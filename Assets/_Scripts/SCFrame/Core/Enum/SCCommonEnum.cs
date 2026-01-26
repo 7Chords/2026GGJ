@@ -1,15 +1,6 @@
 namespace SCFrame
 {
 
-    //根据业务增加枚举
-    public enum ECoreMgrType
-    {
-        TBS,
-        QUEST,
-        UI,
-
-    }
-
     //根据语言国际标准命名
     public enum ELanguageType
     {

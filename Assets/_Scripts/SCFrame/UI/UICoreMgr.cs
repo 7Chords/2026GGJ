@@ -6,9 +6,8 @@ namespace SCFrame.UI
     /// <summary>
     /// UI管理器 队列控制 开启隐藏关闭...
     /// </summary>
-    public class UICoreMgr : ACoreMgrBase
+    public class UICoreMgr : Singleton<UICoreMgr>
     {
-        public override ECoreMgrType coreMgrType => ECoreMgrType.UI;
 
         private List<_ASCUINodeBase> _m_nodeList;
 
