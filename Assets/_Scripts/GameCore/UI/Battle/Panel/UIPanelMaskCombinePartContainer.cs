@@ -1,3 +1,4 @@
+using SCFrame;
 using SCFrame.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,39 +8,76 @@ namespace GameCore.UI
 {
     public class UIPanelMaskCombinePartContainer : UIPanelContainerBase<UIMonoCommonContainer, UIPanelMaskCombinePartContainerItem, UIMonoMaskCombinePartContainerItem>
     {
+        private List<UIPanelMaskCombinePartContainerItem> _m_partItemList;//item列表
+
         public UIPanelMaskCombinePartContainer(UIMonoCommonContainer _mono, SCUIShowType _showType = SCUIShowType.INTERNAL) : base(_mono, _showType)
         {
         }
 
         public override void AfterInitialize()
         {
-            throw new System.NotImplementedException();
         }
 
         public override void BeforeDiscard()
         {
-            throw new System.NotImplementedException();
         }
 
         public override void OnHidePanel()
         {
-            throw new System.NotImplementedException();
         }
 
         public override void OnShowPanel()
         {
-            throw new System.NotImplementedException();
         }
 
         protected override GameObject creatItemGO()
         {
-            throw new System.NotImplementedException();
+            return ResourcesHelper.LoadGameObject(mono.prefabItemObjName);
         }
 
 
         protected override UIPanelMaskCombinePartContainerItem creatItemPanel(UIMonoMaskCombinePartContainerItem _mono)
         {
-            throw new System.NotImplementedException();
+            return new UIPanelMaskCombinePartContainerItem(_mono, SCUIShowType.INTERNAL);
+        }
+
+        public void SetListInfo(List<PartInfo> _infoList)
+        {
+            if (_infoList == null)
+                return;
+            if (_m_partItemList == null)
+                return;
+
+            int i = 0, count = 0;
+            UIPanelMaskCombinePartContainerItem item = null;
+            for (i = 0; i < _infoList.Count; i++)
+            {
+                if (i < _m_partItemList.Count)
+                {
+                    item = _m_partItemList[i];
+                }
+                else
+                {
+                    GameObject itemGO = creatItemGO();
+                    item = creatItemPanel(itemGO.GetComponent<UIMonoMaskCombinePartContainerItem>());
+                    itemGO.transform.SetParent(mono.layoutGroup.transform);
+                    _m_partItemList.Add(item);
+                }
+                if (item == null)
+                    continue;
+                item.SetInfo(_infoList[i]);
+                item.ShowPanel();
+                count++;
+            }
+            //隐藏多余的
+            for (i = count; i < _m_partItemList.Count; i++)
+            {
+                item = _m_partItemList[i];
+                if (item == null)
+                    continue;
+                item.HidePanel();
+            }
+
         }
     }
 }

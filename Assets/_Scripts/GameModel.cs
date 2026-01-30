@@ -10,6 +10,8 @@ namespace GameCore
     /// </summary>
     public class GameModel : Singleton<GameModel>
     {
+        public List<PartInfo> partInfoList;
+
 
     }
 }

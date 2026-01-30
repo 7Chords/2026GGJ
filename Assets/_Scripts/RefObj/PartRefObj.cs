@@ -8,6 +8,7 @@ namespace GameCore.RefData
         public long id;
         public string partName;
         public EPartType partType;
+        public int partHealth;
         public string partDesc;
         public string partSpriteObjName;
         public List<EntryEffectObj> entryList;
@@ -17,6 +18,7 @@ namespace GameCore.RefData
             id = getLong("id");
             partName = getString("partName");
             partType = (EPartType)getEnum("partType",typeof(EPartType));
+            partHealth = getInt("partHealth");
             partDesc = getString("partDesc");
             partSpriteObjName = getString("partSpriteObjName");
             entryList = getList<EntryEffectObj>("entryList");

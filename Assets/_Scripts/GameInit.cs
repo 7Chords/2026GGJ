@@ -30,6 +30,8 @@ namespace GameCore
             SCPoolMgr.instance.Initialize();
             SCInputListener.instance.Initialize();
             UICoreMgr.instance.Initialize();
+            
+            
         }
 
         public override void OnDiscard()

@@ -10,7 +10,7 @@ namespace GameCore.UI
     {
         [Header("商品图标")]
         public Image imgGoods;
-        [Header("数量文本")]
-        public Text txtAmount;
+        [Header("血量文本")]
+        public Text txtHealth;
     }
 }

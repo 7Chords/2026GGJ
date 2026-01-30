@@ -153,7 +153,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 1
+  m_Text: 1/2
 --- !u!1 &6136648539061075631
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,4 +262,4 @@ MonoBehaviour:
   fadeInDuration: 0
   fadeOutDuration: 0
   imgGoods: {fileID: 378263950761052782}
-  txtAmount: {fileID: 6958061118933925905}
+  txtHealth: {fileID: 6958061118933925905}
