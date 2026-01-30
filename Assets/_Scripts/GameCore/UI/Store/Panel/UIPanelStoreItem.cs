@@ -27,30 +27,17 @@ namespace GameCore.UI
         public override void OnHidePanel()
         {
             mono.btnPurchase.RemoveClickDown(onClickDonw);
-            //SCMsgCenter.UnregisterMsg(SCMsgConst.PURCHASE_GOODS, onPurchaseGoods);
         }
 
         private void onClickDonw(PointerEventData _arg, object[] _objs)
         {
+
         }
 
         public override void OnShowPanel()
         {
             mono.btnPurchase.AddMouseLeftClickDown(onClickDonw);
-            //SCMsgCenter.RegisterMsg(SCMsgConst.PURCHASE_GOODS, onPurchaseGoods);
         }
-
-        //private void onPurchaseGoods(object[] _objs)
-        //{
-        //    if (_objs == null || _objs.Length == 0)
-        //        return;
-        //    long goodsId = (long)_objs[0];
-
-        //    if (goodsId != _m_goodsInfo.goodsRefObj.id)
-        //        return;
-
-        //    refreshShow();
-        //}
 
         public void SetInfo(GoodsInfo _goodsInfo)
         {
