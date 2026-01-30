@@ -1,24 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameCore.UI;
+using SCFrame;
+using SCFrame.UI;
 using UnityEngine;
 
-public class MapManager : MonoBehaviour
+public class MapManager : Singleton<MapManager>
 {
-    public static MapManager Instance { get; private set; }
-
     public MapNode[,] CurrentMapNodes { get; private set; }
 
-    private void Awake()
+    public override void OnInitialize()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+    }
+
+    public override void OnDiscard()
+    {
+        CurrentMapNodes = null;
+    }
+
+    public void StartGameMap()
+    {
+        UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
     }
 
     public void SetMapData(MapNode[,] mapNodes)
