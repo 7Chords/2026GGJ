@@ -1,0 +1,29 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace GameCore
+{
+    public enum EPartType
+    {
+        Eye,
+        NOISE,
+        MOUTH,
+        EAR,
+    }
+
+    public enum EGoodsType
+    {
+        PART,//部位
+        HEAL,//回血
+    }
+
+    public enum EAttributeType
+    {
+        ATTACK,//攻击力
+        CRITICAL_CHANCE,//暴击率
+        CRITICAL_MULTIPLIER,//暴击伤害
+        HIT_CHANCE,//命中率
+        DEFEND,//护盾
+    }
+}

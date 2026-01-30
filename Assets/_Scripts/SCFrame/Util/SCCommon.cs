@@ -263,6 +263,17 @@ namespace SCFrame
             if (string.IsNullOrEmpty(_str))
                 return null;
             _AEffectObjBase effectObj = null;
+
+            if (_type == typeof(GoodsEffectObj))
+            {
+                effectObj = new GoodsEffectObj();
+                effectObj.Deserialize(_str);
+            }
+            else if(_type == typeof(EntryEffectObj))
+            {
+                effectObj = new EntryEffectObj();
+                effectObj.Deserialize(_str);
+            }
             return effectObj;
 
         }
