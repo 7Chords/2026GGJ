@@ -1,0 +1,2 @@
+﻿id	enemyName	enemyHealth	initPartList
+104001	大狗	50	101001:1;101002:1;101003:1;
