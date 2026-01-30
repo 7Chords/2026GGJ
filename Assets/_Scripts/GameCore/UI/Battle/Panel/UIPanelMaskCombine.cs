@@ -29,11 +29,13 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            refreshShow();
         }
 
         private void refreshShow()
         {
-
+            _m_partContainer?.ShowPanel();
+            _m_partContainer?.SetListInfo(GameModel.instance.partInfoList);
         }
     }
 }

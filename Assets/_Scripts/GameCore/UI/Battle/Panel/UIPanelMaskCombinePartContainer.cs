@@ -16,14 +16,23 @@ namespace GameCore.UI
 
         public override void AfterInitialize()
         {
+            _m_partItemList = new List<UIPanelMaskCombinePartContainerItem>();
         }
 
         public override void BeforeDiscard()
         {
+            foreach(var item in _m_partItemList)
+            {
+                item?.Discard();
+            }
         }
 
         public override void OnHidePanel()
         {
+            foreach (var item in _m_partItemList)
+            {
+                item?.HidePanel();
+            }
         }
 
         public override void OnShowPanel()

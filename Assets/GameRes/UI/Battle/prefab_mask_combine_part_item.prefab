@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: 695161668178679605}
   - component: {fileID: 4712060529637933557}
   m_Layer: 5
-  m_Name: prefab_mask_combine_part
+  m_Name: prefab_mask_combine_part_item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -12,7 +12,7 @@ namespace GameCore
     {
         private void Start()
         {
-            Initialize();   
+            Initialize();
         }
 
         private void OnDestroy()
@@ -22,28 +22,25 @@ namespace GameCore
 
         public override void OnInitialize()
         {
-
-            GameModel.instance.Initialize();
             SCRefDataMgr.instance.Initialize();
             SCTaskHelper.instance.Initialize();
             SCMsgCenter.instance.Initialize();
             SCPoolMgr.instance.Initialize();
             SCInputListener.instance.Initialize();
             UICoreMgr.instance.Initialize();
-            
-            
+            GameModel.instance.Initialize();
+
         }
 
         public override void OnDiscard()
         {
+            GameModel.instance.Discard();
             UICoreMgr.instance.Discard();
             SCInputListener.instance.Discard();
             SCPoolMgr.instance.Discard();
             SCMsgCenter.instance.Discard();
             SCTaskHelper.instance.Discard();
             SCRefDataMgr.instance.Discard();
-            GameModel.instance.Discard();
-
 
         }
     }

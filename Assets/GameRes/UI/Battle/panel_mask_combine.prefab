@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3732223678577455298}
   - component: {fileID: 8566195473696943022}
   m_Layer: 5
-  m_Name: panel_mask_combin
+  m_Name: panel_mask_combine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105,10 +105,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e757f0137df7c004c84e387edd2a0bad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiMask: {fileID: 0}
-  canvasGroup: {fileID: 0}
-  fadeInDuration: 0
-  fadeOutDuration: 0
+  uiMask: {fileID: 6362608036904214565}
+  canvasGroup: {fileID: 3732223678577455298}
+  fadeInDuration: 0.25
+  fadeOutDuration: 0.25
   monoPartContainer: {fileID: 341772300786419045}
 --- !u!1 &4111750531699556325
 GameObject:
@@ -574,8 +574,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiMask: {fileID: 0}
-  canvasGroup: {fileID: 0}
+  canvasGroup: {fileID: 6676941923495426285}
   fadeInDuration: 0
   fadeOutDuration: 0
-  prefabItemObjName: 
+  prefabItemObjName: prefab_mask_combine_part_item
   layoutGroup: {fileID: 5822895529678320562}
