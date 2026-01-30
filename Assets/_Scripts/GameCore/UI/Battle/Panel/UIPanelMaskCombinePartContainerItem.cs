@@ -86,7 +86,7 @@ namespace GameCore.UI
                 mono.canvasGroup.blocksRaycasts = false;
             }
             createDragClone();
-
+            UpdateGridColors(false);
         }
         private void onEndDrag(PointerEventData _arg, object[] _objs)
         {
@@ -97,26 +97,76 @@ namespace GameCore.UI
 
             if (hitGrid != null)
             {
-                 Vector2Int targetGridPos = Vector2Int.RoundToInt(hitGrid.gridPos);
-                 
-                 // 检查占用
-                 bool isOccupied = _m_container != null && _m_container.CheckOccupancy(targetGridPos, _m_partInfo);
-                 
-                 if (!isOccupied)
+                 // Calculate Logical Grid Origin based on midPos
+                 Vector2Int hitPos = Vector2Int.RoundToInt(hitGrid.gridPos);
+                 Vector2Int midPos = Vector2Int.zero;
+                 if (_m_partInfo != null && _m_partInfo.partRefObj != null)
                  {
-                     // 放置成功
-                     _m_partInfo.gridPos = targetGridPos;
-                     
-                     // 视觉放置：将 Item 移动到 Grid 的位置
-                     // 注意：这里需要根据具体的层级结构来决定是 SetParent 还是 SetPosition
-                     // 假设我们只是将 Item 移动到 Grid 的位置 (Position snap)
-                     // 如果 Grid 和 Item 在同一个 Canvas 下，可以直接转换坐标
-                     SnapToGrid(hitGrid);
-                     placementSuccess = true;
+                     midPos = _m_partInfo.partRefObj.midPos;
+                 }
+                 Vector2Int logicalOrigin = hitPos - midPos;
+                 
+                 // Check Validity of Region (All Shape cells must exist in Grid)
+                 bool regionValid = true;
+                 var shape = (_m_partInfo != null && _m_partInfo.partRefObj != null) ? _m_partInfo.partRefObj.posList : null;
+                 
+                 // Get all Grids in parent to verify existence
+                 // Optimization: Assume grid is 6x7 (0-5, 0-6), or search neighbors.
+                 // Searching all children is safer.
+                 var allGrids = hitGrid.transform.parent.GetComponentsInChildren<UIMonoMaskCombineFaceGrid>();
+                 
+                 List<Vector2Int> requiredPositions = new List<Vector2Int>();
+                 if (shape != null && shape.Count > 0)
+                 {
+                     foreach(var p in shape) requiredPositions.Add(logicalOrigin + new Vector2Int(p.x, p.y));
                  }
                  else
                  {
-                     Debug.Log("该位置已被占用！");
+                      requiredPositions.Add(logicalOrigin);
+                 }
+                 
+                 foreach(var req in requiredPositions)
+                 {
+                     bool found = false;
+                     foreach(var g in allGrids)
+                     {
+                         if (Vector2Int.RoundToInt(g.gridPos) == req)
+                         {
+                             found = true;
+                             break;
+                         }
+                     }
+                     if (!found)
+                     {
+                         regionValid = false;
+                         break;
+                     }
+                 }
+                 
+                 if (regionValid)
+                 {
+                     // Check Occupancy (Collision with other items)
+                     bool isOccupied = _m_container != null && _m_container.CheckRegionOccupancy(logicalOrigin, shape, _m_partInfo);
+                     
+                     if (!isOccupied)
+                     {
+                         // Placement Success
+                         _m_partInfo.gridPos = logicalOrigin;
+                         SnapToGrid(hitGrid); // Parent to HitGrid (midPos location)
+                         
+                         // 更新格子颜色 (变为红色)
+                         UpdateGridColors(true);
+                         
+                         placementSuccess = true;
+                     }
+                     else
+                     {
+                         Debug.Log("该区域已被占用！");
+                     }
+                 }
+                 else
+                 {
+                     Debug.Log("部分区域超出格子范围！");
                  }
             }
             else
@@ -128,6 +178,11 @@ namespace GameCore.UI
                     ReturnToBag();
                     placementSuccess = true;
                 }
+            }
+            
+            if (!placementSuccess)
+            {
+                ReturnToBag();
             }
 
             if (_m_dragCloneGO != null)
@@ -163,9 +218,77 @@ namespace GameCore.UI
             GetGameObject().transform.localScale = new Vector3(0.7f, 0.7f, 1);
         }
 
+        /// <summary>
+        /// 更新格子颜色
+        /// </summary>
+        /// <param name="isOccupied">true:显示占用(红色), false:恢复默认</param>
+        private void UpdateGridColors(bool isOccupied)
+        {
+            if (_m_partInfo == null || _m_partInfo.gridPos.x == -1) return;
+            
+            // 尝试获取 Grid Container
+            // 如果是在背包里，父物体是 LayoutGroup，没法直接找到 Grid Container
+            // 如果是在格子上，父物体是 UIMonoMaskCombineFaceGrid
+            Transform currentParent = GetGameObject().transform.parent;
+            if (currentParent == null) return;
+
+            UIMonoMaskCombineFaceGrid parentGrid = currentParent.GetComponent<UIMonoMaskCombineFaceGrid>();
+            if (parentGrid == null) return; // 不在格子上，无法获取兄弟Grid
+            
+            Transform gridContainer = parentGrid.transform.parent;
+            if (gridContainer == null) return;
+            
+            var allGrids = gridContainer.GetComponentsInChildren<UIMonoMaskCombineFaceGrid>();
+            
+            // 计算需要变色的各位置
+            var shape = (_m_partInfo.partRefObj != null) ? _m_partInfo.partRefObj.posList : null;
+            List<Vector2Int> occupiedPositions = new List<Vector2Int>();
+            if (shape != null && shape.Count > 0)
+            {
+                foreach(var p in shape) occupiedPositions.Add(_m_partInfo.gridPos + new Vector2Int(p.x, p.y));
+            }
+            else
+            {
+                occupiedPositions.Add(_m_partInfo.gridPos);
+            }
+            
+            foreach (var grid in allGrids)
+            {
+                if (occupiedPositions.Contains(Vector2Int.RoundToInt(grid.gridPos)))
+                {
+                    // 找到了对应的 Grid
+                    var img = grid.GetComponent<UnityEngine.UI.Image>();
+                    if (img != null)
+                    {
+                        if (isOccupied)
+                        {
+                            // 排除 midPos 所在的父物体格子 (用户要求 "别的属于item的格子")
+                            // _m_partInfo.gridPos 是逻辑原点
+                            // midPos 是相对偏移
+                            // 父物体格子应该是 gridPos + midPos ? 
+                            // 让我们再检查下: SnapToGrid 把父物体设为 hitGrid (即 midPos 对应的格子)
+                            // 那么 grid == parentGrid 即为 midPos 格子
+                            if (grid != parentGrid)
+                            {
+                                img.color = Color.red;
+                            }
+                        }
+                        else
+                        {
+                            img.color = grid.colorDefault;
+                        }
+                    }
+                }
+            }
+        }
+        
         private void ReturnToBag()
         {
             if (_m_container == null) return;
+            
+            // 在重置父物体之前，先恢复格子颜色
+            // 此时 transform.parent 还是 Grid (如果它之前在格子上)
+            UpdateGridColors(false);
             
             // 将 item 的父物体设置回容器的布局组件
             // 注意：_m_container.GetMono() 可以获取 Mono 引用
@@ -222,6 +345,11 @@ namespace GameCore.UI
             if (canvasGroup == null) canvasGroup = _m_dragCloneGO.AddComponent<CanvasGroup>();
             canvasGroup.blocksRaycasts = false;
             canvasGroup.alpha = 0.7f;
+            
+            // 复制 Image 用于拖拽显示
+            var srcImg = GetGameObject().GetComponent<UnityEngine.UI.Image>();
+            var dstImg = _m_dragCloneGO.GetComponent<UnityEngine.UI.Image>();
+            if (srcImg != null && dstImg != null) dstImg.sprite = srcImg.sprite; // 确保图标一致（如有必要）
 
             // 移除克隆体上不需要的组件
             var cloneInstrumentItem = _m_dragCloneGO.GetComponent<UIMonoMaskCombinePartContainerItem>();
