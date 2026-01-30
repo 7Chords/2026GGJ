@@ -21,6 +21,7 @@ namespace SCFrame.UI
     /// </summary>
     public enum SCUINodeFuncType
     {
+        BATTLE,
     }
 
 

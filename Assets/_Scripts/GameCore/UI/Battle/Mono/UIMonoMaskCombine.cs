@@ -7,6 +7,7 @@ namespace GameCore.UI
 {
     public class UIMonoMaskCombine : _ASCUIMonoBase
     {
-
+        [Header("²¿Î»Container")]
+        public UIMonoCommonContainer monoPartContainer;
     }
 }
