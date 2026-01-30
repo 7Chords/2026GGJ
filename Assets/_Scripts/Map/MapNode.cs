@@ -2,9 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using GameCore.UI;
+using SCFrame.UI;
 
 public class MapNode : MonoBehaviour
 {
+    
+    // UI Reference
+    private UIMonoMapNode _uiMono;
+    private UIPanelMapNode _uiPanel;
+
+    private void Awake()
+    {
+        _uiMono = GetComponent<UIMonoMapNode>();
+        if (_uiMono != null)
+        {
+            // Initialize UI Panel (SCUIShowType.INTERNAL usually for sub-items)
+            _uiPanel = new UIPanelMapNode(_uiMono, SCUIShowType.INTERNAL);
+            // Note: _ASCUIPanelBase constructor call Initialize() for INTERNAL, so AfterInitialize used for listener binding is good.
+        }
+    }
+
+    private void Start()
+    {
+        if (_uiPanel != null)
+        {
+            _uiPanel.SetNodeInfo(this);
+        }
+    }
+
     public bool isActive;
     public List<int> nextLayerConnectedNodes = new List<int>();
     
