@@ -9,6 +9,7 @@ namespace GameCore
     {
         public PartRefObj partRefObj;
         public int currentHealth;
+        public Vector2Int gridPos; // Grid Coordinates
 
         public PartInfo(PartRefObj _partRefObj)
         {

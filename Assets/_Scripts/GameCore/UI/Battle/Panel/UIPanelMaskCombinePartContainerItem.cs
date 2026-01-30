@@ -15,8 +15,21 @@ namespace GameCore.UI
         private GameObject _m_dragCloneGO;
 
         private bool _m_isDraging;
+
+        private UIPanelMaskCombinePartContainer _m_container;
+
         public UIPanelMaskCombinePartContainerItem(UIMonoMaskCombinePartContainerItem _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
+        }
+
+        public void SetContainer(UIPanelMaskCombinePartContainer container)
+        {
+            _m_container = container;
+        }
+
+        public PartInfo GetPartInfo()
+        {
+            return _m_partInfo;
         }
 
         public override void AfterInitialize()
@@ -48,6 +61,11 @@ namespace GameCore.UI
         {
             _m_partInfo = _info;
             refreshShow();
+            
+            // 初次设置位置需要根据 gridPos 更新 (这里先不处理，假设初始Layout负责)
+            // 如果需要初始化位置：
+            // UpdatePositionByGrid(_m_partInfo.gridPos); 
+            // 但需要找到对应的Grid Transform，比较复杂，暂时只处理拖拽后的位置更新
         }
         private void refreshShow()
         {
@@ -61,7 +79,7 @@ namespace GameCore.UI
         {
             _m_isDraging = true;
 
-            // ����ԭ����Ľ���
+            // 隐藏原物体的交互
             if (mono.canvasGroup != null)
             {
                 mono.canvasGroup.alpha = 0f;
@@ -74,24 +92,47 @@ namespace GameCore.UI
         {
             _m_isDraging = false;
 
-            if(checkIsValidInstrument(_arg))
-            {
+            UIMonoMaskCombineFaceGrid hitGrid = GetHitGrid(_arg);
+            bool placementSuccess = false;
 
-            }
-            else
+            if (hitGrid != null)
             {
-                if (_m_dragCloneGO != null)
-                {
-                    SCCommon.DestoryGameObject(_m_dragCloneGO);
-                    _m_dragCloneGO = null;
-                }
-                // �ָ�ԭ�������ʾ�ͽ���
-                if (mono.canvasGroup != null)
-                {
-                    mono.canvasGroup.alpha = 1f;
-                    mono.canvasGroup.blocksRaycasts = true;
-                }
+                 Vector2Int targetGridPos = Vector2Int.RoundToInt(hitGrid.gridPos);
+                 
+                 // 检查占用
+                 bool isOccupied = _m_container != null && _m_container.CheckOccupancy(targetGridPos, _m_partInfo);
+                 
+                 if (!isOccupied)
+                 {
+                     // 放置成功
+                     _m_partInfo.gridPos = targetGridPos;
+                     
+                     // 视觉放置：将 Item 移动到 Grid 的位置
+                     // 注意：这里需要根据具体的层级结构来决定是 SetParent 还是 SetPosition
+                     // 假设我们只是将 Item 移动到 Grid 的位置 (Position snap)
+                     // 如果 Grid 和 Item 在同一个 Canvas 下，可以直接转换坐标
+                     SnapToGrid(hitGrid);
+                     placementSuccess = true;
+                 }
+                 else
+                 {
+                     Debug.Log("该位置已被占用！");
+                 }
             }
+
+            if (_m_dragCloneGO != null)
+            {
+                SCCommon.DestoryGameObject(_m_dragCloneGO);
+                _m_dragCloneGO = null;
+            }
+
+            // 恢复原物体的显示和交互
+            if (mono.canvasGroup != null)
+            {
+                mono.canvasGroup.alpha = 1f;
+                mono.canvasGroup.blocksRaycasts = true;
+            }
+            
         }
 
         private void onDrag(PointerEventData _arg, object[] _objs)
@@ -100,19 +141,47 @@ namespace GameCore.UI
                 return;
             updateDragClonePosition(_arg);
         }
+        
+        private void SnapToGrid(UIMonoMaskCombineFaceGrid grid)
+        {
+            // 将 Item 的中心对齐到 Grid 的中心
+            // 修改为：将 item 的父物体设置为 grid
+            GetGameObject().transform.SetParent(grid.transform);
+            GetGameObject().transform.localPosition = Vector3.zero;
+            
+            // 确保 scale 正确 (防止父物体 scale 影响)
+            GetGameObject().transform.localScale = Vector3.one;
+        }
+
+        private UIMonoMaskCombineFaceGrid GetHitGrid(PointerEventData _eventData)
+        {
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(_eventData, results);
+            foreach (var result in results)
+            {
+                var grid = result.gameObject.GetComponent<UIMonoMaskCombineFaceGrid>();
+                if (grid != null) return grid;
+            }
+            return null;
+        }
 
         /// <summary>
-        /// ������ק��¡��
+        /// 创建拖拽克隆体
         /// </summary>
         private void createDragClone()
         {
             if (_m_dragCloneGO != null) return;
 
-            // ������¡��
+            // 创建克隆体
             _m_dragCloneGO = SCCommon.InstantiateGameObject(GetGameObject(), SCGame.instance.fullLayerRoot.transform);
+            
+            // 确保克隆体不阻挡射线，否则 RaycastAll 可能会先打到克隆体
+            var canvasGroup = _m_dragCloneGO.GetComponent<CanvasGroup>();
+            if (canvasGroup == null) canvasGroup = _m_dragCloneGO.AddComponent<CanvasGroup>();
+            canvasGroup.blocksRaycasts = false;
+            canvasGroup.alpha = 0.7f;
 
-
-            // �Ƴ���¡���ϲ���Ҫ�����
+            // 移除克隆体上不需要的组件
             var cloneInstrumentItem = _m_dragCloneGO.GetComponent<UIMonoMaskCombinePartContainerItem>();
             if (cloneInstrumentItem != null)
                 cloneInstrumentItem.enabled = false;
@@ -121,7 +190,7 @@ namespace GameCore.UI
 
 
         /// <summary>
-        /// ������ק��¡��λ��
+        /// 更新拖拽克隆体位置
         /// </summary>
         private void updateDragClonePosition(PointerEventData eventData)
         {
@@ -133,7 +202,7 @@ namespace GameCore.UI
 
 
         /// <summary>
-        /// ����Ƿ��������Ч����
+        /// 检查是否放置在有效区域 (已弃用，改为 GetHitGrid)
         /// </summary>
         private bool checkIsValidInstrument(PointerEventData _eventData)
         {
@@ -144,4 +213,3 @@ namespace GameCore.UI
         }
     }
 }
-

@@ -8,7 +8,7 @@ namespace GameCore.UI
 {
     public class UIPanelMaskCombinePartContainer : UIPanelContainerBase<UIMonoCommonContainer, UIPanelMaskCombinePartContainerItem, UIMonoMaskCombinePartContainerItem>
     {
-        private List<UIPanelMaskCombinePartContainerItem> _m_partItemList;//item¡–±Ì
+        private List<UIPanelMaskCombinePartContainerItem> _m_partItemList;//itemÂàóË°®
 
         public UIPanelMaskCombinePartContainer(UIMonoCommonContainer _mono, SCUIShowType _showType = SCUIShowType.INTERNAL) : base(_mono, _showType)
         {
@@ -47,7 +47,22 @@ namespace GameCore.UI
 
         protected override UIPanelMaskCombinePartContainerItem creatItemPanel(UIMonoMaskCombinePartContainerItem _mono)
         {
-            return new UIPanelMaskCombinePartContainerItem(_mono, SCUIShowType.INTERNAL);
+            var item = new UIPanelMaskCombinePartContainerItem(_mono, SCUIShowType.INTERNAL);
+            item.SetContainer(this);
+            return item;
+        }
+
+        public bool CheckOccupancy(Vector2Int targetPos, PartInfo exceptInfo)
+        {
+            if (_m_partItemList == null) return false;
+            foreach (var item in _m_partItemList)
+            {
+                var info = item.GetPartInfo();
+                if (info == null || info == exceptInfo) continue;
+                if (info.gridPos == targetPos) return true;
+                // TODO: Add multi-cell check if parts have size
+            }
+            return false;
         }
 
         public void SetListInfo(List<PartInfo> _infoList)
@@ -78,7 +93,7 @@ namespace GameCore.UI
                 item.ShowPanel();
                 count++;
             }
-            //“˛≤ÿ∂‡”‡µƒ
+            //ÈöêËóèÂ§ö‰ΩôÁöÑ
             for (i = count; i < _m_partItemList.Count; i++)
             {
                 item = _m_partItemList[i];
@@ -116,7 +131,7 @@ namespace GameCore.UI
                 item.SetInfo(_infoList[i]);
                 count++;
             }
-            //“˛≤ÿ∂‡”‡µƒ
+            //ÈöêËóèÂ§ö‰ΩôÁöÑ
             for (i = count; i < _m_partItemList.Count; i++)
             {
                 item = _m_partItemList[i];

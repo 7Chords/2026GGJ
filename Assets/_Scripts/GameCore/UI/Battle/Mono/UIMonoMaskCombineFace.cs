@@ -7,7 +7,6 @@ namespace GameCore.UI
 {
     public class UIMonoMaskCombineFace : _ASCUIMonoBase
     {
-        [Header("格子列表")]
-        public List<UIMonoMaskCombineFaceGrid> monoGridList;
+        public GameObject gridPrefab;
     }
 }

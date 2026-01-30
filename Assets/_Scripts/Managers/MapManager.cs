@@ -11,7 +11,7 @@ public class MapManager : Singleton<MapManager>
 
     public override void OnInitialize()
     {
-        UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+        //UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
     }
 
     public override void OnDiscard()

@@ -15,6 +15,12 @@ namespace GameCore.UI
         public override void AfterInitialize()
         {
             _m_partContainer = new UIPanelMaskCombinePartContainer(mono.monoPartContainer);
+            
+            if (mono.monoFace != null)
+            {
+                var faceGrid = new UIPanelMaskCombineFaceGrid(mono.monoFace, SCUIShowType.INTERNAL);
+                faceGrid.ShowPanel();
+            }
         }
 
         public override void BeforeDiscard()
