@@ -6,10 +6,9 @@ namespace GameCore
 {
     public enum EPartType
     {
-        Eye,
-        NOISE,
+        EYE,
+        NOSE,
         MOUTH,
-        EAR,
     }
 
     public enum EGoodsType
