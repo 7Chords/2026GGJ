@@ -1,1 +1,1 @@
-﻿id	partName	partType	partDesc	partSpriteObjName
+﻿id	partName	partType	partDesc	partSpriteObjName	entryList	posList

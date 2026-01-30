@@ -11,7 +11,7 @@ namespace GameCore.RefData
         public string partDesc;
         public string partSpriteObjName;
         public List<EntryEffectObj> entryList;
-
+        public List<PosEffectObj> posList;
         protected override void _parseFromString()
         {
             id = getLong("id");
@@ -20,6 +20,7 @@ namespace GameCore.RefData
             partDesc = getString("partDesc");
             partSpriteObjName = getString("partSpriteObjName");
             entryList = getList<EntryEffectObj>("entryList");
+            posList = getList<PosEffectObj>("posList");
         }
 
         public static string assetPath => "RefData/ExportTxt";
