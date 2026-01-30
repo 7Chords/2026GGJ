@@ -54,7 +54,7 @@ public class MapGenerate : MonoBehaviour
     private void Initialize()
     {
         //从种子管理器获取随机数生成器
-        _mapRandom = RandomUtility.Instance.GetRandomGenerator(ModuleType.Map);
+        _mapRandom = RandomUtility.GetRandomGenerator(ModuleType.Map);
         
         //从地图数据中获取层数
         if (mapData == null)
@@ -90,7 +90,7 @@ public class MapGenerate : MonoBehaviour
         // 设置房间连接线可视化
         SetNodeLineVisual();
         
-        MapManager.Instance.SetMapData(_mapNodeArray);
+        MapManager.instance.SetMapData(_mapNodeArray);
     }
 
     #region 设置地图视图
@@ -99,7 +99,7 @@ public class MapGenerate : MonoBehaviour
     {
         // 1. 调整 Content 大小以适应地图
         // 高度 = padding上下 + (层数-1) * 间距
-        float totalHeight =  padding.y + _layerCount.x * nodeSize.y;
+        float totalHeight =  padding.y + (_layerCount.x-1) * nodeSize.y;
         // 宽度 = padding左右 + (宽度-1) * 间距 (预估最大宽度)
         float totalWidth =  padding.x + (_layerCount.y- 1) * nodeSize.x;
         

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace GameCore
 {
     /// <summary>
-    /// ÓÎÏ·³õÊ¼»¯
+    /// ï¿½ï¿½Ï·ï¿½ï¿½Ê¼ï¿½ï¿½
     /// </summary>
     public class GameInit : SingletonPersistent<GameInit>
     {
@@ -29,19 +29,20 @@ namespace GameCore
             SCInputListener.instance.Initialize();
             UICoreMgr.instance.Initialize();
             GameModel.instance.Initialize();
-
+            MapManager.instance.Initialize();
         }
 
         public override void OnDiscard()
         {
-            GameModel.instance.Discard();
+            
             UICoreMgr.instance.Discard();
             SCInputListener.instance.Discard();
             SCPoolMgr.instance.Discard();
             SCMsgCenter.instance.Discard();
             SCTaskHelper.instance.Discard();
             SCRefDataMgr.instance.Discard();
-
+            GameModel.instance.Discard();
+            MapManager.instance.Discard();
         }
     }
 }

@@ -5,7 +5,7 @@ using SCFrame.UI;
 namespace SCFrame
 {
     /// <summary>
-    /// UI¹ÜÀíÆ÷ ¶ÓÁÐ¿ØÖÆ ¿ªÆôÒþ²Ø¹Ø±Õ...
+    /// UIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¹Ø±ï¿½...
     /// </summary>
     public class UICoreMgr : Singleton<UICoreMgr>
     {
@@ -30,10 +30,10 @@ namespace SCFrame
         {
         }
 
-        #region ¹¦ÄÜ
+        #region ï¿½ï¿½ï¿½ï¿½
 
         /// <summary>
-        /// Ìí¼ÓÒ»¸ö½Úµã
+        /// ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Úµï¿½
         /// </summary>
         /// <param name="_node"></param>
         /// <param name="_needShow"></param>
@@ -49,7 +49,7 @@ namespace SCFrame
                 node.CopyData(_node);
                 if (node.hasHideNode)
                 {
-                    //¶ÓÁÐÖÐÔ­±¾¾Í´æÔÚ¸Ãnode£¬ÖØÐÂÕ¹Ê¾²¢ÒÆ¶¯µ½Î²²¿
+                    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô­ï¿½ï¿½ï¿½Í´ï¿½ï¿½Ú¸ï¿½nodeï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¹Ê¾ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½Î²ï¿½ï¿½
                     node.ShowNode();
                     _m_nodeList.Remove(node);
                     _m_nodeList.Add(node);
@@ -63,10 +63,10 @@ namespace SCFrame
                     _m_nodeList.Add(_node);
             }
 
-            //¹ã²¥³ö½Úµã±ä»¯µÄÐÅÏ¢
+            //ï¿½ã²¥ï¿½ï¿½ï¿½Úµï¿½ä»¯ï¿½ï¿½ï¿½ï¿½Ï¢
             SCMsgCenter.SendMsg(SCMsgConst.UI_NODE_CHG, lastTopNode, _node);
 
-            //ÉÏÒ»¸öÍ¬ÀàÐÍµÄ½Úµã
+            //ï¿½ï¿½Ò»ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ÍµÄ½Úµï¿½
             _ASCUINodeBase lastSameTypeNode = null;
             for (int i = _m_nodeList.Count - 2; i > -1; i--)
             {
@@ -94,14 +94,14 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// ¹Ø±Õµ±Ç°µÄ½Úµã
+        /// ï¿½Ø±Õµï¿½Ç°ï¿½Ä½Úµï¿½
         /// </summary>
         public void CloseTopNode()
         {
             if (_m_nodeList == null || _m_nodeList.Count == 0)
                 return;
 
-            //ÕÒµ½×î¶¥²ãµÄ¿ÉÒÔ¹Ø±ÕµÄ½Úµã
+            //ï¿½Òµï¿½ï¿½î¶¥ï¿½ï¿½Ä¿ï¿½ï¿½Ô¹Ø±ÕµÄ½Úµï¿½
             int nodeIdx = _m_nodeList.Count - 1;
             _ASCUINodeBase topNode = _m_nodeList[nodeIdx];
             while(topNode.ignoreOnUIList)
@@ -118,13 +118,13 @@ namespace SCFrame
 
                 if(topNode.needMoveToBottomWhenHide)
                 {
-                    //°Ñ¸Ã½ÚµãÒÆ¶¯µ½Í·²¿
+                    //ï¿½Ñ¸Ã½Úµï¿½ï¿½Æ¶ï¿½ï¿½ï¿½Í·ï¿½ï¿½
                     _m_nodeList.Remove(topNode);
                     _m_nodeList.Insert(0, topNode);
                 }
             }
 
-            //ÉÏÒ»¸öÍ¬ÀàÐÍµÄ½Úµã
+            //ï¿½ï¿½Ò»ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ÍµÄ½Úµï¿½
             _ASCUINodeBase lastSameTypeNode = null;
 
             for(int i = _m_nodeList.Count - 2;i>-1;i--)
@@ -145,18 +145,18 @@ namespace SCFrame
             }
 
             _ASCUINodeBase nextTopNode = GetTopNode(true);
-            //¹ã²¥½ÚµãÇÐ»»ÏûÏ¢
+            //ï¿½ã²¥ï¿½Úµï¿½ï¿½Ð»ï¿½ï¿½ï¿½Ï¢
             SCMsgCenter.SendMsg(SCMsgConst.UI_NODE_CHG, topNode, nextTopNode);
         }
 
         /// <summary>
-        /// Í¨¹ýESC¹Ø±Õµ±Ç°µÄ½Úµã
+        /// Í¨ï¿½ï¿½ESCï¿½Ø±Õµï¿½Ç°ï¿½Ä½Úµï¿½
         /// </summary>
         public void CloseNodeByEsc()
         {
             if (_m_nodeList == null || _m_nodeList.Count == 0)
                 return;
-            //igonreOnUIListÀàÐÍµÄ½Úµã²»ÄÜÍ¨¹ýESC¹Ø±Õ
+            //igonreOnUIListï¿½ï¿½ï¿½ÍµÄ½Úµã²»ï¿½ï¿½Í¨ï¿½ï¿½ESCï¿½Ø±ï¿½
             _ASCUINodeBase topNode = GetTopNode(false);
             if (!topNode.canQuitByEsc)
                 return;
@@ -164,13 +164,13 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// Í¨¹ýÊó±êÓÒ¼ü¹Ø±Õµ±Ç°µÄ½Úµã
+        /// Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¼ï¿½ï¿½Ø±Õµï¿½Ç°ï¿½Ä½Úµï¿½
         /// </summary>
         public void CloseNodeByMouseRight()
         {
             if (_m_nodeList == null || _m_nodeList.Count == 0)
                 return;
-            //igonreOnUIListÀàÐÍµÄ½Úµã²»ÄÜÍ¨¹ýÊó±êÓÒ¼ü¹Ø±Õ
+            //igonreOnUIListï¿½ï¿½ï¿½ÍµÄ½Úµã²»ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¼ï¿½ï¿½Ø±ï¿½
             _ASCUINodeBase topNode = GetTopNode(false);
             if (!topNode.canQuitByMouseRight)
                 return;
@@ -220,8 +220,8 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// ÏÔÊ¾½Úµãµ«ÊÇ²»ÒÆ¶¯µ½¶ÓÁÐµÄ¶¥²¿£¬Ò»°ãÓÃÓÚigonreOnUIListÀàÐÍµÄ½Úµã
-        /// ½ö½ö×öÕ¹Ê¾ ²»Éæ¼°µ½Ë³Ðò
+        /// ï¿½ï¿½Ê¾ï¿½Úµãµ«ï¿½Ç²ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÐµÄ¶ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½igonreOnUIListï¿½ï¿½ï¿½ÍµÄ½Úµï¿½
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¹Ê¾ ï¿½ï¿½ï¿½æ¼°ï¿½ï¿½Ë³ï¿½ï¿½
         /// </summary>
         /// <param name="_nodeName"></param>
         public void ShowNodeButNotMove2Top(string _nodeName)
