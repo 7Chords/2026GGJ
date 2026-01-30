@@ -12,12 +12,14 @@ namespace GameCore
         public SCRefDataList<GoodsRefObj> goodsRefList = new SCRefDataList<GoodsRefObj>(GoodsRefObj.assetPath, GoodsRefObj.sheetName);
         public SCRefDataList<PartRefObj> partRefList = new SCRefDataList<PartRefObj>(PartRefObj.assetPath, PartRefObj.sheetName);
         public PlayerRefObj playerConfigRefObj = new PlayerRefObj(PlayerRefObj.assetPath, PlayerRefObj.sheetName);
+        public SCRefDataList<EnemyRefObj> enemyRefList = new SCRefDataList<EnemyRefObj>(EnemyRefObj.assetPath, EnemyRefObj.sheetName);
         public override void OnInitialize()
         {
             storeRefList.readFromTxt();
             goodsRefList.readFromTxt();
             partRefList.readFromTxt();
             playerConfigRefObj.readFromTxt();
+            enemyRefList.readFromTxt();
         }
     }
 }
