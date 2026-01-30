@@ -9,9 +9,11 @@ namespace GameCore.UI
     public class UIPanelMaskCombinePartContainer : UIPanelContainerBase<UIMonoCommonContainer, UIPanelMaskCombinePartContainerItem, UIMonoMaskCombinePartContainerItem>
     {
         private List<UIPanelMaskCombinePartContainerItem> _m_partItemList;//item列表
+        public UIMonoCommonContainer mono;
 
         public UIPanelMaskCombinePartContainer(UIMonoCommonContainer _mono, SCUIShowType _showType = SCUIShowType.INTERNAL) : base(_mono, _showType)
         {
+            mono = _mono;
         }
 
         public override void AfterInitialize()

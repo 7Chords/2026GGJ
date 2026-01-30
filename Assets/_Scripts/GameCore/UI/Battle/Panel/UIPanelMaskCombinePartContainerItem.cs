@@ -119,6 +119,16 @@ namespace GameCore.UI
                      Debug.Log("该位置已被占用！");
                  }
             }
+            else
+            {
+                // 如果没有放在格子上，检查是否放在了背包里
+                UIMonoCommonContainer hitContainer = GetHitContainer(_arg); 
+                if (hitContainer != null)
+                {
+                    ReturnToBag();
+                    placementSuccess = true;
+                }
+            }
 
             if (_m_dragCloneGO != null)
             {
@@ -150,7 +160,39 @@ namespace GameCore.UI
             GetGameObject().transform.localPosition = Vector3.zero;
             
             // 确保 scale 正确 (防止父物体 scale 影响)
-            GetGameObject().transform.localScale = Vector3.one;
+            GetGameObject().transform.localScale = new Vector3(0.7f, 0.7f, 1);
+        }
+
+        private void ReturnToBag()
+        {
+            if (_m_container == null) return;
+            
+            // 将 item 的父物体设置回容器的布局组件
+            // 注意：_m_container.GetMono() 可以获取 Mono 引用
+            var containerMono = _m_container.mono;
+            if (containerMono != null && containerMono.layoutGroup != null)
+            {
+                GetGameObject().transform.SetParent(containerMono.layoutGroup.transform);
+                GetGameObject().transform.localScale = Vector3.one;
+                
+                // 重置 GridPos，表示不再占用格子
+                if (_m_partInfo != null)
+                {
+                    _m_partInfo.gridPos = new Vector2Int(-1, -1);
+                }
+            }
+        }
+        
+        private UIMonoCommonContainer GetHitContainer(PointerEventData _eventData)
+        {
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(_eventData, results);
+            foreach (var result in results)
+            {
+                var container = result.gameObject.GetComponentInParent<UIMonoCommonContainer>();
+                if (container != null) return container;
+            }
+            return null;
         }
 
         private UIMonoMaskCombineFaceGrid GetHitGrid(PointerEventData _eventData)

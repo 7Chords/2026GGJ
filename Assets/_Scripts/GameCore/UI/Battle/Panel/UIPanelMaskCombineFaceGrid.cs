@@ -29,10 +29,6 @@ namespace GameCore.UI
 
             _m_gridList = new List<UIMonoMaskCombineFaceGrid>();
             
-
-            
-
-
             int columns = 6; 
             int rows = 7;
             
