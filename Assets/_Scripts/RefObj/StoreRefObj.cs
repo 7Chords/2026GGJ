@@ -11,6 +11,15 @@ namespace GameCore.RefData
         public string storeName;
         public string storeDesc;
         public List<GoodsEffectObj> goodsList;
+
+        public StoreRefObj()
+        {
+
+        }
+        public StoreRefObj(string _assetPath, string _sheetName) : base(_assetPath, _sheetName)
+        {
+
+        }
         protected override void _parseFromString()
         {
             id = getLong("id");

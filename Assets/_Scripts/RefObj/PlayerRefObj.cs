@@ -9,6 +9,15 @@ namespace GameCore.RefData
     {
         public int playerHealth;
         public List<GoodsEffectObj> initPartList;
+
+        public PlayerRefObj()
+        {
+
+        }
+        public PlayerRefObj(string _assetPath, string _sheetName) : base(_assetPath, _sheetName)
+        {
+
+        }
         protected override void _parseFromString()
         {
             playerHealth = getInt("playerHealth");

@@ -15,7 +15,14 @@ namespace GameCore.RefData
         public long partId;
         public int healthValue;
         public string goodsSpriteObjName;
+        public GoodsRefObj()
+        {
 
+        }
+        public GoodsRefObj(string _assetPath, string _sheetName) : base(_assetPath, _sheetName)
+        {
+
+        }
         protected override void _parseFromString()
         {
             id = getLong("id");

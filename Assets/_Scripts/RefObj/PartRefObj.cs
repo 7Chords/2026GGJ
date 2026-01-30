@@ -13,6 +13,15 @@ namespace GameCore.RefData
         public string partSpriteObjName;
         public List<EntryEffectObj> entryList;
         public List<PosEffectObj> posList;
+
+        public PartRefObj()
+        {
+
+        }
+        public PartRefObj(string _assetPath, string _sheetName) : base(_assetPath, _sheetName)
+        {
+
+        }
         protected override void _parseFromString()
         {
             id = getLong("id");
