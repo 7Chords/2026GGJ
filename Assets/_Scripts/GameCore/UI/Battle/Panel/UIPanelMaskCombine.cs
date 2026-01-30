@@ -35,7 +35,7 @@ namespace GameCore.UI
         private void refreshShow()
         {
             _m_partContainer?.ShowPanel();
-            _m_partContainer?.SetListInfo(GameModel.instance.partInfoList);
+            _m_partContainer?.SetListInfo(GameModel.instance.deckPartInfoList);
         }
     }
 }

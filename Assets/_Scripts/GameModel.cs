@@ -11,9 +11,11 @@ namespace GameCore
     /// </summary>
     public class GameModel : Singleton<GameModel>
     {
-        public List<PartInfo> partInfoList;
-        public int playerHealth;
-
+        public List<PartInfo> deckPartInfoList;//牌堆部位列表
+        public int playerHealth;//玩家生命
+        public List<FacePartInfo> facePartInfoList;//脸部装备的部位列表
+        public List<PartInfo> bagPartInfoList;//背包部位列表
+        public List<FaceGridInfo> faceGridInfoList;//脸部格子信息列表
         public override void OnInitialize()
         {
             //初始化数据从配表读取
@@ -21,7 +23,7 @@ namespace GameCore
             if (playerRefObj == null)
                 return;
             playerHealth = playerRefObj.playerHealth;
-            partInfoList = new List<PartInfo>();
+            deckPartInfoList = new List<PartInfo>();
             GoodsEffectObj goodsEffectObj = null;
             PartInfo info = null;
             PartRefObj partRefObj = null;
@@ -34,7 +36,7 @@ namespace GameCore
                 if (partRefObj == null)
                     continue;
                 info = new PartInfo(partRefObj);
-                partInfoList.Add(info);
+                deckPartInfoList.Add(info);
             }
         }
 

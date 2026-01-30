@@ -110,9 +110,6 @@ namespace GameCore.UI
 
             // 创建克隆体
             _m_dragCloneGO = SCCommon.InstantiateGameObject(GetGameObject(), SCGame.instance.fullLayerRoot.transform);
-            _m_dragCloneGO.GetComponent<RectTransform>().sizeDelta = new Vector2
-                (GetGameObject().GetComponent<RectTransform>().rect.width,
-                GetGameObject().GetComponent<RectTransform>().rect.height);
 
 
             // 移除克隆体上不需要的组件
