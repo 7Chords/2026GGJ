@@ -68,6 +68,20 @@ namespace SCFrame
         }
 
         /// <summary>
+        /// 生成游戏物体
+        /// </summary>
+        /// <param name="_obj"></param>
+        /// <returns></returns>
+        public static GameObject InstantiateGameObject(GameObject _obj,Transform _parent)
+        {
+            if (_obj == null)
+                return null;
+            GameObject go = GameObject.Instantiate(_obj);
+            go.transform.SetParent(_parent);
+            return go;
+        }
+
+        /// <summary>
         /// 销毁游戏物体
         /// </summary>
         /// <param name="_obj"></param>

@@ -88,5 +88,42 @@ namespace GameCore.UI
             }
 
         }
+
+        public void RefreshShow(List<PartInfo> _infoList)
+        {
+            if (_infoList == null)
+                return;
+            if (_m_partItemList == null)
+                return;
+
+            int i = 0, count = 0;
+            UIPanelMaskCombinePartContainerItem item = null;
+            for (i = 0; i < _infoList.Count; i++)
+            {
+                if (i < _m_partItemList.Count)
+                {
+                    item = _m_partItemList[i];
+                }
+                else
+                {
+                    GameObject itemGO = creatItemGO();
+                    item = creatItemPanel(itemGO.GetComponent<UIMonoMaskCombinePartContainerItem>());
+                    itemGO.transform.SetParent(mono.layoutGroup.transform);
+                    _m_partItemList.Add(item);
+                }
+                if (item == null)
+                    continue;
+                item.SetInfo(_infoList[i]);
+                count++;
+            }
+            //Òþ²Ø¶àÓàµÄ
+            for (i = count; i < _m_partItemList.Count; i++)
+            {
+                item = _m_partItemList[i];
+                if (item == null)
+                    continue;
+                item.HidePanel();
+            }
+        }
     }
 }
