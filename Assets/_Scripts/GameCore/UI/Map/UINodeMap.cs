@@ -11,7 +11,7 @@ namespace GameCore.UI
         public override bool canQuitByEsc => false;
         public override bool canQuitByMouseRight => false;
         public override bool ignoreOnUIList => false;
-        public override SCUINodeFuncType nodeFuncType => SCUINodeFuncType.BATTLE; // 根据实际需求调整类型
+        public override SCUINodeFuncType nodeFuncType => SCUINodeFuncType.MAP; // 根据实际需求调整类型
         public override bool needMoveToBottomWhenHide => false;
 
         private GameObject _m_panelGO;

@@ -22,6 +22,9 @@ namespace SCFrame.UI
     public enum SCUINodeFuncType
     {
         BATTLE,
+        STORE,
+        MAP,
+        COMMON,
     }
 
 

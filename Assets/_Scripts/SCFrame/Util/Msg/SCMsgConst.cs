@@ -6,6 +6,11 @@ public class SCMsgConst
     #endregion
 
 
+    #region 玩法相关
+    public const int PURCHASE_GOODS = 2001;
+
+    #endregion
+
     #region 系统相关 99
     public const int GAME_START = 9901;
     public const int GAME_END = 9902;
