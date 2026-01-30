@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Text;
+using SCFrame.UI;
 
-namespace SCFrame.UI
+namespace SCFrame
 {
     /// <summary>
     /// UI管理器 队列控制 开启隐藏关闭...
