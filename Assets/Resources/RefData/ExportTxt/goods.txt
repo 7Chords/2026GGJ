@@ -1,1 +1,7 @@
 ﻿id	goodsName	goodsType	goodsPrice	partId	healthValue	goodsSpriteObjName
+100001	大狗鼻子	PART	75	101001	0	spr_default
+101002	大狗眼	PART	50	101002	0	spr_default
+101003	大狗嘴	PART	50	101003	0	spr_default
+101004	小血药	HEAL	25	0	25	spr_default
+101005	中血药	HEAL	30	0	30	spr_default
+101006	大血药	HEAL	35	0	35	spr_default
