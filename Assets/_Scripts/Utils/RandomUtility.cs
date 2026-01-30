@@ -12,25 +12,15 @@ public enum ModuleType
 
 public class RandomUtility : MonoBehaviour
 {
-    public static RandomUtility Instance { get; private set; }
 
     [SerializeField]
     private string globalSeed = "2026GGJ";
 
-    private Dictionary<ModuleType, System.Random> _randomGenerators = new Dictionary<ModuleType, System.Random>();
+    private static Dictionary<ModuleType, System.Random> _randomGenerators = new Dictionary<ModuleType, System.Random>();
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            InitializeGenerators();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        InitializeGenerators();
     }
 
     private void InitializeGenerators()
@@ -42,7 +32,7 @@ public class RandomUtility : MonoBehaviour
         }
     }
 
-    public System.Random GetRandomGenerator(ModuleType module)
+    public static System.Random GetRandomGenerator(ModuleType module)
     {
         if (!_randomGenerators.ContainsKey(module))
         {

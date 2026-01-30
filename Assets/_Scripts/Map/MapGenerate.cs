@@ -54,7 +54,7 @@ public class MapGenerate : MonoBehaviour
     private void Initialize()
     {
         //从种子管理器获取随机数生成器
-        _mapRandom = RandomUtility.Instance.GetRandomGenerator(ModuleType.Map);
+        _mapRandom = RandomUtility.GetRandomGenerator(ModuleType.Map);
         
         //从地图数据中获取层数
         if (mapData == null)
