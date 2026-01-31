@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6754543702868366543
 RectTransform:
   m_ObjectHideFlags: 0
@@ -154,7 +154,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 130}
+  m_AnchoredPosition: {x: 0, y: 90}
   m_SizeDelta: {x: 547.2883, y: 92.9859}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1868582496776954947
@@ -305,7 +305,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2, y: -265.65}
+  m_AnchoredPosition: {x: 2, y: -163}
   m_SizeDelta: {x: 260.8774, y: 59.4433}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &374438030668760902
@@ -401,6 +401,8 @@ GameObject:
   - component: {fileID: 7174500512872637379}
   - component: {fileID: 5225962857027949128}
   - component: {fileID: 5975177192031652314}
+  - component: {fileID: 6003382910945485136}
+  - component: {fileID: 5290997002792019229}
   m_Layer: 5
   m_Name: panel_lose
   m_TagString: Untagged
@@ -453,7 +455,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -470,6 +472,36 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &6003382910945485136
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4375038964448134076}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &5290997002792019229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4375038964448134076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49674123aa108c344bef4e9fb60c90cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiMask: {fileID: 5634409945348191254}
+  canvasGroup: {fileID: 6003382910945485136}
+  fadeInDuration: 0.25
+  fadeOutDuration: 0.25
+  btnRestart: {fileID: 6856439675525106173}
+  btnExit: {fileID: 3400506919676798737}
 --- !u!1 &5634409945348191254
 GameObject:
   m_ObjectHideFlags: 0
