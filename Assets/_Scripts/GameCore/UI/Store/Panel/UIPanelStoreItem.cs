@@ -43,7 +43,10 @@ namespace GameCore.UI
             //钱够了直接发送购买消息
             if(GameModel.instance.playerMoney >= _m_goodsInfo.goodsRefObj.goodsPrice
                 && _m_goodsInfo.goodsAmount > 0)
+            {
+                AudioMgr.instance.PlaySfx("sfx_buy");
                 SCMsgCenter.SendMsg(SCMsgConst.PURCHASE_GOODS, _m_goodsInfo.goodsRefObj.id);
+            }
         }
 
         public override void OnShowPanel()
@@ -71,6 +74,8 @@ namespace GameCore.UI
         {
             if (_m_goodsInfo == null)
                 return;
+            AudioMgr.instance.PlaySfx("sfx_mouse_enter");
+
             Vector2 screenPos = Vector2.zero;
             var _canvas = GetGameObject().GetComponentInParent<Canvas>();
             Camera cam = (_canvas != null && _canvas.renderMode != RenderMode.ScreenSpaceOverlay) ? _canvas.worldCamera : null;
