@@ -9,12 +9,15 @@ using UnityEngine.EventSystems;
 
 namespace GameCore.UI
 {
-    public class UIPanelStoreBagItem : _ASCUIPanelBase<UIMonoStoreBagItem>
+    /// <summary>
+    /// 通用的部位itempanel
+    /// </summary>
+    public class UIPanelCommonPartItem : _ASCUIPanelBase<UIMonoCommonPartItem>
     {
         private PartInfo _m_partInfo;
         private TweenContainer _m_tweenContainer;
 
-        public UIPanelStoreBagItem(UIMonoStoreBagItem _mono, SCUIShowType _showType) : base(_mono, _showType)
+        public UIPanelCommonPartItem(UIMonoCommonPartItem _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
 

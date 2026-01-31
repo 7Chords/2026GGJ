@@ -7,9 +7,9 @@ using UnityEngine;
 
 namespace GameCore.UI
 {
-    public class UIPanelStoreBagContainer : UIPanelContainerBase<UIMonoCommonContainer, UIPanelStoreBagItem, UIMonoStoreBagItem>
+    public class UIPanelStoreBagContainer : UIPanelContainerBase<UIMonoCommonContainer, UIPanelCommonPartItem, UIMonoCommonPartItem>
     {
-        private List<UIPanelStoreBagItem> _m_itemList;//item列表
+        private List<UIPanelCommonPartItem> _m_itemList;//item列表
 
         public UIPanelStoreBagContainer(UIMonoCommonContainer _mono, SCUIShowType _showType = SCUIShowType.INTERNAL) : base(_mono, _showType)
         {
@@ -17,7 +17,7 @@ namespace GameCore.UI
 
         public override void AfterInitialize()
         {
-            _m_itemList = new List<UIPanelStoreBagItem>();
+            _m_itemList = new List<UIPanelCommonPartItem>();
 
         }
 
@@ -47,9 +47,9 @@ namespace GameCore.UI
 
         }
 
-        protected override UIPanelStoreBagItem creatItemPanel(UIMonoStoreBagItem _mono)
+        protected override UIPanelCommonPartItem creatItemPanel(UIMonoCommonPartItem _mono)
         {
-            return new UIPanelStoreBagItem(_mono,SCUIShowType.INTERNAL);
+            return new UIPanelCommonPartItem(_mono,SCUIShowType.INTERNAL);
         }
 
         public void SetListInfo(List<PartInfo> _infoList)
@@ -60,7 +60,7 @@ namespace GameCore.UI
                 return;
 
             int i = 0, count = 0;
-            UIPanelStoreBagItem item = null;
+            UIPanelCommonPartItem item = null;
             for (i = 0; i < _infoList.Count; i++)
             {
                 if (i < _m_itemList.Count)
@@ -70,7 +70,7 @@ namespace GameCore.UI
                 else
                 {
                     GameObject itemGO = creatItemGO();
-                    item = creatItemPanel(itemGO.GetComponent<UIMonoStoreBagItem>());
+                    item = creatItemPanel(itemGO.GetComponent<UIMonoCommonPartItem>());
 
                     _m_itemList.Add(item);
                 }

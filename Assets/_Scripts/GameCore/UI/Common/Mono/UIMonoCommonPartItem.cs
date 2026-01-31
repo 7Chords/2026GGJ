@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace GameCore.UI
 {
-    public class UIMonoStoreBagItem : _ASCUIMonoBase
+    public class UIMonoCommonPartItem : _ASCUIMonoBase
     {
         [Header("²¿Î»icon")]
         public Image imgIcon;

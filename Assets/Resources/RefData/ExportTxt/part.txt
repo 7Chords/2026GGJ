@@ -1,7 +1,7 @@
-﻿id	partName	partType	partHealth	partDesc	partSpriteObjName	entryList	posList	midPos	logicClassName
-101001	大狗鼻子	NOSE	30	1	spr_nose	CRITICAL_CHANCE:5;DEFEND:15	0:0;0:1	0:1	NoseLogic
-101002	大狗眼	EYE	25	1	spr_eye	HIT_CHANCE:5;DEFEND:15	0:0	0:0	EyeLogic
-101003	大狗嘴	MOUTH	20	1	spr_mouth	ATTACK:20;DEFEND:15	0:0;1:1;1:2;0:3	1:1	MouthLogic
+﻿id	partName	partType	partHealth	partDesc	partSpriteObjName	partGameObjectName	entryList	posList	midPos	logicClassName
+101001	大狗鼻子	NOSE	30	1	spr_nose	spr_default	CRITICAL_CHANCE:5;DEFEND:15	0:0;0:1	0:1	NoseLogic
+101002	大狗眼	EYE	25	1	spr_eye	spr_default	HIT_CHANCE:5;DEFEND:15	0:0	0:0	EyeLogic
+101003	大狗嘴	MOUTH	20	1	spr_mouth	spr_default	ATTACK:20;DEFEND:15	0:0;1:1;1:2;0:3	1:1	MouthLogic
 
 
 
