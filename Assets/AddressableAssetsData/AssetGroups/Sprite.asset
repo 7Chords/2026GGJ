@@ -138,7 +138,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f67c337871a96774991e2a87866aad22
-    m_Address: spr_medic_small_0
+    m_Address: spr_medic_small
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
