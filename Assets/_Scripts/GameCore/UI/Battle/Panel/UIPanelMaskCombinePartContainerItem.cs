@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace GameCore.UI
 {
@@ -125,10 +126,10 @@ namespace GameCore.UI
             }
             // 强制隐藏图片（防止CanvasGroup不起作用）
             if (mono.imgGoods != null) mono.imgGoods.enabled = false;
-            
+
             if (_dragLoopCoroutine != null) mono.StopCoroutine(_dragLoopCoroutine);
             _dragLoopCoroutine = mono.StartCoroutine(DragLoop());
-            
+
             // 3. 恢复格子颜色
             UpdateGridColors(false);
         }
@@ -153,7 +154,10 @@ namespace GameCore.UI
                      // Placement Success
                      _m_partInfo.gridPos = logicalOrigin;
                      _m_partInfo.rotation = _currentRotation; // Save rotation
-                     
+
+                    //隐藏格子背景
+                     GetGameObject().GetComponent<Image>().enabled = false;
+
                      SnapToGrid(hitGrid); 
                      
                      // Apply Rotation to actual item
@@ -419,10 +423,13 @@ namespace GameCore.UI
             var containerMono = _m_container.mono;
             if (containerMono != null && containerMono.layoutGroup != null)
             {
+                //恢复格子显示
+                GetGameObject().GetComponent<Image>().enabled = true;
+                
                 GetGameObject().transform.SetParent(containerMono.layoutGroup.transform);
-                GetGameObject().transform.localScale = Vector3.one;
-                GetGameObject().transform.localRotation = Quaternion.identity; // Reset rotation
-                GetGameObject().transform.localPosition = Vector3.zero;
+                //GetGameObject().transform.localScale = Vector3.one;
+                //GetGameObject().transform.localRotation = Quaternion.identity; // Reset rotation
+                //GetGameObject().transform.localPosition = Vector3.zero;
 
                 if (mono.imgGoods != null)
                 {
@@ -511,7 +518,11 @@ namespace GameCore.UI
                 {
                     Sprite gameSprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
                     if (gameSprite != null)
+                    {
                         dstImg.sprite = gameSprite;
+                        //自适应大小
+                        dstImg.SetNativeSize();
+                    }
                 }
             }
 
@@ -549,6 +560,7 @@ namespace GameCore.UI
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, eventData.position, uiCam, out localPoint))
             {
                 _m_dragCloneGO.transform.localPosition = localPoint;
+
             }
         }
         
@@ -558,10 +570,11 @@ namespace GameCore.UI
         {
             while (_m_isDraging)
             {
-                if (Input.GetMouseButtonDown(1))
-                {
-                    RotateDragItem();
-                }
+                //todo：来不及 不做旋转处理了
+                //if (Input.GetMouseButtonDown(1))
+                //{
+                //    RotateDragItem();
+                //}
                 UpdatePreview();
                 yield return null;
             }
@@ -573,6 +586,7 @@ namespace GameCore.UI
         {
             _currentRotation = (_currentRotation + 1) % 4;
             // 逆时针旋转 90 度 -> Z 轴 +90
+
             _m_dragCloneGO.transform.Rotate(0, 0, 90);
         }
 
