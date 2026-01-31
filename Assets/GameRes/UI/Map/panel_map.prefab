@@ -124,10 +124,10 @@ MonoBehaviour:
   nodePrefab: {fileID: 4988794329175121149, guid: 3b90e40e8f1e9624895150f9c6ad45a7, type: 3}
   linePrefab: {fileID: 4653072183398419852, guid: 66155fc8676566e47bbf9bc33ef810ff, type: 3}
   mapNodeParentRect: {fileID: 2398427714649396136}
-  nodeSize: {x: 100, y: 150}
+  nodeSize: {x: 170, y: 170}
   nodeOffset: {x: 2, y: 2}
   nodeAnglesOffset: 0
-  padding: {x: 0, y: -100}
+  padding: {x: 0, y: 0}
   mapData: {fileID: 11400000, guid: 0361bafd491906f41aea5a33be993af3, type: 2}
 --- !u!1 &6362608036904214565
 GameObject:

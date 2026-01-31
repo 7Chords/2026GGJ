@@ -25,6 +25,8 @@ namespace GameCore
 
         public long rollStoreId; //进入商店节点后roll到的商店id
         public long rollEnemyId; //进入战斗节点后roll到的敌人id
+        
+        public Vector2Int playerMapPosition = new Vector2Int(-1, -1); // Current Player Position in Map (Layer, Index)
 
         public override void OnInitialize()
         {

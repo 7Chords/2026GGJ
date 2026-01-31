@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GameCore.UI;
+using SCFrame;
 using SCFrame.UI;
 
 public class MapNode : MonoBehaviour
@@ -61,15 +62,20 @@ public class MapNode : MonoBehaviour
         UpdateVisuals();
     }
 
+    [Header("Visuals")]
+    [SerializeField]
+    public string nodeImageName; // Image path/name for loading sprite
+
     private void UpdateVisuals()
     {
         if (nodeImage == null) nodeImage = GetComponent<Image>();
         if (nodeImage == null) return;
-
+        
         switch (NodeType)
         {
             case RoomType.Enemy:
-                nodeImage.color = enemyColor;
+                //nodeImage.color = enemyColor;
+                nodeImageName = "zhandoutub_1";
                 break;
             case RoomType.Elite:
                 nodeImage.color = eliteColor;
@@ -78,17 +84,33 @@ public class MapNode : MonoBehaviour
                 nodeImage.color = restColor;
                 break;
             case RoomType.Shop:
-                nodeImage.color = shopColor;
+                //nodeImage.color = shopColor;
+                nodeImageName = "shangdiantubiao_0";
                 break;
             case RoomType.Treasure:
                 nodeImage.color = treasureColor;
                 break;
             case RoomType.Boss:
-                nodeImage.color = bossColor;
+                //nodeImage.color = bossColor;
+                nodeImageName = "bosstubiao_1";
                 break;
             default:
                 nodeImage.color = normalColor;
                 break;
         }
+        
+        // Try to load sprite if name is provided
+        if (!string.IsNullOrEmpty(nodeImageName))
+        {
+             Sprite sp = ResourcesHelper.LoadAsset<Sprite>(nodeImageName);
+             if (sp != null)
+             {
+                 nodeImage.sprite = sp;
+                 nodeImage.color = Color.white; // Reset color if using sprite
+                 return;
+             }
+        }
+
+        
     }
 }

@@ -93,27 +93,27 @@ public class MapGenerate : MonoBehaviour
 
     private void CreateMap()
     {
-        // 1. 调整 Content 大小以适应地图
-        // 高度 = padding上下 + (层数-1) * 间距
-        float totalHeight =  padding.y + (_layerCount.x-1) * nodeSize.y;
-        // 宽度 = padding左右 + (宽度-1) * 间距 (预估最大宽度)
-        float totalWidth =  padding.x + (_layerCount.y- 1) * nodeSize.x;
+        // 1. 调整 Content 大小以适应地图 (Horizontal Layout)
+        // Width = padding左右 + (LayerCount - 1) * NodeSpacingX
+        float totalWidth = padding.x + (_layerCount.x - 1) * nodeSize.x;
+        // Height = padding上下 + (MaxNodesPerLayer - 1) * NodeSpacingY
+        float totalHeight = padding.y + (_layerCount.y - 1) * nodeSize.y;
         
         mapNodeParentRect.sizeDelta = new Vector2(totalWidth, totalHeight);
 
         // 2. 生成节点
-        // 计算起始Y (底部)
-        float startY = -totalHeight / 2 + padding.y;
-        if (mapNodeParentRect.pivot.y == 0) startY = padding.y; // Pivot在底部
-        
-        for (var i = 0; i < _mapNodeArray.GetLength(0); i++) // Layers (Vertical)
-        {
-            // X轴居中计算
-            // 这一层的总宽度
-            float layerWidth = (_layerCount.y - 1) * nodeSize.x;
-            float startX = -layerWidth / 2; // 从左侧开始
+        // Calculate Start X (Left)
+        float startX = -totalWidth / 2 + padding.x;
+        if (mapNodeParentRect.pivot.x == 0) startX = padding.x; // Pivot at Left
 
-            for (var j = 0; j < _mapNodeArray.GetLength(1); j++) // Nodes in Layer (Horizontal)
+        for (var i = 0; i < _mapNodeArray.GetLength(0); i++) // i = Layer Index (X Axis)
+        {
+            // Y Axis Centering for this layer
+            // This layer's height logic (assuming full width for calculation)
+            float layerHeight = (_layerCount.y - 1) * nodeSize.y;
+            float startY = -layerHeight / 2; // Center Vertically
+
+            for (var j = 0; j < _mapNodeArray.GetLength(1); j++) // j = Node/Row Index (Y Axis)
             {
                 var node = Instantiate(nodePrefab, mapNodeParentRect).GetComponent<MapNode>();
                 node.transform.rotation = Quaternion.Euler(0, 0, Random.Range(-nodeAnglesOffset, nodeAnglesOffset));
@@ -121,21 +121,23 @@ public class MapGenerate : MonoBehaviour
 
                 node.SetMapNodeIndex(i, j);
 
-                // 计算随机偏移
-                // X轴偏移 (左右微调)
+                // Calculate Random Offset
+                // X axis offset (Depth jitter)
                 float offsetX = Random.Range(-nodeOffset.x, nodeOffset.x);
-                // Y轴偏移 (上下微调)
+                // Y axis offset (Height jitter)
                 float offsetY = Random.Range(-nodeOffset.y, nodeOffset.y);
 
                 if (i == 0 || i == _layerCount.x - 1)
                 {
-                   // 首尾层不偏移Y，保证对齐
-                   offsetY = 0;
+                   // Align start/end layers perfectly on X
+                   offsetX = 0;
                 }
 
-                // 设置位置
-                float finalX = startX + j * nodeSize.x + offsetX;
-                float finalY = startY + i * nodeSize.y + offsetY;
+                // Set Position (Horizontal Layout)
+                // X depends on Layer (i)
+                // Y depends on Row (j)
+                float finalX = startX + i * nodeSize.x + offsetX;
+                float finalY = startY + j * nodeSize.y + offsetY;
                 
                 node.transform.localPosition = new Vector3(finalX, finalY, 0);
                 node.gameObject.SetActive(true);

@@ -39,7 +39,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 70, y: 70}
+  m_SizeDelta: {x: 90, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4431654704025290112
 CanvasRenderer:
@@ -101,6 +101,7 @@ MonoBehaviour:
   shopColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   treasureColor: {r: 0, g: 1, b: 1, a: 1}
   bossColor: {r: 1, g: 0, b: 1, a: 1}
+  nodeImageName: 
 --- !u!114 &5173591153613733483
 MonoBehaviour:
   m_ObjectHideFlags: 0
