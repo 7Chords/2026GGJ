@@ -35,16 +35,12 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
-            //mono.imgIcon.RemoveMouseEnter(onIconMouseEnter);
-            //mono.imgIcon.RemoveMouseExit(onIconMouseExit);
             GetGameObject().transform.RemoveMouseEnter(onGameObjMouseEnter);
             GetGameObject().transform.RemoveMouseExit(onGameObjMouseExit);
         }
 
         public override void OnShowPanel()
         {
-            //mono.imgIcon.AddMouseEnter(onIconMouseEnter);
-            //mono.imgIcon.AddMouseExit(onIconMouseExit);
             GetGameObject().transform.AddMouseEnter(onGameObjMouseEnter);
             GetGameObject().transform.AddMouseExit(onGameObjMouseExit);
 
@@ -61,40 +57,13 @@ namespace GameCore.UI
             if (_m_partInfo == null)
                 return;
             mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
-            mono.txtHealth.text =_m_partInfo.partRefObj.partHealth.ToString();
-        }
-
-        private void onIconMouseExit(PointerEventData _arg, object[] _objs)
-        {
-            GameCommon.DiscardToolTip();
-        }
-
-        private void onIconMouseEnter(PointerEventData _arg, object[] _objs)
-        {
-            if (_m_partInfo == null)
-                return;
-            Vector2 screenPos = Vector2.zero;
-            var _canvas = GetGameObject().GetComponentInParent<Canvas>();
-            Camera cam = (_canvas != null && _canvas.renderMode != RenderMode.ScreenSpaceOverlay) ? _canvas.worldCamera : null;
-
-            // Check direction
-            float itemScreenX = RectTransformUtility.WorldToScreenPoint(cam, GetGameObject().transform.position).x;
-            bool showOnLeft = itemScreenX > Screen.width * 0.7f; // If in right 30% of screen
-
-            // Offset based on direction
-            // Left: Pivot Right-Top (1,1) -> Anchor at (ItemX - border, ItemY)
-            // Right: Pivot Left-Top (0,1) -> Anchor at (ItemX + border, ItemY)
-            Vector3 offset = showOnLeft ? new Vector3(-40, -20, 0) : new Vector3(40, -20, 0);
-
-            screenPos = RectTransformUtility.WorldToScreenPoint(cam, GetGameObject().transform.position + offset);
-
-            var tooltip = GameCommon.ShowTooltip(_m_partInfo.partRefObj.partName, _m_partInfo.partRefObj.partDesc, screenPos);
-            /*if (tooltip != null)
-            {
-                tooltip.SetPivot(showOnLeft ? new Vector2(1, 1) : new Vector2(0, 1));
-            }*/
+            if(!mono.isTxtHealthIsRunningInfo)
+                mono.txtHealth.text =_m_partInfo.partRefObj.partHealth.ToString();
+            else
+                mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.partRefObj.partHealth;
 
         }
+
 
         private void onGameObjMouseExit(PointerEventData arg1, object[] arg2)
         {

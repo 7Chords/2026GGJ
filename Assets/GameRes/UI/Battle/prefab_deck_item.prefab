@@ -341,3 +341,4 @@ MonoBehaviour:
   txtHealth: {fileID: 6958061118933925905}
   scaleMouseEnter: 1.03
   scaleChgDuration: 0.1
+  isTxtHealthIsRunningInfo: 1
