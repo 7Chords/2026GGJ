@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de0fef0b35eb0b429275354d13682df, type: 3}
   m_Name: MapData
   m_EditorClassIdentifier: 
-  layerCount: {x: 6, y: 4}
+  layerCount: {x: 6, y: 6}
   repetitionCount: 6
   roomProbabilities:
   - type: 0
-    weight: 50
+    weight: 60
   - type: 4
-    weight: 50
+    weight: 40
