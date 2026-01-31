@@ -43,22 +43,19 @@ namespace GameCore.UI
 
         private void refreshShow()
         {
-            // 边界校验：敌人数据为空直接返回
             if (_m_enemyRefObj == null)
             {
                 Debug.LogWarning("UIPanelBattleWin: 敌人配置数据为空！");
                 return;
             }
 
-            // 1. 获取基础数据并校验
             List<PartEffectObj> sourceList = _m_enemyRefObj.initPartList;
             int targetCount = _m_enemyRefObj.winCount;
-
-            // 2. 核心逻辑：随机抽取不重复的targetCount个元素
             List<PartInfo> randomSelectedList = RandomSelectUniqueItems(sourceList, targetCount);
 
-            // 3. 传递抽取结果给容器，刷新UI
             _m_winContainer?.SetListInfo(randomSelectedList);
+
+            mono.txtMoney.text = _m_enemyRefObj.winMoney.ToString();
         }
 
         /// <summary>
