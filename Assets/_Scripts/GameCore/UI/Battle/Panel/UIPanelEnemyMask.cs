@@ -106,97 +106,37 @@ namespace GameCore.UI
         {
             ClearItems();
             
-            // 1. Random Enemy
-            var enemies = SCRefDataMgr.instance.enemyRefList.refDataList;
-            if (enemies == null || enemies.Count == 0) return;
-            var enemy = enemies[Random.Range(0, enemies.Count)];
-            
-            Debug.Log($"[EnemyGen] Selected Enemy: {enemy.enemyName}");
-
-            // 2. Random Parts (Pick 2)
-            if (enemy.initPartList == null || enemy.initPartList.Count == 0) return;
-            List<GameCore.RefData.PartEffectObj> selectedEffects = new List<GameCore.RefData.PartEffectObj>();
-            
-            // Fisher-Yates shuffle for randomness or simple loop if small count
-            List<GameCore.RefData.PartEffectObj> pool = new List<GameCore.RefData.PartEffectObj>(enemy.initPartList);
-            int pickCount = Mathf.Min(2, pool.Count);
-            
-            for(int k=0; k<pickCount; k++)
+            // Read from Model
+            var enemyData = GameModel.instance.currentEnemy;
+            if (enemyData == null)
             {
-               int idx = Random.Range(0, pool.Count);
-               selectedEffects.Add(pool[idx]);
-               pool.RemoveAt(idx); // No duplicate picking of the exact same entry obj (unless defined multiple times)
+                Debug.LogWarning("[UIPanelEnemyMask] No enemy data in Model!");
+                return;
             }
-
-            // 3. Placement
-            bool[,] occupiedGrid = new bool[6, 7]; // 6 Width, 7 Height
             
-            foreach(var effect in selectedEffects)
+            Debug.Log($"[EnemyGen] Displaying Enemy: {enemyData.enemyRef.enemyName}");
+
+            // 3. Placement Visualization
+            bool[,] occupiedGrid = new bool[6, 7]; 
+            
+            foreach(var partInfo in enemyData.parts)
             {
-                var partRef = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == effect.partId);
-                if (partRef == null) continue;
-                
-                // Try to place
-                if (TryFindValidPlacement(occupiedGrid, partRef, out Vector2Int pos, out int rot))
-                {
-                    // Mark occupancy
-                    MarkOccupancy(occupiedGrid, partRef, pos, rot);
-                    // Create UI
-                    CreatePartItem(partRef, pos, rot);
-                }
-                else
-                {
-                    Debug.LogWarning($"[EnemyGen] Could not fit part {partRef.partName}");
-                }
+                // Mark occupancy
+                MarkOccupancy(occupiedGrid, partInfo.partRefObj, partInfo.gridPos, partInfo.rotation);
+                // Create UI
+                CreatePartItem(partInfo.partRefObj, partInfo.gridPos, partInfo.rotation);
             }
         }
         
-        private bool TryFindValidPlacement(bool[,] grid, GameCore.RefData.PartRefObj part, out Vector2Int resultPos, out int resultRot)
-        {
-            resultPos = Vector2Int.zero;
-            resultRot = 0;
-            
-            int maxAttempts = 50;
-            for(int i=0; i<maxAttempts; i++)
-            {
-                // Random Rotation: 0, 1, 2, 3 (x90)
-                int rot = Random.Range(0, 4);
-                // Random Pos
-                int x = Random.Range(0, 6);
-                int y = Random.Range(0, 7);
-                Vector2Int origin = new Vector2Int(x, y);
-                
-                if (IsValidPlacement(grid, part, origin, rot))
-                {
-                    resultPos = origin;
-                    resultRot = rot;
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private bool IsValidPlacement(bool[,] grid, GameCore.RefData.PartRefObj part, Vector2Int origin, int rot)
-        {
-            List<Vector2Int> shape = GetRotatedShape(part, rot);
-            foreach(var offset in shape)
-            {
-                Vector2Int p = origin + offset;
-                // Check Bounds
-                if (p.x < 0 || p.x >= 6 || p.y < 0 || p.y >= 7) return false;
-                // Check Occupancy
-                if (grid[p.x, p.y]) return false;
-            }
-            return true;
-        }
-
+        // Helper methods for visual occupancy marking (same as before)
         private void MarkOccupancy(bool[,] grid, GameCore.RefData.PartRefObj part, Vector2Int origin, int rot)
         {
             List<Vector2Int> shape = GetRotatedShape(part, rot);
             foreach(var offset in shape)
             {
                 Vector2Int p = origin + offset;
-                grid[p.x, p.y] = true;
+                if (p.x >= 0 && p.x < 6 && p.y >= 0 && p.y < 7) 
+                    grid[p.x, p.y] = true;
             }
         }
 

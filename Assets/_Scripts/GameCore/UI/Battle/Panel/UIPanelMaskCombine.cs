@@ -46,6 +46,9 @@ namespace GameCore.UI
                 UICoreMgr.instance.AddNode(new UINodeEnemyMask(SCFrame.UI.SCUIShowType.ADDITION));
             });
             
+            // Generate Enemy when entering the mask combine (preparation phase)
+            GameModel.instance.GenerateRandomEnemy();
+            
             refreshShow();
         }
 
@@ -79,19 +82,11 @@ namespace GameCore.UI
                 return bMinX.CompareTo(aMinX); // Ascending X
             });
             
-            // 3. 执行战斗逻辑
-            Debug.Log("=== Battle Start: Turn Order ===");
-            foreach(var part in placedParts)
-            {
-                if (part.logicObj != null)
-                {
-                    part.logicObj.OnTurnStart();
-                }
-                else
-                {
-                   // Debug.Log($"Parts {part.partRefObj.partName} has no logic.");
-                }
-            }
+            // 3. Save to GameModel for Battle
+            GameModel.instance.playerBattleParts = placedParts;
+            
+            // 4. Open Battle Node
+            UICoreMgr.instance.AddNode(new UINodeBattle(SCUIShowType.FULL)); 
         }
         
         // Helper to get Max Y (Top-most cell Y)
