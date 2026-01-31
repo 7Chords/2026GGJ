@@ -10,7 +10,7 @@ namespace GameCore.RefData
         public long id;
         public string enemyName;
         public int enemyHealth;
-        public List<GoodsEffectObj> initPartList;
+        public List<PartEffectObj> initPartList;
         public int winMoney;
         public int winCount;
         protected override void _parseFromString()
@@ -18,7 +18,7 @@ namespace GameCore.RefData
             id = getLong("id");
             enemyName = getString("enemyName");
             enemyHealth = getInt("enemyHealth");
-            initPartList = getList<GoodsEffectObj>("initPartList");
+            initPartList = getList<PartEffectObj>("initPartList");
             winMoney = getInt("winMoney");
             winCount = getInt("winCount");
         }

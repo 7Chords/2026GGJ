@@ -106,8 +106,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b07a37e7e0e85b4f84837e40f27a912, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiMask: {fileID: 0}
-  canvasGroup: {fileID: 0}
+  uiMask: {fileID: 9048739035347644998}
+  canvasGroup: {fileID: 2214269245191035423}
   fadeInDuration: 0.25
   fadeOutDuration: 0.25
   monoContainer: {fileID: 3701247619877853409}
