@@ -11,12 +11,16 @@ namespace GameCore.RefData
         public string enemyName;
         public int enemyHealth;
         public List<GoodsEffectObj> initPartList;
+        public int winMoney;
+        public int winCount;
         protected override void _parseFromString()
         {
             id = getLong("id");
             enemyName = getString("enemyName");
             enemyHealth = getInt("enemyHealth");
             initPartList = getList<GoodsEffectObj>("initPartList");
+            winMoney = getInt("winMoney");
+            winCount = getInt("winCount");
         }
         public static string assetPath => "RefData/ExportTxt";
         public static string sheetName => "enemy";

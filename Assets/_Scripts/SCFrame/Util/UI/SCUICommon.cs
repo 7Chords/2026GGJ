@@ -12,6 +12,8 @@ namespace SCFrame
         public static Vector2 ScreenPointToUIPoint(RectTransform _rt, Vector2 _screenPoint)
         {
             Vector2 localPoint;
+
+
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 _rt.parent as RectTransform,
                 _screenPoint,
