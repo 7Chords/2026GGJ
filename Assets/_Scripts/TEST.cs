@@ -24,7 +24,10 @@ public class TEST : MonoBehaviour
         {
             GameModel.instance.rollStoreId = 103001;
             UICoreMgr.instance.AddNode(new UINodeStore(SCFrame.UI.SCUIShowType.FULL));
-
+        }
+        else if (Input.GetKeyDown(KeyCode.L))
+        {
+            UICoreMgr.instance.AddNode(new UINodeMap(SCFrame.UI.SCUIShowType.FULL));
         }
     }
 }
