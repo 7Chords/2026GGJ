@@ -13,5 +13,13 @@ using UnityEngine;
         [Header("玩家血条")]
         public UnityEngine.UI.Slider sliderPlayerHp;
         [Header("敌方血条")]
+        [Header("敌方血条")]
         public UnityEngine.UI.Slider sliderEnemyHp;
+        
+        public System.Action onUpdate;
+        
+        private void Update()
+        {
+            onUpdate?.Invoke();
+        }
     }
