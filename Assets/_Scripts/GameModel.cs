@@ -34,7 +34,11 @@ namespace GameCore
             playerMaxHealth = playerRefObj.playerHealth;
             playerHealth = playerMaxHealth;
             playerMoney = playerRefObj.playerMoney;
+
             busyPartInfoList = new List<PartInfo>();
+            bagPartInfoList = new List<PartInfo>();
+            deckPartInfoList = new List<PartInfo>();
+
             PartEffectObj partEffectObj = null;
             PartInfo info = null;
             PartRefObj partRefObj = null;
@@ -48,6 +52,9 @@ namespace GameCore
                     continue;
                 info = new PartInfo(partRefObj);
                 busyPartInfoList.Add(info);
+                bagPartInfoList.Add(info);
+                deckPartInfoList.Add(info);
+
             }
         }
 
