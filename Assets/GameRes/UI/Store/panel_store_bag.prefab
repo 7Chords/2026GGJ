@@ -473,7 +473,7 @@ MonoBehaviour:
   fadeOutDuration: 0.25
   monoContainer: {fileID: 2419926971380788201}
   btnClose: {fileID: 8035200198668194270}
-  scaleMouseEnter: 1.1
+  scaleMouseEnter: 1
   scaleChgDuration: 0.1
 --- !u!1 &7820164948027728518
 GameObject:
