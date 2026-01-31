@@ -9,7 +9,7 @@ namespace GameCore.UI
     public class UIPanelBattleWin : _ASCUIPanelBase<UIMonoBattleWin>
     {
         private EnemyRefObj _m_enemyRefObj;
-        private UIPanelStoreBagContainer _m_winContainer;
+        private UIPanelCommonPartContainer _m_winContainer;
 
         public UIPanelBattleWin(UIMonoBattleWin _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
@@ -17,7 +17,7 @@ namespace GameCore.UI
 
         public override void AfterInitialize()
         {
-            _m_winContainer = new UIPanelStoreBagContainer(mono.monoContainer);
+            _m_winContainer = new UIPanelCommonPartContainer(mono.monoContainer);
         }
 
         public override void BeforeDiscard()
