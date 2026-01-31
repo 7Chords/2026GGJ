@@ -87,6 +87,11 @@ namespace GameCore.UI
             if (_m_storeRefObj == null)
                 return;
 
+            if (_m_goodsInfoList == null)
+                _m_goodsInfoList = new List<GoodsInfo>();
+            _m_goodsInfoList.Clear();
+
+
             GoodsEffectObj effectObj;
             for (int i = 0; i < _m_storeRefObj.goodsList.Count; i++)
             {
