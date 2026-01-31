@@ -109,8 +109,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -4.7, y: 3.4}
-  m_SizeDelta: {x: 93.5081, y: 46.5691}
+  m_AnchoredPosition: {x: -10.351128, y: 3.4000015}
+  m_SizeDelta: {x: 91.2674, y: 46.5691}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &6888647263497908140
 CanvasRenderer:
@@ -147,13 +147,13 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 3
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 55/55
+  m_Text: 555/555
 --- !u!1 &4216626814817612860
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,8 +188,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 17, y: 9.7}
-  m_SizeDelta: {x: 37.2705, y: 37.2705}
+  m_AnchoredPosition: {x: 11.3, y: 9.7}
+  m_SizeDelta: {x: 36.3774, y: 37.2705}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &7951013972861211191
 CanvasRenderer:
@@ -219,7 +219,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -168309933, guid: 451efe7b4f6e80b4da4dc38165fde833, type: 3}
+  m_Sprite: {fileID: 1091164101, guid: 9a6ab53833cd1f243bec4eef79e3922d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -341,3 +341,4 @@ MonoBehaviour:
   txtHealth: {fileID: 6958061118933925905}
   scaleMouseEnter: 1.03
   scaleChgDuration: 0.1
+  isTxtHealthIsRunningInfo: 1

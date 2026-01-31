@@ -16,7 +16,8 @@ namespace GameCore.UI
         public float scaleMouseEnter;
         [Header("鼠标移入的缩放时间")]
         public float scaleChgDuration;
-
+        [Header("生命值文本是否是cur/max型")]
+        public bool isTxtHealthIsRunningInfo;
     }
 
 }
