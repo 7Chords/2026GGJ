@@ -54,6 +54,7 @@ namespace GameCore.UI
         }
         private void onBtnStartClickDown(PointerEventData arg1, object[] arg2)
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.CloseTopNode();
             UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
         }

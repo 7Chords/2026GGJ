@@ -146,10 +146,12 @@ namespace GameCore.UI
         }
         private void onBtnBagClickDown(PointerEventData _arg, object[] _objs)
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.AddNode(new UINodeStoreBag(SCUIShowType.ADDITION));
         }
         private void onBtnExitClickDonw(PointerEventData _arg, object[] _objs)
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.CloseTopNode();
             UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
         }

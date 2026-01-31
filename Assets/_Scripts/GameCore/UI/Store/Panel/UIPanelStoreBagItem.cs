@@ -100,6 +100,7 @@ namespace GameCore.UI
 
         private void onBtnSellClickDown(PointerEventData arg1, object[] arg2)
         {
+
             GameCommon.DiscardToolTip();
             SCMsgCenter.SendMsg(SCMsgConst.SELL_PART, _m_partInfo);
         }

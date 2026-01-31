@@ -62,6 +62,7 @@ namespace GameCore.UI
 
         private void onBtnCloseClickDown(PointerEventData _arg, object[] _objs)
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.CloseTopNode();
         }
 
