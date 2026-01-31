@@ -31,15 +31,15 @@ namespace GameCore
             playerHealth = playerMaxHealth;
             playerMoney = playerRefObj.playerMoney;
             deckPartInfoList = new List<PartInfo>();
-            GoodsEffectObj goodsEffectObj = null;
+            PartEffectObj partEffectObj = null;
             PartInfo info = null;
             PartRefObj partRefObj = null;
             for (int i =0;i<playerRefObj.initPartList.Count;i++)
             {
-                goodsEffectObj = playerRefObj.initPartList[i];
-                if (goodsEffectObj == null)
+                partEffectObj = playerRefObj.initPartList[i];
+                if (partEffectObj == null)
                     continue;
-                partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == goodsEffectObj.goodsId);
+                partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == partEffectObj.partId);
                 if (partRefObj == null)
                     continue;
                 info = new PartInfo(partRefObj);

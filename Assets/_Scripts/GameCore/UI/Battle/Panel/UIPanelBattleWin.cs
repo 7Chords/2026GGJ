@@ -37,7 +37,7 @@ namespace GameCore.UI
         {
             
             _m_enemyRefObj = SCRefDataMgr.instance.enemyRefList.refDataList.Find(x => x.id == GameModel.instance.rollEnemyId);
-
+            _m_winContainer?.ShowPanel();
             refreshShow();
         }
 
@@ -51,7 +51,7 @@ namespace GameCore.UI
             }
 
             // 1. 获取基础数据并校验
-            List<GoodsEffectObj> sourceList = _m_enemyRefObj.initPartList;
+            List<PartEffectObj> sourceList = _m_enemyRefObj.initPartList;
             int targetCount = _m_enemyRefObj.winCount;
 
             // 2. 核心逻辑：随机抽取不重复的targetCount个元素
@@ -67,12 +67,12 @@ namespace GameCore.UI
         /// <param name="sourceList">源列表</param>
         /// <param name="count">抽取数量</param>
         /// <returns>抽取后的列表</returns>
-        private List<PartInfo> RandomSelectUniqueItems(List<GoodsEffectObj> sourceList, int count)
+        private List<PartInfo> RandomSelectUniqueItems(List<PartEffectObj> sourceList, int count)
         {
             List<PartInfo> resultList = new List<PartInfo>();
 
             // 复制源列表（避免修改原数据）
-            List<GoodsEffectObj> tempList = new List<GoodsEffectObj>(sourceList);
+            List<PartEffectObj> tempList = new List<PartEffectObj>(sourceList);
             // 洗牌算法（Fisher-Yates）：随机打乱后取前count个，保证随机性且不重复
             for (int i = tempList.Count - 1; i > 0; i--)
             {
@@ -84,7 +84,7 @@ namespace GameCore.UI
             // 取前count个元素作为结果
             for (int i = 0; i < count; i++)
             {
-                PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == tempList[i].goodsId);
+                PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == tempList[i].partId);
                 resultList.Add(new PartInfo(partRefObj));
             }
 

@@ -29,10 +29,10 @@ public class TEST : MonoBehaviour
         {
             UICoreMgr.instance.AddNode(new UINodeMap(SCFrame.UI.SCUIShowType.FULL));
         }
-        else if (Input.GetKeyDown(KeyCode.L))
+        else if (Input.GetKeyDown(KeyCode.O))
         {
             GameModel.instance.rollEnemyId = 104001;
-            UICoreMgr.instance.AddNode(new UINodeMap(SCFrame.UI.SCUIShowType.FULL));
+            UICoreMgr.instance.AddNode(new UINodeBattleWin(SCFrame.UI.SCUIShowType.ADDITION));
         }
     }
 }

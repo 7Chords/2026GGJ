@@ -8,7 +8,7 @@ namespace GameCore.RefData
     public class PlayerRefObj : SCRefDataCore
     {
         public int playerHealth;
-        public List<GoodsEffectObj> initPartList;
+        public List<PartEffectObj> initPartList;
         public int playerMoney;
         public PlayerRefObj()
         {
@@ -21,7 +21,7 @@ namespace GameCore.RefData
         protected override void _parseFromString()
         {
             playerHealth = getInt("playerHealth");
-            initPartList = getList<GoodsEffectObj>("initPartList");
+            initPartList = getList<PartEffectObj>("initPartList");
             playerMoney = getInt("playerMoney");
         }
 
