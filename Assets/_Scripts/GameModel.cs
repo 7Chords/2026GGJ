@@ -19,7 +19,8 @@ namespace GameCore
         public List<PartInfo> bagPartInfoList;//背包部位列表
         public List<FaceGridInfo> faceGridInfoList;//脸部格子信息列表
 
-        public long rollStoreId;
+        public long rollStoreId;//进入商店节点后roll到的商店id
+        public long rollEnemyId;//进入战斗节点后roll到的敌人id
         public override void OnInitialize()
         {
             //初始化数据从配表读取
