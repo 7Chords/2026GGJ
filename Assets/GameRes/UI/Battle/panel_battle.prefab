@@ -986,6 +986,10 @@ MonoBehaviour:
   gridPrefab: {fileID: 167188352181821789}
   columnCount: 4
   rowCount: 7
+  disabledGrids:
+  - {x: 3, y: 0}
+  - {x: 0, y: 6}
+  - {x: 3, y: 6}
 --- !u!1 &5365043761952542921
 GameObject:
   m_ObjectHideFlags: 0
@@ -1120,6 +1124,10 @@ MonoBehaviour:
   gridPrefab: {fileID: 6949152297723294458}
   columnCount: 4
   rowCount: 7
+  disabledGrids:
+  - {x: 3, y: 0}
+  - {x: 0, y: 6}
+  - {x: 3, y: 6}
 --- !u!1 &5917411692990177272
 GameObject:
   m_ObjectHideFlags: 0
@@ -2107,6 +2115,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6551300967387294209, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
+      propertyPath: imgBg
+      value: 
+      objectReference: {fileID: 1003738045579637766}
+    - target: {fileID: 6551300967387294209, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
       propertyPath: colorDefault.a
       value: 1
       objectReference: {fileID: 0}
@@ -2122,38 +2134,16 @@ PrefabInstance:
       propertyPath: colorDefault.r
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6551300967387294209, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2833186293798626533, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5068091337985426087}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
 --- !u!1 &167188352181821789 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2833186293798626533, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
   m_PrefabInstance: {fileID: 2666279446863807928}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5068091337985426087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 167188352181821789}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47c96451a626cc64e86a48ab6b1da863, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiMask: {fileID: 0}
-  canvasGroup: {fileID: 0}
-  fadeInDuration: 0
-  fadeOutDuration: 0
-  gridPos: {x: 0, y: 0}
-  imgBg: {fileID: 1003738045579637766}
 --- !u!114 &1003738045579637766 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2949146822614954430, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
@@ -2267,6 +2257,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6551300967387294209, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
+      propertyPath: imgBg
+      value: 
+      objectReference: {fileID: 8055919072032991137}
+    - target: {fileID: 6551300967387294209, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
       propertyPath: colorDefault.a
       value: 1
       objectReference: {fileID: 0}
@@ -2282,14 +2276,10 @@ PrefabInstance:
       propertyPath: colorDefault.r
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6551300967387294209, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2833186293798626533, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3717043364412465233}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
 --- !u!224 &6078070756096319417 stripped
 RectTransform:
@@ -2301,24 +2291,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2833186293798626533, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
   m_PrefabInstance: {fileID: 5125420586716993055}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3717043364412465233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6949152297723294458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47c96451a626cc64e86a48ab6b1da863, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiMask: {fileID: 0}
-  canvasGroup: {fileID: 0}
-  fadeInDuration: 0
-  fadeOutDuration: 0
-  gridPos: {x: 0, y: 0}
-  imgBg: {fileID: 8055919072032991137}
 --- !u!114 &8055919072032991137 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2949146822614954430, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
