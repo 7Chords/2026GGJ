@@ -63,7 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0.24313727, g: 0.5137255, b: 0.15294118, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -124,10 +124,10 @@ MonoBehaviour:
   nodePrefab: {fileID: 4988794329175121149, guid: 3b90e40e8f1e9624895150f9c6ad45a7, type: 3}
   linePrefab: {fileID: 4653072183398419852, guid: 66155fc8676566e47bbf9bc33ef810ff, type: 3}
   mapNodeParentRect: {fileID: 2398427714649396136}
-  nodeSize: {x: 170, y: 170}
+  nodeSize: {x: 200, y: 200}
   nodeOffset: {x: 2, y: 2}
   nodeAnglesOffset: 0
-  padding: {x: 0, y: 0}
+  padding: {x: 200, y: 200}
   mapData: {fileID: 11400000, guid: 0361bafd491906f41aea5a33be993af3, type: 2}
 --- !u!1 &6362608036904214565
 GameObject:
