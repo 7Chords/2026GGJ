@@ -1,7 +1,16 @@
-﻿id	goodsName	goodsType	goodsPrice	partId	healthValue	goodsSpriteObjName
-100001	大狗鼻子	PART	75	101001	0	spr_default
-101002	大狗眼	PART	50	101002	0	spr_default
-101003	大狗嘴	PART	50	101003	0	spr_default
-101004	小血药	HEAL	25	0	25	spr_default
-101005	中血药	HEAL	30	0	30	spr_default
-101006	大血药	HEAL	35	0	35	spr_default
+﻿id	goodsName	goodsDesc	goodsType	goodsPrice	partId	healthValue	goodsSpriteObjName
+100001	贝斯顿之鼻	暴击率：10%; 护盾：15	PART	75	101001	0	spr_icon_nose_1
+100002	贝斯顿之眼	命中率：45%; 护盾：15	PART	50	101002	0	spr_icon_eye_1
+100003	贝斯顿之嘴	伤害：10; 护盾：15	PART	50	101003	0	spr_icon_mouth_1
+100004	希尔之鼻	暴击率：30%; 恢复量：5	PART	100	101004	0	spr_icon_nose_2
+100005	希尔之眼	命中率：40%; 恢复量：5	PART	100	101005	0	spr_icon_eye_2
+100006	希尔之嘴	伤害：7; 恢复量：5	PART	100	101006	0	spr_icon_mouth_2
+100007	里卡多之鼻	暴击率：40%; 反伤：5	PART	100	101007	0	spr_icon_nose_3
+100008	里卡多之眼	命中率：33%; 反伤：5	PART	100	101008	0	spr_icon_eye_3
+100009	里卡多之嘴	伤害：10; 反伤：5	PART	100	101009	0	spr_icon_mouth_3
+100010	阿卡多之鼻	暴击率：25%; 吸血：5	PART	100	101010	0	spr_icon_nose_4
+100011	阿卡多之眼	命中率：33%; 吸血：5	PART	100	101011	0	spr_icon_eye_4
+100012	阿卡多之嘴	伤害：10; 吸血：5	PART	100	101012	0	spr_icon_mouth_4
+100013	小血药	恢复HP：25	HEAL	25	0	25	spr_medic_small
+100014	中血药	恢复HP：30	HEAL	30	0	30	spr_medic_middle
+100015	大血药	恢复HP：35	HEAL	35	0	35	spr_medic_big

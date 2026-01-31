@@ -1,4 +1,20 @@
-﻿id	partName	partType	partHealth	partDesc	partSpriteObjName	entryList	posList
-101001	大狗鼻子	NOSE	30	大狗的鼻子	spr_default	CRITICAL_CHANCE:5;DEFEND:15;	0:00
-101002	大狗眼	EYE	25	大狗的眼	spr_default	HIT_CHANCE:5;DEFEND:15;	0:00
-101003	大狗嘴	MOUTH	20	大狗的嘴	spr_default	ATTACK:20;DEFEND:15;	0:00
+﻿id	partName	partType	partHealth	partDesc	partSpriteObjName	partGameObjectName	entryList	posList	midPos	logicClassName
+101001	贝斯顿之鼻	NOSE	15	暴击率：10%; 护盾：15	spr_icon_nose_1	spr_nose_1	CRITICAL_CHANCE:10;DEFEND:15	0:0;0:1	0:0	NoseLogic
+101002	贝斯顿之眼	EYE	25	命中率：45%; 护盾：15	spr_icon_eye_1	spr_eye_1	HIT_CHANCE:45;DEFEND:15	0:0	0:0	EyeLogic
+101003	贝斯顿之嘴	MOUTH	20	伤害：10; 护盾：15	spr_icon_mouth_1	spr_mouth_1	ATTACK:10;DEFEND:15	0:0;1:0	0:0	MouthLogic
+101004	希尔之鼻	NOSE	7	暴击率：30%; 恢复量：5	spr_icon_nose_2	spr_nose_2	CRITICAL_CHANCE:30;HEALTH:5	0:0	0:1	NoseLogic
+101005	希尔之眼	EYE	6	命中率：40%; 恢复量：5	spr_icon_eye_2	spr_eye_2	HIT_CHANCE:40;HEALTH:5	0:0;0:1;1:0;1:1	0:0	EyeLogic
+101006	希尔之嘴	MOUTH	19	伤害：7; 恢复量：5	spr_icon_mouth_2	spr_mouth_2	ATTACK:7;HEALTH:5	0:0;1:0	1:1	MouthLogic
+101007	里卡多之鼻	NOSE	20	暴击率：40%; 反伤：5	spr_icon_nose_3	spr_nose_3	CRITICAL_CHANCE:40;REFLECT:5	0:0;0:1;0:2	0:1	NoseLogic
+101008	里卡多之眼	EYE	15	命中率：33%; 反伤：5	spr_icon_eye_3	spr_eye_3	HIT_CHANCE:33;REFLECT:5	0:0;0:1;1:0;1:1	0:0	EyeLogic
+101009	里卡多之嘴	MOUTH	25	伤害：10; 反伤：5	spr_icon_mouth_3	spr_mouth_3	ATTACK:10;REFLECT:5	0:0;1:0:2:0	1:1	MouthLogic
+101010	阿卡多之鼻	NOSE	5	暴击率：25%; 吸血：5	spr_icon_nose_4	spr_nose_4	CRITICAL_CHANCE:25;SUCK:5	0:0;0:1;0:2	0:1	NoseLogic
+101011	阿卡多之眼	EYE	10	命中率：33%; 吸血：5	spr_icon_eye_4	spr_eye_4	HIT_CHANCE:33;SUCK:5	0:0;1:0	0:0	EyeLogic
+101012	阿卡多之嘴	MOUTH	15	伤害：10; 吸血：5	spr_icon_mouth_4	spr_mouth_4	ATTACK:10;SUCK:5	0:0;0:1;1:0;1:1;2:0;2:1	1:1	MouthLogic
+
+
+
+
+
+
+

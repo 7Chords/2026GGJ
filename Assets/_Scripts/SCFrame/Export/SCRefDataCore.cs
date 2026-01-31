@@ -43,11 +43,19 @@ namespace SCFrame
                 Debug.LogError(_m_assetPath + "��" + _m_sheetName + "û����Ϣ������ʧ�ܣ�");
                 return;
             }
+#if UNITY_EDITOR
             using (StreamReader sr = new StreamReader("Assets/Resources/RefData/ExportTxt/" + _m_sheetName + ".txt"))
             {
                 string str = sr.ReadToEnd();
                 parseFromTxt(str);
             }
+#else
+            using (StreamReader sr = new StreamReader(Application.streamingAssetsPath+"/ExportTxt/" + _m_sheetName + ".txt"))
+            {
+                string str = sr.ReadToEnd();
+                parseFromTxt(str);
+            }
+#endif
         }
         protected void parseFromTxt(string _string)
         {
