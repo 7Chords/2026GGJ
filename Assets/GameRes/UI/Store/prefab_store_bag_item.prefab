@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 30}
+  m_AnchoredPosition: {x: 0, y: 54}
   m_SizeDelta: {x: 116.5926, y: 116.5926}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6842918443505125446
@@ -109,7 +109,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 12.4, y: -38}
+  m_AnchoredPosition: {x: 12.400002, y: -54.600006}
   m_SizeDelta: {x: 45.1799, y: 46.5691}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &9102121361851617026
@@ -188,7 +188,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -12.5, y: -39.3}
+  m_AnchoredPosition: {x: -12.5, y: -55.9}
   m_SizeDelta: {x: 46.2948, y: 46.5691}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &6888647263497908140
@@ -276,7 +276,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -46.903687}
-  m_SizeDelta: {x: 150, y: 214}
+  m_SizeDelta: {x: 150, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8972399171050778377
 CanvasRenderer:
@@ -384,7 +384,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -21.3, y: -12.4}
+  m_AnchoredPosition: {x: -21.3, y: -29.000006}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &5571243471144205864
@@ -415,7 +415,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -168309933, guid: 451efe7b4f6e80b4da4dc38165fde833, type: 3}
+  m_Sprite: {fileID: 1091164101, guid: 9a6ab53833cd1f243bec4eef79e3922d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -459,7 +459,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 20.6, y: -11.4}
+  m_AnchoredPosition: {x: 20.599998, y: -28.000006}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &6524904553091355719
@@ -483,7 +483,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
