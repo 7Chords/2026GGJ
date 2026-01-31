@@ -1,4 +1,5 @@
 using GameCore.RefData;
+using SCFrame;
 using SCFrame.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,12 +29,18 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
+            mono.btnGoto.onClick.RemoveAllListeners();
             _m_winContainer?.HidePanel();
         }
 
         public override void OnShowPanel()
         {
-            
+            mono.btnGoto.onClick.AddListener(() =>
+            {
+                UICoreMgr.instance.RemoveAllNodes(SCUINodeFuncType.BATTLE);
+                UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+
+            });
             _m_enemyRefObj = SCRefDataMgr.instance.enemyRefList.refDataList.Find(x => x.id == GameModel.instance.rollEnemyId);
             _m_winContainer?.ShowPanel();
             refreshShow();

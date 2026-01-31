@@ -442,12 +442,17 @@ namespace GameCore.UI
                 if (GameModel.instance.currentEnemy != null)
                 {
                     GameModel.instance.currentEnemy.currentHealth = Mathf.Max(0, GameModel.instance.currentEnemy.currentHealth - amount);
+                    if (GameModel.instance.currentEnemy.currentHealth== 0)
+                        UICoreMgr.instance.AddNode(new UINodeBattleWin(SCUIShowType.ADDITION));
                 }
             }
             else
             {
                 // Damage Player
                 GameModel.instance.playerHealth = Mathf.Max(0, GameModel.instance.playerHealth - amount);
+                //
+                if (GameModel.instance.playerHealth == 0)
+                    UICoreMgr.instance.AddNode(new UINodeLose(SCUIShowType.FULL));
             }
         }
 

@@ -520,6 +520,7 @@ namespace GameCore.UI
                     if (gameSprite != null)
                     {
                         dstImg.sprite = gameSprite;
+                        dstImg.GetComponent<RectTransform>().pivot = Vector2.one * 0.5f;
                         //自适应大小
                         dstImg.SetNativeSize();
                     }
