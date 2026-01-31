@@ -17,7 +17,7 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 045db2c26f053644f8f1dac8e888007b
   m_SerializeEntries:
-  - m_GUID: 18475ae6f5cbf384d903f0635bf6c153
+  - m_GUID: 33f2ef046d216ed4faabaca7c60269d6
     m_Address: spr_medic_big
     m_ReadOnly: 0
     m_SerializedLabels: []
@@ -37,23 +37,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f336de652740dcf41a0cde0c0bf2ac6d
-    m_Address: spr_nose_4
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b2f00abc635839441b1efc15747ff102
-    m_Address: spr_nose_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e016afe9b8e8d5a4489d72a68c1bcf0b
-    m_Address: spr_nose_2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cdc886a990e77c040b74aec986b2393d
-    m_Address: spr_nose_1
+  - m_GUID: 4d1ce94b7b1d3b04090969bc5093a9d8
+    m_Address: spr_medic_middle
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -137,7 +122,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f67c337871a96774991e2a87866aad22
+  - m_GUID: 83987faaa29be00439747611550ada75
     m_Address: spr_medic_small
     m_ReadOnly: 0
     m_SerializedLabels: []
