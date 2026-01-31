@@ -55,6 +55,11 @@ namespace GameCore.UI
             SCMsgCenter.UnregisterMsg(SCMsgConst.PURCHASE_GOODS, onPurchaseGoods);
             mono.btnBag.RemoveClickDown(onBtnBagClickDown);
             mono.btnExit.RemoveClickDown(onBtnExitClickDonw);
+            mono.btnBag.RemoveMouseEnter(onBtnBagMouseEnter);
+            mono.btnBag.RemoveMouseExit(onBtnBagMouseExit);
+
+            mono.btnExit.RemoveMouseEnter(onBtnExitMouseEnter);
+            mono.btnExit.RemoveMouseExit(onBtnExitMouseExit);
 
             foreach (var item in _m_storeItemList)
                 item?.HidePanel();
@@ -65,6 +70,10 @@ namespace GameCore.UI
             SCMsgCenter.RegisterMsg(SCMsgConst.PURCHASE_GOODS, onPurchaseGoods);
             mono.btnBag.AddMouseLeftClickDown(onBtnBagClickDown);
             mono.btnExit.AddMouseLeftClickDown(onBtnExitClickDonw);
+            mono.btnBag.AddMouseEnter(onBtnBagMouseEnter);
+            mono.btnBag.AddMouseExit(onBtnBagMouseExit);
+            mono.btnExit.AddMouseEnter(onBtnExitMouseEnter);
+            mono.btnExit.AddMouseExit(onBtnExitMouseExit);
 
 
             foreach (var item in _m_storeItemList)
@@ -139,6 +148,29 @@ namespace GameCore.UI
         {
             UICoreMgr.instance.CloseTopNode();
             UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+        }
+
+        private void onBtnBagMouseEnter(PointerEventData arg1, object[] arg2)
+        {
+            _m_tweenContainer.RegDoTween(mono.btnBag.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
+        }
+
+        private void onBtnBagMouseExit(PointerEventData arg1, object[] arg2)
+        {
+            _m_tweenContainer.RegDoTween(mono.btnBag.transform.DOScale(Vector3.one, mono.scaleChgDuration));
+
+        }
+
+        private void onBtnExitMouseEnter(PointerEventData arg1, object[] arg2)
+        {
+            _m_tweenContainer.RegDoTween(mono.btnExit.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
+
+        }
+
+        private void onBtnExitMouseExit(PointerEventData arg1, object[] arg2)
+        {
+            _m_tweenContainer.RegDoTween(mono.btnExit.transform.DOScale(Vector3.one, mono.scaleChgDuration));
+
         }
     }
 }

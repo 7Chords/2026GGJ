@@ -20,5 +20,9 @@ namespace GameCore.UI
         public Image imgHealthBar;
         [Header("血条过渡时间")]
         public float healthBarFadeDuration;
+        [Header("鼠标移入按钮的缩放")]
+        public float scaleMouseEnter;
+        [Header("按钮的缩放时间")]
+        public float scaleChgDuration;
     }
 }
