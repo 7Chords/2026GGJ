@@ -25,8 +25,21 @@ namespace GameCore
             // 初始化逻辑对象
             if (!string.IsNullOrEmpty(partRefObj.logicClassName))
             {
+                 Debug.Log($"[PartInfo] Attempting to create logic for {partRefObj.partName}: {partRefObj.logicClassName}");
                 logicObj = PartLogicFactory.CreateLogic(partRefObj.logicClassName);
-                logicObj?.Initialize(this);
+                if (logicObj != null) 
+                {
+                    logicObj.Initialize(this);
+                     Debug.Log($"[PartInfo] Logic created successfully: {logicObj.GetType().Name}");
+                }
+                else
+                {
+                    Debug.LogError($"[PartInfo] Failed to create logic: {partRefObj.logicClassName}");
+                }
+            }
+            else
+            {
+                 Debug.Log($"[PartInfo] No logic class name for {partRefObj.partName}");
             }
         }
     }
