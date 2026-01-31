@@ -148,6 +148,9 @@ namespace GameCore.UI
         {
             _m_partContainer?.ShowPanel();
             _m_partContainer?.ReloadParts();
+
+            mono.imgHealthBar.fillAmount = (float)GameModel.instance.playerHealth / GameModel.instance.playerMaxHealth;
+            mono.txtHealth.text = GameModel.instance.playerHealth +"/" + GameModel.instance.playerMaxHealth;
         }
     }
 }

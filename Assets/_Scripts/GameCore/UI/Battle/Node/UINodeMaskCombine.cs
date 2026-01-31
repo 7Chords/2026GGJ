@@ -8,9 +8,9 @@ namespace GameCore.UI
 {
     public class UINodeMaskCombine : _ASCUINodeBase
     {
-        public override bool needHideWhenEnterNewSameTypeNode => false;
+        public override bool needHideWhenEnterNewSameTypeNode => true;
 
-        public override bool needShowWhenQuitNewSameTypeNode => false;
+        public override bool needShowWhenQuitNewSameTypeNode => true;
 
         public override bool canQuitByEsc => false;
 

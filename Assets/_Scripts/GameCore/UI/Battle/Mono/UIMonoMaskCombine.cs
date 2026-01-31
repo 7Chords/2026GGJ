@@ -22,5 +22,9 @@ namespace GameCore.UI
 
         [Header("牌堆按钮")]
         public Button btnDeck;
+        [Header("血条bar")]
+        public Image imgHealthBar;
+        [Header("血量文本")]
+        public Text txtHealth;
     }
 }
