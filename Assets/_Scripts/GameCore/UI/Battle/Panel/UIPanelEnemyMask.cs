@@ -119,7 +119,10 @@ namespace GameCore.UI
                  // Also fallback destroy children if list was lost but objects exist
                  for(int i = parent.childCount - 1; i >= 0; i--)
                  {
-                     Object.Destroy(parent.GetChild(i).gameObject);
+                     var child = parent.GetChild(i);
+                     if (mono.gridPrefab != null && child == mono.gridPrefab.transform) continue;
+                     
+                     Object.Destroy(child.gameObject);
                  }
             }
 
@@ -139,6 +142,7 @@ namespace GameCore.UI
         private void InitializeEnemy()
         {
             ClearItems();
+            CreateGrids(); // Re-create grids since ClearItems destroyed them
             
             // Read from Model
             var enemyData = GameModel.instance.currentEnemy;
