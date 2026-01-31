@@ -33,6 +33,8 @@ namespace GameCore.UI
             mono.btnExit.RemoveClickDown(onBtnExitClickDown);
             mono.btnStart.RemoveMouseEnter(onBtnStartMouseEnter);
             mono.btnStart.RemoveMouseExit(onBtnStartMouseExit);
+            mono.btnExit.RemoveMouseEnter(onBtnExitMouseEnter);
+            mono.btnExit.RemoveMouseExit(onBtnExitMouseExit);
         }
 
 
@@ -42,7 +44,8 @@ namespace GameCore.UI
             mono.btnExit.AddMouseLeftClickDown(onBtnExitClickDown);
             mono.btnStart.AddMouseEnter(onBtnStartMouseEnter);
             mono.btnStart.AddMouseExit(onBtnStartMouseExit);
-
+            mono.btnExit.AddMouseEnter(onBtnExitMouseEnter);
+            mono.btnExit.AddMouseExit(onBtnExitMouseExit);
         }
 
         private void onBtnExitClickDown(PointerEventData arg1, object[] arg2)
@@ -63,6 +66,17 @@ namespace GameCore.UI
         private void onBtnStartMouseExit(PointerEventData arg1, object[] arg2)
         {
             _m_tweenContainer.RegDoTween(mono.btnStart.transform.DOScale(Vector3.one, mono.scaleChgDuration));
+
+        }
+
+        private void onBtnExitMouseEnter(PointerEventData arg1, object[] arg2)
+        {
+            _m_tweenContainer.RegDoTween(mono.btnExit.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
+        }
+
+        private void onBtnExitMouseExit(PointerEventData arg1, object[] arg2)
+        {
+            _m_tweenContainer.RegDoTween(mono.btnExit.transform.DOScale(Vector3.one, mono.scaleChgDuration));
 
         }
     }

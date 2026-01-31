@@ -1,8 +1,6 @@
 public class SCMsgConst
 {
     #region 玩家输入相关 10
-    public const int ESC_INPUT = 1001;
-    public const int MOUSE_RIGHT_INPUT = 1002;
     #endregion
 
 

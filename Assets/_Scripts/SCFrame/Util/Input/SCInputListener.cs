@@ -39,9 +39,9 @@ namespace SCFrame
                 _m_tbsFrameChecker = 0;
 
             if (Input.GetKeyDown(KeyCode.Escape))
-                SCMsgCenter.SendMsg(SCMsgConst.ESC_INPUT);
+                UICoreMgr.instance.CloseNodeByEsc();
             if (Input.GetMouseButtonDown(1))
-                SCMsgCenter.SendMsg(SCMsgConst.MOUSE_RIGHT_INPUT);
+                UICoreMgr.instance.CloseNodeByMouseRight();
         }
 
         public float GetHorizontalInput()
