@@ -47,6 +47,10 @@ namespace GameCore.UI
             mono.imgGoods.RemoveBeginDrag(onBeginDrag);
             mono.imgGoods.RemoveDrag(onDrag);
             mono.imgGoods.RemoveEndDrag(onEndDrag);
+
+
+            GetGameObject().transform.RemoveMouseEnter(onGameObjMouseEnter);
+            GetGameObject().transform.RemoveMouseExit(onGameObjMouseExit);
         }
 
         public override void OnShowPanel()
@@ -55,6 +59,8 @@ namespace GameCore.UI
             mono.imgGoods.AddDrag(onDrag);
             mono.imgGoods.AddEndDrag(onEndDrag);
 
+            GetGameObject().transform.AddMouseEnter(onGameObjMouseEnter);
+            GetGameObject().transform.AddMouseExit(onGameObjMouseExit);
         }
 
         public void SetInfo(PartInfo _info)
@@ -724,6 +730,38 @@ namespace GameCore.UI
             EventSystem.current.RaycastAll(_eventData, results);
             GameObject go = results.Find(x => x.gameObject.GetComponent<UIMonoMaskCombineFaceGrid>() != null).gameObject;
             return go != null;
+        }
+
+
+        private void onGameObjMouseExit(PointerEventData arg1, object[] arg2)
+        {
+            GameCommon.DiscardToolTip();
+        }
+
+        private void onGameObjMouseEnter(PointerEventData arg1, object[] arg2)
+        {
+            if (_m_partInfo == null)
+                return;
+            Vector2 screenPos = Vector2.zero;
+            var _canvas = GetGameObject().GetComponentInParent<Canvas>();
+            Camera cam = (_canvas != null && _canvas.renderMode != RenderMode.ScreenSpaceOverlay) ? _canvas.worldCamera : null;
+
+            // Check direction
+            float itemScreenX = RectTransformUtility.WorldToScreenPoint(cam, GetGameObject().transform.position).x;
+            bool showOnLeft = itemScreenX > Screen.width * 0.7f; // If in right 30% of screen
+
+            // Offset based on direction
+            // Left: Pivot Right-Top (1,1) -> Anchor at (ItemX - border, ItemY)
+            // Right: Pivot Left-Top (0,1) -> Anchor at (ItemX + border, ItemY)
+            Vector3 offset = showOnLeft ? new Vector3(-40, -20, 0) : new Vector3(40, -20, 0);
+
+            screenPos = RectTransformUtility.WorldToScreenPoint(cam, GetGameObject().transform.position + offset);
+
+            var tooltip = GameCommon.ShowTooltip(_m_partInfo.partRefObj.partName, _m_partInfo.partRefObj.partDesc, screenPos);
+            /*if (tooltip != null)
+            {
+                tooltip.SetPivot(showOnLeft ? new Vector2(1, 1) : new Vector2(0, 1));
+            }*/
         }
     }
 }
