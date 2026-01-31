@@ -104,6 +104,7 @@ namespace GameCore.UI
                      }
                  }
              }
+             mono.gridPrefab.SetActive(false);
         }
 
         private void CreatePartItem(PartInfo part)

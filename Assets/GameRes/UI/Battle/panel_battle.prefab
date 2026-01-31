@@ -2098,6 +2098,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: prefab_mask_combine_face_grid
       objectReference: {fileID: 0}
+    - target: {fileID: 2833186293798626533, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6551300967387294209, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
       propertyPath: colorDefault.a
       value: 1
@@ -2253,6 +2257,10 @@ PrefabInstance:
     - target: {fileID: 2833186293798626533, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
       propertyPath: m_Name
       value: prefab_mask_combine_face_grid
+      objectReference: {fileID: 0}
+    - target: {fileID: 2833186293798626533, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6551300967387294209, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
       propertyPath: colorDefault.a
