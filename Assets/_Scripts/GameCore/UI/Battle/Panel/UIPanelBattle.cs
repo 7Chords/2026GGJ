@@ -70,7 +70,7 @@ namespace GameCore.UI
             if (mono.imgHealthBar_player != null)
             {
                 mono.imgHealthBar_player.fillAmount = (float)GameModel.instance.playerMaxHealth / GameModel.instance.playerHealth;
-                mono.txtHealth_player.text = GameModel.instance.playerMaxHealth + "/" + GameModel.instance.playerHealth;
+                mono.txtHealth_player.text = GameModel.instance.playerHealth + "/" + GameModel.instance.playerMaxHealth;
             }
             if (mono.imgHealthBar_enemy != null)
             {
