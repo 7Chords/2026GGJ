@@ -1,6 +1,7 @@
 using SCFrame.UI;
 using System.Collections;
 using System.Collections.Generic;
+using SCFrame;
 using UnityEngine;
 
 namespace GameCore.UI
@@ -37,6 +38,14 @@ namespace GameCore.UI
         {
             mono.btnConfirm.onClick.RemoveAllListeners();
             mono.btnConfirm.onClick.AddListener(OnConfirmClick);
+
+            mono.btnCheckEnemyMask.onClick.RemoveAllListeners();
+            
+            mono.btnCheckEnemyMask.onClick.AddListener(() =>
+            {
+                UICoreMgr.instance.AddNode(new UINodeEnemyMask(SCFrame.UI.SCUIShowType.ADDITION));
+            });
+            
             refreshShow();
         }
 

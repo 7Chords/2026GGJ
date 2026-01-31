@@ -309,7 +309,7 @@ public class MapGenerate : MonoBehaviour
             //    return RoomType.Treasure;
         }
 
-        if (layerIndex == _layerCount.x - 1) return RoomType.Enemy; // 末位是战斗节点 (原为Rest)
+        if (layerIndex == _layerCount.x - 1) return RoomType.Boss; // 末位是战斗节点 (原为Rest)
 
         // 2. 确定当前层级的限制条件
         var excludedTypes = new List<RoomType> { RoomType.None };

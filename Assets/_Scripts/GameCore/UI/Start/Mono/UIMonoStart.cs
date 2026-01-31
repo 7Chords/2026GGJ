@@ -14,5 +14,9 @@ namespace GameCore.UI
         //public Button btnSetting;
         [Header("结束按钮")]
         public Button btnExit;
+        [Header("鼠标移入按钮的缩放")]
+        public float scaleMouseEnter;
+        [Header("鼠标移入的缩放时间")]
+        public float scaleChgDuration;
     }
 }

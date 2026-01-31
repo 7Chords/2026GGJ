@@ -1,5 +1,7 @@
+using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameCore.UI
@@ -77,7 +79,10 @@ namespace GameCore.UI
 
         private void EnterEnemyLevel()
         {
-            // TODO: Enter Enemy Level Logic
+            List<EnemyRefObj> enemyRefList = SCRefDataMgr.instance.enemyRefList.refDataList;
+            long id = enemyRefList[Random.Range(0, enemyRefList.Count)].id;
+            GameModel.instance.rollEnemyId = id;
+            UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
         }
 
         private void EnterEliteLevel()
@@ -88,11 +93,15 @@ namespace GameCore.UI
         private void EnterBossLevel()
         {
             // TODO: Enter Boss Level Logic
+            UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
         }
 
         private void EnterShop()
         {
-            // TODO: Enter Shop Logic
+            List<StoreRefObj> storeRefList = SCRefDataMgr.instance.storeRefList.refDataList;
+            long id = storeRefList[Random.Range(0, storeRefList.Count)].id;
+            GameModel.instance.rollStoreId = id;
+            UICoreMgr.instance.AddNode(new UINodeStore(SCUIShowType.FULL));
         }
 
         private void EnterRest()

@@ -393,6 +393,8 @@ MonoBehaviour:
   fadeOutDuration: 0.25
   monoContainer: {fileID: 2419926971380788201}
   btnClose: {fileID: 8035200198668194270}
+  scaleMouseEnter: 1.1
+  scaleChgDuration: 0.1
 --- !u!1 &7820164948027728518
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,11 +508,11 @@ RectTransform:
   - {fileID: 3313557322419318868}
   m_Father: {fileID: 3600047668693474508}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -350.3872, y: -26.82251}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 521, y: 434}
   m_SizeDelta: {x: 201.6128, y: 86.1774}
-  m_Pivot: {x: 1, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &973807935247490553
 CanvasRenderer:
   m_ObjectHideFlags: 0

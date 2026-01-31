@@ -12,6 +12,10 @@ namespace GameCore.UI
         public Image imgIcon;
         [Header("生命值文本")]
         public Text txtHealth;
+        [Header("鼠标移入的缩放")]
+        public float scaleMouseEnter;
+        [Header("鼠标移入的缩放时间")]
+        public float scaleChgDuration;
 
     }
 

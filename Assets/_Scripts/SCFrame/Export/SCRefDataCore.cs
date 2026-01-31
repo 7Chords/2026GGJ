@@ -10,12 +10,12 @@ using UnityEngine;
 namespace SCFrame
 {
     /// <summary>
-    /// µ¥ÌõÅä±íÀà ÓÃÓÚÖ»ÓÐkeyºÍvalueÒ»Ò»¶ÔÓ¦µÄÀàÐÍ
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½keyï¿½ï¿½valueÒ»Ò»ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class SCRefDataCore
     {
-        private string _m_assetPath;//×Ê²úÂ·¾¶
+        private string _m_assetPath;//ï¿½Ê²ï¿½Â·ï¿½ï¿½
         private string _m_sheetName;//
         public SCRefDataCore()
         {
@@ -28,7 +28,7 @@ namespace SCFrame
             _m_sheetName = _sheetName;
         }
 
-        /** »ñÈ¡¼ÓÔØ×ÊÔ´¶ÔÏóµÄÂ·¾¶ */
+        /** ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ */
         protected string _assetPath { get { return _m_assetPath; } }
         protected string _sheetName { get { return _m_sheetName; } }
 
@@ -40,7 +40,7 @@ namespace SCFrame
         {
             if (string.IsNullOrEmpty(_m_assetPath) || string.IsNullOrEmpty(_m_sheetName))
             {
-                Debug.LogError(_m_assetPath + "»ò" + _m_sheetName + "Ã»ÓÐÐÅÏ¢£¬µ¼³öÊ§°Ü£¡");
+                Debug.LogError(_m_assetPath + "ï¿½ï¿½" + _m_sheetName + "Ã»ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½");
                 return;
             }
             using (StreamReader sr = new StreamReader("Assets/Resources/RefData/ExportTxt/" + _m_sheetName + ".txt"))
@@ -53,7 +53,7 @@ namespace SCFrame
         {
             if (string.IsNullOrEmpty(_string))
             {
-                Debug.LogError("txtÎª¿Õ");
+                Debug.LogError("txtÎªï¿½ï¿½");
                 return;
             }
 
@@ -69,7 +69,7 @@ namespace SCFrame
                 string[] lineSplit = line.Split('\t');
                 if (lineSplit.Length < 2)
                 {
-                    Debug.LogError($"general±í¸ñÊ½´íÎó£º±í¸ñ{_m_sheetName}£¬µÚ{i}ÐÐ£º\n{line}");
+                    Debug.LogError($"generalï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ó£º±ï¿½ï¿½ï¿½{_m_sheetName}ï¿½ï¿½ï¿½ï¿½{i}ï¿½Ð£ï¿½\n{line}");
                     continue;
                 }
                 try
@@ -78,7 +78,7 @@ namespace SCFrame
                 }
                 catch(Exception ex)
                 {
-                    Debug.LogError($"general±í¸ñÊ½µÄ" + _m_sheetName + "±íÌí¼Óµ½×Öµä³öÏÖÎÊÌâ£¬key£º" + lineSplit[0] + ",value:" +lineSplit[1]+
+                    Debug.LogError($"generalï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½" + _m_sheetName + "ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â£¬keyï¿½ï¿½" + lineSplit[0] + ",value:" +lineSplit[1]+
                         "----"+ex) ;
                 }
             }
@@ -103,7 +103,7 @@ namespace SCFrame
 
             if(keySplitArr.Length != valSplitArr.Length)
             {
-                Debug.LogError(_sheetName + "ÒªÅäÖÃµÄ±äÁ¿ÊýÄ¿ºÍÊµ¼ÊÅäÖÃµÄ±äÁ¿ÊýÄ¿²»Æ¥Åä£¡£¡£¡");
+                Debug.LogError(_sheetName + "Òªï¿½ï¿½ï¿½ÃµÄ±ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½ÃµÄ±ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Æ¥ï¿½ä£¡ï¿½ï¿½ï¿½ï¿½");
                 return;
             }
             _m_keyValueMap.Clear();
@@ -131,7 +131,7 @@ namespace SCFrame
             string result;
             if (!_m_keyValueMap.TryGetValue(_key, out result))
             {
-                Debug.LogError($"_key²»´æÔÚ{_key}");
+                Debug.LogError($"_keyï¿½ï¿½ï¿½ï¿½ï¿½ï¿½{_key}");
                 return null;
             }
             return result;
@@ -142,12 +142,12 @@ namespace SCFrame
             string tempValue = getString(_name);
             if (string.IsNullOrEmpty(tempValue))
             {
-                Debug.LogError($"{_m_assetPath},{_m_sheetName}µÄ×Ö¶Î{_name}Îª¿Õ");
+                Debug.LogError($"{_m_assetPath},{_m_sheetName}ï¿½ï¿½ï¿½Ö¶ï¿½{_name}Îªï¿½ï¿½");
                 return 0;
             }
             if (!int.TryParse(tempValue, out int result))
             {
-                Debug.LogError($"±í\"{_m_assetPath},{_m_sheetName}\"\tÊý¾ÝÌîÐ´´íÎó: {_name},ÌîµÄ{tempValue}²»ÊÇint");
+                Debug.LogError($"ï¿½ï¿½\"{_m_assetPath},{_m_sheetName}\"\tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½: {_name},ï¿½ï¿½ï¿½{tempValue}ï¿½ï¿½ï¿½ï¿½int");
             }
             return result;
         }
@@ -157,14 +157,14 @@ namespace SCFrame
             string tempValue = getString(_name);
             if (string.IsNullOrEmpty(tempValue))
             {
-                Debug.LogError($"{_m_assetPath},{_m_sheetName}µÄ×Ö¶Î{_name}Îª¿Õ");
+                Debug.LogError($"{_m_assetPath},{_m_sheetName}ï¿½ï¿½ï¿½Ö¶ï¿½{_name}Îªï¿½ï¿½");
                 return 0;
             }
 
             object obj = Enum.Parse(_type, tempValue);
             if (obj == null)
             {
-                Debug.LogError($"±í\"{_m_assetPath},{_m_sheetName}\"\tÊý¾ÝÌîÐ´´íÎó: {_name},ÌîµÄ{tempValue}²»ÊÇenum");
+                Debug.LogError($"ï¿½ï¿½\"{_m_assetPath},{_m_sheetName}\"\tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½: {_name},ï¿½ï¿½ï¿½{tempValue}ï¿½ï¿½ï¿½ï¿½enum");
             }
             return obj;
         }
@@ -176,12 +176,12 @@ namespace SCFrame
             if (string.IsNullOrEmpty(tempValue))
             {
                 if (!_canNull)
-                    Debug.LogError($"{_m_assetPath},{_m_sheetName}µÄ×Ö¶Î{_name}Îª¿Õ");
+                    Debug.LogError($"{_m_assetPath},{_m_sheetName}ï¿½ï¿½ï¿½Ö¶ï¿½{_name}Îªï¿½ï¿½");
                 return 0;
             }
             if (!long.TryParse(tempValue, out long result))
             {
-                Debug.LogError($"±í\"{_m_assetPath},{_m_sheetName}\"\tÊý¾ÝÌîÐ´´íÎó: {_name},ÌîµÄ{tempValue}²»ÊÇlong");
+                Debug.LogError($"ï¿½ï¿½\"{_m_assetPath},{_m_sheetName}\"\tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½: {_name},ï¿½ï¿½ï¿½{tempValue}ï¿½ï¿½ï¿½ï¿½long");
             }
             return result;
         }
@@ -193,12 +193,12 @@ namespace SCFrame
             if (string.IsNullOrEmpty(tempValue))
             {
                 if (!_canNull)
-                    Debug.LogError($"{_m_assetPath},{_m_sheetName}µÄ×Ö¶Î{_name}Îª¿Õ");
+                    Debug.LogError($"{_m_assetPath},{_m_sheetName}ï¿½ï¿½ï¿½Ö¶ï¿½{_name}Îªï¿½ï¿½");
                 return false;
             }
             if (!bool.TryParse(tempValue, out bool result))
             {
-                Debug.LogError($"±í\"{_m_assetPath},{_m_sheetName}\"\tÊý¾ÝÌîÐ´´íÎó: {_name},ÌîµÄ{tempValue}²»ÊÇbool");
+                Debug.LogError($"ï¿½ï¿½\"{_m_assetPath},{_m_sheetName}\"\tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½: {_name},ï¿½ï¿½ï¿½{tempValue}ï¿½ï¿½ï¿½ï¿½bool");
             }
             return result;
         }
@@ -210,12 +210,12 @@ namespace SCFrame
             if (string.IsNullOrEmpty(tempValue))
             {
                 if (!_canNull)
-                    Debug.LogError($"{_m_assetPath},{_m_sheetName}µÄ×Ö¶Î{_name}Îª¿Õ");
+                    Debug.LogError($"{_m_assetPath},{_m_sheetName}ï¿½ï¿½ï¿½Ö¶ï¿½{_name}Îªï¿½ï¿½");
                 return 0;
             }
             if (!float.TryParse(tempValue, NumberStyles.Float, CultureInfo.InvariantCulture, out float result))
             {
-                Debug.LogError($"±í\"{_m_assetPath},{_m_sheetName}\"\tÊý¾ÝÌîÐ´´íÎó: {_name},ÌîµÄ{tempValue}²»ÊÇfloat");
+                Debug.LogError($"ï¿½ï¿½\"{_m_assetPath},{_m_sheetName}\"\tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½: {_name},ï¿½ï¿½ï¿½{tempValue}ï¿½ï¿½ï¿½ï¿½float");
             }
             return result;
         }
@@ -227,14 +227,14 @@ namespace SCFrame
             if (string.IsNullOrEmpty(tempValue))
             {
                 if (!_canNull)
-                    Debug.LogError($"{_m_assetPath},{_m_sheetName}µÄ×Ö¶Î{_name}Îª¿Õ");
+                    Debug.LogError($"{_m_assetPath},{_m_sheetName}ï¿½ï¿½ï¿½Ö¶ï¿½{_name}Îªï¿½ï¿½");
                 return v2;
             }
 
             string[] strs = tempValue.Split(new char[] { ';', ':' });
             if (strs.Length < 2)
             {
-                Debug.LogError($"±í\"{_m_assetPath},{_m_sheetName}\"\tÊý¾ÝÌîÐ´´íÎó: {_name},ÌîµÄ{tempValue}²»ÊÇVector2");
+                Debug.LogError($"ï¿½ï¿½\"{_m_assetPath},{_m_sheetName}\"\tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½: {_name},ï¿½ï¿½ï¿½{tempValue}ï¿½ï¿½ï¿½ï¿½Vector2");
                 return v2;
             }
             v2.Set(SCCommon.ParseFloat(strs[0]), SCCommon.ParseFloat(strs[1]));
@@ -248,14 +248,14 @@ namespace SCFrame
             if (string.IsNullOrEmpty(tempValue))
             {
                 if (!_canNull)
-                    Debug.LogError($"{_m_assetPath},{_m_sheetName}µÄ×Ö¶Î{_name}Îª¿Õ");
+                    Debug.LogError($"{_m_assetPath},{_m_sheetName}ï¿½ï¿½ï¿½Ö¶ï¿½{_name}Îªï¿½ï¿½");
                 return v3;
             }
 
             string[] strs = tempValue.Split(new char[] { ';', ':' });
             if (strs.Length < 3)
             {
-                Debug.LogError($"±í\"{_m_assetPath},{_m_sheetName}\"\tÊý¾ÝÌîÐ´´íÎó: {_name},ÌîµÄ{tempValue}²»ÊÇVector3");
+                Debug.LogError($"ï¿½ï¿½\"{_m_assetPath},{_m_sheetName}\"\tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½: {_name},ï¿½ï¿½ï¿½{tempValue}ï¿½ï¿½ï¿½ï¿½Vector3");
                 return v3;
             }
 
@@ -270,14 +270,14 @@ namespace SCFrame
             if (string.IsNullOrEmpty(tempValue))
             {
                 if (!_canNull)
-                    Debug.LogError($"{_m_assetPath},{_m_sheetName}µÄ×Ö¶Î{_name}Îª¿Õ");
+                    Debug.LogError($"{_m_assetPath},{_m_sheetName}ï¿½ï¿½ï¿½Ö¶ï¿½{_name}Îªï¿½ï¿½");
                 return rect;
             }
 
             string[] strs = tempValue.Split(new char[] { ';', ':' });
             if (strs.Length < 4)
             {
-                Debug.LogError($"±í\"{_m_assetPath},{_m_sheetName}\"\tÊý¾ÝÌîÐ´´íÎó: {_name},ÌîµÄ{tempValue}²»ÊÇrect");
+                Debug.LogError($"ï¿½ï¿½\"{_m_assetPath},{_m_sheetName}\"\tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½: {_name},ï¿½ï¿½ï¿½{tempValue}ï¿½ï¿½ï¿½ï¿½rect");
                 return rect;
             }
 
@@ -293,10 +293,10 @@ namespace SCFrame
             if (string.IsNullOrEmpty(tempValue))
             {
                 if (!_canNull)
-                    Debug.LogError($"{_m_assetPath},{_m_sheetName}µÄ×Ö¶Î{_name}Îª¿Õ");
+                    Debug.LogError($"{_m_assetPath},{_m_sheetName}ï¿½ï¿½ï¿½Ö¶ï¿½{_name}Îªï¿½ï¿½");
                 return list;
             }
-            //¿ÕÁÐ±í±êÊ¶
+            //ï¿½ï¿½ï¿½Ð±ï¿½ï¿½ï¿½Ê¶
             if (tempValue == EXCEL_EMPTY_FLAG)
                 return list;
 
@@ -307,7 +307,7 @@ namespace SCFrame
                 object value = ParseValue(tempStr, typeof(T));
                 if (value == null)
                 {
-                    Debug.LogError($"±í\"{_m_assetPath},{_m_sheetName}\"\tÊý¾ÝÌîÐ´´íÎó: {_name},ÌîµÄ{tempStr}½âÎöÊ§°Ü£¬ÍêÕûÊý¾Ý£º{value}");
+                    Debug.LogError($"ï¿½ï¿½\"{_m_assetPath},{_m_sheetName}\"\tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½: {_name},ï¿½ï¿½ï¿½{tempStr}ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½{value}");
                 }
                 else
                 {
@@ -327,7 +327,7 @@ namespace SCFrame
             if (string.IsNullOrEmpty(tempValue))
             {
                 if (!_canNull)
-                    Debug.LogError($"{_m_assetPath},{_m_sheetName}µÄ×Ö¶Î{_name}Îª¿Õ");
+                    Debug.LogError($"{_m_assetPath},{_m_sheetName}ï¿½ï¿½ï¿½Ö¶ï¿½{_name}Îªï¿½ï¿½");
                 return vector2List;
             }
             string[] strs = tempValue.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
@@ -336,7 +336,7 @@ namespace SCFrame
                 string[] valueStrs = strs[i].Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
                 if (valueStrs == null || valueStrs.Length != 2)
                 {
-                    Debug.LogError($"±í\"{_m_assetPath},{_m_sheetName}\"\tÊý¾ÝÌîÐ´´íÎó: {_name},½âÎöÊ§°Ü£¬ÍêÕûÊý¾Ý£º{valueStrs}");
+                    Debug.LogError($"ï¿½ï¿½\"{_m_assetPath},{_m_sheetName}\"\tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½: {_name},ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½{valueStrs}");
                 }
                 else
                 {
@@ -356,7 +356,7 @@ namespace SCFrame
             if (string.IsNullOrEmpty(tempValue))
             {
                 if (!_canNull)
-                    Debug.LogError($"{_m_assetPath},{_m_sheetName}µÄ×Ö¶Î{_name}Îª¿Õ");
+                    Debug.LogError($"{_m_assetPath},{_m_sheetName}ï¿½ï¿½ï¿½Ö¶ï¿½{_name}Îªï¿½ï¿½");
                 return Vector2IntList;
             }
             string[] strs = tempValue.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
@@ -365,7 +365,7 @@ namespace SCFrame
                 string[] valueStrs = strs[i].Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
                 if (valueStrs == null || valueStrs.Length != 2)
                 {
-                    Debug.LogError($"±í\"{_m_assetPath},{_m_sheetName}\"\tÊý¾ÝÌîÐ´´íÎó: {_name},½âÎöÊ§°Ü£¬ÍêÕûÊý¾Ý£º{valueStrs}");
+                    Debug.LogError($"ï¿½ï¿½\"{_m_assetPath},{_m_sheetName}\"\tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½: {_name},ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½{valueStrs}");
                 }
                 else
                 {
@@ -385,7 +385,7 @@ namespace SCFrame
             if (string.IsNullOrEmpty(tempValue))
             {
                 if (!_canNull)
-                    Debug.LogError($"{_m_assetPath},{_m_sheetName}µÄ×Ö¶Î{_name}Îª¿Õ");
+                    Debug.LogError($"{_m_assetPath},{_m_sheetName}ï¿½ï¿½ï¿½Ö¶ï¿½{_name}Îªï¿½ï¿½");
                 return vector3List;
             }
             string[] strs = tempValue.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
@@ -394,7 +394,7 @@ namespace SCFrame
                 string[] valueStrs = strs[i].Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
                 if (valueStrs == null || valueStrs.Length != 3)
                 {
-                    Debug.LogError($"±í\"{_m_assetPath},{_m_sheetName}\"\tÊý¾ÝÌîÐ´´íÎó: {_name},½âÎöÊ§°Ü£¬ÍêÕûÊý¾Ý£º{valueStrs}");
+                    Debug.LogError($"ï¿½ï¿½\"{_m_assetPath},{_m_sheetName}\"\tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½: {_name},ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½{valueStrs}");
                 }
                 else
                 {
@@ -407,7 +407,7 @@ namespace SCFrame
             return vector3List;
         }
 
-        // ½âÎö×Ö¶ÎÖµ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½Öµ
         protected static object ParseValue(string _value, Type _type)
         {
             try
@@ -424,19 +424,19 @@ namespace SCFrame
                 {
                     _value = _value.Trim();
 
-                    // Ã¶¾Ù 
+                    // Ã¶ï¿½ï¿½ 
                     if (_type.IsEnum)
                     {
                         return Enum.Parse(_type, _value);
                     }
 
-                    // ×Ö·û´®
+                    // ï¿½Ö·ï¿½ï¿½ï¿½
                     else if (_type == typeof(string))
                     {
                         return _value;
                     }
 
-                    // ¸¡µãÐÍ
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     else if (_type == typeof(float))
                     {
                         if (_value == "0" || _value == "" || _value == string.Empty)
@@ -445,7 +445,7 @@ namespace SCFrame
                         return float.Parse(_value, CultureInfo.InvariantCulture);
                     }
 
-                    // ÕûÐÎ
+                    // ï¿½ï¿½ï¿½ï¿½
                     else if (_type == typeof(int))
                     {
                         if (_value == "")

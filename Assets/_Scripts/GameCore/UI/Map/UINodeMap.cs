@@ -6,7 +6,7 @@ namespace GameCore.UI
 {
     public class UINodeMap : _ASCUINodeBase
     {
-        public override bool needHideWhenEnterNewSameTypeNode => false;
+        public override bool needHideWhenEnterNewSameTypeNode => true;
         public override bool needShowWhenQuitNewSameTypeNode => false;
         public override bool canQuitByEsc => false;
         public override bool canQuitByMouseRight => false;

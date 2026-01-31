@@ -24,7 +24,7 @@ namespace GameCore.UI
 
         public override SCUINodeFuncType nodeFuncType => SCUINodeFuncType.STORE;
 
-        public override bool needMoveToBottomWhenHide => false;
+        public override bool needMoveToBottomWhenHide => true;
 
         private GameObject _m_panelGO;
         private UIPanelStoreBag _m_storeBagPanel;

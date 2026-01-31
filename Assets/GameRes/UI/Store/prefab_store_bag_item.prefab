@@ -263,3 +263,5 @@ MonoBehaviour:
   fadeOutDuration: 0
   imgIcon: {fileID: 378263950761052782}
   txtHealth: {fileID: 6958061118933925905}
+  scaleMouseEnter: 1.03
+  scaleChgDuration: 0.1

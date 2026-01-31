@@ -1,3 +1,4 @@
+using DG.Tweening;
 using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
@@ -12,16 +13,21 @@ namespace GameCore.UI
     public class UIPanelStoreItem : _ASCUIPanelBase<UIMonoStoreItem>
     {
         private GoodsInfo _m_goodsInfo;
+
+        private TweenContainer _m_tweenContainer;
         public UIPanelStoreItem(UIMonoStoreItem _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
 
         public override void AfterInitialize()
         {
+            _m_tweenContainer = new TweenContainer();
         }
 
         public override void BeforeDiscard()
         {
+            _m_tweenContainer?.KillAllDoTween();
+            _m_tweenContainer = null;
         }
 
         public override void OnHidePanel()
@@ -63,6 +69,8 @@ namespace GameCore.UI
         }
         private void onBtnPurchaseMouseEnter(PointerEventData _arg, object[] _objs)
         {
+            if (_m_goodsInfo == null)
+                return;
             Vector2 screenPos = Vector2.zero;
             var _canvas = GetGameObject().GetComponentInParent<Canvas>();
             Camera cam = (_canvas != null && _canvas.renderMode != RenderMode.ScreenSpaceOverlay) ? _canvas.worldCamera : null;
@@ -83,11 +91,16 @@ namespace GameCore.UI
             {
                 tooltip.SetPivot(showOnLeft ? new Vector2(1, 1) : new Vector2(0, 1));
             }*/
+            _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
+
+
         }
 
         private void onBtnPurchaseMouseExit(PointerEventData _arg, object[] _objs)
         {
             GameCommon.DiscardToolTip();
+            _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(Vector3.one, mono.scaleChgDuration));
+
         }
     }
 }

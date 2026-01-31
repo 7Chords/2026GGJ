@@ -12,6 +12,7 @@ namespace GameCore.RefData
         public int partHealth;
         public string partDesc;
         public string partSpriteObjName;
+        public string partGameObjectName;
         public Vector2Int midPos;
         public string logicClassName; // Logic Class Name
         public List<EntryEffectObj> entryList;
@@ -33,6 +34,7 @@ namespace GameCore.RefData
             partHealth = getInt("partHealth");
             partDesc = getString("partDesc");
             partSpriteObjName = getString("partSpriteObjName");
+            partGameObjectName = getString("partGameObjectName");
             entryList = getList<EntryEffectObj>("entryList");
             posList = getList<PosEffectObj>("posList");
             
