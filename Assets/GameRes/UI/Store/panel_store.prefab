@@ -387,7 +387,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 8e5bb06171da842409a927f6f7d54334, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
@@ -466,7 +466,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 8e5bb06171da842409a927f6f7d54334, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
@@ -771,7 +771,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 8e5bb06171da842409a927f6f7d54334, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
@@ -997,6 +997,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7904134866330917176, guid: a026c26e7b24e954e93bc076aa9688cd, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 8e5bb06171da842409a927f6f7d54334, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1026,6 +1030,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1770193782988367002}
     m_Modifications:
+    - target: {fileID: 313276586102071541, guid: a026c26e7b24e954e93bc076aa9688cd, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 8e5bb06171da842409a927f6f7d54334, type: 3}
     - target: {fileID: 5866366932435521011, guid: a026c26e7b24e954e93bc076aa9688cd, type: 3}
       propertyPath: m_Name
       value: prefab_store_item (3)
@@ -1110,6 +1118,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7904134866330917176, guid: a026c26e7b24e954e93bc076aa9688cd, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 8e5bb06171da842409a927f6f7d54334, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1139,6 +1151,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1770193782988367002}
     m_Modifications:
+    - target: {fileID: 313276586102071541, guid: a026c26e7b24e954e93bc076aa9688cd, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 8e5bb06171da842409a927f6f7d54334, type: 3}
     - target: {fileID: 5866366932435521011, guid: a026c26e7b24e954e93bc076aa9688cd, type: 3}
       propertyPath: m_Name
       value: prefab_store_item (1)
@@ -1223,6 +1239,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7904134866330917176, guid: a026c26e7b24e954e93bc076aa9688cd, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 8e5bb06171da842409a927f6f7d54334, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1252,6 +1272,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1770193782988367002}
     m_Modifications:
+    - target: {fileID: 313276586102071541, guid: a026c26e7b24e954e93bc076aa9688cd, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 8e5bb06171da842409a927f6f7d54334, type: 3}
+    - target: {fileID: 4481694311716358433, guid: a026c26e7b24e954e93bc076aa9688cd, type: 3}
+      propertyPath: txtPrice
+      value: 
+      objectReference: {fileID: 1080144986390147997}
     - target: {fileID: 5866366932435521011, guid: a026c26e7b24e954e93bc076aa9688cd, type: 3}
       propertyPath: m_Name
       value: prefab_store_item
@@ -1336,6 +1364,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7904134866330917176, guid: a026c26e7b24e954e93bc076aa9688cd, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 8e5bb06171da842409a927f6f7d54334, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
