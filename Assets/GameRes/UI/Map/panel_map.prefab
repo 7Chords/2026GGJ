@@ -127,7 +127,7 @@ MonoBehaviour:
   nodeSize: {x: 200, y: 200}
   nodeOffset: {x: 2, y: 2}
   nodeAnglesOffset: 0
-  padding: {x: 200, y: 200}
+  padding: {x: 0, y: 200}
   mapData: {fileID: 11400000, guid: 0361bafd491906f41aea5a33be993af3, type: 2}
 --- !u!1 &6362608036904214565
 GameObject:
