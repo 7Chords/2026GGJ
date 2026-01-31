@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using GameCore.Logic.Parts; // 引用具体逻辑类命名空间
+using GameCore.Logic.Parts;
+using UnityEngine; // 引用具体逻辑类命名空间
 
 namespace GameCore.Logic
 {
@@ -39,6 +40,8 @@ namespace GameCore.Logic
             {
                 return Activator.CreateInstance(type) as BasePartLogic;
             }
+            
+            Debug.LogWarning($"[PartLogicFactory] Logic class not found in registry: {logicName}");
             
             // 如果字典里没找到，尝试通过反射查找（可选保底）
             // Type t = Type.GetType("GameCore.Logic.Parts." + logicName);
