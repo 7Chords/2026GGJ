@@ -7,6 +7,6 @@ namespace GameCore.UI
 {
     public class UIMonoDeck : _ASCUIMonoBase
     {
-        
+        public UIMonoCommonContainer monoContainer;
     }
 }

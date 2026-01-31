@@ -1,3 +1,4 @@
+using SCFrame;
 using SCFrame.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,48 +12,66 @@ namespace GameCore.UI
         {
         }
 
-        public override bool needHideWhenEnterNewSameTypeNode => throw new System.NotImplementedException();
+        public override bool needHideWhenEnterNewSameTypeNode => false;
 
-        public override bool needShowWhenQuitNewSameTypeNode => throw new System.NotImplementedException();
+        public override bool needShowWhenQuitNewSameTypeNode => false;
 
-        public override bool canQuitByEsc => throw new System.NotImplementedException();
+        public override bool canQuitByEsc => true;
 
-        public override bool canQuitByMouseRight => throw new System.NotImplementedException();
+        public override bool canQuitByMouseRight => true;
 
-        public override bool ignoreOnUIList => throw new System.NotImplementedException();
+        public override bool ignoreOnUIList => false;
 
-        public override SCUINodeFuncType nodeFuncType => throw new System.NotImplementedException();
+        public override SCUINodeFuncType nodeFuncType => SCUINodeFuncType.BATTLE;
 
-        public override bool needMoveToBottomWhenHide => throw new System.NotImplementedException();
+        public override bool needMoveToBottomWhenHide => false;
+
+        private GameObject _m_panelGO;
+        private UIPanelDeck _m_deckPanel;
+        private UIMonoDeck _m_deckMono;
 
         public override string GetNodeName()
         {
-            throw new System.NotImplementedException();
+            return nameof(UINodeDeck);
         }
 
         public override string GetResName()
         {
-            throw new System.NotImplementedException();
+            return "panel_deck";
         }
 
         public override void OnEnterNode()
         {
-            throw new System.NotImplementedException();
+            _m_panelGO = ResourcesHelper.LoadGameObject(GetResName(), GetRootTransform(), true);
+            if (_m_panelGO == null)
+            {
+                Debug.LogError("未找到资源名为" + GetResName() + "的资源!!!");
+                return;
+            }
+            _m_deckMono = _m_panelGO.GetComponent<UIMonoDeck>();
+            if (_m_deckMono == null)
+            {
+                Debug.LogError("资源名为" + GetResName() + "的资源上不存在对应的Mono!!!");
+                return;
+            }
+
+            _m_deckPanel = new UIPanelDeck(_m_deckMono, _m_showType);
+            _m_deckPanel.Initialize();
         }
 
         public override void OnHideNode()
         {
-            throw new System.NotImplementedException();
+            _m_deckPanel?.HidePanel();
         }
 
         public override void OnQuitNode()
         {
-            throw new System.NotImplementedException();
+            _m_deckPanel?.Discard();
         }
 
         public override void OnShowNode()
         {
-            throw new System.NotImplementedException();
+            _m_deckPanel?.ShowPanel();
         }
     }
 }

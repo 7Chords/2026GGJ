@@ -7,28 +7,37 @@ namespace GameCore.UI
 {
     public class UIPanelDeck : _ASCUIPanelBase<UIMonoDeck>
     {
+        private UIPanelStoreBagContainer _m_deckContainer;
         public UIPanelDeck(UIMonoDeck _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
 
         public override void AfterInitialize()
         {
-            throw new System.NotImplementedException();
+            _m_deckContainer = new UIPanelStoreBagContainer(mono.monoContainer);
         }
 
         public override void BeforeDiscard()
         {
-            throw new System.NotImplementedException();
+            _m_deckContainer?.Discard();
+            _m_deckContainer = null;
         }
 
         public override void OnHidePanel()
         {
-            throw new System.NotImplementedException();
+            _m_deckContainer?.HidePanel();
+
         }
 
         public override void OnShowPanel()
         {
-            throw new System.NotImplementedException();
+            _m_deckContainer?.ShowPanel();
+            refreshShow();
+        }
+
+        private void refreshShow()
+        {
+            _m_deckContainer.SetListInfo(GameModel.instance.deckPartInfoList);
         }
     }
 }
