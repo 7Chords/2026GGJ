@@ -29,12 +29,12 @@ namespace GameCore.UI
 
             _m_gridList = new List<UIMonoMaskCombineFaceGrid>();
             
-            int columns = 6; 
+            int columns = 4; 
             int rows = 7;
 
             Transform parent = mono.transform;
             
-            for (int i = 0; i < 42; i++)
+            for (int i = 0; i < columns * rows; i++)
             {
                 GameObject go = SCCommon.InstantiateGameObject(mono.gridPrefab, parent);
                 go.SetActive(true);

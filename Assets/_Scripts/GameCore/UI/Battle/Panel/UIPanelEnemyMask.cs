@@ -29,7 +29,7 @@ namespace GameCore.UI
 
             mono.monoGridList = new List<UIMonoEnemyMaskGrid>();
             
-            int columns = 6; 
+            int columns = 4; 
             int rows = 7;
             
 
@@ -37,7 +37,7 @@ namespace GameCore.UI
             Transform parent = mono.content_grid != null ? mono.content_grid : mono.transform.Find("GridContainer");
             if (parent == null) parent = mono.transform;
             
-            for (int i = 0; i < 42; i++)
+            for (int i = 0; i < columns * rows; i++)
             {
                 GameObject go = SCCommon.InstantiateGameObject(mono.gridPrefab, parent);
                 go.SetActive(true);
@@ -89,6 +89,40 @@ namespace GameCore.UI
                 _spawnedParts.Clear();
             }
 
+            // Robust Clear: Destroy all children of the grid parent to ensure no leftovers
+            Transform parent = mono.content_grid != null ? mono.content_grid : mono.transform.Find("GridContainer");
+            if (parent == null) parent = mono.transform;
+            
+            if (parent.childCount > 0)
+            {
+                 // Note: If reusing grids is desired, we should distinguish between clearing items vs grids. 
+                 // But since CreateGrids is called on AfterInitialize, and usually one-time, 
+                 // we might need to handle this carefully. 
+                 // Actually this method is 'ClearItems' called on BeforeDiscard.
+                 // If we destroy grids here, we must re-create them next time. 
+                 // CreateGrids is called in AfterInitialize.
+                 // For now let's just clear items (spawnedParts).
+                 // IF the user sees 42 grids, it's because they were instantiated.
+                 // We should destroy them if we want to reset count.
+                 // BUT `BeforeDiscard` is called on Destroy/Close.
+                 
+                 // Let's add specific Grid Clear logic if checking monoGridList
+                 if (mono.monoGridList != null)
+                 {
+                     foreach(var g in mono.monoGridList)
+                     {
+                         if (g!=null) Object.Destroy(g.gameObject);
+                     }
+                     mono.monoGridList.Clear();
+                 }
+                 
+                 // Also fallback destroy children if list was lost but objects exist
+                 for(int i = parent.childCount - 1; i >= 0; i--)
+                 {
+                     Object.Destroy(parent.GetChild(i).gameObject);
+                 }
+            }
+
             // Reset Grid Colors
             if (mono.monoGridList != null)
             {
@@ -117,7 +151,7 @@ namespace GameCore.UI
             Debug.Log($"[EnemyGen] Displaying Enemy: {enemyData.enemyRef.enemyName}");
 
             // 3. Placement Visualization
-            bool[,] occupiedGrid = new bool[6, 7]; 
+            bool[,] occupiedGrid = new bool[4, 7]; 
             
             foreach(var partInfo in enemyData.parts)
             {
@@ -135,7 +169,7 @@ namespace GameCore.UI
             foreach(var offset in shape)
             {
                 Vector2Int p = origin + offset;
-                if (p.x >= 0 && p.x < 6 && p.y >= 0 && p.y < 7) 
+                if (p.x >= 0 && p.x < 4 && p.y >= 0 && p.y < 7) 
                     grid[p.x, p.y] = true;
             }
         }
@@ -166,7 +200,7 @@ namespace GameCore.UI
             // Instantiate Item
             if (mono.monoGridList == null || mono.monoGridList.Count == 0) return;
             
-            int index = gridPos.y * 6 + gridPos.x;
+            int index = gridPos.y * 4 + gridPos.x;
             if (index < 0 || index >= mono.monoGridList.Count) return;
             
             // Position: Match the grid cell position
@@ -191,9 +225,9 @@ namespace GameCore.UI
             foreach(var offset in shape)
             {
                 Vector2Int p = gridPos + offset;
-                if (p.x >= 0 && p.x < 6 && p.y >= 0 && p.y < 7)
+                if (p.x >= 0 && p.x < 4 && p.y >= 0 && p.y < 7)
                 {
-                    int occIndex = p.y * 6 + p.x;
+                    int occIndex = p.y * 4 + p.x;
                     if (occIndex >= 0 && occIndex < mono.monoGridList.Count)
                     {
                         var gridMono = mono.monoGridList[occIndex];

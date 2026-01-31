@@ -984,6 +984,8 @@ MonoBehaviour:
   fadeInDuration: 0
   fadeOutDuration: 0
   gridPrefab: {fileID: 167188352181821789}
+  columnCount: 4
+  rowCount: 7
 --- !u!1 &5365043761952542921
 GameObject:
   m_ObjectHideFlags: 0
@@ -1116,6 +1118,8 @@ MonoBehaviour:
   fadeInDuration: 0
   fadeOutDuration: 0
   gridPrefab: {fileID: 6949152297723294458}
+  columnCount: 4
+  rowCount: 7
 --- !u!1 &5917411692990177272
 GameObject:
   m_ObjectHideFlags: 0

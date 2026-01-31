@@ -109,7 +109,7 @@ namespace GameCore
         private void GenerateEnemyLayout(EnemyData enemy)
         {
             // 6x7 Grid
-            bool[,] occupiedGrid = new bool[6, 7];
+            bool[,] occupiedGrid = new bool[4, 7];
 
             foreach (var part in enemy.parts)
             {
@@ -155,7 +155,7 @@ namespace GameCore
             foreach (var offset in shape)
             {
                 Vector2Int p = origin + offset;
-                if (p.x < 0 || p.x >= 6 || p.y < 0 || p.y >= 7) return false;
+                if (p.x < 0 || p.x >= 4 || p.y < 0 || p.y >= 7) return false;
                 if (grid[p.x, p.y]) return false;
             }
 

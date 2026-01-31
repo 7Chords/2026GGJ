@@ -60,22 +60,17 @@ namespace GameCore.UI
                 }
                 _spawnedParts.Clear();
             }
-            // Clear grids maybe? Or reuse them. 
-            // For simplicity, let's clear grids if we re-create them, or keep them if static.
-            // Let's re-create to be safe or just keep them if already created?
-            // If we re-create, we need to clear _gridList and children.
-            // Let's assume re-create for now to be robust.
-            if (_gridList.Count > 0)
+            
+            // Robust Clear: Destroy all children to avoid duplicates if _gridList lost track
+            if (mono.transform.childCount > 0)
             {
-               foreach(var g in _gridList)
-               {
-                   if (g!=null) 
-                   {
-                       Object.Destroy(g.gameObject);
-                   }
-               }
-               _gridList.Clear();
+                for(int i = mono.transform.childCount - 1; i >= 0; i--)
+                {
+                    var child = mono.transform.GetChild(i);
+                    Object.Destroy(child.gameObject);
+                }
             }
+            _gridList.Clear();
         }
 
         private void CreateGrids()
@@ -86,9 +81,11 @@ namespace GameCore.UI
                  return;
              }
              
-             for(int y=0; y<mono.columnCount; y++)
+             Debug.Log($"[UIPanelMaskCombineFace] Creating Grids: Rows={mono.rowCount}, Cols={mono.columnCount}");
+             
+             for(int y=0; y<mono.rowCount; y++)
              {
-                 for(int x=0; x<mono.rowCount; x++)
+                 for(int x=0; x<mono.columnCount; x++)
                  {
                      GameObject go = SCCommon.InstantiateGameObject(mono.gridPrefab, mono.transform);
                      var script = go.GetComponent<UIMonoEnemyMaskGrid>(); // reusing existing grid mono
