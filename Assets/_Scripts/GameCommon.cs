@@ -11,6 +11,8 @@ namespace GameCore
     /// </summary>
     public static class GameCommon
     {
+
+        private static GameObject _m_toolTipCache;
         /// <summary>
         /// Õ¹Ê¾ÉËº¦Æ®×Ö
         /// </summary>
@@ -36,6 +38,25 @@ namespace GameCore
                 SCGame.instance.topLayerRoot.GetRectTransform(),
                 _worldPos);
             damageGO.GetComponent<DamageFloatText>().Initialize(_healAmount, false);
+        }
+
+        public static void ShowTooltip(string _name, string _desc, Vector2 _localPos)
+        {
+            DiscardToolTip();
+            GameObject toolTipGo = ResourcesHelper.LoadGameObject(
+                "prefab_tooltip",
+                SCGame.instance.topLayerRoot.transform);
+            toolTipGo.GetRectTransform().localPosition = SCUICommon.ScreenPointToUIPoint(SCGame.instance.topLayerRoot.transform as RectTransform,_localPos);
+            toolTipGo.GetComponent<CommonTooltip>().ShowTooltip(_name, _desc, _localPos);
+            _m_toolTipCache = toolTipGo;
+        }
+
+        public static void DiscardToolTip()
+        {
+            if (_m_toolTipCache == null)
+                return;
+            _m_toolTipCache.GetComponent<CommonTooltip>().Discard();
+            _m_toolTipCache = null;
         }
     }
 }

@@ -10,6 +10,7 @@ namespace GameCore.RefData
 
         public long id;
         public string goodsName;
+        public string goodsDesc;
         public EGoodsType goodsType;
         public int goodsPrice;
         public long partId;
@@ -27,6 +28,7 @@ namespace GameCore.RefData
         {
             id = getLong("id");
             goodsName = getString("goodsName");
+            goodsDesc = getString("goodsDesc");
             goodsType = (EGoodsType)getEnum("goodsType", typeof(EGoodsType));
             goodsPrice = getInt("goodsPrice");
             partId = getLong("partId");

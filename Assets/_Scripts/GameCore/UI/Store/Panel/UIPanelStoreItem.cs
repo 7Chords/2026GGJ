@@ -61,7 +61,7 @@ namespace GameCore.UI
         }
         private void onBtnPurchaseMouseEnter(PointerEventData _arg, object[] _objs)
         {
-
+            GameCommon.ShowTooltip(_m_goodsInfo.goodsRefObj.goodsName, _m_goodsInfo.goodsRefObj.goodsDesc, _arg.position);
         }
     }
 }
