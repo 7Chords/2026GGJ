@@ -1,4 +1,5 @@
 using DG.Tweening;
+using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
 using System;
@@ -58,6 +59,9 @@ namespace GameCore.UI
                 return;
             mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
             mono.txtHealth.text = _m_partInfo.partRefObj.partHealth.ToString();
+            GoodsRefObj goodsRefObj = SCRefDataMgr.instance.goodsRefList.refDataList.Find(x => x.partId == _m_partInfo.partRefObj.id);
+            if(goodsRefObj!=null)
+                mono.txtValue.text = (goodsRefObj.goodsPrice / 2).ToString();
         }
 
         private void onGameObjMouseExit(PointerEventData arg1, object[] arg2)

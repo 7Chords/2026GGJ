@@ -16,8 +16,8 @@ namespace GameCore.UI
         public Text txtAmount;
         [Header("购买按钮")]
         public Button btnPurchase;
-        [Header("商品名字")]
-        public Text txtName;
+/*        [Header("商品名字")]
+        public Text txtName;*/
         [Header("鼠标移入的缩放")]
         public float scaleMouseEnter;
         [Header("鼠标移入的缩放时间")]
