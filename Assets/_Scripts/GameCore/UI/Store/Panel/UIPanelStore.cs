@@ -120,7 +120,7 @@ namespace GameCore.UI
                 case EGoodsType.PART:
                     {
                         PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x=>x.id == info.goodsRefObj.partId);
-                        GameModel.instance.deckPartInfoList.Add(new PartInfo(partRefObj));
+                        GameModel.instance.busyPartInfoList.Add(new PartInfo(partRefObj));
                     }
                     break;
                 case EGoodsType.HEAL:

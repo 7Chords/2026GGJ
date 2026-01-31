@@ -8,13 +8,13 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 namespace SCFrame
 {
     /// <summary>
-    /// SCFrame×ÊÔ´¹¤¾ßÀà
+    /// SCFrameï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public static class ResourcesHelper
     {
 
         /// <summary>
-        /// ¼ÓÔØUnity×ÊÔ´  ÈçAudioClip Sprite Ô¤ÖÆÌå
+        /// ï¿½ï¿½ï¿½ï¿½Unityï¿½ï¿½Ô´  ï¿½ï¿½AudioClip Sprite Ô¤ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
@@ -27,7 +27,7 @@ namespace SCFrame
             }
             catch(Exception ex)
             {
-                Debug.LogError("ResourcesHelper¼ÇÔØ×ÊÔ´³ö´í£¡£¡£¡" + ex);
+                Debug.LogError("ResourcesHelperï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" + ex);
                 return null;
             }
         }
@@ -35,11 +35,11 @@ namespace SCFrame
 
 
         /// <summary>
-        /// ¼ÓÔØÓÎÏ·ÎïÌå
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½
         /// </summary>
-        /// <param name="_assetName">×ÊÔ´Ãû³Æ</param>
-        /// <param name="_parent">¸¸ÎïÌå</param>
-        /// <param name="_automaticRelease">ÎïÌåÏú»ÙÊ±£¬»á×Ô¶¯È¥µ÷ÓÃÒ»´ÎAddressables.Release</param>
+        /// <param name="_assetName">ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½</param>
+        /// <param name="_parent">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</param>
+        /// <param name="_automaticRelease">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½È¥ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Addressables.Release</param>
         /// <returns></returns>
         public static GameObject LoadGameObject(string _assetName, Transform _parent = null, bool _automaticRelease = true)
         {
@@ -56,18 +56,18 @@ namespace SCFrame
             }
             catch(Exception ex)
             {
-                Debug.LogError("ResourcesHelper ¼ÓÔØÓÎÏ·ÎïÌå³ö´í£¡£¡£¡" + ex);
+                Debug.LogError("ResourcesHelper ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" + ex);
                 return null;
             }
         }
 
         /// <summary>
-        /// ¼ÓÔØÓÎÏ·ÎïÌå
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½
         /// </summary>
-        /// <param name="_assetName">×ÊÔ´Ãû³Æ</param>
-        /// <param name="_position">Î»ÖÃ</param>
-        /// <param name="_quaternion">Ðý×ª</param>
-        /// <param name="_automaticRelease">ÎïÌåÏú»ÙÊ±£¬»á×Ô¶¯È¥µ÷ÓÃÒ»´ÎAddressables.Release</param>
+        /// <param name="_assetName">ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½</param>
+        /// <param name="_position">Î»ï¿½ï¿½</param>
+        /// <param name="_quaternion">ï¿½ï¿½×ª</param>
+        /// <param name="_automaticRelease">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½È¥ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Addressables.Release</param>
         /// <returns></returns>
         public static GameObject LoadGameObject(string _assetName,Vector3 _position, Quaternion _quaternion , bool _automaticRelease = true)
         {
@@ -84,13 +84,13 @@ namespace SCFrame
             }
             catch(Exception ex)
             {
-                Debug.LogError("ResourcesHelper¼ÇÔØÓÎÏ·ÎïÌå³ö´í£¡£¡£¡" + ex);
+                Debug.LogError("ResourcesHelperï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" + ex);
                 return null;
             }
         }
 
         /// <summary>
-        /// ×Ô¶¯ÊÍ·Å×ÊÔ´ÊÂ¼þ£¬»ùÓÚÊÂ¼þ¹¤¾ß
+        /// ï¿½Ô¶ï¿½ï¿½Í·ï¿½ï¿½ï¿½Ô´ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         private static void AutomaticReleaseAssetAction(GameObject _obj, object[] _arg2)
         {
@@ -99,7 +99,7 @@ namespace SCFrame
 
 
         /// <summary>
-        /// »ñÈ¡ÊµÀý--×é¼þÄ£Ê½
+        /// ï¿½ï¿½È¡Êµï¿½ï¿½--ï¿½ï¿½ï¿½Ä£Ê½
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
@@ -111,9 +111,9 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// Òì²½¼ÓÔØÓÎÏ·ÎïÌå
+        /// ï¿½ì²½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½
         /// </summary>
-        /// <typeparam name="T">¾ßÌåµÄ×é¼þ</typeparam>
+        /// <typeparam name="T">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</typeparam>
         public static void LoadGameObjectAsync<T>(string _assetName, Action<T> _callBack = null, Transform _parent = null) where T : UnityEngine.Object
         {
 
@@ -142,7 +142,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// Òì²½¼ÓÔØUnity×ÊÔ´ AudioClip Sprite GameObject(Ô¤ÖÆÌå)
+        /// ï¿½ì²½ï¿½ï¿½ï¿½ï¿½Unityï¿½ï¿½Ô´ AudioClip Sprite GameObject(Ô¤ï¿½ï¿½ï¿½ï¿½)
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
@@ -160,7 +160,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// ¼ÓÔØÖ¸¶¨KeyµÄËùÓÐ×ÊÔ´
+        /// ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Keyï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´
         /// </summary>
         public static IList<T> LoadAssets<T>(string _keyName, Action<T> _callBack = null)
         {
@@ -168,7 +168,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// Òì²½¼ÓÔØÖ¸¶¨KeyµÄËùÓÐ×ÊÔ´
+        /// ï¿½ì²½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Keyï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´
         /// </summary>
         public static void LoadAssetsAsync<T>(string _keyName, Action<IList<T>> _callBack = null, Action<T> _callBackOnEveryOne = null)
         {
@@ -182,33 +182,33 @@ namespace SCFrame
             _callBack?.Invoke(request.Result);
         }
         /// <summary>
-        /// Òì²½¼ÓÔØÓÎÏ·ÎïÌå£¨Ö±½Ó·µ»Ø GameObject£¬²»»ñÈ¡×é¼þ£©
+        /// ï¿½ì²½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½å£¨Ö±ï¿½Ó·ï¿½ï¿½ï¿½ GameObjectï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
-        /// <param name="_assetName">×ÊÔ´Ãû³Æ</param>
-        /// <param name="_parent">¸¸ÎïÌå</param>
-        /// <param name="_automaticRelease">ÎïÌåÏú»ÙÊ±×Ô¶¯ÊÍ·Å</param>
-        /// <param name="_callBack">¼ÓÔØÍê³É»Øµ÷£¨·µ»Ø GameObject£©</param>
+        /// <param name="_assetName">ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½</param>
+        /// <param name="_parent">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</param>
+        /// <param name="_automaticRelease">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ô¶ï¿½ï¿½Í·ï¿½</param>
+        /// <param name="_callBack">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É»Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ GameObjectï¿½ï¿½</param>
         public static void LoadGameObjectDirectAsync(string _assetName, Action<GameObject> _callBack, Transform _parent = null, bool _automaticRelease = true)
         {
             SCTaskHelper.instance.StartCoroutine(DoLoadGameObjectDirectAsync(_assetName, _callBack, _parent, _automaticRelease));
         }
 
         /// <summary>
-        /// Òì²½¼ÓÔØÓÎÏ·ÎïÌå£¨´øÎ»ÖÃ¡¢Ðý×ª£¬Ö±½Ó·µ»Ø GameObject£©
+        /// ï¿½ì²½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½å£¨ï¿½ï¿½Î»ï¿½Ã¡ï¿½ï¿½ï¿½×ªï¿½ï¿½Ö±ï¿½Ó·ï¿½ï¿½ï¿½ GameObjectï¿½ï¿½
         /// </summary>
-        /// <param name="_assetName">×ÊÔ´Ãû³Æ</param>
-        /// <param name="_pos">Î»ÖÃ</param>
-        /// <param name="_rot">Ðý×ª</param>
-        /// <param name="_callBack">¼ÓÔØÍê³É»Øµ÷£¨·µ»Ø GameObject£©</param>
-        /// <param name="_parent">¸¸ÎïÌå</param>
-        /// <param name="_automaticRelease">ÎïÌåÏú»ÙÊ±×Ô¶¯ÊÍ·Å</param>
+        /// <param name="_assetName">ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½</param>
+        /// <param name="_pos">Î»ï¿½ï¿½</param>
+        /// <param name="_rot">ï¿½ï¿½×ª</param>
+        /// <param name="_callBack">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É»Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ GameObjectï¿½ï¿½</param>
+        /// <param name="_parent">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</param>
+        /// <param name="_automaticRelease">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ô¶ï¿½ï¿½Í·ï¿½</param>
         public static void LoadGameObjectDirectAsync(string _assetName, Vector3 _pos, Quaternion _rot, Action<GameObject> _callBack, Transform _parent = null, bool _automaticRelease = true)
         {
             SCTaskHelper.instance.StartCoroutine(DoLoadGameObjectDirectAsync(_assetName, _pos, _rot, _callBack, _parent, _automaticRelease));
         }
 
         /// <summary>
-        /// Ð­³ÌÂß¼­£ºÖ±½Ó·µ»Ø GameObject
+        /// Ð­ï¿½ï¿½ï¿½ß¼ï¿½ï¿½ï¿½Ö±ï¿½Ó·ï¿½ï¿½ï¿½ GameObject
         /// </summary>
         private static IEnumerator DoLoadGameObjectDirectAsync(string _assetName, Action<GameObject> _callBack, Transform _parent = null, bool _automaticRelease = true)
         {
@@ -227,14 +227,14 @@ namespace SCFrame
             }
             else
             {
-                Debug.LogError($"Ö±½Ó¼ÓÔØ GameObject Ê§°Ü£¡×ÊÔ´Ãû³Æ£º{_assetName}£¬´íÎó£º{request.OperationException?.Message}");
+                Debug.LogError($"Ö±ï¿½Ó¼ï¿½ï¿½ï¿½ GameObject Ê§ï¿½Ü£ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½Æ£ï¿½{_assetName}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½{request.OperationException?.Message}");
             }
 
             _callBack?.Invoke(resultGO);
         }
 
         /// <summary>
-        /// Ð­³ÌÂß¼­£º´øÎ»ÖÃ¡¢Ðý×ª£¬Ö±½Ó·µ»Ø GameObject
+        /// Ð­ï¿½ï¿½ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã¡ï¿½ï¿½ï¿½×ªï¿½ï¿½Ö±ï¿½Ó·ï¿½ï¿½ï¿½ GameObject
         /// </summary>
         private static IEnumerator DoLoadGameObjectDirectAsync(string _assetName, Vector3 _pos, Quaternion _rot, Action<GameObject> _callBack, Transform _parent = null, bool _automaticRelease = true)
         {
@@ -254,7 +254,7 @@ namespace SCFrame
             }
             else
             {
-                Debug.LogError($"Ö±½Ó¼ÓÔØ GameObject Ê§°Ü£¡×ÊÔ´Ãû³Æ£º{_assetName}£¬´íÎó£º{request.OperationException?.Message}");
+                Debug.LogError($"Ö±ï¿½Ó¼ï¿½ï¿½ï¿½ GameObject Ê§ï¿½Ü£ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½Æ£ï¿½{_assetName}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½{request.OperationException?.Message}");
             }
 
             _callBack?.Invoke(resultGO);
@@ -264,7 +264,7 @@ namespace SCFrame
             Addressables.Release<T>(_obj);
         }
         /// <summary>
-        /// ÊÍ·ÅÊµÀý
+        /// ï¿½Í·ï¿½Êµï¿½ï¿½
         /// </summary>
         public static bool ReleaseInstance(GameObject _obj)
         {

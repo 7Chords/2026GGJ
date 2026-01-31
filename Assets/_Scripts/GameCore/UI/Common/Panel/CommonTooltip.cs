@@ -8,108 +8,108 @@ using UnityEngine.UI;
 namespace GameCore.UI
 {
     /// <summary>
-    /// Í¨ÓÃÐü¸¡ÌáÊ¾¿òMonoÀà
-    /// ÓÃÓÚÏÔÊ¾ÉÌÆ·/µÀ¾ßµÄÃû³Æ¡¢ÃèÊöµÈÔ¤ÀÀÐÅÏ¢£¨×Ô´øÆÁÄ»×ÔÊÊÓ¦Î»ÖÃ£©
+    /// Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½Monoï¿½ï¿½
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½Æ·/ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½ï¿½Æ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½Ó¦Î»ï¿½Ã£ï¿½
     /// </summary>
     public class CommonTooltip : MonoBehaviour
     {
-        [Header("Ðü¸¡¿òºËÐÄUI×é¼þ")]
-        public Text txtName;      // ÉÌÆ·Ãû³ÆÎÄ±¾
-        public Text txtDesc;      // ÉÌÆ·ÃèÊöÎÄ±¾
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½UIï¿½ï¿½ï¿½")]
+        public Text txtName;      // ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½
+        public Text txtDesc;      // ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½
 
-        [Header("½¥±ä²ÎÊý")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
         public CanvasGroup canvasGroup;
         public float fadeInDuratin = 0.2f;
         public float fadeOutDuratin = 0.2f;
 
-        [Header("ÆÁÄ»ÊÊÅä²ÎÊý")]
-        [Tooltip("Ðü¸¡¿òÓëÆÁÄ»±ßÔµµÄ×îÐ¡¾àÀë")]
+        [Header("ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
+        [Tooltip("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½Ôµï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½")]
         public float screenPadding = 10f;
 
-        // »º´æ×é¼þ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         private TweenContainer _m_tweenContainer;
         private RectTransform _tooltipRect;
-        private RectTransform _canvasRect; // ¶¥²ãCanvasµÄRectTransform
+        private RectTransform _canvasRect; // ï¿½ï¿½ï¿½ï¿½Canvasï¿½ï¿½RectTransform
 
         private void Awake()
         {
-            // ³õÊ¼»¯»º´æ×é¼þ
+            // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             _tooltipRect = GetComponent<RectTransform>();
             _m_tweenContainer = new TweenContainer();
 
-            // »ñÈ¡¶¥²ãCanvasµÄRectTransform£¨ÊÊÅäOverlayÄ£Ê½£©
+            // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Canvasï¿½ï¿½RectTransformï¿½ï¿½ï¿½ï¿½ï¿½ï¿½OverlayÄ£Ê½ï¿½ï¿½
             _canvasRect = GetComponentInParent<Canvas>().GetComponent<RectTransform>();
             if (_canvasRect == null)
             {
-                Debug.LogWarning("CommonTooltipÎ´ÕÒµ½¸¸¼¶Canvas£¬Çë¼ì²é²ã¼¶½á¹¹£¡");
+                Debug.LogWarning("CommonTooltipÎ´ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½Canvasï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã¼¶ï¿½á¹¹ï¿½ï¿½");
             }
         }
 
         /// <summary>
-        /// ÉèÖÃÐü¸¡¿òÏÔÊ¾µÄ»ù´¡ÐÅÏ¢£¨Ãû³Æ+ÃèÊö£©
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
-        /// <param name="name">ÉÌÆ·Ãû³Æ</param>
-        /// <param name="desc">ÉÌÆ·ÃèÊö</param>
+        /// <param name="name">ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½</param>
+        /// <param name="desc">ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½</param>
         public void SetBaseInfo(string name, string desc)
         {
             if (txtName != null)
-                txtName.text = string.IsNullOrEmpty(name) ? "Î´ÖªÉÌÆ·" : name;
+                txtName.text = string.IsNullOrEmpty(name) ? "Î´Öªï¿½ï¿½Æ·" : name;
 
             if (txtDesc != null)
-                txtDesc.text = string.IsNullOrEmpty(desc) ? "ÔÝÎÞÃèÊö" : desc;
+                txtDesc.text = string.IsNullOrEmpty(desc) ? "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" : desc;
         }
 
         /// <summary>
-        /// ¼ÆËã×ÔÊÊÓ¦Î»ÖÃ£¨ºËÐÄ£ºÈ·±£²»³¬³öÆÁÄ»£©
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½Ä£ï¿½È·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½
         /// </summary>
-        /// <param name="targetLocalPos">Ä¿±ê±¾µØ×ø±ê£¨CanvasÏÂ£©</param>
-        /// <returns>ÊÊÅäºóµÄ±¾µØ×ø±ê</returns>
+        /// <param name="targetLocalPos">Ä¿ï¿½ê±¾ï¿½ï¿½ï¿½ï¿½ï¿½ê£¨Canvasï¿½Â£ï¿½</param>
+        /// <returns>ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</returns>
         private Vector2 CalculateAdaptivePosition(Vector2 targetLocalPos)
         {
             if (_tooltipRect == null || _canvasRect == null)
             {
-                Debug.LogWarning("Tooltip/Canvas RectTransformÎª¿Õ£¬·µ»ØÔ­Ê¼Î»ÖÃ");
+                Debug.LogWarning("Tooltip/Canvas RectTransformÎªï¿½Õ£ï¿½ï¿½ï¿½ï¿½ï¿½Ô­Ê¼Î»ï¿½ï¿½");
                 return targetLocalPos;
             }
 
-            // Ç¿ÖÆË¢ÐÂ²¼¾Ö£¨±ÜÃâ¶¯Ì¬ÎÄ±¾µ¼ÖÂ³ß´ç¼ÆËã´íÎó£©
+            // Ç¿ï¿½ï¿½Ë¢ï¿½Â²ï¿½ï¿½Ö£ï¿½ï¿½ï¿½ï¿½â¶¯Ì¬ï¿½Ä±ï¿½ï¿½ï¿½ï¿½Â³ß´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             LayoutRebuilder.ForceRebuildLayoutImmediate(_tooltipRect);
 
-            // »ñÈ¡TooltipµÄÊµ¼Ê¿í¸ß£¨Í¨¹ýÊÀ½ç½Çµã¼ÆËã£¬ÊÊÅäÈÎÒâÃªµã/Ëõ·Å£©
+            // ï¿½ï¿½È¡Tooltipï¿½ï¿½Êµï¿½Ê¿ï¿½ï¿½ß£ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½ã£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãªï¿½ï¿½/ï¿½ï¿½ï¿½Å£ï¿½
             Vector3[] corners = new Vector3[4];
             _tooltipRect.GetWorldCorners(corners);
             float tooltipWidth = corners[3].x - corners[0].x;
             float tooltipHeight = corners[1].y - corners[0].y;
 
-            // »ñÈ¡CanvasµÄ¿ÉÊÓÇøÓò·¶Î§£¨OverlayÄ£Ê½ÏÂµÈÓÚÆÁÄ»·Ö±æÂÊ£©
+            // ï¿½ï¿½È¡Canvasï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î§ï¿½ï¿½OverlayÄ£Ê½ï¿½Âµï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½Ö±ï¿½ï¿½Ê£ï¿½
             Rect canvasRect = _canvasRect.rect;
             float canvasLeft = canvasRect.xMin + screenPadding;
             float canvasRight = canvasRect.xMax - screenPadding;
             float canvasBottom = canvasRect.yMin + screenPadding;
             float canvasTop = canvasRect.yMax - screenPadding;
 
-            // ¼ÆËãTooltipµÄÄ¿±êÎ»ÖÃ£¨³õÊ¼Îª´«ÈëÎ»ÖÃ£©
+            // ï¿½ï¿½ï¿½ï¿½Tooltipï¿½ï¿½Ä¿ï¿½ï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½Ê¼Îªï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½
             Vector2 adaptivePos = targetLocalPos;
 
-            // ========== Ë®Æ½·½ÏòÊÊÅä ==========
-            // ÓÒ±ß½ç³¬³ö£ºÏò×óµ÷Õû
+            // ========== Ë®Æ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ==========
+            // ï¿½Ò±ß½ç³¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (adaptivePos.x + tooltipWidth > canvasRight)
             {
                 adaptivePos.x = canvasRight - tooltipWidth;
             }
-            // ×ó±ß½ç³¬³ö£ºÏòÓÒµ÷Õû
+            // ï¿½ï¿½ß½ç³¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½
             if (adaptivePos.x < canvasLeft)
             {
                 adaptivePos.x = canvasLeft;
             }
 
-            // ========== ´¹Ö±·½ÏòÊÊÅä ==========
-            // ÉÏ±ß½ç³¬³ö£ºÏòÏÂµ÷Õû
+            // ========== ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ==========
+            // ï¿½Ï±ß½ç³¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½ï¿½ï¿½
             if (adaptivePos.y > canvasTop)
             {
                 adaptivePos.y = canvasTop - tooltipHeight;
             }
-            // ÏÂ±ß½ç³¬³ö£ºÏòÉÏµ÷Õû
+            // ï¿½Â±ß½ç³¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½
             if (adaptivePos.y - tooltipHeight < canvasBottom)
             {
                 adaptivePos.y = canvasBottom + tooltipHeight;
@@ -119,9 +119,9 @@ namespace GameCore.UI
         }
 
         /// <summary>
-        /// ÉèÖÃÐü¸¡¿òµÄÏÔÊ¾Î»ÖÃ£¨±¾µØ×ø±ê£©
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê£©
         /// </summary>
-        /// <param name="localPos">CanvasÏÂµÄ±¾µØ×ø±ê</param>
+        /// <param name="localPos">Canvasï¿½ÂµÄ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</param>
         public void SetLocalPosition(Vector2 localPos)
         {
             if (_tooltipRect != null)
@@ -131,7 +131,7 @@ namespace GameCore.UI
         }
 
         /// <summary>
-        /// Òþ²Ø²¢Ïú»ÙÐü¸¡¿ò
+        /// ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public void Discard()
         {
@@ -149,25 +149,25 @@ namespace GameCore.UI
         }
 
         /// <summary>
-        /// ¿ìËÙÉèÖÃ²¢ÏÔÊ¾Ðü¸¡¿ò£¨Ò»¼üµ÷ÓÃ£¬×Ô¶¯ÊÊÅäÆÁÄ»Î»ÖÃ£©
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã²ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»Î»ï¿½Ã£ï¿½
         /// </summary>
-        /// <param name="name">Ãû³Æ</param>
-        /// <param name="desc">ÃèÊö</param>
-        /// <param name="targetLocalPos">Ä¿±ê±¾µØ×ø±ê£¨CanvasÏÂ£©</param>
+        /// <param name="name">ï¿½ï¿½ï¿½ï¿½</param>
+        /// <param name="desc">ï¿½ï¿½ï¿½ï¿½</param>
+        /// <param name="targetLocalPos">Ä¿ï¿½ê±¾ï¿½ï¿½ï¿½ï¿½ï¿½ê£¨Canvasï¿½Â£ï¿½</param>
         public void ShowTooltip(string name, string desc, Vector2 targetLocalPos)
         {
-            // 1. ÉèÖÃ»ù´¡ÐÅÏ¢
+            // 1. ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
             SetBaseInfo(name, desc);
 
-            // 2. ¼ÆËã×ÔÊÊÓ¦Î»ÖÃ£¨ºËÐÄ£º±ÜÃâ³¬³öÆÁÄ»£©
+            // 2. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½â³¬ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½
             Vector2 adaptivePos = CalculateAdaptivePosition(targetLocalPos);
 
-            // 3. ÉèÖÃÊÊÅäºóµÄÎ»ÖÃ
+            // 3. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
             SetLocalPosition(adaptivePos);
 
-            // 4. ½¥±äÏÔÊ¾
+            // 4. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
             canvasGroup.alpha = 0;
-            gameObject.SetActive(true); // È·±£¼¤»îºóÔÙ×ö½¥±ä
+            gameObject.SetActive(true); // È·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             _m_tweenContainer.RegDoTween(canvasGroup.DOFade(1, fadeInDuratin));
         }
     }

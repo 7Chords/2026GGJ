@@ -155,8 +155,14 @@ public class MapGenerate : MonoBehaviour
     {
         var originRoomList = new List<int>();
         var repetitionCount = mapData.repetitionCount;
+        
+        // 强制起点为中间节点
+        int centerIndex = _layerCount.y / 2;
+        
         for (var i = 0; i < repetitionCount; i++)
         {
+            // 之前的随机起点逻辑屏蔽，改为固定起点
+            /*
             var originRoom = _mapRandom.Next(0, repetitionCount);
             if (i == 1)
             {
@@ -169,6 +175,9 @@ public class MapGenerate : MonoBehaviour
 
                 if (safetyCounter >= 100) originRoom = originRoomList[0];
             }
+            */
+            
+            var originRoom = centerIndex;
 
             originRoomList.Add(originRoom);
             SetRoute(originRoom);
@@ -178,8 +187,10 @@ public class MapGenerate : MonoBehaviour
     private void SetRoute(int originRoom)
     {
         var currentRoom = originRoom;
-
+        
         var currentRoomType = RoomType.None;
+        
+        int centerIndex = _layerCount.y / 2;
 
         for (var i = 0; i < _mapNodeArray.GetLength(0); i++)
         {
@@ -195,6 +206,16 @@ public class MapGenerate : MonoBehaviour
             // 如果已经是最后一层，不需要设置下一个连接点
             if (i == _mapNodeArray.Length - 1)
                 break;
+                
+            // === 特殊处理：如果是倒数第二层，强制指向最后一层的中间节点 ===
+            if (i == _mapNodeArray.GetLength(0) - 2)
+            {
+                var nextRoomIndex = centerIndex;
+                var nextLayerNodes = currentNode.nextLayerConnectedNodes;
+                if (!nextLayerNodes.Contains(nextRoomIndex)) nextLayerNodes.Add(nextRoomIndex);
+                currentRoom = nextRoomIndex;
+                continue; // 跳过常规随机逻辑
+            }
 
             var minIndex = 0;
             var maxIndex = _layerCount.y - 1;
@@ -217,12 +238,12 @@ public class MapGenerate : MonoBehaviour
             minIndex = Mathf.Max(minIndex, currentRoom - 1);
             maxIndex = Mathf.Min(maxIndex, currentRoom + 1);
 
-            var nextRoomIndex = _mapRandom.Next(minIndex, maxIndex + 1);
+            var nextRoomIndexRnd = _mapRandom.Next(minIndex, maxIndex + 1);
 
             var nextLayerConnectedNodes = currentNode.nextLayerConnectedNodes;
-            if (!nextLayerConnectedNodes.Contains(nextRoomIndex)) nextLayerConnectedNodes.Add(nextRoomIndex);
+            if (!nextLayerConnectedNodes.Contains(nextRoomIndexRnd)) nextLayerConnectedNodes.Add(nextRoomIndexRnd);
 
-            currentRoom = nextRoomIndex;
+            currentRoom = nextRoomIndexRnd;
         }
     }
 
@@ -283,17 +304,23 @@ public class MapGenerate : MonoBehaviour
         {
             // 1. 处理固定类型层级
             case 0:
-                return RoomType.Enemy;
-            case 7:
-                return RoomType.Treasure;
+                return RoomType.Enemy; // 首位是战斗节点
+            //case 7:
+            //    return RoomType.Treasure;
         }
 
-        if (layerIndex == _layerCount.x - 1) return RoomType.Rest;
+        if (layerIndex == _layerCount.x - 1) return RoomType.Enemy; // 末位是战斗节点 (原为Rest)
 
         // 2. 确定当前层级的限制条件
         var excludedTypes = new List<RoomType> { RoomType.None };
+        
+        // 屏蔽精英和休息点
+        excludedTypes.Add(RoomType.Elite);
+        excludedTypes.Add(RoomType.Rest);
+
         var avoidDuplicates = previousRoomType != RoomType.Enemy && previousRoomType != RoomType.Event;
 
+        /*
         switch (layerIndex)
         {
             case 1:
@@ -310,6 +337,7 @@ public class MapGenerate : MonoBehaviour
                 break;
             }
         }
+        */
 
         // 3. 生成符合条件的节点类型
         return GetValidNodeType(previousRoomType, excludedTypes, avoidDuplicates);

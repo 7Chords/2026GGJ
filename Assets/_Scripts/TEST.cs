@@ -34,5 +34,9 @@ public class TEST : MonoBehaviour
             GameModel.instance.rollEnemyId = 104001;
             UICoreMgr.instance.AddNode(new UINodeBattleWin(SCFrame.UI.SCUIShowType.ADDITION));
         }
+        else if (Input.GetKeyDown(KeyCode.I))
+        {
+            UICoreMgr.instance.AddNode(new UINodeDeck(SCFrame.UI.SCUIShowType.ADDITION));
+        }
     }
 }

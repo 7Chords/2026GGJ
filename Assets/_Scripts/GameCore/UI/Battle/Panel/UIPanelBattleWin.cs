@@ -18,8 +18,6 @@ namespace GameCore.UI
         public override void AfterInitialize()
         {
             _m_winContainer = new UIPanelStoreBagContainer(mono.monoContainer);
-            // 初始化容器（保证容器完成初始化，避免SetListInfo失效）
-            _m_winContainer.AfterInitialize();
         }
 
         public override void BeforeDiscard()

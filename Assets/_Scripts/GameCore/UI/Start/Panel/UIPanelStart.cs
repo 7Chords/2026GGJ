@@ -24,14 +24,12 @@ namespace GameCore.UI
         public override void OnHidePanel()
         {
             mono.btnStart.RemoveClickDown(onBtnStartClickDown);
-            //mono.btnSetting.RemoveClickDown(onBtnSettingClickDown);
             mono.btnExit.RemoveClickDown(onBtnExitClickDown);
         }
 
         public override void OnShowPanel()
         {
             mono.btnStart.AddMouseLeftClickDown(onBtnStartClickDown);
-            //mono.btnSetting.AddMouseLeftClickDown(onBtnSettingClickDown);
             mono.btnExit.AddMouseLeftClickDown(onBtnExitClickDown);
         }
 
@@ -42,8 +40,7 @@ namespace GameCore.UI
         private void onBtnStartClickDown(PointerEventData arg1, object[] arg2)
         {
             UICoreMgr.instance.CloseTopNode();
-
-            //todo:
+            UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
         }
     }
 

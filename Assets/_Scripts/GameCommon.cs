@@ -7,14 +7,14 @@ using UnityEngine;
 namespace GameCore
 {
     /// <summary>
-    /// ∑‚◊∞”Œœ∑Õ®”√∑Ω∑®
+    /// Â∞ÅË£ÖÊ∏∏ÊàèÈÄöÁî®ÊñπÊ≥ï
     /// </summary>
     public static class GameCommon
     {
 
         private static GameObject _m_toolTipCache;
         /// <summary>
-        /// ’π æ…À∫¶∆Æ◊÷
+        /// Â±ïÁ§∫‰º§ÂÆ≥È£òÂ≠ó
         /// </summary>
         public static void ShowDamageFloatText(int _damage, Vector3 _worldPos)
         {
@@ -27,7 +27,7 @@ namespace GameCore
             damageGO.GetComponent<DamageFloatText>().Initialize(_damage, true);
         }
         /// <summary>
-        /// ’π æ÷Œ¡∆¡ø∆Æ◊÷
+        /// Â±ïÁ§∫Ê≤ªÁñóÈáèÈ£òÂ≠ó
         /// </summary>
         public static void ShowHealFloatText(int _healAmount, Vector3 _worldPos)
         {
@@ -40,15 +40,38 @@ namespace GameCore
             damageGO.GetComponent<DamageFloatText>().Initialize(_healAmount, false);
         }
 
-        public static void ShowTooltip(string _name, string _desc, Vector2 _localPos)
+        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector2 _localPos)
         {
             DiscardToolTip();
             GameObject toolTipGo = ResourcesHelper.LoadGameObject(
                 "prefab_tooltip",
                 SCGame.instance.topLayerRoot.transform);
-            toolTipGo.GetRectTransform().localPosition = SCUICommon.ScreenPointToUIPoint(SCGame.instance.topLayerRoot.transform as RectTransform,_localPos);
-            toolTipGo.GetComponent<CommonTooltip>().ShowTooltip(_name, _desc, _localPos);
+                
+            RectTransform toolTipRT = toolTipGo.GetRectTransform();
+            Vector2 localPoint;
+            
+            // Get correct camera
+            Camera uiCam = null;
+            Canvas canvas = toolTipRT.GetComponentInParent<Canvas>();
+            if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
+            {
+                uiCam = canvas.worldCamera;
+            }
+            
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                toolTipRT.parent as RectTransform,
+                _localPos,
+                uiCam,
+                out localPoint
+            );
+            
+            toolTipRT.localPosition = localPoint;
+            
+            // Fix: pass LOCAL POINT to ShowTooltip
+            var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
+            tooltipComp.ShowTooltip(_name, _desc, localPoint);
             _m_toolTipCache = toolTipGo;
+            return tooltipComp;
         }
 
         public static void DiscardToolTip()
