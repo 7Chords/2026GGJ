@@ -22,18 +22,63 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d0cae6c8c468c8243ad81ef0b66cf576
-    m_Address: spr_mouth
+  - m_GUID: 9b17d955b42a4b542b3be0bed68525ca
+    m_Address: spr_eye_3
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f095709bb94b71648bb9339a8b9f2a73
-    m_Address: spr_nose
+  - m_GUID: c9d0f677944a0bf43ba3047a8e3e68c2
+    m_Address: spr_eye_2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9aac04fe70011d449b737a6bc9ba0d17
-    m_Address: spr_eye
+  - m_GUID: e53afcf043907354aac2951095e30e2c
+    m_Address: spr_eye_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0740a49d0b812b740bf8e41a24f0955d
+    m_Address: spr_eye_4
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f336de652740dcf41a0cde0c0bf2ac6d
+    m_Address: spr_nose_4
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b2f00abc635839441b1efc15747ff102
+    m_Address: spr_nose_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e016afe9b8e8d5a4489d72a68c1bcf0b
+    m_Address: spr_nose_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cdc886a990e77c040b74aec986b2393d
+    m_Address: spr_nose_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f8bf88dafa098f846b0765731d10bdfe
+    m_Address: spr_mouth_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 37454c20e5769724eae04b373779a4b0
+    m_Address: spr_mouth_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2b64a756f889b5146bc886922388d4c0
+    m_Address: spr_mouth_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9b28a1f8c6411a54fbe6df985c7ef329
+    m_Address: spr_mouth_4
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
