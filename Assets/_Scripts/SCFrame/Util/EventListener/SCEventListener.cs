@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 namespace SCFrame
 {
     /// <summary>
-    /// ÊÂ¼þÀàÐÍ
+    /// ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public enum ESCEventType
     {
@@ -51,11 +51,11 @@ namespace SCFrame
 
     public class SCEventListener : MonoBehaviour, ISCMouseEvent
     {
-        //valueÊÇ½Ó¿Ú ¾ßÌåÖ´ÐÐµÄ×ª
+        //valueï¿½Ç½Ó¿ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ðµï¿½×ª
         private Dictionary<int, ISCEventListenerEventPack> _m_eventPackDic = new Dictionary<int, ISCEventListenerEventPack>();
 
         /// <summary>
-        /// Ìí¼ÓÊÂ¼þ
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
         /// </summary>
         public void AddListener<T>(int _eventTypeInt, Action<T, object[]> _action, params object[] _args)
         {
@@ -71,7 +71,7 @@ namespace SCFrame
             }
         }
         /// <summary>
-        /// Ìí¼ÓÊÂ¼þ
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
         /// </summary>
         public void AddListener<T>(ESCEventType _eventType, Action<T, object[]> _action, params object[] _args)
         {
@@ -79,7 +79,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// ÒÆ³ýÊÂ¼þ
+        /// ï¿½Æ³ï¿½ï¿½Â¼ï¿½
         /// </summary>
         public void RemoveListener<T>(int _eventTypeInt, Action<T, object[]> _action, bool _checkArgs = false, params object[] _args)
         {
@@ -89,7 +89,7 @@ namespace SCFrame
             }
         }
         /// <summary>
-        /// ÒÆ³ýÊÂ¼þ
+        /// ï¿½Æ³ï¿½ï¿½Â¼ï¿½
         /// </summary>
         public void RemoveListener<T>(ESCEventType _eventType, Action<T, object[]> _action, bool _checkArgs = false, params object[] _args)
         {
@@ -97,7 +97,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// ÒÆ³ýÄ³Ò»¸öÊÂ¼þÀàÐÍÏÂµÄÈ«²¿ÊÂ¼þ
+        /// ï¿½Æ³ï¿½Ä³Ò»ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½È«ï¿½ï¿½ï¿½Â¼ï¿½
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="_eventType"></param>
@@ -110,7 +110,7 @@ namespace SCFrame
             }
         }
         /// <summary>
-        /// ÒÆ³ýÈ«²¿ÊÂ¼þ
+        /// ï¿½Æ³ï¿½È«ï¿½ï¿½ï¿½Â¼ï¿½
         /// </summary>
         public void RemoveAllListener()
         {
@@ -123,7 +123,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// ´¥·¢ÊÂ¼þ
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
         /// </summary>
         public void TriggerAction<T>(int _eventTypeInt, T _eventData)
         {
@@ -133,7 +133,7 @@ namespace SCFrame
             }
         }
         /// <summary>
-        /// ´¥·¢ÊÂ¼þ
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
         /// </summary>
         public void TriggerAction<T>(ESCEventType _eventType, T _eventData)
         {
@@ -187,7 +187,7 @@ namespace SCFrame
 
         #endregion
 
-        #region Åö×²
+        #region ï¿½ï¿½×²
         private void OnCollisionEnter(Collision collision)
         {
             TriggerAction(ESCEventType.ON_COLLISION_ENTER, collision);
@@ -216,7 +216,7 @@ namespace SCFrame
         }
         #endregion
 
-        #region ´¥·¢
+        #region ï¿½ï¿½ï¿½ï¿½
         private void OnTriggerEnter(Collider other)
         {
             TriggerAction(ESCEventType.ON_TRIGGER_ENTER, other);
@@ -243,7 +243,7 @@ namespace SCFrame
         }
         #endregion
 
-        #region Ïú»Ù
+        #region ï¿½ï¿½ï¿½ï¿½
         private void OnDestroy()
         {
             TriggerAction(ESCEventType.ON_RELEASE_ADDRESSABLE_ASSET, gameObject);
