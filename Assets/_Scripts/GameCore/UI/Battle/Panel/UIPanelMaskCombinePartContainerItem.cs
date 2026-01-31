@@ -78,17 +78,23 @@ namespace GameCore.UI
         private void onBeginDrag(PointerEventData _arg, object[] _objs)
         {
             _m_isDraging = true;
+            
+            // 1. 先创建拖拽克隆体 (使用当前显示状态)
+            createDragClone();
 
-            // 隐藏原物体的交互
+            // 2. 隐藏原物体的交互和显示
             if (mono.canvasGroup != null)
             {
                 mono.canvasGroup.alpha = 0f;
                 mono.canvasGroup.blocksRaycasts = false;
             }
-            createDragClone();
+            // 强制隐藏图片（防止CanvasGroup不起作用）
+            if (mono.imgGoods != null) mono.imgGoods.enabled = false;
             
             if (_dragLoopCoroutine != null) mono.StopCoroutine(_dragLoopCoroutine);
             _dragLoopCoroutine = mono.StartCoroutine(DragLoop());
+            
+            // 3. 恢复格子颜色
             UpdateGridColors(false);
         }
         private void onEndDrag(PointerEventData _arg, object[] _objs)
@@ -99,103 +105,33 @@ namespace GameCore.UI
                 mono.StopCoroutine(_dragLoopCoroutine);
                 _dragLoopCoroutine = null;
             }
+            
+            ClearPreview(); // Cleanup preview before placing
 
             UIMonoMaskCombineFaceGrid hitGrid = GetHitGrid(_arg);
             bool placementSuccess = false;
 
             if (hitGrid != null)
             {
-                 // Calculate Logical Grid Origin based on midPos
-                 Vector2Int hitPos = Vector2Int.RoundToInt(hitGrid.gridPos);
-                 Vector2Int midPos = Vector2Int.zero;
-                 if (_m_partInfo != null && _m_partInfo.partRefObj != null)
+                 if (TryCalculatePlacement(hitGrid, out Vector2Int logicalOrigin, out List<GameCore.RefData.PosEffectObj> rotatedShape))
                  {
-                     midPos = _m_partInfo.partRefObj.midPos;
-                 }
-                 
-                 // CRITICAL FIX: Rotate midPos before subtracting!
-                 // The relative position of the handle changes when the item rotates.
-                 Vector2Int rotatedMidPos = RotateVector(midPos, _currentRotation);
-                 
-                 Vector2Int logicalOrigin = hitPos - rotatedMidPos;
-                 
-                 // Check Validity of Region (All Shape cells must exist in Grid)
-                 bool regionValid = true;
-                 var shape = (_m_partInfo != null && _m_partInfo.partRefObj != null) ? _m_partInfo.partRefObj.posList : null;
-                 
-                 // Get all Grids in parent to verify existence
-                 var allGrids = hitGrid.transform.parent.GetComponentsInChildren<UIMonoMaskCombineFaceGrid>();
-                 
-                 List<Vector2Int> requiredPositions = new List<Vector2Int>();
-                 // Apply Rotation to Shape
-                 List<GameCore.RefData.PosEffectObj> rotatedShape = new List<GameCore.RefData.PosEffectObj>();
-                 if (shape != null && shape.Count > 0)
-                 {
-                     foreach(var p in shape) 
-                     {
-                         Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), _currentRotation);
-                         requiredPositions.Add(logicalOrigin + rotatedP);
-                         rotatedShape.Add(new GameCore.RefData.PosEffectObj() { x = rotatedP.x, y = rotatedP.y });
-                     }
-                 }
-                 else
-                 {
-                      requiredPositions.Add(logicalOrigin);
-                      rotatedShape.Add(new GameCore.RefData.PosEffectObj() { x = 0, y = 0 });
-                 }
-                 
-                 foreach(var req in requiredPositions)
-                 {
-                     bool found = false;
-                     foreach(var g in allGrids)
-                     {
-                         if (Vector2Int.RoundToInt(g.gridPos) == req)
-                         {
-                             found = true;
-                             break;
-                         }
-                     }
-                     if (!found)
-                     {
-                         regionValid = false;
-                         break;
-                     }
-                 }
-                 
-                 if (regionValid)
-                 {
-                     // Check Occupancy (Collision with other items)
-                     // Pass the ROTATED shape
-                     bool isOccupied = _m_container != null && _m_container.CheckRegionOccupancy(logicalOrigin, rotatedShape, _m_partInfo);
+                     // Placement Success
+                     _m_partInfo.gridPos = logicalOrigin;
+                     _m_partInfo.rotation = _currentRotation; // Save rotation
                      
-                     if (!isOccupied)
-                     {
-                         // Placement Success
-                         _m_partInfo.gridPos = logicalOrigin;
-                         _m_partInfo.rotation = _currentRotation; // Save rotation
-                         
-                         // Determine which grid corresponds to the logicalOrigin (to be parent?)
-                         // Actually, user logic was: "place item parent to hitGrid (midPos location)"
-                         // Current logic: SnapToGrid(hitGrid). hitGrid IS the grid under mouse.
-                         // This is correct visual pivot.
-                         SnapToGrid(hitGrid); 
-                         
-                         // Apply Rotation to actual item
-                         GetGameObject().transform.localRotation = Quaternion.Euler(0, 0, _currentRotation * 90);
-                         
-                         // Update Grid Colors using rotated shape
-                         UpdateGridColors(true, rotatedShape); 
-                         
-                         placementSuccess = true;
-                     }
-                     else
-                     {
-                         Debug.Log("该区域已被占用！");
-                     }
+                     SnapToGrid(hitGrid); 
+                     
+                     // Apply Rotation to actual item
+                     GetGameObject().transform.localRotation = Quaternion.Euler(0, 0, _currentRotation * 90);
+                     
+                     // Update Grid Colors using rotated shape
+                     UpdateGridColors(true, rotatedShape); 
+                     
+                     placementSuccess = true;
                  }
                  else
                  {
-                     Debug.Log("部分区域超出格子范围！");
+                     Debug.Log("该区域已被占用或无效！");
                  }
             }
             else
@@ -226,6 +162,7 @@ namespace GameCore.UI
                 mono.canvasGroup.alpha = 1f;
                 mono.canvasGroup.blocksRaycasts = true;
             }
+            if (mono.imgGoods != null) mono.imgGoods.enabled = true;
             
         }
 
@@ -437,6 +374,7 @@ namespace GameCore.UI
                 {
                     RotateDragItem();
                 }
+                UpdatePreview();
                 yield return null;
             }
         }
@@ -460,6 +398,190 @@ namespace GameCore.UI
                 ret = new Vector2Int(-ret.y, ret.x);
             }
             return ret;
+        }
+
+
+        /// <summary>
+        /// 尝试计算放置信息
+        /// </summary>
+        private bool TryCalculatePlacement(UIMonoMaskCombineFaceGrid hitGrid, out Vector2Int logicalOrigin, out List<GameCore.RefData.PosEffectObj> rotatedShape)
+        {
+            logicalOrigin = Vector2Int.zero;
+            rotatedShape = new List<GameCore.RefData.PosEffectObj>();
+
+            if (hitGrid == null) return false;
+
+             // Calculate Logical Grid Origin based on midPos
+             Vector2Int hitPos = Vector2Int.RoundToInt(hitGrid.gridPos);
+             Vector2Int midPos = Vector2Int.zero;
+             if (_m_partInfo != null && _m_partInfo.partRefObj != null)
+             {
+                 midPos = _m_partInfo.partRefObj.midPos;
+             }
+             
+             // Rotate midPos
+             Vector2Int rotatedMidPos = RotateVector(midPos, _currentRotation);
+             
+             logicalOrigin = hitPos - rotatedMidPos;
+             
+             // Check Validity of Region (All Shape cells must exist in Grid)
+             var shape = (_m_partInfo != null && _m_partInfo.partRefObj != null) ? _m_partInfo.partRefObj.posList : null;
+             
+             // Get all Grids in parent to verify existence
+             // Optimization: pass gridContainer if possible, but getting from hitGrid is safe
+             var gridContainer = hitGrid.transform.parent;
+             if (gridContainer == null) return false;
+             var allGrids = gridContainer.GetComponentsInChildren<UIMonoMaskCombineFaceGrid>();
+             
+             List<Vector2Int> requiredPositions = new List<Vector2Int>();
+             // Apply Rotation to Shape
+             if (shape != null && shape.Count > 0)
+             {
+                 foreach(var p in shape) 
+                 {
+                     Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), _currentRotation);
+                     requiredPositions.Add(logicalOrigin + rotatedP);
+                     rotatedShape.Add(new GameCore.RefData.PosEffectObj() { x = rotatedP.x, y = rotatedP.y });
+                 }
+             }
+             else
+             {
+                  requiredPositions.Add(logicalOrigin);
+                  rotatedShape.Add(new GameCore.RefData.PosEffectObj() { x = 0, y = 0 });
+             }
+             
+             foreach(var req in requiredPositions)
+             {
+                 bool found = false;
+                 foreach(var g in allGrids)
+                 {
+                     if (Vector2Int.RoundToInt(g.gridPos) == req)
+                     {
+                         found = true;
+                         break;
+                     }
+                 }
+                 if (!found) return false; // Out of bounds
+             }
+             
+             // Check Occupancy
+             bool isOccupied = _m_container != null && _m_container.CheckRegionOccupancy(logicalOrigin, rotatedShape, _m_partInfo);
+             if (isOccupied) return false;
+
+             return true;
+        }
+
+        // --- Preview Logic ---
+        private GameObject _m_previewGhostGO;
+        private List<UIMonoMaskCombineFaceGrid> _previewHighlightedGrids = new List<UIMonoMaskCombineFaceGrid>();
+
+        private void UpdatePreview()
+        {
+            // Create fake pointer data to find grid under mouse
+            PointerEventData pointerData = new PointerEventData(EventSystem.current)
+            {
+                position = Input.mousePosition
+            };
+            UIMonoMaskCombineFaceGrid hitGrid = GetHitGrid(pointerData);
+
+            // Calculate valid placement
+            bool isValid = false;
+            Vector2Int logicalOrigin = Vector2Int.zero;
+            List<GameCore.RefData.PosEffectObj> rotatedShape = null;
+
+            if (hitGrid != null)
+            {
+                isValid = TryCalculatePlacement(hitGrid, out logicalOrigin, out rotatedShape);
+            }
+
+            if (isValid && hitGrid != null)
+            {
+                // 1. Show Ghost Item
+                if (_m_previewGhostGO == null)
+                {
+                    _m_previewGhostGO = SCCommon.InstantiateGameObject(mono.imgGoods.gameObject, hitGrid.transform);
+                    var img = _m_previewGhostGO.GetComponent<UnityEngine.UI.Image>();
+                    if (img != null) 
+                    {
+                        var col = img.color;
+                        col.a = 0.5f;
+                        img.color = col;
+                    }
+                    // Remove logic component
+                    var comp = _m_previewGhostGO.GetComponent<UIMonoMaskCombinePartContainerItem>();
+                    if (comp) comp.enabled = false;
+                }
+                
+                // Update Ghost Transform (Snap to grid, apply rotation)
+                if (_m_previewGhostGO.transform.parent != hitGrid.transform)
+                {
+                    _m_previewGhostGO.transform.SetParent(hitGrid.transform);
+                }
+                _m_previewGhostGO.transform.localPosition = Vector3.zero;
+                _m_previewGhostGO.transform.localScale = new Vector3(0.7f, 0.7f, 1);
+                _m_previewGhostGO.transform.localRotation = Quaternion.Euler(0, 0, _currentRotation * 90);
+                if (!_m_previewGhostGO.activeSelf) _m_previewGhostGO.SetActive(true);
+
+                // 2. Highlight Grids
+                // Find grids to highlight
+                // We need to find the specific UIMonoMaskCombineFaceGrid instances corresponding to requiredPositions
+                // Reuse parent find logic
+                 var gridContainer = hitGrid.transform.parent;
+                 var allGrids = gridContainer.GetComponentsInChildren<UIMonoMaskCombineFaceGrid>();
+                 
+                 List<Vector2Int> targetPositions = new List<Vector2Int>();
+                 foreach(var p in rotatedShape) targetPositions.Add(logicalOrigin + new Vector2Int(p.x, p.y));
+
+                 // Clear old highlights first (simplest way, though slightly inefficient)
+                 ClearPreviewHighlights();
+
+                 foreach(var g in allGrids)
+                 {
+                     if (targetPositions.Contains(Vector2Int.RoundToInt(g.gridPos)))
+                     {
+                         var img = g.GetComponent<UnityEngine.UI.Image>();
+                         if (img != null)
+                         {
+                             // Only highlight if it's not already red (occupied) - though isValid=true implies it's not occupied.
+                             // Set to Red 0.5
+                             img.color = new Color(1, 0, 0, 0.5f); 
+                             _previewHighlightedGrids.Add(g);
+                         }
+                     }
+                 }
+            }
+            else
+            {
+                // Invalid or no grid
+                ClearPreview();
+            }
+        }
+
+        private void ClearPreview()
+        {
+            if (_m_previewGhostGO != null)
+            {
+                SCCommon.DestoryGameObject(_m_previewGhostGO);
+                _m_previewGhostGO = null;
+            }
+            ClearPreviewHighlights();
+        }
+
+        private void ClearPreviewHighlights()
+        {
+            foreach(var g in _previewHighlightedGrids)
+            {
+                if (g != null)
+                {
+                    var img = g.GetComponent<UnityEngine.UI.Image>();
+                    if (img != null)
+                    {
+                        // Restore default
+                        img.color = g.colorDefault;
+                    }
+                }
+            }
+            _previewHighlightedGrids.Clear();
         }
 
 

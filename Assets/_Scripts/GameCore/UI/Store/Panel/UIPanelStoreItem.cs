@@ -26,10 +26,12 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
-            mono.btnPurchase.RemoveClickDown(onClickDonw);
+            mono.btnPurchase.RemoveClickDown(onBtnPurchaseClickDonw);
+            mono.btnPurchase.RemoveMouseEnter(onBtnPurchaseMouseEnter);
         }
 
-        private void onClickDonw(PointerEventData _arg, object[] _objs)
+
+        private void onBtnPurchaseClickDonw(PointerEventData _arg, object[] _objs)
         {
             //钱够了直接发送购买消息
             if(GameModel.instance.playerMoney >= _m_goodsInfo.goodsRefObj.goodsPrice
@@ -39,7 +41,8 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
-            mono.btnPurchase.AddMouseLeftClickDown(onClickDonw);
+            mono.btnPurchase.AddMouseLeftClickDown(onBtnPurchaseClickDonw);
+            mono.btnPurchase.AddMouseEnter(onBtnPurchaseMouseEnter);
         }
 
         public void SetInfo(GoodsInfo _goodsInfo)
@@ -55,6 +58,10 @@ namespace GameCore.UI
             mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_goodsInfo.goodsRefObj.goodsSpriteObjName);
             mono.txtAmount.text = _m_goodsInfo.goodsAmount.ToString();
             mono.txtPrice.text = _m_goodsInfo.goodsRefObj.goodsPrice.ToString();
+        }
+        private void onBtnPurchaseMouseEnter(PointerEventData _arg, object[] _objs)
+        {
+
         }
     }
 }
