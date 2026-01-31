@@ -1,3 +1,4 @@
+using DG.Tweening;
 using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
@@ -17,6 +18,8 @@ namespace GameCore.UI
         private List<UIPanelStoreItem> _m_storeItemList;
 
         private List<GoodsInfo> _m_goodsInfoList;
+
+        private TweenContainer _m_tweenContainer;
         public UIPanelStore(UIMonoStore _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -34,6 +37,7 @@ namespace GameCore.UI
             }
 
             _m_goodsInfoList = new List<GoodsInfo>();
+            _m_tweenContainer = new TweenContainer();
         }
 
         public override void BeforeDiscard()
@@ -42,6 +46,8 @@ namespace GameCore.UI
                 item?.Discard();
             _m_goodsInfoList.Clear();
             _m_goodsInfoList = null;
+            _m_tweenContainer?.KillAllDoTween();
+            _m_tweenContainer = null;
         }
 
         public override void OnHidePanel()
@@ -95,6 +101,7 @@ namespace GameCore.UI
                 _m_storeItemList[i].SetInfo(_m_goodsInfoList[i]);
             }
             mono.txtPlayerMoney.text = GameModel.instance.playerMoney.ToString();
+            Tween healthTween = mono.imgHealthBar.DOFillAmount((float)GameModel.instance.playerHealth / GameModel.instance.playerMaxHealth, mono.healthBarFadeDuration);
         }
         private void onPurchaseGoods(object[] _objs)
         {

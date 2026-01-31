@@ -16,5 +16,9 @@ namespace GameCore.UI
         public Button btnExit;
         [Header("背包按钮")]
         public Button btnBag;
+        [Header("血条图片")]
+        public Image imgHealthBar;
+        [Header("血条过渡时间")]
+        public float healthBarFadeDuration;
     }
 }

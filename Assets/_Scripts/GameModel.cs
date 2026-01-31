@@ -13,6 +13,7 @@ namespace GameCore
     {
         public List<PartInfo> deckPartInfoList;//牌堆部位列表
         public int playerHealth;//玩家生命
+        public int playerMaxHealth;
         public int playerMoney;
         public List<FacePartInfo> facePartInfoList;//脸部装备的部位列表
         public List<PartInfo> bagPartInfoList;//背包部位列表
@@ -25,7 +26,8 @@ namespace GameCore
             PlayerRefObj playerRefObj = SCRefDataMgr.instance.playerConfigRefObj;
             if (playerRefObj == null)
                 return;
-            playerHealth = playerRefObj.playerHealth;
+            playerMaxHealth = playerRefObj.playerHealth;
+            playerHealth = playerMaxHealth;
             playerMoney = playerRefObj.playerMoney;
             deckPartInfoList = new List<PartInfo>();
             GoodsEffectObj goodsEffectObj = null;
@@ -46,8 +48,7 @@ namespace GameCore
 
         public void Heal(int _amount)
         {
-            PlayerRefObj playerRefObj = SCRefDataMgr.instance.playerConfigRefObj;
-            playerHealth = Mathf.Clamp(playerHealth + _amount, 0, playerRefObj.playerHealth);
+            playerHealth = Mathf.Clamp(playerHealth + _amount, 0, playerMaxHealth);
         }
 
     }
