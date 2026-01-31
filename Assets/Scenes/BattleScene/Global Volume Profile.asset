@@ -29,7 +29,7 @@ MonoBehaviour:
   active: 1
   intensity:
     m_OverrideState: 1
-    m_Value: 3.5
+    m_Value: 4.5
   vignetteWidth:
     m_OverrideState: 1
     m_Value: 0.5
