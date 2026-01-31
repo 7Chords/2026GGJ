@@ -7,8 +7,14 @@ namespace GameCore.UI
 {
     public class UIMonoEnemyMask : _ASCUIMonoBase
     {
-        [Header("¸ñ×ÓÁÐ±í")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½")]
         public List<UIMonoEnemyMaskGrid> monoGridList;
+
+        public GameObject gridPrefab;
+        [Header("å…³é—­æŒ‰é’®")]
+        public UnityEngine.UI.Button btnClose;
+        [Header("Gridå†…å®¹çˆ¶èŠ‚ç‚¹")]
+        public Transform content_grid;
     }
 }
 

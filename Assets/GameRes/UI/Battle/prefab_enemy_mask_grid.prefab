@@ -106,3 +106,4 @@ MonoBehaviour:
   fadeInDuration: 0
   fadeOutDuration: 0
   gridPos: {x: 0, y: 0}
+  imgBg: {fileID: 2949146822614954430}
