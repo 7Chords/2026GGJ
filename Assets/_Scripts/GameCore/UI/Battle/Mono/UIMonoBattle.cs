@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using SCFrame.UI;
 using UnityEngine;
+using UnityEngine.UI;
 
-    public class UIMonoBattle : _ASCUIMonoBase
+public class UIMonoBattle : _ASCUIMonoBase
     {
         [Header("玩家面具")]
         public GameCore.UI.UIMonoMaskCombineFace playerFace;
@@ -15,6 +16,9 @@ using UnityEngine;
         [Header("敌方血条")]
         [Header("敌方血条")]
         public UnityEngine.UI.Slider sliderEnemyHp;
+
+        public Text playerPartInfoText;
+        public Text enemyPartInfoText;
         
         public System.Action onUpdate;
         

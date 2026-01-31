@@ -354,8 +354,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 228}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 0, y: -1.8193}
+  m_SizeDelta: {x: 160, y: 604.5482}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3099564675907241313
 CanvasRenderer:
@@ -702,6 +702,8 @@ MonoBehaviour:
   enemyFace: {fileID: 5262313366857151330}
   sliderPlayerHp: {fileID: 1887348188906981907}
   sliderEnemyHp: {fileID: 7718194047437734908}
+  playerPartInfoText: {fileID: 7851097414838027075}
+  enemyPartInfoText: {fileID: 7116630804477933126}
 --- !u!1 &4418314274412449520
 GameObject:
   m_ObjectHideFlags: 0
@@ -1506,8 +1508,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 228}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 0, y: -5.4102}
+  m_SizeDelta: {x: 160, y: 592.5784}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5135679930433560413
 CanvasRenderer:
