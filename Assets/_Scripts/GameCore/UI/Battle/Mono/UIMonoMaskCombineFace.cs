@@ -8,5 +8,7 @@ namespace GameCore.UI
     public class UIMonoMaskCombineFace : _ASCUIMonoBase
     {
         public GameObject gridPrefab;
+        public int columnCount;
+        public int rowCount;
     }
 }

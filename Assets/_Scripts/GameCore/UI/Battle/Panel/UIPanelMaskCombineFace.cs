@@ -80,16 +80,15 @@ namespace GameCore.UI
 
         private void CreateGrids()
         {
-             // 6x7 Grid
              if (mono.gridPrefab == null) 
              {
                  Debug.LogError($"[UIPanelMaskCombineFace] gridPrefab is null in {mono.gameObject.name}!");
                  return;
              }
              
-             for(int y=0; y<7; y++)
+             for(int y=0; y<mono.columnCount; y++)
              {
-                 for(int x=0; x<6; x++)
+                 for(int x=0; x<mono.rowCount; x++)
                  {
                      GameObject go = SCCommon.InstantiateGameObject(mono.gridPrefab, mono.transform);
                      var script = go.GetComponent<UIMonoEnemyMaskGrid>(); // reusing existing grid mono
@@ -115,7 +114,7 @@ namespace GameCore.UI
                 return;
             }
             
-            int index = part.gridPos.y * 6 + part.gridPos.x;
+            int index = part.gridPos.y * mono.columnCount + part.gridPos.x;
             if (index < 0 || index >= _gridList.Count) 
             {
                 Debug.LogError($"[UIPanelMaskCombineFace] CreatePartItem failed: Index {index} out of bounds (GridPos: {part.gridPos}, ListCount: {_gridList.Count})");
@@ -150,9 +149,9 @@ namespace GameCore.UI
                 foreach(var offset in shape)
                 {
                     Vector2Int p = part.gridPos + offset;
-                    if (p.x >= 0 && p.x < 6 && p.y >= 0 && p.y < 7)
+                    if (p.x >= 0 && p.x < mono.columnCount && p.y >= 0 && p.y < mono.rowCount)
                     {
-                        int occIndex = p.y * 6 + p.x;
+                        int occIndex = p.y * mono.columnCount + p.x;
                         if (occIndex >= 0 && occIndex < _gridList.Count)
                         {
                             var gridMono = _gridList[occIndex];
