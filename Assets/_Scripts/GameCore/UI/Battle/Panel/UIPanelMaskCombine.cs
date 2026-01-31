@@ -135,7 +135,7 @@ namespace GameCore.UI
         private void refreshShow()
         {
             _m_partContainer?.ShowPanel();
-            _m_partContainer?.SetListInfo(GameModel.instance.deckPartInfoList);
+            _m_partContainer?.SetListInfo(GameModel.instance.busyPartInfoList);
         }
     }
 }
