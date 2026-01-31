@@ -1,3 +1,4 @@
 ﻿key	value
 playerHealth	100
 initPartList	101001:1;101002:1;101003:1;
+playerMoney	50

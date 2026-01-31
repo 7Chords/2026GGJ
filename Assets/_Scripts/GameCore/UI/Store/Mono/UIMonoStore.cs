@@ -2,6 +2,7 @@ using SCFrame.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GameCore.UI
 {
@@ -9,5 +10,11 @@ namespace GameCore.UI
     {
         [Header("mono列表")]
         public List<UIMonoStoreItem> monoItemList;
+        [Header("金钱文本")]
+        public Text txtPlayerMoney;
+        [Header("离开按钮")]
+        public Button btnExit;
+        [Header("背包按钮")]
+        public Button btnBag;
     }
 }

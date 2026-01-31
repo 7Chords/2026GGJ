@@ -1,3 +1,4 @@
+using GameCore;
 using GameCore.UI;
 using SCFrame;
 using System.Collections;
@@ -18,6 +19,12 @@ public class TEST : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.J))
         {
             UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCFrame.UI.SCUIShowType.FULL));
+        }
+        else if(Input.GetKeyDown(KeyCode.K))
+        {
+            GameModel.instance.rollStoreId = 103001;
+            UICoreMgr.instance.AddNode(new UINodeStore(SCFrame.UI.SCUIShowType.FULL));
+
         }
     }
 }

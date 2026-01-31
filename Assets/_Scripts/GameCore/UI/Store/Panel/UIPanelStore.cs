@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace GameCore.UI
 {
@@ -46,6 +47,8 @@ namespace GameCore.UI
         public override void OnHidePanel()
         {
             SCMsgCenter.UnregisterMsg(SCMsgConst.PURCHASE_GOODS, onPurchaseGoods);
+            mono.btnBag.RemoveClickDown(onBtnBagClickDown);
+            mono.btnExit.RemoveClickDown(onBtnExitClickDonw);
 
             foreach (var item in _m_storeItemList)
                 item?.HidePanel();
@@ -54,6 +57,9 @@ namespace GameCore.UI
         public override void OnShowPanel()
         {
             SCMsgCenter.RegisterMsg(SCMsgConst.PURCHASE_GOODS, onPurchaseGoods);
+            mono.btnBag.AddMouseLeftClickDown(onBtnBagClickDown);
+            mono.btnExit.AddMouseLeftClickDown(onBtnExitClickDonw);
+
 
             foreach (var item in _m_storeItemList)
                 item?.ShowPanel();
@@ -78,6 +84,18 @@ namespace GameCore.UI
             refreshShow();
         }
 
+
+        private void refreshShow()
+        {
+            if (_m_storeRefObj == null)
+                return;
+
+            for (int i = 0; i < _m_storeItemList.Count; i++)
+            {
+                _m_storeItemList[i].SetInfo(_m_goodsInfoList[i]);
+            }
+            mono.txtPlayerMoney.text = GameModel.instance.playerMoney.ToString();
+        }
         private void onPurchaseGoods(object[] _objs)
         {
             if (_objs == null || _objs.Length == 0)
@@ -86,19 +104,33 @@ namespace GameCore.UI
             GoodsInfo info = _m_goodsInfoList.Find(x => x.goodsRefObj.id == goodsId);
             if (info == null)
                 return;
+
+            //对数据层处理
             info.goodsAmount = Mathf.Max(info.goodsAmount - 1, 0);
+            GameModel.instance.playerMoney = Mathf.Max(GameModel.instance.playerMoney - info.goodsRefObj.goodsPrice, 0);
+            switch (info.goodsRefObj.goodsType)
+            {
+                case EGoodsType.PART:
+                    {
+                        PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x=>x.id == info.goodsRefObj.partId);
+                        GameModel.instance.deckPartInfoList.Add(new PartInfo(partRefObj));
+                    }
+                    break;
+                case EGoodsType.HEAL:
+                    {
+                        GameModel.instance.Heal(info.goodsRefObj.healthValue);
+                    }
+                    break;
+            }
             refreshShow();
         }
-
-        private void refreshShow()
+        private void onBtnBagClickDown(PointerEventData _arg, object[] _objs)
         {
-            if (_m_storeRefObj == null)
-                return;
-
-            for(int i =0;i< _m_storeItemList.Count;i++)
-            {
-                _m_storeItemList[i].SetInfo(_m_goodsInfoList[i]);
-            }
+            UICoreMgr.instance.AddNode(new UINodeStoreBag(SCUIShowType.ADDITION));
+        }
+        private void onBtnExitClickDonw(PointerEventData _arg, object[] _objs)
+        {
+            UICoreMgr.instance.CloseTopNode();
         }
     }
 }

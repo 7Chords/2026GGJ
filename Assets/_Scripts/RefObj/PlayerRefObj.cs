@@ -9,7 +9,7 @@ namespace GameCore.RefData
     {
         public int playerHealth;
         public List<GoodsEffectObj> initPartList;
-
+        public int playerMoney;
         public PlayerRefObj()
         {
 
@@ -22,6 +22,7 @@ namespace GameCore.RefData
         {
             playerHealth = getInt("playerHealth");
             initPartList = getList<GoodsEffectObj>("initPartList");
+            playerMoney = getInt("playerMoney");
         }
 
 

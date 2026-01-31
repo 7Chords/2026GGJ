@@ -31,7 +31,10 @@ namespace GameCore.UI
 
         private void onClickDonw(PointerEventData _arg, object[] _objs)
         {
-
+            //钱够了直接发送购买消息
+            if(GameModel.instance.playerMoney >= _m_goodsInfo.goodsRefObj.goodsPrice
+                && _m_goodsInfo.goodsAmount > 0)
+                SCMsgCenter.SendMsg(SCMsgConst.PURCHASE_GOODS, _m_goodsInfo.goodsRefObj.id);
         }
 
         public override void OnShowPanel()

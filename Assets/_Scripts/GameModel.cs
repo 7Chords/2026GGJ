@@ -26,6 +26,7 @@ namespace GameCore
             if (playerRefObj == null)
                 return;
             playerHealth = playerRefObj.playerHealth;
+            playerMoney = playerRefObj.playerMoney;
             deckPartInfoList = new List<PartInfo>();
             GoodsEffectObj goodsEffectObj = null;
             PartInfo info = null;
@@ -41,6 +42,12 @@ namespace GameCore
                 info = new PartInfo(partRefObj);
                 deckPartInfoList.Add(info);
             }
+        }
+
+        public void Heal(int _amount)
+        {
+            PlayerRefObj playerRefObj = SCRefDataMgr.instance.playerConfigRefObj;
+            playerHealth = Mathf.Clamp(playerHealth + _amount, 0, playerRefObj.playerHealth);
         }
 
     }
