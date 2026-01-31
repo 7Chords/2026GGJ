@@ -219,7 +219,7 @@ MonoBehaviour:
   fullLayerRoot: {fileID: 1300678977}
   additionLayerRoot: {fileID: 1632153055}
   topLayerRoot: {fileID: 820137493}
-  gameCamera: {fileID: 0}
+  gameCamera: {fileID: 931915447}
 --- !u!114 &317680814
 MonoBehaviour:
   m_ObjectHideFlags: 0
