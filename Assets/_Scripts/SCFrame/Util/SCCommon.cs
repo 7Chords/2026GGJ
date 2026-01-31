@@ -9,13 +9,13 @@ using GameCore;
 namespace SCFrame
 {
     /// <summary>
-    /// Ò»Ð©ÊÊÓÃÓÚÈ«¾ÖµÄÍ¨ÓÃ·½·¨
+    /// Ò»Ð©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½Öµï¿½Í¨ï¿½Ã·ï¿½ï¿½ï¿½
     /// </summary>
     public static class SCCommon
     {
 
         /// <summary>
-        /// ÉèÖÃÓÎÏ·ÎïÌåÊÇ·ñ±»¼¤»î
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ñ±»¼ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="_obj"></param>
         /// <param name="_isEnable"></param>
@@ -27,7 +27,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// ÉèÖÃÓÎÏ·ÎïÌåÊÇ·ñ±»¼¤»î
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ñ±»¼ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="_objs"></param>
         /// <param name="_isEnable"></param>
@@ -41,7 +41,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// ÉèÖÃÓÎÏ·ÎïÌåÊÇ·ñ±»¼¤»î
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ñ±»¼ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="_objs"></param>
         /// <param name="_isEnable"></param>
@@ -55,7 +55,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// Éú³ÉÓÎÏ·ÎïÌå
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="_obj"></param>
         /// <returns></returns>
@@ -68,7 +68,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// Éú³ÉÓÎÏ·ÎïÌå
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="_obj"></param>
         /// <returns></returns>
@@ -76,13 +76,12 @@ namespace SCFrame
         {
             if (_obj == null)
                 return null;
-            GameObject go = GameObject.Instantiate(_obj);
-            go.transform.SetParent(_parent);
+            GameObject go = GameObject.Instantiate(_obj, _parent);
             return go;
         }
 
         /// <summary>
-        /// Ïú»ÙÓÎÏ·ÎïÌå
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="_obj"></param>
         public static void DestoryGameObject(GameObject _obj)
@@ -95,7 +94,7 @@ namespace SCFrame
 
 #if UNITY_EDITOR
         /// <summary>
-        /// ±à¼­Æ÷µ±Ç°ÊÇ·ñ´¦ÓÚÔ¤ÖÆÌå±à¼­Ä£Ê½
+        /// ï¿½à¼­ï¿½ï¿½ï¿½ï¿½Ç°ï¿½Ç·ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½à¼­Ä£Ê½
         /// </summary>
         /// <returns></returns>
         public static bool IsInPrefabStage()
@@ -107,7 +106,7 @@ namespace SCFrame
 #endif
 
         /// <summary>
-        /// ×Ö·û´®½âÎö³Éfloat
+        /// ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½float
         /// </summary>
         /// <param name="_str"></param>
         /// <returns></returns>
@@ -117,12 +116,12 @@ namespace SCFrame
             {
                 return result;
             }
-            Debug.LogError("string½âÎö³Éfloat³ö´í£¡£¡£¡");
+            Debug.LogError("stringï¿½ï¿½ï¿½ï¿½ï¿½ï¿½floatï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
             return 0f;
         }
 
         /// <summary>
-        /// ×Ö·û´®½âÎö³Éint
+        /// ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½int
         /// </summary>
         /// <param name="_str"></param>
         /// <returns></returns>
@@ -132,7 +131,7 @@ namespace SCFrame
             {
                 return result;
             }
-            Debug.LogError("string½âÎö³Éint³ö´í£¡£¡£¡");
+            Debug.LogError("stringï¿½ï¿½ï¿½ï¿½ï¿½ï¿½intï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
             return 0;
         }
 
@@ -141,7 +140,7 @@ namespace SCFrame
         {
             if (string.IsNullOrEmpty(_str))
             {
-                Debug.LogError("_strÊÇÎÞÐ§µÄ£¡£¡£¡");
+                Debug.LogError("_strï¿½ï¿½ï¿½ï¿½Ð§ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½");
                 return 0;
             }
 
@@ -150,7 +149,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// ×Ö·û´®½âÎö³Élong
+        /// ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½long
         /// </summary>
         /// <param name="_str"></param>
         /// <returns></returns>
@@ -160,7 +159,7 @@ namespace SCFrame
             {
                 return result;
             }
-            Debug.LogError("string½âÎö³Élong³ö´í£¡£¡£¡");
+            Debug.LogError("stringï¿½ï¿½ï¿½ï¿½ï¿½ï¿½longï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
             return 0L;
         }
 
@@ -170,7 +169,7 @@ namespace SCFrame
             List<T> list = new List<T>();
 
             string tempValue = _name;
-            //¿ÕÁÐ±í±êÊ¶
+            //ï¿½ï¿½ï¿½Ð±ï¿½ï¿½ï¿½Ê¶
             if (tempValue == "*")
                 return list;
 
@@ -193,7 +192,7 @@ namespace SCFrame
             return list;
         }
 
-        // ½âÎö×Ö¶ÎÖµ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½Öµ
         public static object ParseValue(string _value, Type _type)
         {
             try
@@ -210,19 +209,19 @@ namespace SCFrame
                 {
                     _value = _value.Trim();
 
-                    // Ã¶¾Ù 
+                    // Ã¶ï¿½ï¿½ 
                     if (_type.IsEnum)
                     {
                         return Enum.Parse(_type, _value);
                     }
 
-                    // ×Ö·û´®
+                    // ï¿½Ö·ï¿½ï¿½ï¿½
                     else if (_type == typeof(string))
                     {
                         return _value;
                     }
 
-                    // ¸¡µãÐÍ
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     else if (_type == typeof(float))
                     {
                         if (_value == "0" || _value == "" || _value == string.Empty)
@@ -231,7 +230,7 @@ namespace SCFrame
                         return float.Parse(_value, CultureInfo.InvariantCulture);
                     }
 
-                    // ÕûÐÎ
+                    // ï¿½ï¿½ï¿½ï¿½
                     else if (_type == typeof(int))
                     {
                         if (_value == "")
@@ -267,7 +266,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// ½âÎöÅä±íÐ§¹ûobj
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½obj
         /// </summary>
         /// <param name="_str"></param>
         /// <param name="_type"></param>
