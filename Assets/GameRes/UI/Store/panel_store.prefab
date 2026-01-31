@@ -202,7 +202,7 @@ MonoBehaviour:
   btnBag: {fileID: 4489683312421980633}
   imgHealthBar: {fileID: 8489517918102869321}
   healthBarFadeDuration: 0.1
-  scaleMouseEnter: 1.03
+  scaleMouseEnter: 1
   scaleChgDuration: 0.1
   txtHealth: {fileID: 7918500304180929219}
 --- !u!1 &1957031111643058455
