@@ -28,12 +28,13 @@ namespace GameCore.UI
         {
             mono.btnPurchase.RemoveClickDown(onBtnPurchaseClickDonw);
             mono.btnPurchase.RemoveMouseEnter(onBtnPurchaseMouseEnter);
+            mono.btnPurchase.RemoveMouseExit(onBtnPurchaseMouseExit);
         }
 
 
         private void onBtnPurchaseClickDonw(PointerEventData _arg, object[] _objs)
         {
-            //Ç®¹»ÁËÖ±½Ó·¢ËÍ¹ºÂòÏûÏ¢
+            //é’±å¤Ÿäº†ç›´æŽ¥å‘é€è´­ä¹°æ¶ˆæ¯
             if(GameModel.instance.playerMoney >= _m_goodsInfo.goodsRefObj.goodsPrice
                 && _m_goodsInfo.goodsAmount > 0)
                 SCMsgCenter.SendMsg(SCMsgConst.PURCHASE_GOODS, _m_goodsInfo.goodsRefObj.id);
@@ -43,6 +44,7 @@ namespace GameCore.UI
         {
             mono.btnPurchase.AddMouseLeftClickDown(onBtnPurchaseClickDonw);
             mono.btnPurchase.AddMouseEnter(onBtnPurchaseMouseEnter);
+            mono.btnPurchase.AddMouseExit(onBtnPurchaseMouseExit);
         }
 
         public void SetInfo(GoodsInfo _goodsInfo)
@@ -61,7 +63,31 @@ namespace GameCore.UI
         }
         private void onBtnPurchaseMouseEnter(PointerEventData _arg, object[] _objs)
         {
-            GameCommon.ShowTooltip(_m_goodsInfo.goodsRefObj.goodsName, _m_goodsInfo.goodsRefObj.goodsDesc, _arg.position);
+            Vector2 screenPos = Vector2.zero;
+            var _canvas = GetGameObject().GetComponentInParent<Canvas>();
+            Camera cam = (_canvas != null && _canvas.renderMode != RenderMode.ScreenSpaceOverlay) ? _canvas.worldCamera : null;
+            
+            // Check direction
+            float itemScreenX = RectTransformUtility.WorldToScreenPoint(cam, GetGameObject().transform.position).x;
+            bool showOnLeft = itemScreenX > Screen.width * 0.7f; // If in right 30% of screen
+
+            // Offset based on direction
+            // Left: Pivot Right-Top (1,1) -> Anchor at (ItemX - border, ItemY)
+            // Right: Pivot Left-Top (0,1) -> Anchor at (ItemX + border, ItemY)
+            Vector3 offset = showOnLeft ? new Vector3(-40, -20, 0) : new Vector3(40, -20, 0);
+
+            screenPos = RectTransformUtility.WorldToScreenPoint(cam, GetGameObject().transform.position + offset);
+
+            var tooltip = GameCommon.ShowTooltip(_m_goodsInfo.goodsRefObj.goodsName, _m_goodsInfo.goodsRefObj.goodsDesc, screenPos);
+            /*if (tooltip != null)
+            {
+                tooltip.SetPivot(showOnLeft ? new Vector2(1, 1) : new Vector2(0, 1));
+            }*/
+        }
+
+        private void onBtnPurchaseMouseExit(PointerEventData _arg, object[] _objs)
+        {
+            GameCommon.DiscardToolTip();
         }
     }
 }
