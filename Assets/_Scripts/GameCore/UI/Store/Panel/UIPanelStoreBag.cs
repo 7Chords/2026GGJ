@@ -6,6 +6,7 @@ using SCFrame;
 using UnityEngine.EventSystems;
 using System;
 using DG.Tweening;
+using GameCore.RefData;
 
 namespace GameCore.UI
 {
@@ -33,6 +34,8 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
+            SCMsgCenter.UnregisterMsg(SCMsgConst.SELL_PART, onSellPart);
+
             mono.btnClose.RemoveClickDown(onBtnCloseClickDown);
             mono.btnClose.RemoveMouseEnter(onBtnCloseMouseEnter);
             mono.btnClose.RemoveMouseExit(onBtnCloseMouseExit);
@@ -42,12 +45,19 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            SCMsgCenter.RegisterMsg(SCMsgConst.SELL_PART, onSellPart);
+
             mono.btnClose.AddMouseLeftClickDown(onBtnCloseClickDown);
             mono.btnClose.AddMouseEnter(onBtnCloseMouseEnter);
             mono.btnClose.AddMouseExit(onBtnCloseMouseExit);
 
             _m_itemContainer?.ShowPanel();
-            _m_itemContainer?.SetListInfo(GameModel.instance.busyPartInfoList);
+            _m_itemContainer?.SetListInfo(GameModel.instance.bagPartInfoList);
+        }
+
+        private void refreshshow()
+        {
+            _m_itemContainer?.RefreshShow(GameModel.instance.bagPartInfoList);
         }
 
         private void onBtnCloseClickDown(PointerEventData _arg, object[] _objs)
@@ -63,6 +73,17 @@ namespace GameCore.UI
         private void onBtnCloseMouseExit(PointerEventData arg1, object[] arg2)
         {
             _m_tweenContainer.RegDoTween(mono.btnClose.transform.DOScale(Vector3.one, mono.scaleChgDuration));
+        }
+
+
+        private void onSellPart(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            PartInfo partInfo  = _objs[0] as PartInfo;
+            if(GameModel.instance.bagPartInfoList.Contains(partInfo))
+                GameModel.instance.bagPartInfoList.Remove(partInfo);
+            refreshshow();
         }
     }
 }

@@ -6,7 +6,7 @@ public class SCMsgConst
 
     #region 玩法相关
     public const int PURCHASE_GOODS = 2001;
-
+    public const int SELL_PART = 2002;
     #endregion
 
     #region 系统相关 99

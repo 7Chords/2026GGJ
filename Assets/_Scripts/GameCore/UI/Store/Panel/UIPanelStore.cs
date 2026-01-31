@@ -53,6 +53,7 @@ namespace GameCore.UI
         public override void OnHidePanel()
         {
             SCMsgCenter.UnregisterMsg(SCMsgConst.PURCHASE_GOODS, onPurchaseGoods);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.SELL_PART, onSellPart);
             mono.btnBag.RemoveClickDown(onBtnBagClickDown);
             mono.btnExit.RemoveClickDown(onBtnExitClickDonw);
             mono.btnBag.RemoveMouseEnter(onBtnBagMouseEnter);
@@ -68,6 +69,8 @@ namespace GameCore.UI
         public override void OnShowPanel()
         {
             SCMsgCenter.RegisterMsg(SCMsgConst.PURCHASE_GOODS, onPurchaseGoods);
+            SCMsgCenter.RegisterMsg(SCMsgConst.SELL_PART, onSellPart);
+
             mono.btnBag.AddMouseLeftClickDown(onBtnBagClickDown);
             mono.btnExit.AddMouseLeftClickDown(onBtnExitClickDonw);
             mono.btnBag.AddMouseEnter(onBtnBagMouseEnter);
@@ -99,7 +102,6 @@ namespace GameCore.UI
             refreshShow();
         }
 
-
         private void refreshShow()
         {
             if (_m_storeRefObj == null)
@@ -129,7 +131,7 @@ namespace GameCore.UI
                 case EGoodsType.PART:
                     {
                         PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x=>x.id == info.goodsRefObj.partId);
-                        GameModel.instance.busyPartInfoList.Add(new PartInfo(partRefObj));
+                        GameModel.instance.deckPartInfoList.Add(new PartInfo(partRefObj));
                     }
                     break;
                 case EGoodsType.HEAL:
@@ -170,7 +172,15 @@ namespace GameCore.UI
         private void onBtnExitMouseExit(PointerEventData arg1, object[] arg2)
         {
             _m_tweenContainer.RegDoTween(mono.btnExit.transform.DOScale(Vector3.one, mono.scaleChgDuration));
-
+        }
+        private void onSellPart(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            PartInfo partInfo = _objs[0] as PartInfo;
+            GoodsRefObj goodsRefObj = SCRefDataMgr.instance.goodsRefList.refDataList.Find(x => x.partId == partInfo.partRefObj.id);
+            GameModel.instance.playerMoney += goodsRefObj.goodsPrice / 2;
+            refreshShow();
         }
     }
 }

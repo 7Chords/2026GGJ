@@ -1,15 +1,14 @@
-using SCFrame;
-using SCFrame.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using SCFrame.UI;
+using SCFrame;
 
 namespace GameCore.UI
 {
-    public class UIPanelStoreBagContainer : UIPanelContainerBase<UIMonoCommonContainer, UIPanelCommonPartItem, UIMonoCommonPartItem>
+    public class UIPanelStoreBagContainer : UIPanelContainerBase<UIMonoCommonContainer, UIPanelStoreBagItem, UIMonoStoreBagItem>
     {
-        private List<UIPanelCommonPartItem> _m_itemList;//item列表
+        private List<UIPanelStoreBagItem> _m_itemList;//item列表
 
         public UIPanelStoreBagContainer(UIMonoCommonContainer _mono, SCUIShowType _showType = SCUIShowType.INTERNAL) : base(_mono, _showType)
         {
@@ -17,7 +16,7 @@ namespace GameCore.UI
 
         public override void AfterInitialize()
         {
-            _m_itemList = new List<UIPanelCommonPartItem>();
+            _m_itemList = new List<UIPanelStoreBagItem>();
 
         }
 
@@ -43,13 +42,13 @@ namespace GameCore.UI
 
         protected override GameObject creatItemGO()
         {
-            return ResourcesHelper.LoadGameObject(mono.prefabItemObjName,mono.layoutGroup.transform);
+            return ResourcesHelper.LoadGameObject(mono.prefabItemObjName, mono.layoutGroup.transform);
 
         }
 
-        protected override UIPanelCommonPartItem creatItemPanel(UIMonoCommonPartItem _mono)
+        protected override UIPanelStoreBagItem creatItemPanel(UIMonoStoreBagItem _mono)
         {
-            return new UIPanelCommonPartItem(_mono,SCUIShowType.INTERNAL);
+            return new UIPanelStoreBagItem(_mono, SCUIShowType.INTERNAL);
         }
 
         public void SetListInfo(List<PartInfo> _infoList)
@@ -60,7 +59,7 @@ namespace GameCore.UI
                 return;
 
             int i = 0, count = 0;
-            UIPanelCommonPartItem item = null;
+            UIPanelStoreBagItem item = null;
             for (i = 0; i < _infoList.Count; i++)
             {
                 if (i < _m_itemList.Count)
@@ -70,7 +69,7 @@ namespace GameCore.UI
                 else
                 {
                     GameObject itemGO = creatItemGO();
-                    item = creatItemPanel(itemGO.GetComponent<UIMonoCommonPartItem>());
+                    item = creatItemPanel(itemGO.GetComponent<UIMonoStoreBagItem>());
 
                     _m_itemList.Add(item);
                 }
@@ -90,5 +89,44 @@ namespace GameCore.UI
             }
 
         }
+
+        public void RefreshShow(List<PartInfo> _infoList)
+        {
+            if (_infoList == null)
+                return;
+            if (_m_itemList == null)
+                return;
+
+            int i = 0, count = 0;
+            UIPanelStoreBagItem item = null;
+            for (i = 0; i < _infoList.Count; i++)
+            {
+                if (i < _m_itemList.Count)
+                {
+                    item = _m_itemList[i];
+                }
+                else
+                {
+                    GameObject itemGO = creatItemGO();
+                    item = creatItemPanel(itemGO.GetComponent<UIMonoStoreBagItem>());
+
+                    _m_itemList.Add(item);
+                }
+                if (item == null)
+                    continue;
+                item.SetInfo(_infoList[i]);
+                count++;
+            }
+            //隐藏多余的
+            for (i = count; i < _m_itemList.Count; i++)
+            {
+                item = _m_itemList[i];
+                if (item == null)
+                    continue;
+                item.HidePanel();
+            }
+
+        }
     }
+
 }

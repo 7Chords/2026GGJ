@@ -7,14 +7,14 @@ namespace GameCore.UI
 {
     public class UIPanelDeck : _ASCUIPanelBase<UIMonoDeck>
     {
-        private UIPanelStoreBagContainer _m_deckContainer;
+        private UIPanelCommonPartContainer _m_deckContainer;
         public UIPanelDeck(UIMonoDeck _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
 
         public override void AfterInitialize()
         {
-            _m_deckContainer = new UIPanelStoreBagContainer(mono.monoContainer);
+            _m_deckContainer = new UIPanelCommonPartContainer(mono.monoContainer);
         }
 
         public override void BeforeDiscard()
