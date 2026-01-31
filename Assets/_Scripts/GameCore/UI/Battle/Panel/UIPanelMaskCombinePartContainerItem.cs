@@ -175,13 +175,91 @@ namespace GameCore.UI
         
         private void SnapToGrid(UIMonoMaskCombineFaceGrid grid)
         {
-            // 将 Item 的中心对齐到 Grid 的中心
-            // 修改为：将 item 的父物体设置为 grid
+            // Set Parent
             GetGameObject().transform.SetParent(grid.transform);
-            GetGameObject().transform.localPosition = Vector3.zero;
             
-            // 确保 scale 正确 (防止父物体 scale 影响)
-            GetGameObject().transform.localScale = new Vector3(0.7f, 0.7f, 1);
+            // USER REQUEST 2: Set Pivot to (0,0) and adjust Size
+            if (mono.imgGoods != null)
+            {
+                var rt = mono.imgGoods.rectTransform;
+                // Capture original size or grid size? 
+                // "direct multiply by rectangle width/height" implies unit size.
+                // We assume Grid has a RectTransform with size.
+                var gridRect = grid.GetComponent<RectTransform>();
+                float unitW = (gridRect != null) ? gridRect.rect.width : 100f;
+                float unitH = (gridRect != null) ? gridRect.rect.height : 100f;
+                
+                //rt.pivot = new Vector2(0.5f, 0.5f); // Default temp
+                GetGameObject().transform.localPosition = Vector3.zero;
+                
+                // Calculate Shape Bounds and Rotated MidPos
+                int minX = int.MaxValue, maxX = int.MinValue, minY = int.MaxValue, maxY = int.MinValue;
+                var shape = (_m_partInfo != null && _m_partInfo.partRefObj != null) ? _m_partInfo.partRefObj.posList : null;
+                Vector2Int rotatedMidPos = Vector2Int.zero;
+                
+                // Get MidPos from data and rotate it
+                if (_m_partInfo != null && _m_partInfo.partRefObj != null)
+                {
+                    rotatedMidPos = RotateVector(_m_partInfo.partRefObj.midPos, _m_partInfo.rotation);
+                }
+                
+                if (shape != null && shape.Count > 0)
+                {
+                    // Need to calculate bounding box of ROTATED shape
+                    foreach(var p in shape)
+                    {
+                         Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), _m_partInfo.rotation);
+                         if (rotatedP.x < minX) minX = rotatedP.x;
+                         if (rotatedP.x > maxX) maxX = rotatedP.x;
+                         if (rotatedP.y < minY) minY = rotatedP.y;
+                         if (rotatedP.y > maxY) maxY = rotatedP.y;
+                    }
+                }
+                else
+                {
+                    // Fallback for empty shape (shouldn't happen)
+                    minX = rotatedMidPos.x; maxX = rotatedMidPos.x;
+                    minY = rotatedMidPos.y; maxY = rotatedMidPos.y;
+                }
+                
+                // Dimensions in Cells
+                int widthCells = maxX - minX + 1;
+                int heightCells = maxY - minY + 1;
+                
+                // Calculate Pivot
+                // We want the 'midPos' cell to align with the Grid we verified (Parent).
+                // Assuming Grid Pivot is center (0.5, 0.5).
+                // The center of the 'midPos' cell in Grid Space is (0,0).
+                // The center of the 'midPos' cell in Item Space relative to Item Min-Min corner is:
+                // X: (rotatedMidPos.x - minX) * unitW + 0.5 * unitW
+                // Normalized X: (rotatedMidPos.x - minX + 0.5) / widthCells
+                
+                float pivotX = (float)(rotatedMidPos.x - minX + 0.5f) / widthCells;
+                float pivotY = (float)(rotatedMidPos.y - minY + 0.5f) / heightCells;
+                
+                rt.pivot = new Vector2(pivotX, pivotY);
+                
+                // Width = cells * unitW
+                float totalW = widthCells * unitW;
+                float totalH = heightCells * unitH;
+                
+                //rt.sizeDelta = new Vector2(totalW, totalH);
+            }
+            else
+            {
+                GetGameObject().transform.localPosition = Vector3.zero;
+            }
+            
+            // 确保 scale 正确
+            GetGameObject().transform.localScale = Vector3.one; // Should be 1 if sizing manually
+            
+            // USER REQUEST: Show game sprite when placed
+            if (_m_partInfo != null && _m_partInfo.partRefObj != null && !string.IsNullOrEmpty(_m_partInfo.partRefObj.partGameObjectName))
+            {
+                 Sprite gameSprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
+                 if (gameSprite != null && mono.imgGoods != null)
+                     mono.imgGoods.sprite = gameSprite;
+            }
         }
 
         /// <summary>
@@ -197,6 +275,14 @@ namespace GameCore.UI
             if (currentParent == null) return;
 
             UIMonoMaskCombineFaceGrid parentGrid = currentParent.GetComponent<UIMonoMaskCombineFaceGrid>();
+            // Note: UpdateGridColors implementation continues... 
+            // We just need to replace the SnapToGrid and ReturnToBag sections.
+            // Since this tool replaces a block, I must include UpdateGridColors start or use multi_replace.
+            // I'll stick to replacing independent blocks if possible. 
+            // But they are not adjacent in my view. 
+            // Wait, SnapToGrid is 176-185. ReturnToBag is 253-277.
+            // I should use 2 calls or multi_replace. Use multi_replace.
+        
             if (parentGrid == null) return; 
             
             Transform gridContainer = parentGrid.transform.parent;
@@ -232,20 +318,29 @@ namespace GameCore.UI
             
             foreach (var grid in allGrids)
             {
-                if (occupiedPositions.Contains(Vector2Int.RoundToInt(grid.gridPos)))
+                // USER REQUEST 3: Do not mark other grids as red.
+                // Just keep them as they are.
+                // However, we might need to restore them if we previously colored them?
+                // Logic: Only reset if not occupied?
+                // Actually if we simply STOP coloring them red, we don't need to do anything here except
+                // maybe restore colors if dragging OUT (isOccupied=false).
+                
+                if (!isOccupied)
                 {
-                    var img = grid.GetComponent<UnityEngine.UI.Image>();
-                    if (img != null)
-                    {
-                        if (isOccupied)
-                        {
-                            if (grid != parentGrid) img.color = Color.red;
-                        }
-                        else
-                        {
-                            img.color = grid.colorDefault;
-                        }
-                    }
+                     // Restoration phase (End Drag or Return Bag)
+                     if (occupiedPositions.Contains(Vector2Int.RoundToInt(grid.gridPos)))
+                     {
+                         var img = grid.GetComponent<UnityEngine.UI.Image>();
+                         if (img != null)
+                         {
+                             // Restore default color (white for active, invisible for disabled)
+                             // But wait, disable logic uses enabled=false.
+                             // Valid active grids use white.
+                             // We should check if it's disabled? No, disabled grids have enabled=false.
+                             // So just set color to default.
+                             img.color = grid.colorDefault; 
+                         }
+                     }
                 }
             }
         }
@@ -272,6 +367,13 @@ namespace GameCore.UI
                 {
                     _m_partInfo.gridPos = new Vector2Int(-1, -1);
                     _m_partInfo.rotation = 0;
+                    
+                    // Restore Sprite to Icon
+                    if (_m_partInfo.partRefObj != null && mono.imgGoods != null)
+                    {
+                         Sprite iconSprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
+                         if (iconSprite != null) mono.imgGoods.sprite = iconSprite;
+                    }
                 }
             }
         }
@@ -326,6 +428,18 @@ namespace GameCore.UI
             /*var srcImg = GetGameObject().GetComponent<UnityEngine.UI.Image>();
             var dstImg = _m_dragCloneGO.GetComponent<UnityEngine.UI.Image>();
             if (srcImg != null && dstImg != null) dstImg.sprite = srcImg.sprite;*/ // 确保图标一致（如有必要）
+            
+            // USER REQUEST: Swap sprite to partGameObjectName when dragging
+            if (_m_partInfo != null && _m_partInfo.partRefObj != null && !string.IsNullOrEmpty(_m_partInfo.partRefObj.partGameObjectName))
+            {
+                var dstImg = _m_dragCloneGO.GetComponent<UnityEngine.UI.Image>();
+                if (dstImg != null)
+                {
+                    Sprite gameSprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
+                    if (gameSprite != null)
+                        dstImg.sprite = gameSprite;
+                }
+            }
 
             // 移除克隆体上不需要的组件
             var cloneInstrumentItem = _m_dragCloneGO.GetComponent<UIMonoMaskCombinePartContainerItem>();
@@ -440,7 +554,9 @@ namespace GameCore.UI
                  foreach(var p in shape) 
                  {
                      Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), _currentRotation);
-                     requiredPositions.Add(logicalOrigin + rotatedP);
+                     Vector2Int targetP = logicalOrigin + rotatedP;
+                     
+                     requiredPositions.Add(targetP);
                      rotatedShape.Add(new GameCore.RefData.PosEffectObj() { x = rotatedP.x, y = rotatedP.y });
                  }
              }
@@ -449,19 +565,33 @@ namespace GameCore.UI
                   requiredPositions.Add(logicalOrigin);
                   rotatedShape.Add(new GameCore.RefData.PosEffectObj() { x = 0, y = 0 });
              }
-             
-             foreach(var req in requiredPositions)
+
+             // Access Face Mono to check disabled grids
+             var faceMono = gridContainer.GetComponentInParent<UIMonoMaskCombineFace>();
+             List<Vector2Int> disabledList = (faceMono != null) ? faceMono.disabledGrids : null;
+
+             foreach(var p in requiredPositions)
              {
-                 bool found = false;
+                 // 1. Check Bounds (0-3, 0-6 usually, but depends on row/col count which we can try to guess or just trust grid existence)
+                 // Better: Check if a grid exists at 'p'
+                 // We can iterate allGrids to find if 'p' exists.
+                 bool exists = false;
                  foreach(var g in allGrids)
                  {
-                     if (Vector2Int.RoundToInt(g.gridPos) == req)
+                     if (Vector2Int.RoundToInt(g.gridPos) == p)
                      {
-                         found = true;
+                         exists = true;
                          break;
                      }
                  }
-                 if (!found) return false; // Out of bounds
+                 if (!exists) return false;
+                 
+                 // 2. Check Disabled
+                 if (disabledList != null && disabledList.Contains(p))
+                 {
+                     // Debug.Log($"Placement Failed: Position {p} is disabled.");
+                     return false;
+                 }
              }
              
              // Check Occupancy
