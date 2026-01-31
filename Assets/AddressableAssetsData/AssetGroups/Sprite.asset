@@ -22,18 +22,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f095709bb94b71648bb9339a8b9f2a73
-    m_Address: nose
+  - m_GUID: d0cae6c8c468c8243ad81ef0b66cf576
+    m_Address: spr_mouth
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d0cae6c8c468c8243ad81ef0b66cf576
-    m_Address: mouth
+  - m_GUID: f095709bb94b71648bb9339a8b9f2a73
+    m_Address: spr_nose
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9aac04fe70011d449b737a6bc9ba0d17
-    m_Address: eye
+    m_Address: spr_eye
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
