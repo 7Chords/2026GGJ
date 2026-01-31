@@ -7,27 +7,28 @@ using UnityEngine;
 namespace GameCore
 {
     /// <summary>
-    /// ÓÎÏ·Ä£ĞÍ ·ÅËùÓĞµÄÔËĞĞÊ±Êı¾İ
+    /// æ¸¸æˆæ¨¡å‹ æ”¾æ‰€æœ‰çš„è¿è¡Œæ—¶æ•°æ®
     /// </summary>
     public class GameModel : Singleton<GameModel>
     {
-        public List<PartInfo> bagPartInfoList;//±³°ü²¿Î»ÁĞ±í(Íæ¼Ò¾ÖÍâÓµÓĞµÄÈ«²¿)
-        public List<PartInfo> deckPartInfoList;//ÅÆ¶Ñ²¿Î»ÁĞ±í(ÔÚÅÆ¶ÑÀïµ«ÊÇÍæ¼Òµ±Ç°Î´³ÖÓĞµÄ)
-        public List<PartInfo> busyPartInfoList;//Íæ¼Òµ±Ç°³ÖÓĞµÄ²¿Î»ÁĞ±í
+        public List<PartInfo> bagPartInfoList; //èƒŒåŒ…éƒ¨ä½åˆ—è¡¨(ç©å®¶å±€å¤–æ‹¥æœ‰çš„å…¨éƒ¨)
+        public List<PartInfo> deckPartInfoList; //ç‰Œå †éƒ¨ä½åˆ—è¡¨(åœ¨ç‰Œå †é‡Œä½†æ˜¯ç©å®¶å½“å‰æœªæŒæœ‰çš„)
+        public List<PartInfo> busyPartInfoList; //ç©å®¶å½“å‰æŒæœ‰çš„éƒ¨ä½åˆ—è¡¨
 
 
-        public int playerHealth;//Íæ¼ÒÉúÃü
+        public int playerHealth; //ç©å®¶ç”Ÿå‘½
         public int playerMaxHealth;
         public int playerMoney;
 
-        public List<FacePartInfo> facePartInfoList;//Á³²¿×°±¸µÄ²¿Î»ÁĞ±í
-        public List<FaceGridInfo> faceGridInfoList;//Á³²¿¸ñ×ÓĞÅÏ¢ÁĞ±í
+        public List<FacePartInfo> facePartInfoList; //è„¸éƒ¨è£…å¤‡çš„éƒ¨ä½åˆ—è¡¨
+        public List<FaceGridInfo> faceGridInfoList; //è„¸éƒ¨æ ¼å­ä¿¡æ¯åˆ—è¡¨
 
-        public long rollStoreId;//½øÈëÉÌµê½Úµãºórollµ½µÄÉÌµêid
-        public long rollEnemyId;//½øÈëÕ½¶·½Úµãºórollµ½µÄµĞÈËid
+        public long rollStoreId; //è¿›å…¥å•†åº—èŠ‚ç‚¹årollåˆ°çš„å•†åº—id
+        public long rollEnemyId; //è¿›å…¥æˆ˜æ–—èŠ‚ç‚¹årollåˆ°çš„æ•Œäººid
+
         public override void OnInitialize()
         {
-            //³õÊ¼»¯Êı¾İ´ÓÅä±í¶ÁÈ¡
+            //åˆå§‹åŒ–æ•°æ®ä»é…è¡¨è¯»å–
             PlayerRefObj playerRefObj = SCRefDataMgr.instance.playerConfigRefObj;
             if (playerRefObj == null)
                 return;
@@ -42,7 +43,7 @@ namespace GameCore
             PartEffectObj partEffectObj = null;
             PartInfo info = null;
             PartRefObj partRefObj = null;
-            for (int i =0;i<playerRefObj.initPartList.Count;i++)
+            for (int i = 0; i < playerRefObj.initPartList.Count; i++)
             {
                 partEffectObj = playerRefObj.initPartList[i];
                 if (partEffectObj == null)
@@ -63,5 +64,137 @@ namespace GameCore
             playerHealth = Mathf.Clamp(playerHealth + _amount, 0, playerMaxHealth);
         }
 
+        public List<PartInfo> playerBattleParts = new List<PartInfo>();
+
+        // --- Enemy Logic ---
+        public EnemyData currentEnemy;
+
+        public void GenerateRandomEnemy()
+        {
+            currentEnemy = new EnemyData();
+
+            // 1. Random Enemy Ref
+            var enemies = SCRefDataMgr.instance.enemyRefList.refDataList;
+            if (enemies == null || enemies.Count == 0) return;
+            var enemyRef = enemies[Random.Range(0, enemies.Count)];
+            currentEnemy.enemyRef = enemyRef;
+            currentEnemy.maxHealth = enemyRef.enemyHealth;
+            currentEnemy.currentHealth = enemyRef.enemyHealth;
+
+            // 2. Random Parts
+            currentEnemy.parts = new List<PartInfo>();
+            if (enemyRef.initPartList != null && enemyRef.initPartList.Count > 0)
+            {
+                List<GameCore.RefData.PartEffectObj> pool =
+                    new List<GameCore.RefData.PartEffectObj>(enemyRef.initPartList);
+                int pickCount = Mathf.Min(2, pool.Count);
+                for (int k = 0; k < pickCount; k++)
+                {
+                    int idx = Random.Range(0, pool.Count);
+                    var effect = pool[idx];
+                    pool.RemoveAt(idx);
+
+                    var partRef = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == effect.partId);
+                    if (partRef != null)
+                    {
+                        currentEnemy.parts.Add(new PartInfo(partRef));
+                    }
+                }
+            }
+
+            // 3. Generate Layout (Logic from UIPanelEnemyMask moved here)
+            GenerateEnemyLayout(currentEnemy);
+        }
+
+        private void GenerateEnemyLayout(EnemyData enemy)
+        {
+            // 6x7 Grid
+            bool[,] occupiedGrid = new bool[6, 7];
+
+            foreach (var part in enemy.parts)
+            {
+                if (TryFindValidPlacement(occupiedGrid, part.partRefObj, out Vector2Int pos, out int rot))
+                {
+                    part.gridPos = pos;
+                    part.rotation = rot;
+                    MarkOccupancy(occupiedGrid, part.partRefObj, pos, rot);
+                }
+                else
+                {
+                    Debug.LogWarning($"[GameModel] Could not fit enemy part {part.partRefObj.partName}");
+                }
+            }
+        }
+
+        // Copied helper methods from UIPanelEnemyMask (simplified)
+        private bool TryFindValidPlacement(bool[,] grid, GameCore.RefData.PartRefObj part, out Vector2Int resultPos,
+            out int resultRot)
+        {
+            resultPos = Vector2Int.zero;
+            resultRot = 0;
+            for (int i = 0; i < 50; i++)
+            {
+                int rot = Random.Range(0, 4);
+                int x = Random.Range(0, 6);
+                int y = Random.Range(0, 7);
+                Vector2Int origin = new Vector2Int(x, y);
+                if (IsValidPlacement(grid, part, origin, rot))
+                {
+                    resultPos = origin;
+                    resultRot = rot;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool IsValidPlacement(bool[,] grid, GameCore.RefData.PartRefObj part, Vector2Int origin, int rot)
+        {
+            List<Vector2Int> shape = GetRotatedShape(part, rot);
+            foreach (var offset in shape)
+            {
+                Vector2Int p = origin + offset;
+                if (p.x < 0 || p.x >= 6 || p.y < 0 || p.y >= 7) return false;
+                if (grid[p.x, p.y]) return false;
+            }
+
+            return true;
+        }
+
+        private void MarkOccupancy(bool[,] grid, GameCore.RefData.PartRefObj part, Vector2Int origin, int rot)
+        {
+            List<Vector2Int> shape = GetRotatedShape(part, rot);
+            foreach (var offset in shape)
+            {
+                Vector2Int p = origin + offset;
+                grid[p.x, p.y] = true;
+            }
+        }
+
+        private List<Vector2Int> GetRotatedShape(GameCore.RefData.PartRefObj part, int rot)
+        {
+            List<Vector2Int> list = new List<Vector2Int>();
+            if (part.posList != null)
+            {
+                foreach (var pObj in part.posList)
+                {
+                    Vector2Int p = new Vector2Int(pObj.x, pObj.y);
+                    for (int k = 0; k < rot; k++) p = new Vector2Int(-p.y, p.x);
+                    list.Add(p);
+                }
+            }
+            else list.Add(Vector2Int.zero);
+
+            return list;
+        }
+    }
+
+    public class EnemyData
+    {
+        public GameCore.RefData.EnemyRefObj enemyRef;
+        public List<PartInfo> parts;
+        public int maxHealth;
+        public int currentHealth;
     }
 }
