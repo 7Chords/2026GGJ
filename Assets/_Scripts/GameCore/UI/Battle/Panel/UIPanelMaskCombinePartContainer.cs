@@ -39,6 +39,56 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            ReloadParts();
+        }
+
+        public void ReloadParts()
+        {
+            // Clear existing
+            if (_m_partItemList != null)
+            {
+                 foreach(var item in _m_partItemList)
+                 {
+                     if (item != null)
+                     {
+                         item.DestroySelf();
+                         item.Discard();
+                     }
+                 }
+                 _m_partItemList.Clear();
+            }
+            else
+            {
+                _m_partItemList = new List<UIPanelMaskCombinePartContainerItem>();
+            }
+
+            // Load from GameModel Hand (busyPartInfoList)
+            if (GameModel.instance.busyPartInfoList != null)
+            {
+                foreach(var info in GameModel.instance.busyPartInfoList)
+                {
+                    // Create Item Logic (Reuse creatItemPanel / AddItem logic if exposed, but base class handles abstract creation?)
+                    // Base class 'AddItem' usually adds to data list. We need to instantiate Visuals.
+                    // This class inherits from UIPanelContainerBase. 
+                    // Let's use AddItem.
+                    AddItem(info);
+                }
+            }
+        }
+        
+        // Override AddItem to handle initialization
+        public void AddItem(PartInfo info)
+        {
+             GameObject go = creatItemGO();
+             UIMonoMaskCombinePartContainerItem itemMono = go.GetComponent<UIMonoMaskCombinePartContainerItem>();
+             if (itemMono != null)
+             {
+                 var panel = creatItemPanel(itemMono);
+                 panel.AfterInitialize();
+                 panel.SetInfo(info);
+                 panel.ShowPanel();
+                 _m_partItemList.Add(panel);
+             }
         }
 
         protected override GameObject creatItemGO()

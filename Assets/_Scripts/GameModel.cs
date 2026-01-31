@@ -52,11 +52,14 @@ namespace GameCore
                 if (partRefObj == null)
                     continue;
                 info = new PartInfo(partRefObj);
-                busyPartInfoList.Add(info);
-                bagPartInfoList.Add(info);
+                // busyPartInfoList.Add(info); // Don't add to hand directly
+                // bagPartInfoList.Add(info); // Bag tracks ownership? Maybe.
                 deckPartInfoList.Add(info);
 
             }
+            
+            // Initial Draw
+            DrawParts(5);
         }
 
         public void Heal(int _amount)
@@ -105,6 +108,100 @@ namespace GameCore
             // 3. Generate Layout (Logic from UIPanelEnemyMask moved here)
             GenerateEnemyLayout(currentEnemy);
         }
+        
+        public void PrepareNextBattleRound()
+        {
+            Debug.Log($"[GameModel] PrepareNextBattleRound Start. Deck: {deckPartInfoList.Count}, Busy: {busyPartInfoList.Count}, Battle: {playerBattleParts.Count}");
+            
+            // 1. Process Finished Battle Parts (Return to Pool)
+            if (playerBattleParts != null)
+            {
+                foreach(var part in playerBattleParts)
+                {
+                    if (part.currentHealth > 0)
+                    {
+                        if (!deckPartInfoList.Contains(part))
+                        {
+                            // Reset State
+                            part.gridPos = new Vector2Int(-1, -1);
+                            part.rotation = 0;
+                            deckPartInfoList.Add(part);
+                        }
+                    }
+                    else
+                    {
+                        if (deckPartInfoList.Contains(part))
+                        {
+                            deckPartInfoList.Remove(part);
+                        }
+                        Debug.Log($"[GameModel] Part {part.partRefObj.partName} is Dead/Broken. Removed from Deck.");
+                    }
+                    
+                    if (busyPartInfoList.Contains(part))
+                    {
+                        busyPartInfoList.Remove(part);
+                    }
+                }
+                playerBattleParts.Clear();
+            }
+            
+            // 2. Also return any other Busy parts (unused in hand) back to deck?
+            if (busyPartInfoList != null)
+            {
+                foreach(var part in busyPartInfoList)
+                {
+                    if (part.currentHealth > 0)
+                    {
+                        if (!deckPartInfoList.Contains(part))
+                        {
+                            deckPartInfoList.Add(part);
+                        }
+                    }
+                }
+                busyPartInfoList.Clear();
+            }
+            
+            Debug.Log($"[GameModel] After Return - Deck: {deckPartInfoList.Count}, Busy: {busyPartInfoList.Count}");
+            
+            // 3. Redraw
+            DrawParts(5);
+            
+            Debug.Log($"[GameModel] After Draw - Deck: {deckPartInfoList.Count}, Busy: {busyPartInfoList.Count}");
+            
+            // 4. Reset Enemy (But Keep HP if valid)
+            int preservedHp = -1;
+            if (currentEnemy != null) preservedHp = currentEnemy.currentHealth;
+            
+            GenerateRandomEnemy();
+            
+            if (preservedHp > 0 && currentEnemy != null)
+            {
+                currentEnemy.currentHealth = preservedHp;
+                Debug.Log($"[GameModel] Preserved Enemy HP: {preservedHp}");
+            }
+        }
+        
+        public void DrawParts(int count)
+        {
+            if (deckPartInfoList == null || deckPartInfoList.Count == 0) 
+            {
+                Debug.LogWarning("[GameModel] Deck is Empty! Cannot draw.");
+                return;
+            }
+            
+            for(int i=0; i<count; i++)
+            {
+                if (deckPartInfoList.Count == 0) break;
+                
+                int idx = Random.Range(0, deckPartInfoList.Count);
+                PartInfo drawn = deckPartInfoList[idx];
+                deckPartInfoList.RemoveAt(idx);
+                
+                if (busyPartInfoList == null) busyPartInfoList = new List<PartInfo>();
+                busyPartInfoList.Add(drawn);
+                Debug.Log($"[GameModel] Drawn part: {drawn.partRefObj.partName}");
+            }
+        }
 
         private void GenerateEnemyLayout(EnemyData enemy)
         {
@@ -135,7 +232,7 @@ namespace GameCore
             for (int i = 0; i < 50; i++)
             {
                 int rot = Random.Range(0, 4);
-                int x = Random.Range(0, 6);
+                int x = Random.Range(0, 4);
                 int y = Random.Range(0, 7);
                 Vector2Int origin = new Vector2Int(x, y);
                 if (IsValidPlacement(grid, part, origin, rot))

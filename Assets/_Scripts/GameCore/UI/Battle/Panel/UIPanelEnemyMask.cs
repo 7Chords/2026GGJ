@@ -181,7 +181,7 @@ namespace GameCore.UI
                 // Mark occupancy
                 MarkOccupancy(occupiedGrid, partInfo.partRefObj, partInfo.gridPos, partInfo.rotation);
                 // Create UI
-                CreatePartItem(partInfo.partRefObj, partInfo.gridPos, partInfo.rotation);
+                CreatePartItem(partInfo);
             }
         }
         
@@ -218,10 +218,13 @@ namespace GameCore.UI
             return list;
         }
 
-        private void CreatePartItem(GameCore.RefData.PartRefObj part, Vector2Int gridPos, int rot)
+        private void CreatePartItem(PartInfo partInfo)
         {
             // Instantiate Item
             if (mono.monoGridList == null || mono.monoGridList.Count == 0) return;
+            
+            Vector2Int gridPos = partInfo.gridPos;
+            int rot = partInfo.rotation;
             
             int index = gridPos.y * 4 + gridPos.x;
             if (index < 0 || index >= mono.monoGridList.Count) return;
@@ -244,7 +247,7 @@ namespace GameCore.UI
             itemGO.transform.localScale = new Vector3(0.7f, 0.7f, 1);
             
             // Mark occupied grids as red
-            List<Vector2Int> shape = GetRotatedShape(part, rot);
+            List<Vector2Int> shape = GetRotatedShape(partInfo.partRefObj, rot);
             foreach(var offset in shape)
             {
                 Vector2Int p = gridPos + offset;
@@ -262,15 +265,13 @@ namespace GameCore.UI
                 }
             }
 
-            // Refine: We should instantiate a simplistic view.
-            var partScript = itemGO.GetComponent<UIMonoMaskCombinePartContainerItem>();
-            if (partScript != null)
+            // Using Helper Logic for Display
+            var itemMono = itemGO.GetComponent<UIMonoMaskCombinePartContainerItem>();
+            if (itemMono != null)
             {
-                // Init info manually if possible
-                if (!string.IsNullOrEmpty(part.partSpriteObjName))
-                {
-                     partScript.imgGoods.sprite = ResourcesHelper.LoadAsset<Sprite>(part.partSpriteObjName);
-                }
+                var itemPanel = new UIPanelMaskCombinePartContainerItem(itemMono, showType);
+                itemPanel.AfterInitialize();
+                itemPanel.SetInfo(partInfo); // This triggers UI Refresh with HP!
             }
         }
     }

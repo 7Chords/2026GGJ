@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GameCore.RefData;
 using GameCore;
+using SCFrame;
 
 namespace GameCore.UI
 {
@@ -145,7 +146,11 @@ namespace GameCore.UI
         private IEnumerator BattleTurnLoop()
         {
             Debug.Log("[Battle] Turn Start...");
-            UpdateBattleUI(); // Initial Update
+            UpdateBattleUI(); 
+            
+            // 0. Check Battle End Condition (Start of Turn Check)
+            if (CheckBattleEnd()) yield break;
+
             yield return new WaitForSeconds(0.5f);
             
             // 1. Get and Sort Parts
@@ -160,55 +165,143 @@ namespace GameCore.UI
             SortParts(playerParts);
             SortParts(enemyParts);
             
+            // Global Buffs Calculation
+            // "CRITICAL_CHANCE and HIT_CHANCE apply to all parts with ATTACK"
+            // Wait, calculate total available from ALL parts (Sum of all Crit/Hit entries?)
+            // Or does each part contribute? "Parts with attributes... boost their values"
+            // Re-reading: "CRITICAL_CHANCE... act on all parts with ATTACK" -> Likely Sum of all Crit/Hit found in the team.
+            float pGlobalCrit = CalculateGlobalAttribute(playerParts, EAttributeType.CRITICAL_CHANCE);
+            float pGlobalHit = CalculateGlobalAttribute(playerParts, EAttributeType.HIT_CHANCE);
+            float eGlobalCrit = CalculateGlobalAttribute(enemyParts, EAttributeType.CRITICAL_CHANCE);
+            float eGlobalHit = CalculateGlobalAttribute(enemyParts, EAttributeType.HIT_CHANCE);
+            
             int maxCount = Mathf.Max(playerParts.Count, enemyParts.Count);
             
             for (int i = 0; i < maxCount; i++)
             {
-                PartInfo pPart = (i < playerParts.Count) ? playerParts[i] : null;
-                PartInfo ePart = (i < enemyParts.Count) ? enemyParts[i] : null;
+                if (CheckBattleEnd()) yield break;
 
-                // 2. Update Info UI
-                if (mono.playerPartInfoText != null) 
-                    mono.playerPartInfoText.text = pPart != null ? GetPartInfoStr(pPart) : "";
-                if (mono.enemyPartInfoText != null) 
-                    mono.enemyPartInfoText.text = ePart != null ? GetPartInfoStr(ePart) : "";
+                // 3. Execution Delay (Initial)
+                // yield return new WaitForSeconds(1.0f); 
 
-                // 3. Execution Delay
-                yield return new WaitForSeconds(2.0f);
                 
-                // 4. Logics Trigger (Simultaneous execution concept -> Sequential calculation, then Apply)
-                // However, Trample logic needs immediate HP state? 
-                // "Execute two sides... then judge death".
-                // We'll execute Player -> Enemy sequentially for simplicity of state, 
-                // effectively "simultaneous" within the same frame/second.
+                    PartInfo pPart = (i < playerParts.Count) ? playerParts[i] : null;
+                    PartInfo ePart = (i < enemyParts.Count) ? enemyParts[i] : null;
 
-                if (pPart != null && pPart.currentHealth > 0)
-                {
-                    if (pPart.logicObj != null) pPart.logicObj.OnTurnStart();
-                    ExecuteAttackLogic(pPart, true);
-                }
-                
-                if (ePart != null && ePart.currentHealth > 0)
-                {
-                    if (ePart.logicObj != null) ePart.logicObj.OnTurnStart();
-                    ExecuteAttackLogic(ePart, false);
-                }
-                
-                // 5. Update UI (HP)
-                UpdateBattleUI();
-                
-                // 6. Check Death (Simultaneous check after both acted)
-                CheckDeadParts(playerParts);
-                CheckDeadParts(enemyParts);
-                
-                // Refresh Face Panels (Visuals) if needed
-                // _playerFacePanel.Setup(...) might be expensive, maybe just Refresh Grid colors?
-                // For now, assume data update is enough, visuals update on next turn or if we added listeners.
-                // We can call Setup again to clear broken parts if we remove them.
-                // But simply updating sliders is requested.
+                    // 2. Update Info UI
+                    if (mono.playerPartInfoText != null) 
+                        mono.playerPartInfoText.text = pPart != null ? GetPartInfoStr(pPart) : "";
+                    if (mono.enemyPartInfoText != null) 
+                        mono.enemyPartInfoText.text = ePart != null ? GetPartInfoStr(ePart) : "";
+
+                    
+                    // 4. Execution - PLAYER
+                    if (pPart != null)
+                    {
+                        if (pPart.currentHealth > 0)
+                        {
+                            Debug.Log($"[Battle] Player Part {pPart.partRefObj.partName} Acting...");
+                            if (pPart.logicObj != null) pPart.logicObj.OnTurnStart();
+                            ExecuteAttackLogic(pPart, true, pGlobalCrit, pGlobalHit);
+                            UpdateBattleUI(); // Update HP immediately
+                            yield return new WaitForSeconds(1.0f); // Wait 1s
+                        }
+                        else
+                        {
+                            Debug.Log($"[Battle] Player Part {pPart.partRefObj.partName} is Dead/Inactive.");
+                        }
+                    }
+                    
+                    // 4. Execution - ENEMY
+                    if (ePart != null && ePart.currentHealth > 0)
+                    {
+                         Debug.Log($"[Battle] Enemy Part {ePart.partRefObj.partName} Acting...");
+                        if (ePart.logicObj != null) ePart.logicObj.OnTurnStart();
+                        ExecuteAttackLogic(ePart, false, eGlobalCrit, eGlobalHit);
+                        UpdateBattleUI(); // Update HP immediately
+                        yield return new WaitForSeconds(1.0f); // Wait 1s
+                    }
+                    
+                    // 5. Final Update UI (Safe measure)
+                    UpdateBattleUI();
+                    
+                    // 6. Check Death
+                    CheckDeadParts(playerParts);
+                    CheckDeadParts(enemyParts);
+            
             }
             
-            Debug.Log("[Battle] All Parts Executed.");
+            Debug.Log("[Battle] Round Ended.");
+            
+            // Check Final Result
+            if (!CheckBattleEnd())
+            {
+                // If neither dead, go to Combine UI
+                 Debug.Log("[Battle] Round Over -> No Death -> Go Combine");
+                 GoToCombine();
+            }
+        }
+        
+        private bool CheckBattleEnd()
+        {
+            float pHp = GameModel.instance.playerHealth;
+            float eHp = (GameModel.instance.currentEnemy != null) ? GameModel.instance.currentEnemy.currentHealth : 0;
+            
+            Debug.Log($"[Battle] CheckBattleEnd: PlayerHP={pHp}, EnemyHP={eHp}");
+
+            if (pHp <= 0)
+            {
+                 Debug.Log("[Battle] Player Defeated -> Go Map (Loss)");
+                 GoToMap();
+                 return true;
+            }
+            
+            if (eHp <= 0 && GameModel.instance.currentEnemy != null)
+            {
+                 Debug.Log("[Battle] Enemy Defeated -> Go Map (Win)");
+                 // Normally Win -> Rewards -> Map? 
+                 // User says "Battle end go to map ui".
+                 GoToMap();
+                 return true;
+            }
+            return false;
+        }
+        
+        private void GoToCombine()
+        {
+             // Close Battle, Open Combine
+             // User request: "Wash back to pool... redraw... reset enemy"
+             GameModel.instance.PrepareNextBattleRound();
+             
+             // Close Self
+             UICoreMgr.instance.RemoveNode(nameof(UINodeBattle));
+             
+             // Open Combine
+             UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL)); 
+        }
+        
+        private void GoToMap()
+        {
+             // Close Battle, Open Map
+             // Ensure we clean up battle state (return parts, redraw, reset enemy) even on Win/Loss
+             GameModel.instance.PrepareNextBattleRound();
+             
+             UICoreMgr.instance.RemoveNode(nameof(UINodeBattle));
+             UICoreMgr.instance.RemoveNode(nameof(UINodeMaskCombine));
+             UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+        }
+
+        private float CalculateGlobalAttribute(List<PartInfo> parts, EAttributeType type)
+        {
+            float total = 0;
+            foreach(var p in parts)
+            {
+                if (p.currentHealth > 0)
+                {
+                    total += GetAttribute(p, type);
+                }
+            }
+            return total;
         }
         
         private string GetPartInfoStr(PartInfo part)
@@ -225,9 +318,12 @@ namespace GameCore.UI
             return sb.ToString();
         }
         
-        private void ExecuteAttackLogic(PartInfo attacker, bool isPlayerAttacker)
+        private void ExecuteAttackLogic(PartInfo attacker, bool isPlayerAttacker, float globalCrit, float globalHit)
         {
             float att = GetAttribute(attacker, EAttributeType.ATTACK);
+            // Debug Log for Attribute
+            Debug.Log($"[Battle] ExecuteAttack: {attacker.partRefObj.partName} (Player:{isPlayerAttacker}) AttackValue: {att}");
+            
             // If no attack, skip
             if (att <= 0) return;
 
@@ -239,7 +335,6 @@ namespace GameCore.UI
             if (targetsList == null) targetsList = new List<PartInfo>();
 
             // 1. Find overlapping targets
-            // Attacker Grid Positions
             List<Vector2Int> attackShape = GetOccupiedGrids(attacker);
             List<PartInfo> hitParts = new List<PartInfo>();
             
@@ -247,9 +342,13 @@ namespace GameCore.UI
             {
                 // Find target part at this pos
                 PartInfo hit = targetsList.Find(t => t.currentHealth > 0 && IsGridOccupiedBy(t, pos));
-                if (hit != null && !hitParts.Contains(hit))
+                if (hit != null) 
                 {
-                    hitParts.Add(hit);
+                    if (!hitParts.Contains(hit))
+                    {
+                        hitParts.Add(hit);
+                        Debug.Log($"[Battle] Hit Part Finding: {attacker.partRefObj.partName} hits {hit.partRefObj.partName} at {pos}");
+                    }
                 }
             }
             
@@ -258,39 +357,35 @@ namespace GameCore.UI
             {
                 foreach(var target in hitParts)
                 {
-                    ResolveDamage(attacker, target, att, isPlayerAttacker);
+                    ResolveDamage(attacker, target, att, isPlayerAttacker, globalCrit, globalHit);
                 }
             }
             else
             {
                 // Attack Body
-                ResolveBodyDamage(attacker, att, isPlayerAttacker);
+                Debug.Log($"[Battle] {attacker.partRefObj.partName} -> No Parts Hit. Attacking Body Directly.");
+                ResolveBodyDamage(attacker, att, isPlayerAttacker, globalCrit, globalHit);
             }
         }
         
-        private void ResolveDamage(PartInfo attacker, PartInfo target, float damageBase, bool isPlayerAttacker)
+        private void ResolveDamage(PartInfo attacker, PartInfo target, float damageBase, bool isPlayerAttacker, float globalCrit, float globalHit)
         {
             // 1. Hit Check
-            float hitRate = GetAttribute(attacker, EAttributeType.HIT_CHANCE);
-            if (hitRate <= 0) hitRate = 100; // Default 100 if not set? Or 0? Usually 100. Let's assume 100 if missing, or 0 if explicit.
-            // If entryList doesn't have it, default to 100? Or should we check GameRef for defaults?
-            // User requirement: "Calculate if hit based on hit rate". If 0, never hit?
-            // "if no value...". I'll assume 100 base for now, or check if key exists.
-            // Let's use GetAttribute with default -1 to check existence? 
-            // Simplified: If HIT_CHANCE > 0, check rand. Else assume hit.
-            if (hitRate > 0)
+            // Formula: Base 100% + Global Hit Bonus (Sum of all parts)
+            float finalHit = 60f + globalHit;
+            
+            if (Random.Range(0f, 100f) > finalHit) 
             {
-                if (Random.Range(0f, 100f) > hitRate) 
-                {
-                     Debug.Log($"[Battle] Miss! {attacker.partRefObj.partName} -> {target.partRefObj.partName}");
-                     return;
-                }
+                 Debug.Log($"[Battle] Miss! {attacker.partRefObj.partName} -> {target.partRefObj.partName} (Chance: {finalHit}%)");
+                 return;
             }
 
             // 2. Crit Check
-            float critRate = GetAttribute(attacker, EAttributeType.CRITICAL_CHANCE);
+            // Formula: Global Crit Chance (Sum of all parts)
+            float finalCrit = globalCrit;
+            
             bool isCrit = false;
-            if (critRate > 0 && Random.Range(0f, 100f) <= critRate)
+            if (Random.Range(0f, 100f) <= finalCrit)
             {
                 isCrit = true;
                 damageBase *= 1.5f;
@@ -323,14 +418,16 @@ namespace GameCore.UI
             }
         }
         
-        private void ResolveBodyDamage(PartInfo attacker, float damageBase, bool isPlayerAttacker)
+        private void ResolveBodyDamage(PartInfo attacker, float damageBase, bool isPlayerAttacker, float globalCrit, float globalHit)
         {
              // Similar Hit/Crit logic
-            float hitRate = GetAttribute(attacker, EAttributeType.HIT_CHANCE);
-             if (hitRate > 0 && Random.Range(0f, 100f) > hitRate) return;
+             float finalHit = 100f + globalHit;
+
+             if (Random.Range(0f, 100f) > finalHit) return;
              
-             float critRate = GetAttribute(attacker, EAttributeType.CRITICAL_CHANCE);
-             if (critRate > 0 && Random.Range(0f, 100f) <= critRate) damageBase *= 1.5f;
+             float finalCrit = globalCrit;
+             
+             if (Random.Range(0f, 100f) <= finalCrit) damageBase *= 1.5f;
              
              // Body Defense? Assume 0 for now.
              float finalDmg = Mathf.Max(0, damageBase);
@@ -411,6 +508,10 @@ namespace GameCore.UI
             if (mono.sliderPlayerHp != null) mono.sliderPlayerHp.value = GameModel.instance.playerHealth;
             if (mono.sliderEnemyHp != null && GameModel.instance.currentEnemy != null) 
                 mono.sliderEnemyHp.value = GameModel.instance.currentEnemy.currentHealth;
+                
+            // Update Part Visuals (HP Text)
+            if (_playerFacePanel != null) _playerFacePanel.RefreshParts();
+            if (_enemyFacePanel != null) _enemyFacePanel.RefreshParts();
         }
 
         private void SortParts(List<PartInfo> list)

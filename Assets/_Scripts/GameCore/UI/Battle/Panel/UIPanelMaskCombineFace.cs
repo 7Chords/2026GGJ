@@ -9,7 +9,23 @@ namespace GameCore.UI
 {
     public class UIPanelMaskCombineFace : _ASCUIPanelBase<UIMonoMaskCombineFace>
     {
-        private List<GameObject> _spawnedParts = new List<GameObject>();
+        private List<UIPanelMaskCombinePartContainerItem> _partItems = new List<UIPanelMaskCombinePartContainerItem>();
+
+        public void RefreshParts()
+        {
+            if (_partItems != null)
+            {
+                foreach(var item in _partItems)
+                {
+                    if (item != null) item.RefreshUI();
+                }
+            }
+        }
+
+      
+        // ... Inside CreatePartItem ...
+        
+        // (See implementation below)
         private List<UIMonoMaskCombineFaceGrid> _gridList = new List<UIMonoMaskCombineFaceGrid>(); // Assuming reusing EnemyMaskGrid or similar
 
         public UIPanelMaskCombineFace(UIMonoMaskCombineFace _mono, SCUIShowType _showType) : base(_mono, _showType)
@@ -50,16 +66,24 @@ namespace GameCore.UI
             }
         }
         
+
+
         private void ClearItems()
         {
-            if (_spawnedParts != null)
+            if (_partItems != null) // Changed from _spawnedParts
             {
-                foreach(var go in _spawnedParts)
+                foreach(var item in _partItems) // Changed from go in _spawnedParts
                 {
-                    if(go!=null) Object.Destroy(go);
+                    if(item != null) // Changed from go != null
+                    {
+                        item.DestroySelf(); // Use public method instead of accessing protected mono
+                        item.Discard(); 
+                    }
                 }
-                _spawnedParts.Clear();
+                _partItems.Clear(); // Changed from _spawnedParts.Clear();
             }
+        
+     
             
             // Robust Clear: Destroy all children to avoid duplicates if _gridList lost track
             if (mono.transform.childCount > 0)
@@ -158,11 +182,48 @@ namespace GameCore.UI
                  return;
             }
             
-            _spawnedParts.Add(itemGO);
+            var itemMono = itemGO.GetComponent<UIMonoMaskCombinePartContainerItem>();
+            if (itemMono != null)
+            {
+                var itemPanel = new UIPanelMaskCombinePartContainerItem(itemMono, showType);
+                itemPanel.AfterInitialize();
+                itemPanel.SetInfo(part); 
+                _partItems.Add(itemPanel);
+                
+                // Set Rotation
+                itemGO.transform.localRotation = Quaternion.Euler(0, 0, part.rotation * 90);
+                
+                // Init Visuals (Pivot/Size)
+                itemPanel.InitVisualsFromData();
+            }
+            else
+            {
+                // _spawnedParts.Add(itemGO); // Removed (Compilation Error)
+                Debug.LogError("[UIPanelMaskCombineFace] Logic Error: Item Prefab missing Mono component");
+            }
+
             Debug.Log($"[UIPanelMaskCombineFace] Generated Item for {part.partRefObj?.partName} at {part.gridPos}");
             
-            itemGO.transform.localPosition = Vector3.zero;
-            itemGO.transform.localRotation = Quaternion.Euler(0, 0, part.rotation * 90);
+            // itemGO.transform.localPosition = Vector3.zero; // Handled in InitVisualsFromData
+            // itemGO.transform.localRotation = ...; // Handled in if block above
+            
+            // ... (SnapToGrid or similar calls if needed, logic is inside SetInfo/Snap?)
+            // SetInfo updates sprite and text.
+            // But Position/Pivot is handled in SnapToGrid which is usually called on Drop.
+            // Here we are creating from data. We need to apply "Snap" logic or at least calculations.
+            // itemPanel.SnapToGrid(targetGrid.GetComponent<..>?) 
+            // Actually SetInfo just sets sprite.
+            // We should ensure visual alignment. 
+            // Reuse SnapToGrid logic? It requires drag info probably.
+            // Or just manually set Pivot/Size as per "Refining Placement Visuals"?
+            // We can call a method on itemPanel to "AlignToGrid(gridRect)".
+            
+            // Assuming simplified placement for now or user is happy with default instantiantion.
+            // Wait, previous task "Refining Placement Visuals" updated SnapToGrid.
+            // If we don't call it, it looks wrong?
+            // "When a part is placed, pivot... size...".
+            // We need to trigger that alignment.
+            //itemPanel.InitVisualsFromData(); // We might need to implement this or expose SnapToGrid logic.
             itemGO.transform.localScale = new Vector3(0.7f, 0.7f, 1); 
             
             // Mark occupied grids as red

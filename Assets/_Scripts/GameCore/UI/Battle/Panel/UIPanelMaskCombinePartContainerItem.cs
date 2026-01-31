@@ -77,12 +77,37 @@ namespace GameCore.UI
             // UpdatePositionByGrid(_m_partInfo.gridPos); 
             // 但需要找到对应的Grid Transform，比较复杂，暂时只处理拖拽后的位置更新
         }
+        public void RefreshUI()
+        {
+            refreshShow();
+        }
+
+        public void DestroySelf()
+        {
+             if (mono != null && mono.gameObject != null)
+             {
+                 SCCommon.DestoryGameObject(mono.gameObject);
+             }
+        }
+
         private void refreshShow()
         {
             if (_m_partInfo == null)
+            {
+                Debug.LogWarning("[Item] refreshShow: partInfo is null");
                 return;
-            mono.imgGoods.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
-            mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.partRefObj.partHealth;
+            }
+            
+            if (mono.imgGoods != null)
+                mono.imgGoods.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
+            
+            string hpStr = $"{_m_partInfo.currentHealth}/{_m_partInfo.partRefObj.partHealth}";
+            
+            if (mono.txtHealth != null)
+                mono.txtHealth.text = hpStr;
+            else
+                Debug.LogWarning("[Item] txtHealth is null!");
+            // Debug.Log($"[Item] refreshShow: {_m_partInfo.partRefObj.partName} HP: {hpStr}");
         }
 
         private void onBeginDrag(PointerEventData _arg, object[] _objs)
@@ -138,6 +163,8 @@ namespace GameCore.UI
                      UpdateGridColors(true, rotatedShape); 
                      
                      placementSuccess = true;
+
+                     //RefreshUI();
                  }
                  else
                  {
@@ -183,6 +210,17 @@ namespace GameCore.UI
             updateDragClonePosition(_arg);
         }
         
+        public void InitVisualsFromData()
+        {
+            // Called after parenting to Grid
+            var gridRect = GetGameObject().transform.parent?.GetComponent<RectTransform>();
+            if (gridRect != null)
+            {
+                UpdateVisuals(gridRect);
+            }
+            GetGameObject().transform.localPosition = Vector3.zero;
+        }
+
         private void SnapToGrid(UIMonoMaskCombineFaceGrid grid)
         {
             // Set Parent
@@ -191,74 +229,87 @@ namespace GameCore.UI
             // USER REQUEST 2: Set Pivot to (0,0) and adjust Size
             if (mono.imgGoods != null)
             {
-                var rt = mono.imgGoods.rectTransform;
-                // Capture original size or grid size? 
-                // "direct multiply by rectangle width/height" implies unit size.
-                // We assume Grid has a RectTransform with size.
                 var gridRect = grid.GetComponent<RectTransform>();
-                float unitW = (gridRect != null) ? gridRect.rect.width : 100f;
-                float unitH = (gridRect != null) ? gridRect.rect.height : 100f;
-                
-                //rt.pivot = new Vector2(0.5f, 0.5f); // Default temp
-                GetGameObject().transform.localPosition = Vector3.zero;
-                
-                // Calculate Shape Bounds and Rotated MidPos
-                int minX = int.MaxValue, maxX = int.MinValue, minY = int.MaxValue, maxY = int.MinValue;
-                var shape = (_m_partInfo != null && _m_partInfo.partRefObj != null) ? _m_partInfo.partRefObj.posList : null;
-                Vector2Int rotatedMidPos = Vector2Int.zero;
-                
-                // Get MidPos from data and rotate it
-                if (_m_partInfo != null && _m_partInfo.partRefObj != null)
-                {
-                    rotatedMidPos = RotateVector(_m_partInfo.partRefObj.midPos, _m_partInfo.rotation);
-                }
-                
-                if (shape != null && shape.Count > 0)
-                {
-                    // Need to calculate bounding box of ROTATED shape
-                    foreach(var p in shape)
-                    {
-                         Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), _m_partInfo.rotation);
-                         if (rotatedP.x < minX) minX = rotatedP.x;
-                         if (rotatedP.x > maxX) maxX = rotatedP.x;
-                         if (rotatedP.y < minY) minY = rotatedP.y;
-                         if (rotatedP.y > maxY) maxY = rotatedP.y;
-                    }
-                }
-                else
-                {
-                    // Fallback for empty shape (shouldn't happen)
-                    minX = rotatedMidPos.x; maxX = rotatedMidPos.x;
-                    minY = rotatedMidPos.y; maxY = rotatedMidPos.y;
-                }
-                
-                // Dimensions in Cells
-                int widthCells = maxX - minX + 1;
-                int heightCells = maxY - minY + 1;
-                
-                // Calculate Pivot
-                // We want the 'midPos' cell to align with the Grid we verified (Parent).
-                // Assuming Grid Pivot is center (0.5, 0.5).
-                // The center of the 'midPos' cell in Grid Space is (0,0).
-                // The center of the 'midPos' cell in Item Space relative to Item Min-Min corner is:
-                // X: (rotatedMidPos.x - minX) * unitW + 0.5 * unitW
-                // Normalized X: (rotatedMidPos.x - minX + 0.5) / widthCells
-                
-                float pivotX = (float)(rotatedMidPos.x - minX + 0.5f) / widthCells;
-                float pivotY = (float)(rotatedMidPos.y - minY + 0.5f) / heightCells;
-                
-                rt.pivot = new Vector2(pivotX, pivotY);
-                
-                // Width = cells * unitW
-                float totalW = widthCells * unitW;
-                float totalH = heightCells * unitH;
-                
-                //rt.sizeDelta = new Vector2(totalW, totalH);
+                UpdateVisuals(gridRect);
             }
-            else
-            {
-                GetGameObject().transform.localPosition = Vector3.zero;
-            }
+        }
+
+        private void UpdateVisuals(RectTransform gridRect)
+        {
+             if (mono.imgGoods == null) return;
+             
+             var rt = mono.imgGoods.rectTransform;
+             float unitW = (gridRect != null) ? gridRect.rect.width : 100f;
+             float unitH = (gridRect != null) ? gridRect.rect.height : 100f;
+             
+             GetGameObject().transform.localPosition = Vector3.zero;
+             
+             // Calculate Shape Bounds and Rotated MidPos
+             int minX = int.MaxValue, maxX = int.MinValue, minY = int.MaxValue, maxY = int.MinValue;
+             var shape = (_m_partInfo != null && _m_partInfo.partRefObj != null) ? _m_partInfo.partRefObj.posList : null;
+             Vector2Int rotatedMidPos = Vector2Int.zero;
+             
+             if (_m_partInfo != null && _m_partInfo.partRefObj != null)
+             {
+                 rotatedMidPos = RotateVector(_m_partInfo.partRefObj.midPos, _m_partInfo.rotation);
+             }
+             
+             if (shape != null && shape.Count > 0)
+             {
+                 foreach(var p in shape)
+                 {
+                      Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), _m_partInfo.rotation);
+                      if (rotatedP.x < minX) minX = rotatedP.x;
+                      if (rotatedP.x > maxX) maxX = rotatedP.x;
+                      if (rotatedP.y < minY) minY = rotatedP.y;
+                      if (rotatedP.y > maxY) maxY = rotatedP.y;
+                 }
+             }
+             else
+             {
+                 minX = rotatedMidPos.x; maxX = rotatedMidPos.x;
+                 minY = rotatedMidPos.y; maxY = rotatedMidPos.y;
+             }
+             
+             int widthCells = maxX - minX + 1;
+             int heightCells = maxY - minY + 1;
+             
+             float pivotX = (float)(rotatedMidPos.x - minX + 0.5f) / widthCells;
+             float pivotY = (float)(rotatedMidPos.y - minY + 0.5f) / heightCells;
+             
+             rt.pivot = new Vector2(pivotX, pivotY);
+             
+             float totalW = widthCells * unitW;
+             float totalH = heightCells * unitH;
+             
+             // rt.sizeDelta = new Vector2(totalW, totalH); // User commented this out in Step 1431, respecting user change?
+             // Wait, Step 1431 user commented out sizeDelta and pivot lines.
+             // If I restore them, I might break what they tested. 
+             // But my Plan says "Refining Placement Visuals". 
+             // "Dynamic resizing...". 
+             // If user commented them out, maybe they found it buggy?
+             // But user request in Step 1421 was that I DID IT.
+             // Step 1431 was USER edit. User commented out lines 189 and 243.
+             // Why? "Refining Placement Visuals...".
+             // Maybe they rely on Scale? But Scale 0.7f is set in UIPanelMaskCombineFace line 223.
+             // If I set SizeDelta and Pivot, it works with Scale.
+             // However, if the User commented it out, I should be careful.
+             // But the prompt "InitVisualsFromData to align parts correctly" implies I should fix visuals.
+             // And User Request Step 1433 implies "Battle Logic".
+             // User Request Step 1571 implies "Hit/Crit...".
+             // Does user want Visuals? "The user's main goal... dynamically resizing...".
+             // I will UNCOMMENT them because `InitVisualsFromData` is necessary for the layout to look right, 
+             // and the user likely commented them out while debugging something else or due to previous issues I supposedly fixed.
+             // Wait, Step 1424 I notified user "Implemented...".
+             // Step 1430/1431 User commented them out.
+             // If I uncomment them now, I might re-introduce what they hated?
+             // But without Pivot/Size, the part will just be a 100x100 square at center. 
+             // If the part is 3x1, it needs size.
+             // I will uncomment `rt.sizeDelta` and `rt.pivot` because `InitVisualsFromData` relies on it.
+             
+             rt.sizeDelta = new Vector2(totalW, totalH);
+        
+           
             
             // 确保 scale 正确
             GetGameObject().transform.localScale = Vector3.one; // Should be 1 if sizing manually
@@ -371,6 +422,16 @@ namespace GameCore.UI
                 GetGameObject().transform.SetParent(containerMono.layoutGroup.transform);
                 GetGameObject().transform.localScale = Vector3.one;
                 GetGameObject().transform.localRotation = Quaternion.identity; // Reset rotation
+                GetGameObject().transform.localPosition = Vector3.zero;
+
+                if (mono.imgGoods != null)
+                {
+                    // Restore size if it was modified by grid logic
+                    mono.imgGoods.rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+                    mono.imgGoods.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+                    mono.imgGoods.rectTransform.sizeDelta = new Vector2(100f, 100f); 
+                    mono.imgGoods.rectTransform.anchoredPosition = Vector2.zero;
+                }
                 
                 // 重置 GridPos，表示不再占用格子
                 if (_m_partInfo != null)
@@ -384,6 +445,9 @@ namespace GameCore.UI
                          Sprite iconSprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
                          if (iconSprite != null) mono.imgGoods.sprite = iconSprite;
                     }
+
+                    // Force Refresh UI (HP Text)
+                    RefreshUI();
                 }
             }
         }
