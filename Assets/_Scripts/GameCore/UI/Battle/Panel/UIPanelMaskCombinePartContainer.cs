@@ -54,6 +54,18 @@ namespace GameCore.UI
             return item;
         }
 
+        // Helper to rotate vector around (0,0) logic
+        private Vector2Int RotateVector(Vector2Int v, int rotationSteps)
+        {
+            Vector2Int ret = v;
+            for(int i=0; i<rotationSteps; i++)
+            {
+                // (x, y) -> (-y, x) for 90 degrees counter-clockwise
+                ret = new Vector2Int(-ret.y, ret.x);
+            }
+            return ret;
+        }
+
         public bool CheckOccupancy(Vector2Int targetPos, PartInfo exceptInfo)
         {
             if (_m_partItemList == null) return false;
@@ -68,7 +80,9 @@ namespace GameCore.UI
                 {
                     foreach (var p in info.partRefObj.posList)
                     {
-                         Vector2Int occupied = info.gridPos + new Vector2Int(p.x, p.y);
+                         // Apply rotation !
+                         Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), info.rotation);
+                         Vector2Int occupied = info.gridPos + rotatedP;
                          if (occupied == targetPos) return true;
                     }
                 }
@@ -86,6 +100,7 @@ namespace GameCore.UI
             }
             else
             {
+                // shape coming in is already rotated if needed (calling context handles it for the dragging item)
                 foreach(var p in shape) required.Add(logicalOrigin + new Vector2Int(p.x, p.y));
             }
             
@@ -102,7 +117,12 @@ namespace GameCore.UI
                 List<Vector2Int> existingOccupied = new List<Vector2Int>();
                 if (info.partRefObj != null && info.partRefObj.posList != null && info.partRefObj.posList.Count > 0)
                 {
-                    foreach (var p in info.partRefObj.posList) existingOccupied.Add(info.gridPos + new Vector2Int(p.x, p.y));
+                    foreach (var p in info.partRefObj.posList) 
+                    {
+                        // Apply existing item's rotation
+                        Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), info.rotation);
+                        existingOccupied.Add(info.gridPos + rotatedP);
+                    }
                 }
                 else
                 {
