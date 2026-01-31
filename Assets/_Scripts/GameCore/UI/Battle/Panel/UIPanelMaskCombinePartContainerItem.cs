@@ -1,3 +1,4 @@
+using DG.Tweening;
 using SCFrame;
 using SCFrame.UI;
 using System;
@@ -18,6 +19,8 @@ namespace GameCore.UI
 
         private UIPanelMaskCombinePartContainer _m_container;
 
+        private TweenContainer _m_tweenContainer;
+
         public UIPanelMaskCombinePartContainerItem(UIMonoMaskCombinePartContainerItem _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -34,12 +37,13 @@ namespace GameCore.UI
 
         public override void AfterInitialize()
         {
-
+            _m_tweenContainer = new TweenContainer();
         }
 
         public override void BeforeDiscard()
         {
-
+            _m_tweenContainer?.KillAllDoTween();
+            _m_tweenContainer = null;
         }
 
         public override void OnHidePanel()
@@ -736,6 +740,8 @@ namespace GameCore.UI
         private void onGameObjMouseExit(PointerEventData arg1, object[] arg2)
         {
             GameCommon.DiscardToolTip();
+            _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(Vector3.one, mono.scaleChgDuration));
+
         }
 
         private void onGameObjMouseEnter(PointerEventData arg1, object[] arg2)
@@ -762,6 +768,8 @@ namespace GameCore.UI
             {
                 tooltip.SetPivot(showOnLeft ? new Vector2(1, 1) : new Vector2(0, 1));
             }*/
+
+            _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
         }
     }
 }
