@@ -138,6 +138,23 @@ namespace GameCore.UI
             return false;
         }
 
+        public List<PartInfo> GetPlacedParts()
+        {
+            List<PartInfo> list = new List<PartInfo>();
+            if (_m_partItemList == null) return list;
+
+            foreach (var item in _m_partItemList)
+            {
+                var info = item.GetPartInfo();
+                if (info == null) continue;
+                if (info.gridPos.x != -1) // -1 means in bag
+                {
+                    list.Add(info);
+                }
+            }
+            return list;
+        }
+
         public void SetListInfo(List<PartInfo> _infoList)
         {
             if (_infoList == null)

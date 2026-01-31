@@ -13,6 +13,7 @@ namespace GameCore.RefData
         public string partDesc;
         public string partSpriteObjName;
         public Vector2Int midPos;
+        public string logicClassName; // Logic Class Name
         public List<EntryEffectObj> entryList;
         public List<PosEffectObj> posList;
 
@@ -35,15 +36,17 @@ namespace GameCore.RefData
             entryList = getList<EntryEffectObj>("entryList");
             posList = getList<PosEffectObj>("posList");
             
-            //string midPosStr = getString("midPos");
-            //if (!string.IsNullOrEmpty(midPosStr))
-            //{
-            //    string[] strArr = midPosStr.Split(':');
-            //    if (strArr != null && strArr.Length >= 2)
-            //    {
-            //        midPos = new Vector2Int(SCCommon.ParseInt(strArr[0]), SCCommon.ParseInt(strArr[1]));
-            //    }
-            //}
+            logicClassName = getString("logicClassName");
+
+            string midPosStr = getString("midPos");
+            if (!string.IsNullOrEmpty(midPosStr))
+            {
+                string[] strArr = midPosStr.Split(':');
+                if (strArr != null && strArr.Length >= 2)
+                {
+                    midPos = new Vector2Int(SCCommon.ParseInt(strArr[0]), SCCommon.ParseInt(strArr[1]));
+                }
+            }
         }
 
         public static string assetPath => "RefData/ExportTxt";
