@@ -63,6 +63,8 @@ namespace GameCore.UI
         }
         private void onBtnPurchaseMouseEnter(PointerEventData _arg, object[] _objs)
         {
+            if (_m_goodsInfo == null)
+                return;
             Vector2 screenPos = Vector2.zero;
             var _canvas = GetGameObject().GetComponentInParent<Canvas>();
             Camera cam = (_canvas != null && _canvas.renderMode != RenderMode.ScreenSpaceOverlay) ? _canvas.worldCamera : null;

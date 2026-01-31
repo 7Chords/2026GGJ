@@ -138,6 +138,7 @@ namespace GameCore.UI
         private void onBtnExitClickDonw(PointerEventData _arg, object[] _objs)
         {
             UICoreMgr.instance.CloseTopNode();
+            UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
         }
     }
 }

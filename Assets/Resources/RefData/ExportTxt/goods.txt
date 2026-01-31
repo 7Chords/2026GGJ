@@ -1,7 +1,7 @@
 ﻿id	goodsName	goodsDesc	goodsType	goodsPrice	partId	healthValue	goodsSpriteObjName
-100001	大狗鼻子	暴击率：5%\n护盾：15	PART	75	101001	0	spr_nose
-101002	大狗眼	命中率：5%\n护盾：15	PART	50	101002	0	spr_eye
-101003	大狗嘴	伤害：20\n护盾：15	PART	50	101003	0	spr_mouth
+100001	大狗鼻子	暴击率：5%<br>护盾：15	PART	75	101001	0	spr_nose
+101002	大狗眼	命中率：5%<br>护盾：15	PART	50	101002	0	spr_eye
+101003	大狗嘴	伤害：20<br>护盾：15	PART	50	101003	0	spr_mouth
 101004	小血药	恢复HP：25	HEAL	25	0	25	spr_default
 101005	中血药	恢复HP：30	HEAL	30	0	30	spr_default
 101006	大血药	恢复HP：35	HEAL	35	0	35	spr_default
