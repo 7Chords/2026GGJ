@@ -67,15 +67,15 @@ namespace GameCore.UI
         {
             Debug.Log("[UIPanelBattle] RefreshBattle");
             // 1. Setup HP Sliders
-            if (mono.sliderPlayerHp != null)
+            if (mono.imgHealthBar_player != null)
             {
-                mono.sliderPlayerHp.maxValue = GameModel.instance.playerMaxHealth;
-                mono.sliderPlayerHp.value = GameModel.instance.playerHealth;
+                mono.imgHealthBar_player.fillAmount = (float)GameModel.instance.playerMaxHealth / GameModel.instance.playerHealth;
+                mono.txtHealth_player.text = GameModel.instance.playerMaxHealth + "/" + GameModel.instance.playerHealth;
             }
-            if (mono.sliderEnemyHp != null && GameModel.instance.currentEnemy != null)
+            if (mono.imgHealthBar_enemy != null)
             {
-                mono.sliderEnemyHp.maxValue = GameModel.instance.currentEnemy.maxHealth;
-                mono.sliderEnemyHp.value = GameModel.instance.currentEnemy.currentHealth;
+                mono.imgHealthBar_enemy.fillAmount = (float)GameModel.instance.currentEnemy.currentHealth / GameModel.instance.currentEnemy.maxHealth;
+                mono.txtHealth_enemy.text = GameModel.instance.currentEnemy.currentHealth + "/" + GameModel.instance.currentEnemy.maxHealth;
             }
 
             // 2. Setup Faces logic
@@ -505,10 +505,22 @@ namespace GameCore.UI
         
         private void UpdateBattleUI()
         {
-            if (mono.sliderPlayerHp != null) mono.sliderPlayerHp.value = GameModel.instance.playerHealth;
-            if (mono.sliderEnemyHp != null && GameModel.instance.currentEnemy != null) 
-                mono.sliderEnemyHp.value = GameModel.instance.currentEnemy.currentHealth;
-                
+            //if (mono.sliderPlayerHp != null) mono.sliderPlayerHp.value = GameModel.instance.playerHealth;
+            //if (mono.sliderEnemyHp != null && GameModel.instance.currentEnemy != null) 
+            //    mono.sliderEnemyHp.value = GameModel.instance.currentEnemy.currentHealth;
+
+
+            // 1. Setup HP Sliders
+            if (mono.imgHealthBar_player != null)
+            {
+                mono.imgHealthBar_player.fillAmount = (float)GameModel.instance.playerMaxHealth / GameModel.instance.playerHealth;
+                mono.txtHealth_player.text = GameModel.instance.playerMaxHealth + "/" + GameModel.instance.playerHealth;
+            }
+            if (mono.imgHealthBar_enemy != null)
+            {
+                mono.imgHealthBar_enemy.fillAmount = (float)GameModel.instance.currentEnemy.currentHealth / GameModel.instance.currentEnemy.maxHealth;
+                mono.txtHealth_enemy.text = GameModel.instance.currentEnemy.currentHealth + "/" + GameModel.instance.currentEnemy.maxHealth;
+            }
             // Update Part Visuals (HP Text)
             if (_playerFacePanel != null) _playerFacePanel.RefreshParts();
             if (_enemyFacePanel != null) _enemyFacePanel.RefreshParts();

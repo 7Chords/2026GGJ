@@ -118,6 +118,8 @@ namespace GameCore.UI
 
         private void EnterEnemyLevel()
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
+
             List<EnemyRefObj> enemyRefList = SCRefDataMgr.instance.enemyRefList.refDataList;
             long id = enemyRefList[Random.Range(0, enemyRefList.Count)].id;
             GameModel.instance.rollEnemyId = id;
@@ -131,12 +133,15 @@ namespace GameCore.UI
 
         private void EnterBossLevel()
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
+            //GameModel.instance.rollEnemyId = id;
             // TODO: Enter Boss Level Logic
             UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
         }
 
         private void EnterShop()
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
             List<StoreRefObj> storeRefList = SCRefDataMgr.instance.storeRefList.refDataList;
             long id = storeRefList[Random.Range(0, storeRefList.Count)].id;
             GameModel.instance.rollStoreId = id;
