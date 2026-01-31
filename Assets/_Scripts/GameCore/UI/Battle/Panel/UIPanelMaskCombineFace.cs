@@ -67,6 +67,9 @@ namespace GameCore.UI
                 for(int i = mono.transform.childCount - 1; i >= 0; i--)
                 {
                     var child = mono.transform.GetChild(i);
+                    // Protect the prefab if it's a child
+                    if (mono.gridPrefab != null && child == mono.gridPrefab.transform) continue;
+                    
                     Object.Destroy(child.gameObject);
                 }
             }
@@ -80,6 +83,10 @@ namespace GameCore.UI
                  Debug.LogError($"[UIPanelMaskCombineFace] gridPrefab is null in {mono.gameObject.name}!");
                  return;
              }
+             
+             // Fallback defaults if 0
+             if (mono.rowCount == 0) mono.rowCount = 7;
+             if (mono.columnCount == 0) mono.columnCount = 4;
              
              Debug.Log($"[UIPanelMaskCombineFace] Creating Grids: Rows={mono.rowCount}, Cols={mono.columnCount}");
              
