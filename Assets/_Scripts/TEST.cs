@@ -1,42 +1,42 @@
-using GameCore;
-using GameCore.UI;
-using SCFrame;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+//using GameCore;
+//using GameCore.UI;
+//using SCFrame;
+//using System.Collections;
+//using System.Collections.Generic;
+//using UnityEngine;
 
-public class TEST : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
+//public class TEST : MonoBehaviour
+//{
+//    // Start is called before the first frame update
+//    void Start()
+//    {
         
-    }
+//    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.J))
-        {
-            UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCFrame.UI.SCUIShowType.FULL));
-        }
-        else if(Input.GetKeyDown(KeyCode.K))
-        {
-            GameModel.instance.rollStoreId = 103001;
-            UICoreMgr.instance.AddNode(new UINodeStore(SCFrame.UI.SCUIShowType.FULL));
-        }
-        else if (Input.GetKeyDown(KeyCode.L))
-        {
-            UICoreMgr.instance.AddNode(new UINodeMap(SCFrame.UI.SCUIShowType.FULL));
-        }
-        else if (Input.GetKeyDown(KeyCode.O))
-        {
-            GameModel.instance.rollEnemyId = 104001;
-            UICoreMgr.instance.AddNode(new UINodeBattleWin(SCFrame.UI.SCUIShowType.ADDITION));
-        }
-        else if (Input.GetKeyDown(KeyCode.I))
-        {
-            UICoreMgr.instance.AddNode(new UINodeDeck(SCFrame.UI.SCUIShowType.ADDITION));
-        }
-    }
-}
+//    // Update is called once per frame
+//    void Update()
+//    {
+//        if(Input.GetKeyDown(KeyCode.J))
+//        {
+//            UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCFrame.UI.SCUIShowType.FULL));
+//        }
+//        else if(Input.GetKeyDown(KeyCode.K))
+//        {
+//            GameModel.instance.rollStoreId = 103001;
+//            UICoreMgr.instance.AddNode(new UINodeStore(SCFrame.UI.SCUIShowType.FULL));
+//        }
+//        else if (Input.GetKeyDown(KeyCode.L))
+//        {
+//            UICoreMgr.instance.AddNode(new UINodeMap(SCFrame.UI.SCUIShowType.FULL));
+//        }
+//        else if (Input.GetKeyDown(KeyCode.O))
+//        {
+//            GameModel.instance.rollEnemyId = 104001;
+//            UICoreMgr.instance.AddNode(new UINodeBattleWin(SCFrame.UI.SCUIShowType.ADDITION));
+//        }
+//        else if (Input.GetKeyDown(KeyCode.I))
+//        {
+//            UICoreMgr.instance.AddNode(new UINodeDeck(SCFrame.UI.SCUIShowType.ADDITION));
+//        }
+//    }
+//}

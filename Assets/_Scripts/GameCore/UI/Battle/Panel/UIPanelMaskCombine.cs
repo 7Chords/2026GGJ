@@ -52,10 +52,6 @@ namespace GameCore.UI
             {
                 UICoreMgr.instance.AddNode(new UINodeDeck(SCFrame.UI.SCUIShowType.ADDITION));
             });
-
-
-            // Generate Enemy when entering the mask combine (preparation phase)
-            GameModel.instance.GenerateRandomEnemy();
             
             refreshShow();
         }

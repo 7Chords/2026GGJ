@@ -120,9 +120,8 @@ namespace GameCore.UI
         {
             AudioMgr.instance.PlaySfx("sfx_click");
 
-            List<EnemyRefObj> enemyRefList = SCRefDataMgr.instance.enemyRefList.refDataList;
-            long id = enemyRefList[Random.Range(0, enemyRefList.Count)].id;
-            GameModel.instance.rollEnemyId = id;
+            // Generate Enemy when entering the mask combine (preparation phase)
+            GameModel.instance.GenerateRandomEnemy();
             UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
         }
 

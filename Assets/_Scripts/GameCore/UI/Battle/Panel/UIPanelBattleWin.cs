@@ -41,7 +41,7 @@ namespace GameCore.UI
                 UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
 
             });
-            _m_enemyRefObj = SCRefDataMgr.instance.enemyRefList.refDataList.Find(x => x.id == GameModel.instance.rollEnemyId);
+            _m_enemyRefObj = SCRefDataMgr.instance.enemyRefList.refDataList.Find(x => x.id == GameModel.instance.currentEnemy.enemyRef.id);
             _m_winContainer?.ShowPanel();
             refreshShow();
         }
