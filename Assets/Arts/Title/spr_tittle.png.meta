@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -95,7 +95,28 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: spr_tittle_0
+      rect:
+        serializedVersion: 2
+        x: 2039
+        y: 1417
+        width: 1637
+        height: 255
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: edfcc5fb77fc4e5449cc0ed82793309e
+      internalID: -1771867993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -106,7 +127,15 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      spr_tittle_0: -1771867993
+      spr_tittle_1: -764685160
+      spr_tittle_2: 1506037947
+      spr_tittle_3: -189231280
+      spr_tittle_4: -1338426148
+      spr_tittle_5: 822331944
+      spr_tittle_6: -1578070949
+      spr_tittle_7: -1600883215
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

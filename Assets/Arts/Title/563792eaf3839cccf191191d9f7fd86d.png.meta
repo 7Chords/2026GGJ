@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: cfa5da1f07b0cef42977e28087004816
+guid: 2bb4777e6f682e84a8e36ee6eb4cf88c
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -95,28 +95,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: spr_start_button_0
-      rect:
-        serializedVersion: 2
-        x: 2390
-        y: 1111
-        width: 842
-        height: 67
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 16ff06f72d758f34a96323456c2926ef
-      internalID: 2067885267
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
@@ -127,16 +106,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      spr_start_button_0: 2067885267
-      spr_start_button_1: -592503267
-      spr_start_button_2: -2053914102
-      spr_start_button_3: -462572515
-      spr_start_button_4: 2008410423
-      spr_start_button_5: 1237945402
-      spr_start_button_6: 228768767
-      spr_start_button_7: 60823621
-      spr_start_button_8: 23253876
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

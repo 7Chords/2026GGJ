@@ -106,8 +106,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiMask: {fileID: 0}
   canvasGroup: {fileID: 3732223678577455298}
-  fadeInDuration: 0
-  fadeOutDuration: 0
+  fadeInDuration: 0.5
+  fadeOutDuration: 0.5
   scrollView: {fileID: 2114326476726038933}
 --- !u!114 &6471387246735022416
 MonoBehaviour:
