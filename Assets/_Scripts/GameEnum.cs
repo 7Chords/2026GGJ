@@ -23,6 +23,8 @@ namespace GameCore
         CRITICAL_CHANCE,//暴击率
         HIT_CHANCE,//命中率
         DEFEND,//护盾
-        HEALTH,//生命
+        HEALTH,//回血
+        REFLECT,//反射
+        SUCK,//吸血
     }
 }
