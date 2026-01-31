@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -95,7 +95,28 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: spr_restart_6
+      rect:
+        serializedVersion: 2
+        x: 1611
+        y: 641
+        width: 612
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e04e14d086b07b40b3cb7f8e293b531
+      internalID: -1422244674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -106,7 +127,14 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      spr_restart_0: -141587052
+      spr_restart_1: 1734353416
+      spr_restart_2: -1462469952
+      spr_restart_3: 1615874120
+      spr_restart_4: -1759699681
+      spr_restart_5: 152637889
+      spr_restart_6: -1422244674
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
