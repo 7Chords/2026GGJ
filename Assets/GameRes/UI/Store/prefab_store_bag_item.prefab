@@ -166,7 +166,6 @@ GameObject:
   - component: {fileID: 8972399171050778377}
   - component: {fileID: 5847666396976659232}
   - component: {fileID: 695161668178679605}
-  - component: {fileID: 4712060529637933557}
   - component: {fileID: 6613898271078217152}
   m_Layer: 5
   m_Name: prefab_store_bag_item
@@ -246,24 +245,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &4712060529637933557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6136648539061075631}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78c0c5e2746d8f044ac3c5e56f6d3086, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiMask: {fileID: 0}
-  canvasGroup: {fileID: 0}
-  fadeInDuration: 0
-  fadeOutDuration: 0
-  imgGoods: {fileID: 378263950761052782}
-  txtHealth: {fileID: 6958061118933925905}
 --- !u!114 &6613898271078217152
 MonoBehaviour:
   m_ObjectHideFlags: 0

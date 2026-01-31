@@ -31,8 +31,8 @@ namespace GameCore.UI
             
             int columns = 6; 
             int rows = 7;
-            
-            Transform parent = mono.transform; 
+
+            Transform parent = mono.transform;
             
             for (int i = 0; i < 42; i++)
             {

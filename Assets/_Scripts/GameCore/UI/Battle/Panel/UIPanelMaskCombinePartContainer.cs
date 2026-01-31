@@ -43,7 +43,7 @@ namespace GameCore.UI
 
         protected override GameObject creatItemGO()
         {
-            return ResourcesHelper.LoadGameObject(mono.prefabItemObjName);
+            return ResourcesHelper.LoadGameObject(mono.prefabItemObjName,mono.layoutGroup.transform);
         }
 
 
@@ -137,7 +137,6 @@ namespace GameCore.UI
                 {
                     GameObject itemGO = creatItemGO();
                     item = creatItemPanel(itemGO.GetComponent<UIMonoMaskCombinePartContainerItem>());
-                    itemGO.transform.SetParent(mono.layoutGroup.transform);
                     _m_partItemList.Add(item);
                 }
                 if (item == null)
@@ -176,7 +175,7 @@ namespace GameCore.UI
                 {
                     GameObject itemGO = creatItemGO();
                     item = creatItemPanel(itemGO.GetComponent<UIMonoMaskCombinePartContainerItem>());
-                    itemGO.transform.SetParent(mono.layoutGroup.transform);
+
                     _m_partItemList.Add(item);
                 }
                 if (item == null)

@@ -43,7 +43,7 @@ namespace GameCore.UI
 
         protected override GameObject creatItemGO()
         {
-            return ResourcesHelper.LoadGameObject(mono.prefabItemObjName);
+            return ResourcesHelper.LoadGameObject(mono.prefabItemObjName,mono.layoutGroup.transform);
 
         }
 
@@ -71,7 +71,7 @@ namespace GameCore.UI
                 {
                     GameObject itemGO = creatItemGO();
                     item = creatItemPanel(itemGO.GetComponent<UIMonoStoreBagItem>());
-                    itemGO.transform.SetParent(mono.layoutGroup.transform);
+
                     _m_itemList.Add(item);
                 }
                 if (item == null)
