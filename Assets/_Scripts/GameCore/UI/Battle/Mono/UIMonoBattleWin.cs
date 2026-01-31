@@ -12,6 +12,8 @@ namespace GameCore.UI
         public UIMonoCommonContainer monoContainer;
         [Header("金钱文本")]
         public Text txtMoney;
+        [Header("goto按钮")]
+        public Button btnGoto;
     }
 
 }

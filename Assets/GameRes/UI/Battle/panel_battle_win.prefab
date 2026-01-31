@@ -112,6 +112,7 @@ MonoBehaviour:
   fadeOutDuration: 0.25
   monoContainer: {fileID: 3701247619877853409}
   txtMoney: {fileID: 4613239457410364115}
+  btnGoto: {fileID: 6325391289070227481}
 --- !u!1 &3175509744948169404
 GameObject:
   m_ObjectHideFlags: 0
