@@ -261,6 +261,8 @@ MonoBehaviour:
   fadeOutDuration: 0.25
   btnStart: {fileID: 8837085146728909278}
   btnExit: {fileID: 692505098507962021}
+  scaleMouseEnter: 1.03
+  scaleChgDuration: 0.1
 --- !u!1 &6907117796816058221
 GameObject:
   m_ObjectHideFlags: 0
