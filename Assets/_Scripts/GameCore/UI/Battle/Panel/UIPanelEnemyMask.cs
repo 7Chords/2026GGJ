@@ -37,6 +37,8 @@ namespace GameCore.UI
             Transform parent = mono.content_grid != null ? mono.content_grid : mono.transform.Find("GridContainer");
             if (parent == null) parent = mono.transform;
             
+            Debug.Log($"[EnemyMask] Creating Grids: {columns}x{rows}, Disabled={(mono.disabledGrids!=null?mono.disabledGrids.Count:0)}");
+            
             for (int i = 0; i < columns * rows; i++)
             {
                 GameObject go = SCCommon.InstantiateGameObject(mono.gridPrefab, parent);
@@ -49,6 +51,23 @@ namespace GameCore.UI
                     int x = i % columns;
                     int y = i / columns;
                     gridMono.gridPos = new Vector2(x, y);
+                    
+                    if (mono.disabledGrids != null && mono.disabledGrids.Contains(new Vector2Int(x, y)))
+                    {
+                        if (gridMono.imgBg != null)
+                        {
+                            gridMono.imgBg.enabled = false; // Hide completely
+                        }
+                    }
+                    else
+                    {
+                         // Reset
+                         if (gridMono.imgBg != null)
+                         {
+                              gridMono.imgBg.enabled = true;
+                              // Respect prefab color
+                         }
+                    }
                     
                     mono.monoGridList.Add(gridMono);
                 }

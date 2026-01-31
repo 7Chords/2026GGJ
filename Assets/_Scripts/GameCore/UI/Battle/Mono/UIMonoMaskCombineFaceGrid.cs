@@ -2,18 +2,21 @@ using SCFrame.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GameCore.UI
 {
     public class UIMonoMaskCombineFaceGrid : _ASCUIMonoBase
     {
-        [Header("×ø±ê")]
+        [Header("ï¿½ï¿½ï¿½ï¿½")]
         public Vector2 gridPos;
-        [Header("Ä¬ÈÏÑÕÉ«")]
+        [Header("Ä¬ï¿½ï¿½ï¿½ï¿½É«")]
         public Color colorDefault;
-        [Header("¿ÉÒÔ·ÅÖÃµÄÑÕÉ«")]
+        [Header("ï¿½ï¿½ï¿½Ô·ï¿½ï¿½Ãµï¿½ï¿½ï¿½É«")]
         public Color colorCanPlace;
-        [Header("²»¿ÉÒÔ·ÅÖÃµÄÑÕÉ«")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½Ô·ï¿½ï¿½Ãµï¿½ï¿½ï¿½É«")]
         public Color colorCanNotPlace;
+
+        public Image imgBg;
     }
 }

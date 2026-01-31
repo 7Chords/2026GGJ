@@ -34,6 +34,8 @@ namespace GameCore.UI
 
             Transform parent = mono.transform;
             
+             Debug.Log($"[CombineFaceGrid] Disabled Grids Count: {(mono.disabledGrids!=null?mono.disabledGrids.Count:0)}");
+             
             for (int i = 0; i < columns * rows; i++)
             {
                 GameObject go = SCCommon.InstantiateGameObject(mono.gridPrefab, parent);
@@ -47,6 +49,27 @@ namespace GameCore.UI
                     int x = i % columns;
                     int y = i / columns;
                     gridMono.gridPos = new Vector2(x, y);
+                    
+                    if (mono.disabledGrids != null && mono.disabledGrids.Contains(new Vector2Int(x, y)))
+                    {
+                         // Using GetComponent<Image> safely just in case
+                         var img = go.GetComponent<UnityEngine.UI.Image>();
+                         //if (img == null && gridMono is UIMonoEnemyMaskGrid casted) img = casted.imgBg; // fallback try
+                         
+                         if (img != null) {
+                             img.enabled = false; // Hide completely
+                         }
+                    }
+                    else
+                    {
+                         // Default
+                         var img = go.GetComponent<UnityEngine.UI.Image>(); 
+                         if (img != null) {
+                             img.enabled = true;
+                             // Don't force color, verify prefab settings
+                             if (gridMono != null) gridMono.colorDefault = img.color; // Capture prefab color
+                         }
+                    }
                     
                     _m_gridList.Add(gridMono);
                 }

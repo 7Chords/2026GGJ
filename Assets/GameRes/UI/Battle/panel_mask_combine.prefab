@@ -1098,6 +1098,10 @@ MonoBehaviour:
   gridPrefab: {fileID: 6949152297723294458}
   columnCount: 4
   rowCount: 7
+  disabledGrids:
+  - {x: 3, y: 0}
+  - {x: 0, y: 6}
+  - {x: 3, y: 6}
 --- !u!1 &5390782702195404404
 GameObject:
   m_ObjectHideFlags: 0
@@ -2373,6 +2377,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6551300967387294209, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
+      propertyPath: imgBg
+      value: 
+      objectReference: {fileID: 8055919072032991137}
+    - target: {fileID: 6551300967387294209, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
       propertyPath: colorDefault.a
       value: 0.5019608
       objectReference: {fileID: 0}
@@ -2403,3 +2411,14 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2833186293798626533, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
   m_PrefabInstance: {fileID: 5125420586716993055}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8055919072032991137 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2949146822614954430, guid: af735c42e45a8ca459c07ef246bdaf87, type: 3}
+  m_PrefabInstance: {fileID: 5125420586716993055}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6949152297723294458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

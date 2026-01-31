@@ -10,5 +10,8 @@ namespace GameCore.UI
         public GameObject gridPrefab;
         public int columnCount;
         public int rowCount;
+        
+        [Header("禁用格子坐标列表")]
+        public List<Vector2Int> disabledGrids;
     }
 }

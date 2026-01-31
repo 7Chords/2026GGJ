@@ -10,7 +10,7 @@ namespace GameCore.UI
     public class UIPanelMaskCombineFace : _ASCUIPanelBase<UIMonoMaskCombineFace>
     {
         private List<GameObject> _spawnedParts = new List<GameObject>();
-        private List<UIMonoEnemyMaskGrid> _gridList = new List<UIMonoEnemyMaskGrid>(); // Assuming reusing EnemyMaskGrid or similar
+        private List<UIMonoMaskCombineFaceGrid> _gridList = new List<UIMonoMaskCombineFaceGrid>(); // Assuming reusing EnemyMaskGrid or similar
 
         public UIPanelMaskCombineFace(UIMonoMaskCombineFace _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
@@ -88,18 +88,36 @@ namespace GameCore.UI
              if (mono.rowCount == 0) mono.rowCount = 7;
              if (mono.columnCount == 0) mono.columnCount = 4;
              
-             Debug.Log($"[UIPanelMaskCombineFace] Creating Grids: Rows={mono.rowCount}, Cols={mono.columnCount}");
+             Debug.Log($"[UIPanelMaskCombineFace] Creating Grids: Rows={mono.rowCount}, Cols={mono.columnCount}, Disabled={(mono.disabledGrids!=null?mono.disabledGrids.Count:0)}");
              
              for(int y=0; y<mono.rowCount; y++)
              {
                  for(int x=0; x<mono.columnCount; x++)
                  {
                      GameObject go = SCCommon.InstantiateGameObject(mono.gridPrefab, mono.transform);
-                     var script = go.GetComponent<UIMonoEnemyMaskGrid>(); // reusing existing grid mono
+                     var script = go.GetComponent<UIMonoMaskCombineFaceGrid>(); // reusing existing grid mono
                      if (script != null)
                      {
                          script.gridPos = new Vector2(x, y);
                          // script.imgBg.color = Color.white; // Ensure white
+                         
+                         if (mono.disabledGrids != null && mono.disabledGrids.Contains(new Vector2Int(x, y)))
+                         {
+                             if (script.imgBg != null)
+                             {
+                                 script.imgBg.enabled = false; // Hide completely
+                             }
+                         }
+                         else
+                         {
+                             // Ensure default state if re-used or pooled
+                             if (script.imgBg != null)
+                             {
+                                 script.imgBg.enabled = true;
+                                 // Respect prefab color
+                             }
+                         }
+
                          _gridList.Add(script);
                      }
                      else

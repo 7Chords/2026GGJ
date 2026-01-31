@@ -114,6 +114,10 @@ MonoBehaviour:
   gridPrefab: {fileID: 8741165969833175402}
   btnClose: {fileID: 8166210391274114705}
   content_grid: {fileID: 5818406944141437465}
+  disabledGrids:
+  - {x: 3, y: 0}
+  - {x: 0, y: 6}
+  - {x: 3, y: 6}
 --- !u!1 &3234656959600742326
 GameObject:
   m_ObjectHideFlags: 0
