@@ -24,5 +24,7 @@ namespace GameCore.UI
         public float scaleMouseEnter;
         [Header("按钮的缩放时间")]
         public float scaleChgDuration;
+        [Header("血量文本")]
+        public Text txtHealth;
     }
 }

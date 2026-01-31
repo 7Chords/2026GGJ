@@ -19,5 +19,8 @@ namespace GameCore.UI
 
         [Header("查看敌人面具按钮")]
         public Button btnCheckEnemyMask;
+
+        [Header("牌堆按钮")]
+        public Button btnDeck;
     }
 }

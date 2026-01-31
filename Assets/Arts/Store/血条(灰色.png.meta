@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: afd3cd6ccbc501d4eb11d5f20644000b
+guid: 37ffd550a942ae245aed6842fd35b5a7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,55 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: spr_confirm_1
+      name: "\u8840\u6761(\u7070\u8272_0"
       rect:
         serializedVersion: 2
-        x: 79
-        y: 236
-        width: 373
-        height: 212
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 12bb434e2d6ec154b83f6b6f476613c3
-      internalID: -1858704660
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: spr_confirm_0
-      rect:
-        serializedVersion: 2
-        x: 78
-        y: 236
-        width: 373
-        height: 212
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 52ba42ab823bdf440be95955ba007ac6
-      internalID: 1763096431
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: spr_confirm_2
-      rect:
-        serializedVersion: 2
-        x: 79
-        y: 82
-        width: 373
-        height: 154
+        x: 1942
+        y: 1912
+        width: 1837
+        height: 112
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,8 +111,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e174a0fe241ec0149b2e952f29fb64e8
-      internalID: -117181089
+      spriteID: 21d69d55c80bc184ea8e6451215acb0c
+      internalID: -180048494
       vertices: []
       indices: 
       edges: []
@@ -170,9 +128,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      spr_confirm_0: 1763096431
-      spr_confirm_1: -1858704660
-      spr_confirm_2: -117181089
+      "\u8840\u6761(\u7070\u8272_0": -180048494
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

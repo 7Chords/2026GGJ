@@ -113,6 +113,8 @@ namespace GameCore.UI
             }
             mono.txtPlayerMoney.text = GameModel.instance.playerMoney.ToString();
             Tween healthTween = mono.imgHealthBar.DOFillAmount((float)GameModel.instance.playerHealth / GameModel.instance.playerMaxHealth, mono.healthBarFadeDuration);
+            _m_tweenContainer.RegDoTween(healthTween);
+            mono.txtHealth.text = GameModel.instance.playerHealth + "/" + GameModel.instance.playerMaxHealth;
         }
         private void onPurchaseGoods(object[] _objs)
         {
