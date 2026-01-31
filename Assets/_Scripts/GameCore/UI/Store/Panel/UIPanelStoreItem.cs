@@ -66,9 +66,30 @@ namespace GameCore.UI
         {
             if (_m_goodsInfo == null)
                 return;
+            refreshHasBuyShow();
+            refreshActiveShow();
             mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_goodsInfo.goodsRefObj.goodsSpriteObjName);
-            mono.txtAmount.text = _m_goodsInfo.goodsAmount.ToString();
-            mono.txtPrice.text = _m_goodsInfo.goodsRefObj.goodsPrice.ToString();
+            if (_m_goodsInfo.goodsRefObj.goodsType == EGoodsType.PART)
+            {
+                mono.txtPartPrice.text = _m_goodsInfo.goodsRefObj.goodsPrice.ToString();
+                PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == _m_goodsInfo.goodsRefObj.partId);
+                mono.txtPartHealth.text = partRefObj.partHealth.ToString();
+            }
+            else
+            {
+                mono.txtHealthPrice.text = _m_goodsInfo.goodsRefObj.goodsPrice.ToString();
+            }
+        }
+
+        private void refreshHasBuyShow()
+        {
+            mono.canvasGroup.alpha = _m_goodsInfo.goodsAmount == 0 ? mono.hasPurchaseAlpha : 1;
+        }
+        private void refreshActiveShow()
+        {
+            SCCommon.SetGameObjectEnable(mono.goIsPartShowList, _m_goodsInfo.goodsRefObj.goodsType == EGoodsType.PART);
+            SCCommon.SetGameObjectEnable(mono.goIsHealthShowList, _m_goodsInfo.goodsRefObj.goodsType == EGoodsType.HEAL);
+
         }
         private void onBtnPurchaseMouseEnter(PointerEventData _arg, object[] _objs)
         {

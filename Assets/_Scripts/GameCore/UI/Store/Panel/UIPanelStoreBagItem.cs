@@ -100,7 +100,7 @@ namespace GameCore.UI
 
         private void onBtnSellClickDown(PointerEventData arg1, object[] arg2)
         {
-
+            AudioMgr.instance.PlaySfx("sfx_money");
             GameCommon.DiscardToolTip();
             SCMsgCenter.SendMsg(SCMsgConst.SELL_PART, _m_partInfo);
         }
