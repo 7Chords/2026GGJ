@@ -82,6 +82,66 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c324981b16c8cb34ebd98a15d318b380
+    m_Address: spr_icon_nose_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 88a8420b803ee664ba54c84376346e6d
+    m_Address: spr_icon_nose_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d83ee42e2d5aae84bbedf3756a99c228
+    m_Address: spr_icon_nose_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5e38ad3f1c175db47b0283f4fec93eab
+    m_Address: spr_icon_nose_4
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7efff904b73e4d642a05bb5964435e0d
+    m_Address: spr_icon_mouth_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 89ee3f3a5bb02e34d9349e2a355a9863
+    m_Address: spr_icon_mouth_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ed680412725e3c43b750a4a6e17db33
+    m_Address: spr_icon_mouth_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 14fdde67ce0789b4bb5348e72cc62679
+    m_Address: spr_icon_mouth_4
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f59eba48b409a0d4f828f1fa3d2d3288
+    m_Address: spr_icon_eye_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6ad086d8216b1094193019f2e71c231e
+    m_Address: spr_icon_eye_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4b76c700b3a4a444fbd38988f73f702b
+    m_Address: spr_icon_eye_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b2c743f5bdbea9e408550e063e2d10f3
+    m_Address: spr_icon_eye_4
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e6ff67292e86232428a7beb839c4d36b, type: 2}
   m_SchemaSet:
