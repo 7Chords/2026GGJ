@@ -191,6 +191,8 @@ MonoBehaviour:
   txtAmount: {fileID: 313276586102071541}
   btnPurchase: {fileID: 616279272101900973}
   txtName: {fileID: 8161088008445342342}
+  scaleMouseEnter: 1.1
+  scaleChgDuration: 0.1
 --- !u!114 &616279272101900973
 MonoBehaviour:
   m_ObjectHideFlags: 0
