@@ -13,7 +13,7 @@ namespace GameCore
         public Vector2Int gridPos; // Grid Coordinates
         public int rotation; // 0, 1, 2, 3 (CCW 90 degrees steps)
         
-        public System.Func<Vector2> GetScreenPosEvent;
+        public System.Func<Transform> GetAnchorTransformEvent;
         
         public BasePartLogic logicObj; // 逻辑实例
 

@@ -78,7 +78,7 @@ namespace GameCore.UI
                     {
                         // Cleanup delegate
                         var info = item.GetPartInfo();
-                        if (info != null) info.GetScreenPosEvent = null;
+                        if (info != null) info.GetAnchorTransformEvent = null;
 
                         item.DestroySelf(); // Use public method instead of accessing protected mono
                         item.Discard(); 
@@ -206,17 +206,11 @@ namespace GameCore.UI
             }
 
             // Bind Logic Event for Position
-            // Bind Logic Event for Screen Position
-            part.GetScreenPosEvent = () => 
+            // Bind Logic Event for Anchor Transform
+            part.GetAnchorTransformEvent = () => 
             {
-                 if (itemGO != null)
-                 {
-                     Canvas c = itemGO.GetComponentInParent<Canvas>();
-                     Camera cam = null;
-                     if (c != null && c.renderMode != RenderMode.ScreenSpaceOverlay) cam = c.worldCamera;
-                     return RectTransformUtility.WorldToScreenPoint(cam, itemGO.transform.position);
-                 }
-                 return Vector2.zero;
+                 if (itemGO != null) return itemGO.transform;
+                 return null;
             };
 
             Debug.Log($"[UIPanelMaskCombineFace] Generated Item for {part.partRefObj?.partName} at {part.gridPos}");

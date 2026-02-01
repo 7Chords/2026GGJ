@@ -38,6 +38,22 @@ namespace GameCore
                 _screenPos);
             damageGO.GetComponent<DamageFloatText>().Initialize(_damage, true);
         }
+
+        public static void ShowDamageFloatText(int _damage, Transform _anchor)
+        {
+            Transform parent = _anchor != null ? _anchor.parent : SCGame.instance.topLayerRoot.transform;
+            GameObject damageGO = ResourcesHelper.LoadGameObject(
+                "prefab_damage_num",
+                parent);
+            
+            damageGO.transform.localPosition = Vector3.zero;
+            damageGO.transform.localScale = Vector3.one; // Ensure scale is reset
+            damageGO.transform.localRotation = Quaternion.identity; // Ensure rotation matches parent or is reset? 
+            // If parent is rotated, text will rotate. This might be desired or not.
+            // User requested "Parent to part", usually implies following its transform.
+            
+            damageGO.GetComponent<DamageFloatText>().Initialize(_damage, true);
+        }
         /// <summary>
         /// 展示治疗量飘字
         /// </summary>
@@ -60,6 +76,20 @@ namespace GameCore
             damageGO.GetRectTransform().localPosition = SCUICommon.ScreenPointToUIPoint(
                 SCGame.instance.topLayerRoot.GetRectTransform(),
                 _screenPos);
+            damageGO.GetComponent<DamageFloatText>().Initialize(_healAmount, false);
+        }
+
+        public static void ShowHealFloatText(int _healAmount, Transform _anchor)
+        {
+            Transform parent = _anchor != null ? _anchor : SCGame.instance.topLayerRoot.transform;
+            GameObject damageGO = ResourcesHelper.LoadGameObject(
+                "prefab_damage_num",
+                parent);
+            
+            damageGO.transform.localPosition = Vector3.zero;
+            damageGO.transform.localScale = Vector3.one;
+            damageGO.transform.localRotation = Quaternion.identity;
+
             damageGO.GetComponent<DamageFloatText>().Initialize(_healAmount, false);
         }
 
