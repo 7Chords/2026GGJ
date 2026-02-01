@@ -100,7 +100,7 @@ namespace GameCore.UI
             }
             
             if (mono.imgGoods != null)
-                mono.imgGoods.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
+                mono.imgGoods.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
             
             string hpStr = $"{_m_partInfo.currentHealth}/{_m_partInfo.partRefObj.partHealth}";
             
@@ -430,6 +430,7 @@ namespace GameCore.UI
                     mono.imgGoods.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
                     mono.imgGoods.rectTransform.sizeDelta = new Vector2(100f, 100f); 
                     mono.imgGoods.rectTransform.anchoredPosition = Vector2.zero;
+                    mono.imgGoods.rectTransform.pivot = new Vector2(0.5f, 0.5f);
                 }
                 
                 // 重置 GridPos，表示不再占用格子
