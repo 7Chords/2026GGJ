@@ -271,7 +271,7 @@ namespace GameCore.UI
         {
              // Close Battle, Open Combine
              // User request: "Wash back to pool... redraw... reset enemy"
-             GameModel.instance.PrepareNextBattleRound();
+             
              
              // Close Self
              UICoreMgr.instance.RemoveNode(nameof(UINodeBattle));
