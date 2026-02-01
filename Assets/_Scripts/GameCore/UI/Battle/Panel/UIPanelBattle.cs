@@ -285,7 +285,8 @@ namespace GameCore.UI
              UICoreMgr.instance.RemoveNode(nameof(UINodeBattle));
              
              // Open Combine
-             UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL)); 
+             UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
+            GameCommon.DiscardToolTip();
         }
         
         private void GoToMap()
