@@ -51,7 +51,7 @@ namespace GameCore
             _tweenContainer = new TweenContainer();
 
             mainVolumeFactor = 1;
-            bgmVolumeFactor = 0.5f;
+            bgmVolumeFactor = 0.25f;
             sfxVolumeFactor = 1;
         }
         public override void OnDiscard()

@@ -54,6 +54,7 @@ namespace GameCore
             if(SceneManager.GetActiveScene().name == "Release")
             {
                 UICoreMgr.instance.AddNode(new UINodeStart(SCFrame.UI.SCUIShowType.FULL));
+                AudioMgr.instance.PlayBgm("game_music");
             }
         }
     }
