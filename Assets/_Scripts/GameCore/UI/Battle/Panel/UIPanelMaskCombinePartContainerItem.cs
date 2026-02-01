@@ -876,10 +876,14 @@ namespace GameCore.UI
         }
 
 
+        public Vector3 DefaultScale { get; set; } = Vector3.one;
+
         private void onGameObjMouseExit(PointerEventData arg1, object[] arg2)
         {
+            
             GameCommon.DiscardToolTip();
-            _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(Vector3.one, mono.scaleChgDuration));
+            _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(DefaultScale, mono.scaleChgDuration));
+            //_m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
 
         }
 
@@ -908,7 +912,17 @@ namespace GameCore.UI
                 tooltip.SetPivot(showOnLeft ? new Vector2(1, 1) : new Vector2(0, 1));
             }*/
 
-            _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
+            // Relative Scaling: DefaultScale * HoverScale
+            // Assuming mono.scaleMouseEnter is a multiplier (e.g. 1.2)
+            // If it is absolute (e.g. 1.2), we might want: DefaultScale.x * mono.scaleMouseEnter
+            // Let's assume absolute for now but scaled by DefaultScale ratio? 
+            // Better: DefaultScale * 1.2f.
+            // But mono.scaleMouseEnter is likely 1.2f?
+            // If the user set 1.2 in Unity Inspector, using it as absolute is what they did.
+            // But for 0.7 item, 1.2 is HUGE.
+            // Let's use Relative: DefaultScale * mono.scaleMouseEnter.
+            
+            _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(DefaultScale * mono.scaleMouseEnter, mono.scaleChgDuration));
         }
         public void TriggerTurnEffect()
         {
@@ -934,7 +948,9 @@ namespace GameCore.UI
             {
                 tooltip.SetPivot(showOnLeft ? new Vector2(1, 1) : new Vector2(0, 1));
             }*/
-            _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(mono.scaleMouseEnter + 0.1f, mono.scaleChgDuration));
+            
+            // Relative Scaling
+            _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(DefaultScale * (mono.scaleMouseEnter + 0.1f), mono.scaleChgDuration));
         }
 
     }

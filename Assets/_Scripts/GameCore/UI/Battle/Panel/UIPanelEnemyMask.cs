@@ -177,12 +177,6 @@ namespace GameCore.UI
                 return;
             }
             
-            // Check if parts need layout (e.g. if they are all at 0,0 or marked as invalid)
-            // Assuming GameModel no longer does layout, or we force it here.
-            // But if we want to respect disabledGrids, we should probably regenerate or ensure it's valid.
-            // If GameModel already generated it avoiding collisions, we are good.
-            // But the user explicitly asked to "Add judgment in UIPanelEnemyMask".
-            // So we will Generate Layout here.
             GenerateLayout(enemyData);
             
             Debug.Log($"[EnemyGen] Displaying Enemy: {enemyData.enemyRef.enemyName}");
@@ -230,7 +224,7 @@ namespace GameCore.UI
             resultRot = 0;
             for (int i = 0; i < 50; i++)
             {
-                int rot = Random.Range(0, 4);
+                int rot = 0; // Forced to 0 as rotation is disabled
                 int x = Random.Range(0, 4);
                 int y = Random.Range(0, 7);
                 Vector2Int origin = new Vector2Int(x, y);
@@ -349,6 +343,7 @@ namespace GameCore.UI
             {
                 var itemPanel = new UIPanelMaskCombinePartContainerItem(itemMono, showType);
                 itemPanel.AfterInitialize();
+                itemPanel.DefaultScale = new Vector3(0.7f, 0.7f, 1f);
                 itemPanel.AddMouseEvent();
                 itemPanel.SetInfo(partInfo); 
                 
