@@ -147,7 +147,7 @@ namespace GameCore.UI
                     float pivotX = (float)(rotatedMidPos.x - minX + 0.5f) / widthCells;
                     float pivotY = (float)(rotatedMidPos.y - minY + 0.5f) / heightCells;
 
-                    mono.imgGoods.transform.localScale /= 0.7f;
+                    mono.imgGoods.transform.localScale = 1.4f * Vector3.one;
                     mono.imgGoods.rectTransform.pivot = new Vector2(pivotX, pivotY);
                     mono.imgGoods.SetNativeSize();
                     //mono.imgGoods.rectTransform.pivot = new Vector2(pivotX, 1 - pivotY);
