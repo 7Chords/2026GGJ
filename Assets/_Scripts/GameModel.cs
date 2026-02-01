@@ -55,7 +55,7 @@ namespace GameCore
                     continue;
                 info = new PartInfo(partRefObj);
                 // busyPartInfoList.Add(info); // Don't add to hand directly
-                // bagPartInfoList.Add(info); // Bag tracks ownership? Maybe.
+                bagPartInfoList.Add(info); // Bag tracks ownership? Maybe.
                 deckPartInfoList.Add(info);
 
             }

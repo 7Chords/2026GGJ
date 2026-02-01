@@ -45,6 +45,8 @@ namespace GameCore.UI
                         // Fallback: Create simple Red Circle
                         _playerIconGO = new GameObject("PlayerIcon");
                         var img = _playerIconGO.AddComponent<UnityEngine.UI.Image>();
+
+                        //TODO:WJW
                         img.color = Color.green;
                         // Assuming standard sprite exists or just color block
                     }
