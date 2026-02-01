@@ -133,8 +133,7 @@ namespace GameCore.UI
         private void EnterBossLevel()
         {
             AudioMgr.instance.PlaySfx("sfx_click");
-            //GameModel.instance.rollEnemyId = id;
-            // TODO: Enter Boss Level Logic
+            GameModel.instance.GenerateRandomEnemy();
             UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
         }
 

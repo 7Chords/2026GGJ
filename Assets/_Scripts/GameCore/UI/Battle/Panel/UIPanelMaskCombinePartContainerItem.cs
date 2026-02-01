@@ -934,7 +934,7 @@ namespace GameCore.UI
             {
                 tooltip.SetPivot(showOnLeft ? new Vector2(1, 1) : new Vector2(0, 1));
             }*/
-            _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
+            _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(mono.scaleMouseEnter + 0.1f, mono.scaleChgDuration));
         }
 
     }
