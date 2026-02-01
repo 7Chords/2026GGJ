@@ -29,6 +29,16 @@ namespace SCFrame
             return ScreenPointToUIPoint(_rt, screenPoint);
         }
 
+        public static Vector2 UIWorldToUIPoint(RectTransform _rt, Vector3 _worldPoint)
+        {
+            Camera cam = null;
+            Canvas c = _rt.GetComponentInParent<Canvas>();
+            if (c != null && c.renderMode != RenderMode.ScreenSpaceOverlay) cam = c.worldCamera;
+
+            Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(cam, _worldPoint);
+            return ScreenPointToUIPoint(_rt, screenPoint);
+        }
+
         public static string AddColorForRichText(string txt, Color color)
         {
             string richTextColor = "#" + ColorToString(color);

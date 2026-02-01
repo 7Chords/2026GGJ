@@ -19,6 +19,11 @@ namespace GameCore.Logic
         /// <param name="damage"></param>
         public virtual void OnTakeDamage(ref float damage) { }
 
+        public virtual void OnDamageTaken(float damage)
+        {
+             GameCore.GameCommon.ShowDamageFloatText((int)damage, partInfo.GetScreenPosEvent?.Invoke() ?? Vector2.zero);
+        }
+
         /// <summary>
         /// 部位破坏时的逻辑
         /// </summary>
