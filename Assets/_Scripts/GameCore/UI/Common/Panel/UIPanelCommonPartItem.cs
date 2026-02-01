@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
 namespace GameCore.UI
 {
     /// <summary>
-    /// 通用的部位itempanel
+    /// 通锟矫的诧拷位itempanel
     /// </summary>
     public class UIPanelCommonPartItem : _ASCUIPanelBase<UIMonoCommonPartItem>
     {
@@ -56,7 +56,7 @@ namespace GameCore.UI
         {
             if (_m_partInfo == null)
                 return;
-            mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
+            mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
             if(!mono.isTxtHealthIsRunningInfo)
                 mono.txtHealth.text =_m_partInfo.partRefObj.partHealth.ToString();
             else

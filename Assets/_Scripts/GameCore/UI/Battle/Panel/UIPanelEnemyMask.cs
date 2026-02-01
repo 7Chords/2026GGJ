@@ -271,7 +271,27 @@ namespace GameCore.UI
             {
                 var itemPanel = new UIPanelMaskCombinePartContainerItem(itemMono, showType);
                 itemPanel.AfterInitialize();
-                itemPanel.SetInfo(partInfo); // This triggers UI Refresh with HP!
+                itemPanel.SetInfo(partInfo); 
+                
+                // USER REQUEST: Match OnDragEnd logic (Init Visuals from data for Pivot/Size)
+                itemPanel.InitVisualsFromData();
+            }
+            
+            // Re-apply Transform settings (Scale/Rotation) AFTER InitVisuals might have reset them (e.g. scale to 1)
+            // Position: Local zero since parented to grid
+            itemGO.transform.localPosition = Vector3.zero;
+            
+            // Rotation
+            itemGO.transform.localRotation = Quaternion.Euler(0, 0, rot * 90);
+            
+            // Scale (Enemy Mask uses 0.7f)
+            itemGO.transform.localScale = new Vector3(0.7f, 0.7f, 1);
+            
+            // USER REQUEST: Set Sorting Order to 6
+            if (itemMono.imgCanvas != null)
+            {
+                itemMono.imgCanvas.overrideSorting = true;
+                itemMono.imgCanvas.sortingOrder = 6;
             }
         }
     }

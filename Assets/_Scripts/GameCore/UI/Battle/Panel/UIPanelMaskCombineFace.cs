@@ -193,38 +193,25 @@ namespace GameCore.UI
                 // Set Rotation
                 itemGO.transform.localRotation = Quaternion.Euler(0, 0, part.rotation * 90);
                 
-                // Init Visuals (Pivot/Size)
                 itemPanel.InitVisualsFromData();
             }
             else
             {
-                // _spawnedParts.Add(itemGO); // Removed (Compilation Error)
                 Debug.LogError("[UIPanelMaskCombineFace] Logic Error: Item Prefab missing Mono component");
             }
 
             Debug.Log($"[UIPanelMaskCombineFace] Generated Item for {part.partRefObj?.partName} at {part.gridPos}");
             
-            // itemGO.transform.localPosition = Vector3.zero; // Handled in InitVisualsFromData
-            // itemGO.transform.localRotation = ...; // Handled in if block above
-            
-            // ... (SnapToGrid or similar calls if needed, logic is inside SetInfo/Snap?)
-            // SetInfo updates sprite and text.
-            // But Position/Pivot is handled in SnapToGrid which is usually called on Drop.
-            // Here we are creating from data. We need to apply "Snap" logic or at least calculations.
-            // itemPanel.SnapToGrid(targetGrid.GetComponent<..>?) 
-            // Actually SetInfo just sets sprite.
-            // We should ensure visual alignment. 
-            // Reuse SnapToGrid logic? It requires drag info probably.
-            // Or just manually set Pivot/Size as per "Refining Placement Visuals"?
-            // We can call a method on itemPanel to "AlignToGrid(gridRect)".
-            
-            // Assuming simplified placement for now or user is happy with default instantiantion.
-            // Wait, previous task "Refining Placement Visuals" updated SnapToGrid.
-            // If we don't call it, it looks wrong?
-            // "When a part is placed, pivot... size...".
-            // We need to trigger that alignment.
-            //itemPanel.InitVisualsFromData(); // We might need to implement this or expose SnapToGrid logic.
+            // Re-apply Transform settings (Scale/Rotation) AFTER InitVisuals might have reset them
+            // itemGO.transform.localPosition = Vector3.zero; // InitVisuals handles this
             itemGO.transform.localScale = new Vector3(0.7f, 0.7f, 1); 
+            
+            // USER REQUEST: Set Sorting Order to 6
+            if (itemMono.imgCanvas != null)
+            {
+                itemMono.imgCanvas.overrideSorting = true;
+                itemMono.imgCanvas.sortingOrder = 6;
+            } 
             
             // Mark occupied grids as red
             if (part.partRefObj != null)
@@ -251,9 +238,9 @@ namespace GameCore.UI
             var partScript = itemGO.GetComponent<UIMonoMaskCombinePartContainerItem>();
             if (partScript != null && part.partRefObj != null)
             {
-                if (!string.IsNullOrEmpty(part.partRefObj.partSpriteObjName))
+                if (!string.IsNullOrEmpty(part.partRefObj.partGameObjectName))
                 {
-                     partScript.imgGoods.sprite = ResourcesHelper.LoadAsset<Sprite>(part.partRefObj.partSpriteObjName);
+                     partScript.imgGoods.sprite = ResourcesHelper.LoadAsset<Sprite>(part.partRefObj.partGameObjectName);
                 }
             }
         }

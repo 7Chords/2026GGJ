@@ -467,4 +467,4 @@ MonoBehaviour:
   txtHealth: {fileID: 6958061118933925905}
   scaleMouseEnter: 1.05
   scaleChgDuration: 0.1
-  canvasList: []
+  imgCanvas: {fileID: 1445584033295636015}

@@ -8,13 +8,15 @@ namespace GameCore.UI
 {
     public class UIMonoMaskCombinePartContainerItem : _ASCUIMonoBase
     {
-        [Header("ÉÌÆ·Í¼±ê")]
+        [Header("ï¿½ï¿½Æ·Í¼ï¿½ï¿½")]
         public Image imgGoods;
-        [Header("ÑªÁ¿ÎÄ±¾")]
+        [Header("Ñªï¿½ï¿½ï¿½Ä±ï¿½")]
         public Text txtHealth;
-        [Header("Êó±êÒÆÈëËõ·Å")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
         public float scaleMouseEnter;
-        [Header("Êó±êÒÆÈëËõ·ÅÊ±¼ä")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½")]
         public float scaleChgDuration;
+        
+        public Canvas imgCanvas;
     }
 }
