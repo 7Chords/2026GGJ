@@ -283,9 +283,10 @@ namespace GameCore.UI
              float pivotX = (float)(rotatedMidPos.x - minX + 0.5f) / widthCells;
              float pivotY = (float)(rotatedMidPos.y - minY + 0.5f) / heightCells;
              
-             rt.pivot = new Vector2(pivotX, 1-pivotY);
-             
-             float totalW = widthCells * unitW;
+             rt.pivot = new Vector2(pivotX, pivotY);
+             //rt.pivot = new Vector2(((float)_m_partInfo.partRefObj.midPos.x / widthCells)/2, ((float)_m_partInfo.partRefObj.midPos.y / heightCells)/2);
+
+            float totalW = widthCells * unitW;
              float totalH = heightCells * unitH;
              
              // Wait, Step 1424 I notified user "Implemented...".
@@ -312,7 +313,7 @@ namespace GameCore.UI
                      
                      // USER REQUEST: Multiply width and height (Use Calculated totalW/totalH from above)
                      // Remove SetNativeSize and Pivot Override to respect the Shape Bounds
-                      mono.imgGoods.rectTransform.pivot = new Vector2(0.5f, 0.5f);
+                      mono.imgGoods.rectTransform.pivot = new Vector2(pivotX, 1-pivotY);
                       mono.imgGoods.SetNativeSize();
                  }
             }
