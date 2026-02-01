@@ -202,6 +202,10 @@ namespace GameCore.UI
                         {
                             Debug.Log($"[Battle] Player Part {pPart.partRefObj.partName} Acting...");
                             if (pPart.logicObj != null) pPart.logicObj.OnTurnStart();
+                            
+                            // Visual Effect (Tooltip + Scale)
+                            if (_playerFacePanel != null) _playerFacePanel.TriggerPartEffect(pPart);
+                            
                             ExecuteAttackLogic(pPart, true, pGlobalCrit, pGlobalHit);
                             UpdateBattleUI(); // Update HP immediately
                             yield return new WaitForSeconds(1.0f); // Wait 1s
@@ -217,6 +221,10 @@ namespace GameCore.UI
                     {
                          Debug.Log($"[Battle] Enemy Part {ePart.partRefObj.partName} Acting...");
                         if (ePart.logicObj != null) ePart.logicObj.OnTurnStart();
+                        
+                        // Visual Effect (Tooltip + Scale)
+                        if (_enemyFacePanel != null) _enemyFacePanel.TriggerPartEffect(ePart);
+                        
                         ExecuteAttackLogic(ePart, false, eGlobalCrit, eGlobalHit);
                         UpdateBattleUI(); // Update HP immediately
                         yield return new WaitForSeconds(1.0f); // Wait 1s

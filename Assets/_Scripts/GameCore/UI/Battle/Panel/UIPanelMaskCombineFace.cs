@@ -21,6 +21,19 @@ namespace GameCore.UI
                 }
             }
         }
+        
+        public void TriggerPartEffect(PartInfo part)
+        {
+            if (_partItems == null || part == null) return;
+            foreach(var item in _partItems)
+            {
+                if (item != null && item.GetPartInfo() == part)
+                {
+                    item.TriggerTurnEffect();
+                    return;
+                }
+            }
+        }
 
       
         // ... Inside CreatePartItem ...

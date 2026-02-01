@@ -90,7 +90,7 @@ namespace GameCore.UI
 
             screenPos = RectTransformUtility.WorldToScreenPoint(cam, GetGameObject().transform.position + offset);
 
-            var tooltip = GameCommon.ShowTooltip(_m_partInfo.partRefObj.partName, _m_partInfo.partRefObj.partDesc, screenPos);
+            //var tooltip = GameCommon.ShowTooltip(_m_partInfo.partRefObj.partName, _m_partInfo.partRefObj.partDesc, screenPos);
             /*if (tooltip != null)
             {
                 tooltip.SetPivot(showOnLeft ? new Vector2(1, 1) : new Vector2(0, 1));
