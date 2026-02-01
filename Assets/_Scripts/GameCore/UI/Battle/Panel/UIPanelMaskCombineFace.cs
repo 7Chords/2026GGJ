@@ -192,6 +192,7 @@ namespace GameCore.UI
                 itemMono.useGameObjSpr = useGameObjSpr;
                 var itemPanel = new UIPanelMaskCombinePartContainerItem(itemMono, showType);
                 itemPanel.AfterInitialize();
+                itemPanel.AddMouseEvent(); // Ensure OnShowPanel is called to register events
                 itemPanel.SetInfo(part); 
                 _partItems.Add(itemPanel);
                 

@@ -68,6 +68,12 @@ namespace GameCore.UI
             GetGameObject().transform.AddMouseExit(onGameObjMouseExit);
         }
 
+        public void AddMouseEvent()
+        {
+            GetGameObject().transform.AddMouseEnter(onGameObjMouseEnter);
+            GetGameObject().transform.AddMouseExit(onGameObjMouseExit);
+        }
+
         public void SetInfo(PartInfo _info)
         {
             _m_partInfo = _info;
