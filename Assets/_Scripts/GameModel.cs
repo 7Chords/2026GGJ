@@ -189,7 +189,7 @@ namespace GameCore
             }
         }
 
-        public int initEnemyPartCount = 2; // Default 2 parts
+        public int initEnemyPartCount = 3; // Default 2 parts
         private List<Vector2Int> _cachedEnemyDisabledGrids;
 
         private void EnsureEnemyDisabledGridsLoaded()
