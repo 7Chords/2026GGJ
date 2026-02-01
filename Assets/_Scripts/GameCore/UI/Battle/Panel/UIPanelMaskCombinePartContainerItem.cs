@@ -281,7 +281,7 @@ namespace GameCore.UI
              float pivotX = (float)(rotatedMidPos.x - minX + 0.5f) / widthCells;
              float pivotY = (float)(rotatedMidPos.y - minY + 0.5f) / heightCells;
              
-             rt.pivot = new Vector2(pivotX, pivotY);
+             rt.pivot = new Vector2(pivotX, 1-pivotY);
              
              float totalW = widthCells * unitW;
              float totalH = heightCells * unitH;
@@ -563,6 +563,7 @@ namespace GameCore.UI
                 _m_dragCloneGO.transform.localPosition = localPoint;
 
             }
+
         }
         
         private Coroutine _dragLoopCoroutine;
