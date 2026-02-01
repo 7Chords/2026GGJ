@@ -37,7 +37,7 @@ namespace GameCore.UI
 
         public override string GetResName()
         {
-            return "panel_win";
+            return "panel_lose";
         }
 
         public override void OnEnterNode()
