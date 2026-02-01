@@ -23,6 +23,7 @@ namespace GameCore.UI
                 var faceGrid = new UIPanelMaskCombineFaceGrid(mono.monoFace, SCUIShowType.INTERNAL);
                 faceGrid.ShowPanel();
             }
+            
         }
 
         public override void BeforeDiscard()
@@ -37,6 +38,7 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            
             mono.btnConfirm.onClick.RemoveAllListeners();
             mono.btnConfirm.onClick.AddListener(OnConfirmClick);
 
@@ -45,7 +47,10 @@ namespace GameCore.UI
             mono.btnCheckEnemyMask.onClick.AddListener(() =>
             {
                 UICoreMgr.instance.AddNode(new UINodeEnemyMask(SCFrame.UI.SCUIShowType.ADDITION));
+                
             });
+            UICoreMgr.instance.AddNode(new UINodeEnemyMask(SCFrame.UI.SCUIShowType.ADDITION),false);
+            GameCommon.OnRequestInitializeEnemy?.Invoke();
 
             mono.btnDeck.onClick.RemoveAllListeners();
 
