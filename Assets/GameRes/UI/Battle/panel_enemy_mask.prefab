@@ -196,7 +196,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -571, y: -26}
+  m_AnchoredPosition: {x: -571, y: -67}
   m_SizeDelta: {x: 197.7849, y: 112.4139}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &486783057544530701
@@ -545,7 +545,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 742.79395, y: 1080}
+  m_SizeDelta: {x: 764.65, y: 1089.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6948187751882782575
 CanvasRenderer:
@@ -575,8 +575,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -973691653, guid: 8ae31873c0b808741b2764b478a04ecd, type: 3}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 4d5a941ebc3e0e74e88c2e70e16d77ea, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -792,8 +792,12 @@ PrefabInstance:
       value: prefab_enemy_mask_grid
       objectReference: {fileID: 0}
     - target: {fileID: 2949146822614954430, guid: f20b272ab1a641b4fac83337c8adac5c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: daa22c0aedc296b4eb0cb9957a8c0faa, type: 3}
+    - target: {fileID: 2949146822614954430, guid: f20b272ab1a641b4fac83337c8adac5c, type: 3}
       propertyPath: m_Color.a
-      value: 0.58431375
+      value: 0.5019608
       objectReference: {fileID: 0}
     - target: {fileID: 2949146822614954430, guid: f20b272ab1a641b4fac83337c8adac5c, type: 3}
       propertyPath: m_Color.b
