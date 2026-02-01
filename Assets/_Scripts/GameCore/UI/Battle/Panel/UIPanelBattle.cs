@@ -69,7 +69,7 @@ namespace GameCore.UI
             // 1. Setup HP Sliders
             if (mono.imgHealthBar_player != null)
             {
-                mono.imgHealthBar_player.fillAmount = (float)GameModel.instance.playerMaxHealth / GameModel.instance.playerHealth;
+                mono.imgHealthBar_player.fillAmount = (float)GameModel.instance.playerHealth / GameModel.instance.playerMaxHealth;
                 mono.txtHealth_player.text = GameModel.instance.playerHealth + "/" + GameModel.instance.playerMaxHealth;
             }
             if (mono.imgHealthBar_enemy != null)
@@ -519,7 +519,7 @@ namespace GameCore.UI
             if (mono.imgHealthBar_player != null)
             {
                 mono.imgHealthBar_player.fillAmount = (float)GameModel.instance.playerMaxHealth / GameModel.instance.playerHealth;
-                mono.txtHealth_player.text = GameModel.instance.playerMaxHealth + "/" + GameModel.instance.playerHealth;
+                mono.txtHealth_player.text = GameModel.instance.playerHealth + "/" + GameModel.instance.playerMaxHealth;
             }
             if (mono.imgHealthBar_enemy != null)
             {
