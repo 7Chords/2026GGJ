@@ -15,6 +15,7 @@ namespace GameCore.UI
 
         public override void AfterInitialize()
         {
+            GameModel.instance.PrepareNextBattleRound();
             _m_partContainer = new UIPanelMaskCombinePartContainer(mono.monoPartContainer);
             
             if (mono.monoFace != null)
