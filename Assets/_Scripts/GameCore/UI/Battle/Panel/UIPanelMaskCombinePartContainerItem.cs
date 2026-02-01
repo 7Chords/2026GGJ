@@ -100,7 +100,7 @@ namespace GameCore.UI
             }
             
             if (mono.imgGoods != null)
-                mono.imgGoods.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
+                mono.imgGoods.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
             
             string hpStr = $"{_m_partInfo.currentHealth}/{_m_partInfo.partRefObj.partHealth}";
             
@@ -237,14 +237,16 @@ namespace GameCore.UI
                 UpdateVisuals(gridRect);
             }
         }
+        
 
         private void UpdateVisuals(RectTransform gridRect)
         {
              if (mono.imgGoods == null) return;
              
              var rt = mono.imgGoods.rectTransform;
-             float unitW = (gridRect != null) ? gridRect.rect.width : 100f;
-             float unitH = (gridRect != null) ? gridRect.rect.height : 100f;
+             // Fix 0 size issue: Fallback to 100f if gridRect is null or has 0 size
+             float unitW = (gridRect != null && gridRect.rect.width > 0) ? gridRect.rect.width : 100f;
+             float unitH = (gridRect != null && gridRect.rect.height > 0) ? gridRect.rect.height : 100f;
              
              GetGameObject().transform.localPosition = Vector3.zero;
              
@@ -286,24 +288,6 @@ namespace GameCore.UI
              float totalW = widthCells * unitW;
              float totalH = heightCells * unitH;
              
-             // rt.sizeDelta = new Vector2(totalW, totalH); // User commented this out in Step 1431, respecting user change?
-             // Wait, Step 1431 user commented out sizeDelta and pivot lines.
-             // If I restore them, I might break what they tested. 
-             // But my Plan says "Refining Placement Visuals". 
-             // "Dynamic resizing...". 
-             // If user commented them out, maybe they found it buggy?
-             // But user request in Step 1421 was that I DID IT.
-             // Step 1431 was USER edit. User commented out lines 189 and 243.
-             // Why? "Refining Placement Visuals...".
-             // Maybe they rely on Scale? But Scale 0.7f is set in UIPanelMaskCombineFace line 223.
-             // If I set SizeDelta and Pivot, it works with Scale.
-             // However, if the User commented it out, I should be careful.
-             // But the prompt "InitVisualsFromData to align parts correctly" implies I should fix visuals.
-             // And User Request Step 1433 implies "Battle Logic".
-             // User Request Step 1571 implies "Hit/Crit...".
-             // Does user want Visuals? "The user's main goal... dynamically resizing...".
-             // I will UNCOMMENT them because `InitVisualsFromData` is necessary for the layout to look right, 
-             // and the user likely commented them out while debugging something else or due to previous issues I supposedly fixed.
              // Wait, Step 1424 I notified user "Implemented...".
              // Step 1430/1431 User commented them out.
              // If I uncomment them now, I might re-introduce what they hated?
@@ -318,12 +302,19 @@ namespace GameCore.UI
             // 确保 scale 正确
             GetGameObject().transform.localScale = Vector3.one; // Should be 1 if sizing manually
             
-            // USER REQUEST: Show game sprite when placed
+            // USER REQUEST: Show game sprite when placed (Using partGameObjectName as 'gameObjectSprite')
             if (_m_partInfo != null && _m_partInfo.partRefObj != null && !string.IsNullOrEmpty(_m_partInfo.partRefObj.partGameObjectName))
             {
                  Sprite gameSprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
                  if (gameSprite != null && mono.imgGoods != null)
+                 {
                      mono.imgGoods.sprite = gameSprite;
+                     
+                     // USER REQUEST: Multiply width and height (Use Calculated totalW/totalH from above)
+                     // Remove SetNativeSize and Pivot Override to respect the Shape Bounds
+                      mono.imgGoods.rectTransform.pivot = new Vector2(0.5f, 0.5f);
+                      mono.imgGoods.SetNativeSize();
+                 }
             }
         }
 

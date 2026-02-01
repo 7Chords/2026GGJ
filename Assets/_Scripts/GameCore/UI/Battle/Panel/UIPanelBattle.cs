@@ -289,8 +289,28 @@ namespace GameCore.UI
              //UICoreMgr.instance.RemoveNode(nameof(UINodeBattle));
              //UICoreMgr.instance.RemoveNode(nameof(UINodeMaskCombine));
 
-            //todo:如果是boss结束 打开通关界面 否则是战利品界面
-             UICoreMgr.instance.AddNode(new UINodeBattleWin(SCUIShowType.ADDITION));
+             // Check if Boss Battle
+             bool isBoss = false;
+             // Assuming MapManager exists and tracks nodes. Using safe access.
+             if (MapManager.instance != null && GameModel.instance != null)
+             {
+                 var node = MapManager.instance.GetNode(GameModel.instance.playerMapPosition.x,GameModel.instance.playerMapPosition.y);
+                 if (node != null && node.NodeType == RoomType.Boss)
+                 {
+                     isBoss = true;
+                 }
+             }
+
+             if (isBoss)
+             {
+                 Debug.Log("[Battle] Boss Defeated -> Game Win!");
+                 UICoreMgr.instance.AddNode(new UINodeWin(SCUIShowType.FULL)); // Game Clear
+             }
+             else
+             {
+                 Debug.Log("[Battle] Enemy Defeated -> Loot!");
+                 UICoreMgr.instance.AddNode(new UINodeBattleWin(SCUIShowType.ADDITION)); // Battle Win/Loot
+             }
         }
 
         private float CalculateGlobalAttribute(List<PartInfo> parts, EAttributeType type)
