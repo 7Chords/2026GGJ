@@ -252,16 +252,16 @@ namespace GameCore.UI
             if (pHp <= 0)
             {
                  Debug.Log("[Battle] Player Defeated -> Go Map (Loss)");
-                 GoToMap();
-                 return true;
+                UICoreMgr.instance.AddNode(new UINodeLose(SCUIShowType.FULL));
+                return true;
             }
             
             if (eHp <= 0 && GameModel.instance.currentEnemy != null)
             {
                  Debug.Log("[Battle] Enemy Defeated -> Go Map (Win)");
-                 // Normally Win -> Rewards -> Map? 
-                 // User says "Battle end go to map ui".
-                 GoToMap();
+                // Normally Win -> Rewards -> Map? 
+                // User says "Battle end go to map ui".
+                GoToMap();
                  return true;
             }
             return false;
@@ -286,9 +286,9 @@ namespace GameCore.UI
              // Ensure we clean up battle state (return parts, redraw, reset enemy) even on Win/Loss
              GameModel.instance.PrepareNextBattleRound();
              
-             UICoreMgr.instance.RemoveNode(nameof(UINodeBattle));
-             UICoreMgr.instance.RemoveNode(nameof(UINodeMaskCombine));
-             UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+             //UICoreMgr.instance.RemoveNode(nameof(UINodeBattle));
+             //UICoreMgr.instance.RemoveNode(nameof(UINodeMaskCombine));
+             UICoreMgr.instance.AddNode(new UINodeBattleWin(SCUIShowType.ADDITION));
         }
 
         private float CalculateGlobalAttribute(List<PartInfo> parts, EAttributeType type)
