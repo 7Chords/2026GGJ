@@ -104,11 +104,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageText: {fileID: 6152919722129367013}
   canvasGroup: {fileID: -7358500064349020852}
-  biggerDuration: 0.1
+  biggerDuration: 0.5
   floatDuration: 0.1
   fadeOutDuration: 0.1
   floatHeight: 20
-  stopDuration: 0.5
+  stopDuration: 1
   shakeStrength: 1
   shakeDuration: 0.1
   colorIsDamage: {r: 1, g: 0, b: 0, a: 1}

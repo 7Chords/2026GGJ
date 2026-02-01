@@ -21,7 +21,7 @@ namespace GameCore.Logic
 
         public virtual void OnDamageTaken(float damage)
         {
-             GameCore.GameCommon.ShowDamageFloatText((int)damage, partInfo.GetScreenPosEvent?.Invoke() ?? Vector2.zero);
+             GameCore.GameCommon.ShowDamageFloatText((int)damage, partInfo.GetAnchorTransformEvent?.Invoke());
         }
 
         /// <summary>
