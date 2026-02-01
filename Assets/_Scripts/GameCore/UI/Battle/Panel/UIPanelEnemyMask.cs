@@ -349,6 +349,7 @@ namespace GameCore.UI
             {
                 var itemPanel = new UIPanelMaskCombinePartContainerItem(itemMono, showType);
                 itemPanel.AfterInitialize();
+                itemPanel.AddMouseEvent();
                 itemPanel.SetInfo(partInfo); 
                 
                 // USER REQUEST: Match OnDragEnd logic (Init Visuals from data for Pivot/Size)
