@@ -41,7 +41,7 @@ namespace GameCore
 
         public static void ShowDamageFloatText(int _damage, Transform _anchor)
         {
-            Transform parent = _anchor != null ? _anchor.parent : SCGame.instance.topLayerRoot.transform;
+            Transform parent = _anchor != null ? _anchor.parent.parent : SCGame.instance.topLayerRoot.transform;
             GameObject damageGO = ResourcesHelper.LoadGameObject(
                 "prefab_damage_num",
                 parent);
@@ -51,7 +51,7 @@ namespace GameCore
             damageGO.transform.localRotation = Quaternion.identity; // Ensure rotation matches parent or is reset? 
             // If parent is rotated, text will rotate. This might be desired or not.
             // User requested "Parent to part", usually implies following its transform.
-            
+            damageGO.transform.SetParent(_anchor.parent.parent.parent,true);
             damageGO.GetComponent<DamageFloatText>().Initialize(_damage, true);
         }
         /// <summary>
