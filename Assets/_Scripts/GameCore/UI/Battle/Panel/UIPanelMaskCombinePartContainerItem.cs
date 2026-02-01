@@ -215,7 +215,6 @@ namespace GameCore.UI
                  {
                      // Placement Success
                      _m_partInfo.gridPos = logicalOrigin;
-                     _m_partInfo.rotation = _currentRotation; // Save rotation
 
                     //隐藏格子背景
                      GetGameObject().GetComponent<Image>().enabled = false;
@@ -319,14 +318,14 @@ namespace GameCore.UI
              
              if (_m_partInfo != null && _m_partInfo.partRefObj != null)
              {
-                 rotatedMidPos = RotateVector(_m_partInfo.partRefObj.midPos, _m_partInfo.rotation);
+                 rotatedMidPos = RotateVector(_m_partInfo.partRefObj.midPos,0);
              }
              
              if (shape != null && shape.Count > 0)
              {
                  foreach(var p in shape)
                  {
-                      Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), _m_partInfo.rotation);
+                      Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), 0);
                       if (rotatedP.x < minX) minX = rotatedP.x;
                       if (rotatedP.x > maxX) maxX = rotatedP.x;
                       if (rotatedP.y < minY) minY = rotatedP.y;
@@ -419,7 +418,7 @@ namespace GameCore.UI
             else
             {
                 var shape = (_m_partInfo.partRefObj != null) ? _m_partInfo.partRefObj.posList : null;
-                int rot = _m_partInfo.rotation; 
+                int rot = 0;
                 
                 if (shape != null && shape.Count > 0)
                 {
@@ -499,7 +498,6 @@ namespace GameCore.UI
                 if (_m_partInfo != null)
                 {
                     _m_partInfo.gridPos = new Vector2Int(-1, -1);
-                    _m_partInfo.rotation = 0;
                     
                     // Restore Sprite to Icon
                     if (_m_partInfo.partRefObj != null && mono.imgGoods != null)
@@ -544,9 +542,9 @@ namespace GameCore.UI
         private void createDragClone()
         {
             if (_m_dragCloneGO != null) return;
-            
+
             // 继承当前的旋转状态
-            _currentRotation = (_m_partInfo != null) ? _m_partInfo.rotation : 0;
+            _currentRotation = 0;
 
             // 创建克隆体
             _m_dragCloneGO = SCCommon.InstantiateGameObject(mono.imgGoods.gameObject, SCGame.instance.fullLayerRoot.transform);

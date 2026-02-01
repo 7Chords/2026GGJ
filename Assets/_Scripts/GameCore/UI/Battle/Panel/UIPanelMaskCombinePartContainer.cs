@@ -131,7 +131,7 @@ namespace GameCore.UI
                     foreach (var p in info.partRefObj.posList)
                     {
                          // Apply rotation !
-                         Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), info.rotation);
+                         Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), 0);
                          Vector2Int occupied = info.gridPos + rotatedP;
                          if (occupied == targetPos) return true;
                     }
@@ -170,7 +170,7 @@ namespace GameCore.UI
                     foreach (var p in info.partRefObj.posList) 
                     {
                         // Apply existing item's rotation
-                        Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), info.rotation);
+                        Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), 0);
                         existingOccupied.Add(info.gridPos + rotatedP);
                     }
                 }

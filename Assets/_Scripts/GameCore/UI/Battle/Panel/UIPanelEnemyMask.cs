@@ -193,7 +193,7 @@ namespace GameCore.UI
             foreach(var partInfo in enemyData.parts)
             {
                 // Mark occupancy
-                MarkOccupancy(occupiedGrid, partInfo.partRefObj, partInfo.gridPos, partInfo.rotation);
+                MarkOccupancy(occupiedGrid, partInfo.partRefObj, partInfo.gridPos, 0);
                 // Create UI
                 CreatePartItem(partInfo);
             }
@@ -215,7 +215,6 @@ namespace GameCore.UI
                  if (TryFindValidPlacement(occupiedGrid, part.partRefObj, out Vector2Int pos, out int rot))
                  {
                      part.gridPos = pos;
-                     part.rotation = rot;
                      MarkOccupancy(occupiedGrid, part.partRefObj, pos, rot);
                  }
                  else
@@ -302,7 +301,6 @@ namespace GameCore.UI
             if (mono.monoGridList == null || mono.monoGridList.Count == 0) return;
             
             Vector2Int gridPos = partInfo.gridPos;
-            int rot = partInfo.rotation;
             
             int index = gridPos.y * 4 + gridPos.x;
             if (index < 0 || index >= mono.monoGridList.Count) return;
@@ -322,12 +320,12 @@ namespace GameCore.UI
             itemGO.transform.localPosition = Vector3.zero;
             
             // Rotation
-            itemGO.transform.localRotation = Quaternion.Euler(0, 0, rot * 90);
+            itemGO.transform.localRotation = Quaternion.Euler(0, 0, 0);
             
             itemGO.transform.localScale = new Vector3(0.7f, 0.7f, 1);
             
             // Mark occupied grids as red
-            List<Vector2Int> shape = GetRotatedShape(partInfo.partRefObj, rot);
+            List<Vector2Int> shape = GetRotatedShape(partInfo.partRefObj, 0);
             foreach(var offset in shape)
             {
                 Vector2Int p = gridPos + offset;
@@ -362,7 +360,7 @@ namespace GameCore.UI
             itemGO.transform.localPosition = Vector3.zero;
             
             // Rotation
-            itemGO.transform.localRotation = Quaternion.Euler(0, 0, rot * 90);
+            itemGO.transform.localRotation = Quaternion.Euler(0, 0, 0);
             
             // Scale (Enemy Mask uses 0.7f)
             itemGO.transform.localScale = new Vector3(0.7f, 0.7f, 1);

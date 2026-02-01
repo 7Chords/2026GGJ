@@ -497,7 +497,7 @@ namespace GameCore.UI
              
              var shape = part.partRefObj.posList;
              Vector2Int origin = part.gridPos;
-             int rot = part.rotation;
+            int rot = 0;
              
              if (shape != null)
              {

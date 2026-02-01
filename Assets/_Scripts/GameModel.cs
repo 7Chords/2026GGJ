@@ -137,7 +137,6 @@ namespace GameCore
                     {
                         // Reset State
                         part.gridPos = new Vector2Int(-1, -1);
-                        part.rotation = 0;
                         deckPartInfoList.Add(part);
                     }
                     else
@@ -232,7 +231,6 @@ namespace GameCore
                 if (TryFindValidPlacement(occupiedGrid, part.partRefObj, out Vector2Int pos, out int rot))
                 {
                     part.gridPos = pos;
-                    part.rotation = rot;
                     MarkOccupancy(occupiedGrid, part.partRefObj, pos, rot);
                 }
                 else

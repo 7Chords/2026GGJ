@@ -196,7 +196,7 @@ namespace GameCore.UI
                 _partItems.Add(itemPanel);
                 
                 // Set Rotation
-                itemGO.transform.localRotation = Quaternion.Euler(0, 0, part.rotation * 90);
+                itemGO.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 
                 itemPanel.InitVisualsFromData();
             }
@@ -229,7 +229,7 @@ namespace GameCore.UI
             // Mark occupied grids as red
             if (part.partRefObj != null)
             {
-                List<Vector2Int> shape = GetRotatedShape(part.partRefObj, part.rotation);
+                List<Vector2Int> shape = GetRotatedShape(part.partRefObj, 0);
                 foreach(var offset in shape)
                 {
                     Vector2Int p = part.gridPos + offset;

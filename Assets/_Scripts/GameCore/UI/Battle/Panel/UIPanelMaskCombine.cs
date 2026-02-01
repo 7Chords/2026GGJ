@@ -109,7 +109,7 @@ namespace GameCore.UI
                 foreach(var p in info.partRefObj.posList)
                 {
                      // Apply rotation to shape offset
-                     Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), info.rotation);
+                     Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), 0);
                      int currentY = info.gridPos.y + rotatedP.y;
                      if (currentY > maxY) maxY = currentY;
                 }
@@ -127,7 +127,7 @@ namespace GameCore.UI
                 foreach(var p in info.partRefObj.posList)
                 {
                      // Apply rotation to shape offset
-                     Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), info.rotation);
+                     Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), 0);
                      int currentX = info.gridPos.x + rotatedP.x;
                      if (currentX < minX) minX = currentX;
                 }
