@@ -171,6 +171,14 @@ namespace GameCore.UI
                 return;
             }
             
+            // Check if parts need layout (e.g. if they are all at 0,0 or marked as invalid)
+            // Assuming GameModel no longer does layout, or we force it here.
+            // But if we want to respect disabledGrids, we should probably regenerate or ensure it's valid.
+            // If GameModel already generated it avoiding collisions, we are good.
+            // But the user explicitly asked to "Add judgment in UIPanelEnemyMask".
+            // So we will Generate Layout here.
+            GenerateLayout(enemyData);
+            
             Debug.Log($"[EnemyGen] Displaying Enemy: {enemyData.enemyRef.enemyName}");
 
             // 3. Placement Visualization
@@ -183,6 +191,70 @@ namespace GameCore.UI
                 // Create UI
                 CreatePartItem(partInfo);
             }
+        }
+
+        private void GenerateLayout(GameCore.EnemyData enemy)
+        {
+            // 6x7 Grid Logic (matching GameModel logic but using View data)
+             bool[,] occupiedGrid = new bool[4, 7];
+             
+             // Reset parts? Or try to place them? 
+             // We assume we need to place ALL parts.
+             
+             foreach (var part in enemy.parts)
+             {
+                 // Start fresh or keep? 
+                 // If we re-generate, we overlook previous positions.
+                 
+                 if (TryFindValidPlacement(occupiedGrid, part.partRefObj, out Vector2Int pos, out int rot))
+                 {
+                     part.gridPos = pos;
+                     part.rotation = rot;
+                     MarkOccupancy(occupiedGrid, part.partRefObj, pos, rot);
+                 }
+                 else
+                 {
+                      Debug.LogWarning($"[UIPanelEnemyMask] Could not fit enemy part {part.partRefObj.partName}");
+                 }
+             }
+        }
+        
+        private bool TryFindValidPlacement(bool[,] grid, GameCore.RefData.PartRefObj part, out Vector2Int resultPos, out int resultRot)
+        {
+            resultPos = Vector2Int.zero;
+            resultRot = 0;
+            for (int i = 0; i < 50; i++)
+            {
+                int rot = Random.Range(0, 4);
+                int x = Random.Range(0, 4);
+                int y = Random.Range(0, 7);
+                Vector2Int origin = new Vector2Int(x, y);
+                if (IsValidPlacement(grid, part, origin, rot))
+                {
+                    resultPos = origin;
+                    resultRot = rot;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool IsValidPlacement(bool[,] grid, GameCore.RefData.PartRefObj part, Vector2Int origin, int rot)
+        {
+            List<Vector2Int> shape = GetRotatedShape(part, rot);
+            foreach (var offset in shape)
+            {
+                Vector2Int p = origin + offset;
+                if (p.x < 0 || p.x >= 4 || p.y < 0 || p.y >= 7) return false;
+                if (grid[p.x, p.y]) return false;
+                
+                // Check Disabled Grids from Mono
+                if (mono.disabledGrids != null && mono.disabledGrids.Contains(p))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         
         // Helper methods for visual occupancy marking (same as before)
