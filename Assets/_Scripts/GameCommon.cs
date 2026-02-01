@@ -12,6 +12,8 @@ namespace GameCore
     public static class GameCommon
     {
 
+        public static System.Action OnRequestInitializeEnemy;
+
         private static GameObject _m_toolTipCache;
         /// <summary>
         /// 展示伤害飘字

@@ -17,6 +17,8 @@ namespace GameCore.UI
         public override void AfterInitialize()
         {
             CreateGrids();
+            GameCommon.OnRequestInitializeEnemy -= InitializeEnemy;
+            GameCommon.OnRequestInitializeEnemy += InitializeEnemy;
         }
 
         private void CreateGrids()
@@ -78,23 +80,27 @@ namespace GameCore.UI
 
         public override void BeforeDiscard()
         {
+            GameCommon.OnRequestInitializeEnemy -= InitializeEnemy;
             ClearItems();
         }
 
         public override void OnHidePanel()
         {
              mono.btnClose.onClick.RemoveAllListeners();
+             
         }
 
         public override void OnShowPanel()
         {
+            
+            
             mono.btnClose.onClick.RemoveAllListeners();
             mono.btnClose.onClick.AddListener(() =>
             {
                 // Use Manager to close properly so it can be reopened
                 UICoreMgr.instance.CloseTopNode();
             });
-            InitializeEnemy();
+            //InitializeEnemy(); // User commented this out, we rely on event.
         }
         
         private void ClearItems()
