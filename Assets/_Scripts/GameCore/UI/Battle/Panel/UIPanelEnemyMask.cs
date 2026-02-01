@@ -98,7 +98,7 @@ namespace GameCore.UI
             mono.btnClose.onClick.AddListener(() =>
             {
                 // Use Manager to close properly so it can be reopened
-                UICoreMgr.instance.CloseTopNode();
+                UICoreMgr.instance.HideNode(nameof(UINodeEnemyMask));
             });
             //InitializeEnemy(); // User commented this out, we rely on event.
         }
