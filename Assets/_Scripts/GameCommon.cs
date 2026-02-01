@@ -21,9 +21,21 @@ namespace GameCore
             GameObject damageGO = ResourcesHelper.LoadGameObject(
                 "prefab_damage_num",
                 SCGame.instance.topLayerRoot.transform);
-            damageGO.GetRectTransform().localPosition = SCUICommon.WorldPointToUIPoint(
+            damageGO.GetRectTransform().localPosition = SCUICommon.UIWorldToUIPoint(
                 SCGame.instance.topLayerRoot.GetRectTransform(),
                 _worldPos);
+            damageGO.GetComponent<DamageFloatText>().Initialize(_damage, true);
+            Debug.Break();
+        }
+
+        public static void ShowDamageFloatText(int _damage, Vector2 _screenPos)
+        {
+            GameObject damageGO = ResourcesHelper.LoadGameObject(
+                "prefab_damage_num",
+                SCGame.instance.topLayerRoot.transform);
+            damageGO.GetRectTransform().localPosition = SCUICommon.ScreenPointToUIPoint(
+                SCGame.instance.topLayerRoot.GetRectTransform(),
+                _screenPos);
             damageGO.GetComponent<DamageFloatText>().Initialize(_damage, true);
         }
         /// <summary>
@@ -34,9 +46,20 @@ namespace GameCore
             GameObject damageGO = ResourcesHelper.LoadGameObject(
                 "prefab_damage_num",
                 SCGame.instance.topLayerRoot.transform);
-            damageGO.GetRectTransform().localPosition = SCUICommon.WorldPointToUIPoint(
+            damageGO.GetRectTransform().localPosition = SCUICommon.UIWorldToUIPoint(
                 SCGame.instance.topLayerRoot.GetRectTransform(),
                 _worldPos);
+            damageGO.GetComponent<DamageFloatText>().Initialize(_healAmount, false);
+        }
+
+        public static void ShowHealFloatText(int _healAmount, Vector2 _screenPos)
+        {
+            GameObject damageGO = ResourcesHelper.LoadGameObject(
+                "prefab_damage_num",
+                SCGame.instance.topLayerRoot.transform);
+            damageGO.GetRectTransform().localPosition = SCUICommon.ScreenPointToUIPoint(
+                SCGame.instance.topLayerRoot.GetRectTransform(),
+                _screenPos);
             damageGO.GetComponent<DamageFloatText>().Initialize(_healAmount, false);
         }
 

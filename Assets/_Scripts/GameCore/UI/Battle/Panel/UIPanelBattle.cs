@@ -433,6 +433,11 @@ namespace GameCore.UI
                 target.currentHealth -= dmgInt;
             }
             
+            if (target != null && target.logicObj != null)
+            {
+                target.logicObj.OnDamageTaken(dmgInt);
+            }
+
             if (overflow > 0)
             {
                 Debug.Log($"[Battle] Trample! Overflow {overflow} to Body.");
