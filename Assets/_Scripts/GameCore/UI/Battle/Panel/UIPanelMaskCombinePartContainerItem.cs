@@ -104,6 +104,7 @@ namespace GameCore.UI
                 if(mono.useGameObjSpr)
                 {
                     mono.imgGoods.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
+                    mono.imgGoods.SetNativeSize();
                 }
                 else
                 {
