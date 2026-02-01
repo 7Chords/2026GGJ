@@ -55,13 +55,16 @@ namespace GameCore
                     continue;
                 info = new PartInfo(partRefObj);
                 // busyPartInfoList.Add(info); // Don't add to hand directly
-                bagPartInfoList.Add(info); // Bag tracks ownership? Maybe.
-                deckPartInfoList.Add(info);
-
+                bagPartInfoList.Add(info); 
+                // deckPartInfoList.Add(info); // Don't add to Deck manually, PrepareNextBattleRound handles it
             }
             
-            // Initial Draw
-            DrawParts(5);
+            Debug.Log($"[GameModel] OnInitialize Loop Done. Bag Count: {bagPartInfoList.Count}");
+
+            // Initial Setup using Unified Logic
+            PrepareNextBattleRound();
+            
+            Debug.Log($"[GameModel] OnInitialize Complete. Bag: {bagPartInfoList.Count}, Deck: {deckPartInfoList.Count}, Busy: {busyPartInfoList.Count}");
         }
 
         public void Heal(int _amount)
@@ -115,58 +118,39 @@ namespace GameCore
         {
             Debug.Log($"[GameModel] PrepareNextBattleRound Start. Deck: {deckPartInfoList.Count}, Busy: {busyPartInfoList.Count}, Battle: {playerBattleParts.Count}");
             
-            // 1. Process Finished Battle Parts (Return to Pool)
-            if (playerBattleParts != null)
+            // 1. Reset Lists
+            if (deckPartInfoList == null) deckPartInfoList = new List<PartInfo>();
+            else deckPartInfoList.Clear();
+            
+            if (busyPartInfoList == null) busyPartInfoList = new List<PartInfo>();
+            else busyPartInfoList.Clear();
+            
+            if (playerBattleParts == null) playerBattleParts = new List<PartInfo>();
+            else playerBattleParts.Clear(); // Just clear the reference list, parts are in Bag
+
+            // 2. Return All Living Parts from Bag to Deck
+            if (bagPartInfoList != null)
             {
-                foreach(var part in playerBattleParts)
+                foreach(var part in bagPartInfoList)
                 {
                     if (part.currentHealth > 0)
                     {
-                        if (!deckPartInfoList.Contains(part))
-                        {
-                            // Reset State
-                            part.gridPos = new Vector2Int(-1, -1);
-                            part.rotation = 0;
-                            deckPartInfoList.Add(part);
-                        }
+                        // Reset State
+                        part.gridPos = new Vector2Int(-1, -1);
+                        part.rotation = 0;
+                        deckPartInfoList.Add(part);
                     }
                     else
                     {
-                        if (deckPartInfoList.Contains(part))
-                        {
-                            deckPartInfoList.Remove(part);
-                        }
-                        Debug.Log($"[GameModel] Part {part.partRefObj.partName} is Dead/Broken. Removed from Deck.");
-                    }
-                    
-                    if (busyPartInfoList.Contains(part))
-                    {
-                        busyPartInfoList.Remove(part);
+                         Debug.Log($"[GameModel] Part {part.partRefObj.partName} is Dead/Broken. Remaining in Bag but not in Deck.");
                     }
                 }
-                playerBattleParts.Clear();
             }
             
-            // 2. Also return any other Busy parts (unused in hand) back to deck?
-            if (busyPartInfoList != null)
-            {
-                foreach(var part in busyPartInfoList)
-                {
-                    if (part.currentHealth > 0)
-                    {
-                        if (!deckPartInfoList.Contains(part))
-                        {
-                            deckPartInfoList.Add(part);
-                        }
-                    }
-                }
-                busyPartInfoList.Clear();
-            }
+            Debug.Log($"[GameModel] After Return - Deck: {deckPartInfoList.Count}");
             
-            Debug.Log($"[GameModel] After Return - Deck: {deckPartInfoList.Count}, Busy: {busyPartInfoList.Count}");
-            
-            // 3. Redraw
-            DrawParts(5);
+            // 3. Random Draw 3
+            DrawParts(3);
             
             Debug.Log($"[GameModel] After Draw - Deck: {deckPartInfoList.Count}, Busy: {busyPartInfoList.Count}");
             
