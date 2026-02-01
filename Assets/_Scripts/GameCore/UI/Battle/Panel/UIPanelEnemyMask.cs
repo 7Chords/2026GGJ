@@ -233,7 +233,9 @@ namespace GameCore.UI
             var targetGrid = mono.monoGridList[index];
 
             // Parent to the specific grid cell as requested
-            var itemGO = ResourcesHelper.LoadGameObject("prefab_mask_combine_part_item", targetGrid.transform); 
+            var itemGO = ResourcesHelper.LoadGameObject("prefab_mask_combine_part_item", targetGrid.transform);
+            UIMonoMaskCombinePartContainerItem item = itemGO.GetComponent<UIMonoMaskCombinePartContainerItem>();
+            item.useGameObjSpr = true;
             if (itemGO == null) return;
             
             _spawnedParts.Add(itemGO);

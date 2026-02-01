@@ -103,8 +103,54 @@ namespace GameCore.UI
             {
                 if(mono.useGameObjSpr)
                 {
+                    GetGameObject().GetComponent<Image>().enabled = false;
                     mono.imgGoods.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
+
+                    var rt = mono.imgGoods.rectTransform;
+                    RectTransform gridRect = GetGameObject().transform.parent?.GetComponent<RectTransform>();
+                    // Fix 0 size issue: Fallback to 100f if gridRect is null or has 0 size
+                    float unitW = (gridRect != null && gridRect.rect.width > 0) ? gridRect.rect.width : 100f;
+                    float unitH = (gridRect != null && gridRect.rect.height > 0) ? gridRect.rect.height : 100f;
+
+                    GetGameObject().transform.localPosition = Vector3.zero;
+
+                    // Calculate Shape Bounds and Rotated MidPos
+                    int minX = int.MaxValue, maxX = int.MinValue, minY = int.MaxValue, maxY = int.MinValue;
+                    var shape = (_m_partInfo != null && _m_partInfo.partRefObj != null) ? _m_partInfo.partRefObj.posList : null;
+                    Vector2Int rotatedMidPos = Vector2Int.zero;
+
+                    if (_m_partInfo != null && _m_partInfo.partRefObj != null)
+                    {
+                        rotatedMidPos = RotateVector(_m_partInfo.partRefObj.midPos, _m_partInfo.rotation);
+                    }
+
+                    if (shape != null && shape.Count > 0)
+                    {
+                        foreach (var p in shape)
+                        {
+                            Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), _m_partInfo.rotation);
+                            if (rotatedP.x < minX) minX = rotatedP.x;
+                            if (rotatedP.x > maxX) maxX = rotatedP.x;
+                            if (rotatedP.y < minY) minY = rotatedP.y;
+                            if (rotatedP.y > maxY) maxY = rotatedP.y;
+                        }
+                    }
+                    else
+                    {
+                        minX = rotatedMidPos.x; maxX = rotatedMidPos.x;
+                        minY = rotatedMidPos.y; maxY = rotatedMidPos.y;
+                    }
+
+                    int widthCells = maxX - minX + 1;
+                    int heightCells = maxY - minY + 1;
+
+                    float pivotX = (float)(rotatedMidPos.x - minX + 0.5f) / widthCells;
+                    float pivotY = (float)(rotatedMidPos.y - minY + 0.5f) / heightCells;
+
+                    mono.imgGoods.transform.localScale /= 0.7f;
+                    mono.imgGoods.rectTransform.pivot = new Vector2(pivotX, pivotY);
                     mono.imgGoods.SetNativeSize();
+                    //mono.imgGoods.rectTransform.pivot = new Vector2(pivotX, 1 - pivotY);
                 }
                 else
                 {
