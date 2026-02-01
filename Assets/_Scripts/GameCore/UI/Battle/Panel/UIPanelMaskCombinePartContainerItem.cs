@@ -910,5 +910,32 @@ namespace GameCore.UI
 
             _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
         }
+        public void TriggerTurnEffect()
+        {
+            if (_m_partInfo == null)
+                return;
+            Vector2 screenPos = Vector2.zero;
+            var _canvas = GetGameObject().GetComponentInParent<Canvas>();
+            Camera cam = (_canvas != null && _canvas.renderMode != RenderMode.ScreenSpaceOverlay) ? _canvas.worldCamera : null;
+
+            // Check direction
+            float itemScreenX = RectTransformUtility.WorldToScreenPoint(cam, GetGameObject().transform.position).x;
+            bool showOnLeft = itemScreenX > Screen.width * 0.7f; // If in right 30% of screen
+
+            // Offset based on direction
+            // Left: Pivot Right-Top (1,1) -> Anchor at (ItemX - border, ItemY)
+            // Right: Pivot Left-Top (0,1) -> Anchor at (ItemX + border, ItemY)
+            Vector3 offset = showOnLeft ? new Vector3(-40, -20, 0) : new Vector3(40, -20, 0);
+
+            screenPos = RectTransformUtility.WorldToScreenPoint(cam, GetGameObject().transform.position + offset);
+
+            //var tooltip = GameCommon.ShowTooltip(_m_partInfo.partRefObj.partName, _m_partInfo.partRefObj.partDesc, screenPos);
+            /*if (tooltip != null)
+            {
+                tooltip.SetPivot(showOnLeft ? new Vector2(1, 1) : new Vector2(0, 1));
+            }*/
+            _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
+        }
+
     }
 }
