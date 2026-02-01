@@ -37,6 +37,7 @@ namespace GameCore.UI
         {
             mono.btnGoto.onClick.AddListener(() =>
             {
+                AudioMgr.instance.PlaySfx("sfx_click");
                 UICoreMgr.instance.RemoveAllNodes(SCUINodeFuncType.BATTLE);
                 UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
 
