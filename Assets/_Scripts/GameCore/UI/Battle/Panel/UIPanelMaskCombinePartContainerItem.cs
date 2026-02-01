@@ -100,7 +100,17 @@ namespace GameCore.UI
             }
             
             if (mono.imgGoods != null)
-                mono.imgGoods.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
+            {
+                if(mono.useGameObjSpr)
+                {
+                    mono.imgGoods.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
+                }
+                else
+                {
+                    mono.imgGoods.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
+
+                }
+            }
             
             string hpStr = $"{_m_partInfo.currentHealth}/{_m_partInfo.partRefObj.partHealth}";
             

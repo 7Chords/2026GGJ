@@ -52,7 +52,7 @@ namespace GameCore.UI
             // Do nothing on default show, wait for Setup
         }
 
-        public void Setup(List<PartInfo> parts)
+        public void Setup(List<PartInfo> parts,bool useGameObjSpr)
         {
             Debug.Log($"[UIPanelMaskCombineFace] Setup with {parts?.Count} parts");
             ClearItems();
@@ -62,7 +62,7 @@ namespace GameCore.UI
             
             foreach(var part in parts)
             {
-                CreatePartItem(part);
+                CreatePartItem(part, useGameObjSpr);
             }
         }
         
@@ -153,7 +153,7 @@ namespace GameCore.UI
              mono.gridPrefab.SetActive(false);
         }
 
-        private void CreatePartItem(PartInfo part)
+        private void CreatePartItem(PartInfo part,bool useGameObjSpr)
         {
             if (_gridList == null || _gridList.Count == 0) 
             {
@@ -185,6 +185,7 @@ namespace GameCore.UI
             var itemMono = itemGO.GetComponent<UIMonoMaskCombinePartContainerItem>();
             if (itemMono != null)
             {
+                itemMono.useGameObjSpr = useGameObjSpr;
                 var itemPanel = new UIPanelMaskCombinePartContainerItem(itemMono, showType);
                 itemPanel.AfterInitialize();
                 itemPanel.SetInfo(part); 

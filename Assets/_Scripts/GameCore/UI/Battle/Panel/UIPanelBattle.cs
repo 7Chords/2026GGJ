@@ -83,7 +83,7 @@ namespace GameCore.UI
             {
                 var pParts = GameModel.instance.playerBattleParts;
                 Debug.Log($"[UIPanelBattle] Player Parts Count: {(pParts!=null?pParts.Count:0)}");
-                if (pParts != null) _playerFacePanel.Setup(pParts);
+                if (pParts != null) _playerFacePanel.Setup(pParts,true);
             }
             else
             {
@@ -94,7 +94,7 @@ namespace GameCore.UI
             {
                 var eParts = GameModel.instance.currentEnemy != null ? GameModel.instance.currentEnemy.parts : null;
                 Debug.Log($"[UIPanelBattle] Enemy Parts Count: {(eParts!=null?eParts.Count:0)}");
-                if (eParts != null) _enemyFacePanel.Setup(eParts);
+                if (eParts != null) _enemyFacePanel.Setup(eParts, true);
             }
             else
             {

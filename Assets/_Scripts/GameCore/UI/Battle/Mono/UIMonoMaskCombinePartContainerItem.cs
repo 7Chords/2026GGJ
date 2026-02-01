@@ -18,5 +18,6 @@ namespace GameCore.UI
         public float scaleChgDuration;
         
         public Canvas imgCanvas;
+        public bool useGameObjSpr;
     }
 }
