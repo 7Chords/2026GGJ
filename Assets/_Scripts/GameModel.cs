@@ -11,6 +11,7 @@ namespace GameCore
     /// </summary>
     public class GameModel : Singleton<GameModel>
     {
+        public bool needsRoundReset = false;
         public List<PartInfo> bagPartInfoList; //背包部位列表(玩家局外拥有的全部)
         public List<PartInfo> deckPartInfoList; //牌堆部位列表(在牌堆里但是玩家当前未持有的)
         public List<PartInfo> busyPartInfoList; //玩家当前持有的部位列表

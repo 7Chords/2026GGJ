@@ -284,6 +284,8 @@ namespace GameCore.UI
              // Close Self
              UICoreMgr.instance.RemoveNode(nameof(UINodeBattle));
              
+             GameModel.instance.needsRoundReset = true;
+             
              // Open Combine
              UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
             GameCommon.DiscardToolTip();

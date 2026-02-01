@@ -38,6 +38,21 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            if (GameModel.instance.needsRoundReset)
+            {
+                GameModel.instance.PrepareNextBattleRound();
+                GameModel.instance.needsRoundReset = false;
+                
+                // Clear Player Face Grid Visualization too
+                // Assuming faceGrid logic is handled by _m_partContainer or similar? 
+                // Wait, FaceGrid is separate?
+                // In AfterInitialize: var faceGrid = new UIPanelMaskCombineFaceGrid(...)
+                // But we don't store reference to faceGrid except locally!
+                // If FaceGrid retains state, we have a leak.
+                // Re-creating faceGrid here might be needed if it's not managed.
+                // BUT, faceGrid is usually just the BACKGROUND grid. 
+                // The PLACED PARTS are in _m_partContainer.
+            }
             
             mono.btnConfirm.onClick.RemoveAllListeners();
             mono.btnConfirm.onClick.AddListener(OnConfirmClick);
