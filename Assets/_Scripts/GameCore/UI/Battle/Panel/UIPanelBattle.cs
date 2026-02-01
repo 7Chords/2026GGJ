@@ -288,6 +288,8 @@ namespace GameCore.UI
              
              //UICoreMgr.instance.RemoveNode(nameof(UINodeBattle));
              //UICoreMgr.instance.RemoveNode(nameof(UINodeMaskCombine));
+
+            //todo:如果是boss结束 打开通关界面 否则是战利品界面
              UICoreMgr.instance.AddNode(new UINodeBattleWin(SCUIShowType.ADDITION));
         }
 
