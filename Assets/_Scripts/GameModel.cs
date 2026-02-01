@@ -191,68 +191,14 @@ namespace GameCore
 
         private void GenerateEnemyLayout(EnemyData enemy)
         {
-            // 6x7 Grid
-            bool[,] occupiedGrid = new bool[4, 7];
-
-            foreach (var part in enemy.parts)
-            {
-                if (TryFindValidPlacement(occupiedGrid, part.partRefObj, out Vector2Int pos, out int rot))
-                {
-                    part.gridPos = pos;
-                    part.rotation = rot;
-                    MarkOccupancy(occupiedGrid, part.partRefObj, pos, rot);
-                }
-                else
-                {
-                    Debug.LogWarning($"[GameModel] Could not fit enemy part {part.partRefObj.partName}");
-                }
-            }
-        }
-
-        // Copied helper methods from UIPanelEnemyMask (simplified)
-        private bool TryFindValidPlacement(bool[,] grid, GameCore.RefData.PartRefObj part, out Vector2Int resultPos,
-            out int resultRot)
-        {
-            resultPos = Vector2Int.zero;
-            resultRot = 0;
-            for (int i = 0; i < 50; i++)
-            {
-                int rot = Random.Range(0, 4);
-                int x = Random.Range(0, 4);
-                int y = Random.Range(0, 7);
-                Vector2Int origin = new Vector2Int(x, y);
-                if (IsValidPlacement(grid, part, origin, rot))
-                {
-                    resultPos = origin;
-                    resultRot = rot;
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private bool IsValidPlacement(bool[,] grid, GameCore.RefData.PartRefObj part, Vector2Int origin, int rot)
-        {
-            List<Vector2Int> shape = GetRotatedShape(part, rot);
-            foreach (var offset in shape)
-            {
-                Vector2Int p = origin + offset;
-                if (p.x < 0 || p.x >= 4 || p.y < 0 || p.y >= 7) return false;
-                if (grid[p.x, p.y]) return false;
-            }
-
-            return true;
-        }
-
-        private void MarkOccupancy(bool[,] grid, GameCore.RefData.PartRefObj part, Vector2Int origin, int rot)
-        {
-            List<Vector2Int> shape = GetRotatedShape(part, rot);
-            foreach (var offset in shape)
-            {
-                Vector2Int p = origin + offset;
-                grid[p.x, p.y] = true;
-            }
+             // Layout generation moved to UIPanelEnemyMask to access view configuration (disabled grids) directly.
+             // We just ensure parts list is ready.
+             // Initial positions will be (0,0) or invalid until UI initializes.
+             foreach(var part in enemy.parts)
+             {
+                 part.gridPos = new Vector2Int(-1, -1);
+                 part.rotation = 0;
+             }
         }
 
         private List<Vector2Int> GetRotatedShape(GameCore.RefData.PartRefObj part, int rot)

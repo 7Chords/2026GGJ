@@ -60,9 +60,103 @@ namespace GameCore.UI
             
             if (parts == null) return;
             
+            // Check if parts need layout (e.g. if they are all at -1,-1)
+            // This allows GameModel to just provide the list, and UI handles the constraints/layout.
+            bool needsLayout = false;
+            foreach(var p in parts)
+            {
+                if (p.gridPos.x < 0 || p.gridPos.y < 0)
+                {
+                    needsLayout = true;
+                    break;
+                }
+            }
+            
+            if (needsLayout)
+            {
+                GenerateLayout(parts);
+            }
+            
             foreach(var part in parts)
             {
                 CreatePartItem(part, useGameObjSpr);
+            }
+        }
+        
+        private void GenerateLayout(List<PartInfo> parts)
+        {
+             // 6x7 Grid or use Mono dimensions?
+             // Use Mono dimensions: mono.columnCount, mono.rowCount
+             int cols = mono.columnCount;
+             int rows = mono.rowCount;
+             
+             bool[,] occupiedGrid = new bool[cols, rows];
+             
+             foreach (var part in parts)
+             {
+                 if (TryFindValidPlacement(occupiedGrid, part.partRefObj, out Vector2Int pos, out int rot))
+                 {
+                     part.gridPos = pos;
+                     part.rotation = rot;
+                     MarkOccupancy(occupiedGrid, part.partRefObj, pos, rot);
+                 }
+                 else
+                 {
+                      Debug.LogWarning($"[UIPanelMaskCombineFace] Could not fit part {part.partRefObj.partName}");
+                 }
+             }
+        }
+        
+        private bool TryFindValidPlacement(bool[,] grid, GameCore.RefData.PartRefObj part, out Vector2Int resultPos, out int resultRot)
+        {
+            resultPos = Vector2Int.zero;
+            resultRot = 0;
+            // Configurable dimensions
+            int cols = mono.columnCount;
+            int rows = mono.rowCount;
+            
+            for (int i = 0; i < 50; i++)
+            {
+                int rot = Random.Range(0, 4);
+                int x = Random.Range(0, cols);
+                int y = Random.Range(0, rows);
+                Vector2Int origin = new Vector2Int(x, y);
+                if (IsValidPlacement(grid, part, origin, rot))
+                {
+                    resultPos = origin;
+                    resultRot = rot;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool IsValidPlacement(bool[,] grid, GameCore.RefData.PartRefObj part, Vector2Int origin, int rot)
+        {
+            List<Vector2Int> shape = GetRotatedShape(part, rot);
+            foreach (var offset in shape)
+            {
+                Vector2Int p = origin + offset;
+                if (p.x < 0 || p.x >= mono.columnCount || p.y < 0 || p.y >= mono.rowCount) return false;
+                if (grid[p.x, p.y]) return false;
+                
+                // Check Disabled Grids from Mono
+                if (mono.disabledGrids != null && mono.disabledGrids.Contains(p))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void MarkOccupancy(bool[,] grid, GameCore.RefData.PartRefObj part, Vector2Int origin, int rot)
+        {
+            List<Vector2Int> shape = GetRotatedShape(part, rot);
+            foreach (var offset in shape)
+            {
+                Vector2Int p = origin + offset;
+                if (p.x >= 0 && p.x < mono.columnCount && p.y >= 0 && p.y < mono.rowCount)
+                    grid[p.x, p.y] = true;
             }
         }
         

@@ -394,7 +394,7 @@ namespace GameCore.UI
         {
             // 1. Hit Check
             // Formula: Base 100% + Global Hit Bonus (Sum of all parts)
-            float finalHit = 60f + globalHit;
+            float finalHit = 0f + globalHit;
             
             if (Random.Range(0f, 100f) > finalHit) 
             {
