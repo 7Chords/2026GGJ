@@ -50,13 +50,16 @@ namespace GameCore
                 partEffectObj = playerRefObj.initPartList[i];
                 if (partEffectObj == null)
                     continue;
-                partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == partEffectObj.partId);
-                if (partRefObj == null)
-                    continue;
-                info = new PartInfo(partRefObj);
-                // busyPartInfoList.Add(info); // Don't add to hand directly
-                bagPartInfoList.Add(info); 
-                // deckPartInfoList.Add(info); // Don't add to Deck manually, PrepareNextBattleRound handles it
+                for(int j =0;j< partEffectObj.partAmount;j++)
+                {
+                    partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == partEffectObj.partId);
+                    if (partRefObj == null)
+                        continue;
+                    info = new PartInfo(partRefObj);
+                    // busyPartInfoList.Add(info); // Don't add to hand directly
+                    bagPartInfoList.Add(info);
+                    // deckPartInfoList.Add(info); // Don't add to Deck manually, PrepareNextBattleRound handles it
+                }
             }
             
             Debug.Log($"[GameModel] OnInitialize Loop Done. Bag Count: {bagPartInfoList.Count}");
@@ -149,7 +152,7 @@ namespace GameCore
             Debug.Log($"[GameModel] After Return - Deck: {deckPartInfoList.Count}");
             
             // 3. Random Draw 3
-            DrawParts(3);
+            DrawParts(4);
             
             Debug.Log($"[GameModel] After Draw - Deck: {deckPartInfoList.Count}, Busy: {busyPartInfoList.Count}");
             
