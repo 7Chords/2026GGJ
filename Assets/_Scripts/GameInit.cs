@@ -39,6 +39,7 @@ namespace GameCore
         public override void OnDiscard()
         {
             AudioMgr.instance.Discard();
+            MapManager.instance.Discard();
             UICoreMgr.instance.Discard();
             SCInputListener.instance.Discard();
             SCPoolMgr.instance.Discard();
@@ -46,7 +47,6 @@ namespace GameCore
             SCTaskHelper.instance.Discard();
             SCRefDataMgr.instance.Discard();
             GameModel.instance.Discard();
-            MapManager.instance.Discard();
         }
 
         private void startGame()
@@ -54,7 +54,7 @@ namespace GameCore
             if(SceneManager.GetActiveScene().name == "Release")
             {
                 UICoreMgr.instance.AddNode(new UINodeStart(SCFrame.UI.SCUIShowType.FULL));
-                AudioMgr.instance.PlayBgm("game_music");
+                AudioMgr.instance.PlayBgm("bgm_main_music");
             }
         }
     }

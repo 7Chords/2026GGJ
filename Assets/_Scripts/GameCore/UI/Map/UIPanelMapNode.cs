@@ -9,7 +9,7 @@ namespace GameCore.UI
     public class UIPanelMapNode : _ASCUIPanelBase<UIMonoMapNode>
     {
         private MapNode _m_mapNode;
-        private RoomType _m_roomType;
+        private ERoomType _m_roomType;
 
         public UIPanelMapNode(UIMonoMapNode _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
@@ -88,25 +88,25 @@ namespace GameCore.UI
 
             switch (_m_roomType)
             {
-                case RoomType.Enemy:
+                case ERoomType.ENEMY:
                     EnterEnemyLevel();
                     break;
-                case RoomType.Elite:
+                case ERoomType.ELITE:
                     EnterEliteLevel();
                     break;
-                case RoomType.Boss:
+                case ERoomType.BOSS:
                     EnterBossLevel();
                     break;
-                case RoomType.Shop:
+                case ERoomType.SHOP:
                     EnterShop();
                     break;
-                case RoomType.Rest:
+                case ERoomType.REST:
                     EnterRest();
                     break;
-                case RoomType.Treasure:
+                case ERoomType.TREASURE:
                     EnterTreasure();
                     break;
-                case RoomType.Event:
+                case ERoomType.EVENT:
                     EnterEvent();
                     break;
                 default:

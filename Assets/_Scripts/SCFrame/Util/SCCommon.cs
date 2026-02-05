@@ -9,13 +9,13 @@ using GameCore;
 namespace SCFrame
 {
     /// <summary>
-    /// һЩ������ȫ�ֵ�ͨ�÷���
+    /// 框架通用方法
     /// </summary>
     public static class SCCommon
     {
 
         /// <summary>
-        /// ������Ϸ�����Ƿ񱻼���
+        /// 设置物体显隐
         /// </summary>
         /// <param name="_obj"></param>
         /// <param name="_isEnable"></param>
@@ -27,7 +27,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// ������Ϸ�����Ƿ񱻼���
+        /// 设置物体显隐
         /// </summary>
         /// <param name="_objs"></param>
         /// <param name="_isEnable"></param>
@@ -41,7 +41,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// ������Ϸ�����Ƿ񱻼���
+        /// 设置物体显隐
         /// </summary>
         /// <param name="_objs"></param>
         /// <param name="_isEnable"></param>
@@ -55,7 +55,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// ������Ϸ����
+        /// 生成物体
         /// </summary>
         /// <param name="_obj"></param>
         /// <returns></returns>
@@ -68,7 +68,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// ������Ϸ����
+        /// 生成物体（传入父物体生成时就设置）
         /// </summary>
         /// <param name="_obj"></param>
         /// <returns></returns>
@@ -81,7 +81,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// ������Ϸ����
+        /// 销毁物体
         /// </summary>
         /// <param name="_obj"></param>
         public static void DestoryGameObject(GameObject _obj)
@@ -94,7 +94,7 @@ namespace SCFrame
 
 #if UNITY_EDITOR
         /// <summary>
-        /// �༭����ǰ�Ƿ���Ԥ����༭ģʽ
+        /// 是否处于预制体状态下
         /// </summary>
         /// <returns></returns>
         public static bool IsInPrefabStage()
@@ -106,7 +106,7 @@ namespace SCFrame
 #endif
 
         /// <summary>
-        /// �ַ���������float
+        /// 解析float
         /// </summary>
         /// <param name="_str"></param>
         /// <returns></returns>
@@ -121,7 +121,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// �ַ���������int
+        /// 解析int
         /// </summary>
         /// <param name="_str"></param>
         /// <returns></returns>
@@ -149,7 +149,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// �ַ���������long
+        /// 解析long
         /// </summary>
         /// <param name="_str"></param>
         /// <returns></returns>
@@ -169,7 +169,6 @@ namespace SCFrame
             List<T> list = new List<T>();
 
             string tempValue = _name;
-            //���б���ʶ
             if (tempValue == "*")
                 return list;
 
@@ -192,7 +191,6 @@ namespace SCFrame
             return list;
         }
 
-        // �����ֶ�ֵ
         public static object ParseValue(string _value, Type _type)
         {
             try
@@ -266,7 +264,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// �������Ч��obj
+        /// 解析效果obj
         /// </summary>
         /// <param name="_str"></param>
         /// <param name="_type"></param>

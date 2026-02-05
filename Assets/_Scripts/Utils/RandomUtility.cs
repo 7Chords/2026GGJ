@@ -2,42 +2,44 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ModuleType
+public enum EModuleType
 {
-    Map,
-    Combat,
-    Event,
-    Loot
+    MAP,
+    COMBAT,
+    EVENT,
+    LOOT
 }
 
-public class RandomUtility : MonoBehaviour
+namespace GameCore
 {
-
-    [SerializeField]
-    private string globalSeed = "2026GGJ";
-
-    private static Dictionary<ModuleType, System.Random> _randomGenerators = new Dictionary<ModuleType, System.Random>();
-
-    private void Awake()
+    public static class RandomUtility
     {
-        InitializeGenerators();
-    }
 
-    private void InitializeGenerators()
-    {
-        int seedHash = globalSeed.GetHashCode();
-        foreach (ModuleType type in Enum.GetValues(typeof(ModuleType)))
+        private const string _m_globalSeed = "FACEMASK";
+
+        private static Dictionary<EModuleType, System.Random> _randomGenerators = new Dictionary<EModuleType, System.Random>();
+
+        static RandomUtility()
         {
-            _randomGenerators[type] = new System.Random(seedHash + (int)type);
+            InitializeGenerators();
         }
-    }
 
-    public static System.Random GetRandomGenerator(ModuleType module)
-    {
-        if (!_randomGenerators.ContainsKey(module))
+        private static void InitializeGenerators()
         {
-            _randomGenerators[module] = new System.Random();
+            int seedHash = _m_globalSeed.GetHashCode();
+            foreach (EModuleType type in Enum.GetValues(typeof(EModuleType)))
+            {
+                _randomGenerators[type] = new System.Random(seedHash + (int)type);
+            }
         }
-        return _randomGenerators[module];
+
+        public static System.Random GetRandomGenerator(EModuleType module)
+        {
+            if (!_randomGenerators.ContainsKey(module))
+            {
+                _randomGenerators[module] = new System.Random();
+            }
+            return _randomGenerators[module];
+        }
     }
 }

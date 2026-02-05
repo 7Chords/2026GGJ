@@ -306,7 +306,7 @@ namespace GameCore.UI
              if (MapManager.instance != null && GameModel.instance != null)
              {
                  var node = MapManager.instance.GetNode(GameModel.instance.playerMapPosition.x,GameModel.instance.playerMapPosition.y);
-                 if (node != null && node.NodeType == RoomType.Boss)
+                 if (node != null && node.NodeType == ERoomType.BOSS)
                  {
                      isBoss = true;
                  }

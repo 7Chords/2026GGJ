@@ -27,4 +27,15 @@ namespace GameCore
         REFLECT,//·´Éä
         SUCK,//ÎüÑª
     }
+    public enum ERoomType
+    {
+        NONE,
+        ENEMY,
+        ELITE,
+        REST,
+        TREASURE,
+        SHOP,
+        EVENT,
+        BOSS,
+    }
 }

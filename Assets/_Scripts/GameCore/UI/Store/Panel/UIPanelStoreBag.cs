@@ -1,12 +1,8 @@
-using SCFrame.UI;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using SCFrame;
-using UnityEngine.EventSystems;
-using System;
 using DG.Tweening;
-using GameCore.RefData;
+using SCFrame;
+using SCFrame.UI;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace GameCore.UI
 {

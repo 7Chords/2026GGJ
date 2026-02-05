@@ -5,36 +5,34 @@ using SCFrame;
 using SCFrame.UI;
 using UnityEngine;
 
-public class MapManager : Singleton<MapManager>
+namespace GameCore
 {
-    public MapNode[,] CurrentMapNodes { get; private set; }
-
-    public override void OnInitialize()
+    public class MapManager : Singleton<MapManager>
     {
-        //UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
-    }
+        public MapNode[,] currentMapNodes { get; private set; }
 
-    public override void OnDiscard()
-    {
-        CurrentMapNodes = null;
-    }
+        public override void OnInitialize()
+        {
+        }
 
-    public void StartGameMap()
-    {
-        UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
-    }
+        public override void OnDiscard()
+        {
+            currentMapNodes = null;
+        }
 
-    public void SetMapData(MapNode[,] mapNodes)
-    {
-        CurrentMapNodes = mapNodes;
-        Debug.Log($"Map generated with {mapNodes.GetLength(0)} layers and {mapNodes.GetLength(1)} width.");
-    }
 
-    public MapNode GetNode(int x, int y)
-    {
-        if (CurrentMapNodes == null) return null;
-        if (x < 0 || x >= CurrentMapNodes.GetLength(0)) return null;
-        if (y < 0 || y >= CurrentMapNodes.GetLength(1)) return null;
-        return CurrentMapNodes[x, y];
+        public void SetMapData(MapNode[,] mapNodes)
+        {
+            currentMapNodes = mapNodes;
+            Debug.Log($"Map generated with {mapNodes.GetLength(0)} layers and {mapNodes.GetLength(1)} width.");
+        }
+
+        public MapNode GetNode(int x, int y)
+        {
+            if (currentMapNodes == null) return null;
+            if (x < 0 || x >= currentMapNodes.GetLength(0)) return null;
+            if (y < 0 || y >= currentMapNodes.GetLength(1)) return null;
+            return currentMapNodes[x, y];
+        }
     }
 }

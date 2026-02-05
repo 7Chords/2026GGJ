@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using GameCore.UI;
 using SCFrame;
 using SCFrame.UI;
+using GameCore;
 
 public class MapNode : MonoBehaviour
 {
@@ -35,7 +36,7 @@ public class MapNode : MonoBehaviour
     public bool isActive;
     public List<int> nextLayerConnectedNodes = new List<int>();
     
-    public RoomType NodeType { get; private set; }
+    public ERoomType NodeType { get; private set; }
     public Vector2Int GridPosition { get; private set; }
 
     [SerializeField]
@@ -56,7 +57,7 @@ public class MapNode : MonoBehaviour
         name = $"Node_{x}_{y}";
     }
 
-    public void SetMapNodeType(RoomType type)
+    public void SetMapNodeType(ERoomType type)
     {
         NodeType = type;
         UpdateVisuals();
@@ -73,26 +74,26 @@ public class MapNode : MonoBehaviour
         
         switch (NodeType)
         {
-            case RoomType.Enemy:
+            case ERoomType.ENEMY:
                 //nodeImage.color = enemyColor;
-                nodeImageName = "zhandoutub_1";
+                nodeImageName = "spr_icon_node_enemy";
                 break;
-            case RoomType.Elite:
+            case ERoomType.ELITE:
                 nodeImage.color = eliteColor;
                 break;
-            case RoomType.Rest:
+            case ERoomType.REST:
                 nodeImage.color = restColor;
                 break;
-            case RoomType.Shop:
+            case ERoomType.SHOP:
                 //nodeImage.color = shopColor;
-                nodeImageName = "shangdiantubiao_0";
+                nodeImageName = "spr_icon_node_shop";
                 break;
-            case RoomType.Treasure:
+            case ERoomType.TREASURE:
                 nodeImage.color = treasureColor;
                 break;
-            case RoomType.Boss:
+            case ERoomType.BOSS:
                 //nodeImage.color = bossColor;
-                nodeImageName = "bosstubiao_1";
+                nodeImageName = "spr_icon_node_boss";
                 break;
             default:
                 nodeImage.color = normalColor;
