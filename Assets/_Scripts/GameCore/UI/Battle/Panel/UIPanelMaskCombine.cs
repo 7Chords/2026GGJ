@@ -61,6 +61,7 @@ namespace GameCore.UI
             
             mono.btnCheckEnemyMask.onClick.AddListener(() =>
             {
+                AudioMgr.instance.PlaySfx("sfx_click");
                 UICoreMgr.instance.AddNode(new UINodeEnemyMask(SCFrame.UI.SCUIShowType.ADDITION));
                 
             });
@@ -71,6 +72,7 @@ namespace GameCore.UI
 
             mono.btnDeck.onClick.AddListener(() =>
             {
+                AudioMgr.instance.PlaySfx("sfx_click");
                 UICoreMgr.instance.AddNode(new UINodeDeck(SCFrame.UI.SCUIShowType.ADDITION));
             });
             
@@ -80,7 +82,8 @@ namespace GameCore.UI
         private void OnConfirmClick()
         {
             if (_m_partContainer == null) return;
-            
+            AudioMgr.instance.PlaySfx("sfx_click");
+
             // 1. 获取所有放置的部位
             List<PartInfo> placedParts = _m_partContainer.GetPlacedParts();
             if (placedParts == null || placedParts.Count == 0)
