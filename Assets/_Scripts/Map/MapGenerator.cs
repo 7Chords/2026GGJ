@@ -254,7 +254,7 @@ namespace GameCore
 
                         GameObject lineInstance = SCCommon.InstantiateGameObject(linePrefab, mapNodeParentRect);
                         SCCommon.SetGameObjectEnable(lineInstance,true);
-
+                        lineInstance.transform.SetAsFirstSibling();//设置为第一个元素 防止图层在node前面
                         SetNodeLinePosition(lineInstance, startPosition, endPosition);
                     }
                 }

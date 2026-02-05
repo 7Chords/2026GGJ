@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MapData
   m_EditorClassIdentifier: 
   layerCount: {x: 6, y: 5}
-  repetitionCount: 3
+  repetitionCount: 4
   roomProbabilities:
   - type: 1
     weight: 60
