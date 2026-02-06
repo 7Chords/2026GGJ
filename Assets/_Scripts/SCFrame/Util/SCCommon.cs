@@ -295,6 +295,11 @@ namespace SCFrame
                 effectObj = new PartEffectObj();
                 effectObj.Deserialize(_str);
             }
+            else if (_type == typeof(TrialRewardEffectObj))
+            {
+                effectObj = new TrialRewardEffectObj();
+                effectObj.Deserialize(_str);
+            }
             return effectObj;
 
         }

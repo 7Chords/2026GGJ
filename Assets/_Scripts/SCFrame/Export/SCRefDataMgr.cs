@@ -14,6 +14,8 @@ namespace GameCore
         public PlayerRefObj playerConfigRefObj = new PlayerRefObj(PlayerRefObj.assetPath, PlayerRefObj.sheetName);
         public SCRefDataList<EnemyRefObj> enemyRefList = new SCRefDataList<EnemyRefObj>(EnemyRefObj.assetPath, EnemyRefObj.sheetName);
         public SCRefDataList<PartLevelRefObj> partLevelRefList = new SCRefDataList<PartLevelRefObj>(PartLevelRefObj.assetPath, PartLevelRefObj.sheetName);
+        public SCRefDataList<TrialRefObj> trialRefList = new SCRefDataList<TrialRefObj>(TrialRefObj.assetPath, TrialRefObj.sheetName);
+        public SCRefDataList<TrialRewardRefObj> trialRewardRefList = new SCRefDataList<TrialRewardRefObj>(TrialRewardRefObj.assetPath, TrialRewardRefObj.sheetName);
 
         public override void OnInitialize()
         {
@@ -23,6 +25,8 @@ namespace GameCore
             playerConfigRefObj.readFromTxt();
             enemyRefList.readFromTxt();
             partLevelRefList.readFromTxt();
+            trialRefList.readFromTxt();
+            trialRewardRefList.readFromTxt();
         }
     }
 }
