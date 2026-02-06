@@ -319,7 +319,7 @@ namespace GameCore.UI
              
              // Calculate Shape Bounds and Rotated MidPos
              int minX = int.MaxValue, maxX = int.MinValue, minY = int.MaxValue, maxY = int.MinValue;
-             var shape = (_m_partInfo != null && _m_partInfo.partRefObj != null) ? _m_partInfo.partRefObj.posList : null;
+             var shape = (_m_partInfo != null && _m_partInfo.partRefObj != null) ? _m_partInfo.partRefObj.occupyPosList : null;
              Vector2Int rotatedMidPos = Vector2Int.zero;
              
              if (_m_partInfo != null && _m_partInfo.partRefObj != null)
@@ -423,7 +423,7 @@ namespace GameCore.UI
             }
             else
             {
-                var shape = (_m_partInfo.partRefObj != null) ? _m_partInfo.partRefObj.posList : null;
+                var shape = (_m_partInfo.partRefObj != null) ? _m_partInfo.partRefObj.occupyPosList : null;
                 int rot = 0;
                 
                 if (shape != null && shape.Count > 0)
@@ -688,7 +688,7 @@ namespace GameCore.UI
              logicalOrigin = hitPos - rotatedMidPos;
              
              // Check Validity of Region (All Shape cells must exist in Grid)
-             var shape = (_m_partInfo != null && _m_partInfo.partRefObj != null) ? _m_partInfo.partRefObj.posList : null;
+             var shape = (_m_partInfo != null && _m_partInfo.partRefObj != null) ? _m_partInfo.partRefObj.occupyPosList : null;
              
              // Get all Grids in parent to verify existence
              // Optimization: pass gridContainer if possible, but getting from hitGrid is safe

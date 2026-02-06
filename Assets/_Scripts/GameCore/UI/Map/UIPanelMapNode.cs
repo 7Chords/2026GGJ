@@ -34,12 +34,32 @@ namespace GameCore.UI
 
         private void RefreshShow()
         {
-            // TODO: 根据 RoomType 加载对应的图标
-            // string iconPath = "Path/To/Icon_" + _m_roomType.ToString();
-            // mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>(iconPath);
-            
-            // 暂时为空或默认逻辑
-            // Debug.Log($"Node {_m_mapNode.GridPosition} Type: {_m_roomType}");
+            if (_m_mapNode == null)
+                return;
+            switch (_m_roomType)
+            {
+                case ERoomType.NONE:
+                    break;
+                case ERoomType.ENEMY:
+                    {
+                        mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>("spr_icon_node_enemy");
+                    }
+                    break;
+                case ERoomType.TRIAL:
+                    break;
+                case ERoomType.SHOP:
+                    {
+                        mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>("spr_icon_node_shop");
+                    }
+                    break;
+                case ERoomType.EVENT:
+                    break;
+                case ERoomType.BOSS:
+                    {
+                        mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>("spr_icon_node_boss");
+                    }
+                    break;
+            }
         }
 
         private void OnClickEnter()
@@ -53,7 +73,7 @@ namespace GameCore.UI
             {
                 if (targetPos.x != 0) 
                 {
-                    Debug.Log("Must start at Layer 0!");
+                    SCDebugHelper.Log("Must start at Layer 0!");
                     return;
                 }
             }
@@ -63,7 +83,7 @@ namespace GameCore.UI
                 // Check Layer (Must be Next Layer)
                 if (targetPos.x != playerPos.x + 1)
                 {
-                    Debug.Log($"Can only move to Next Layer! Current: {playerPos.x}, Target: {targetPos.x}");
+                    SCDebugHelper.Log($"Can only move to Next Layer! Current: {playerPos.x}, Target: {targetPos.x}");
                     return;
                 }
 
@@ -74,7 +94,7 @@ namespace GameCore.UI
                 {
                     if (!prevNode.nextLayerConnectedNodes.Contains(targetPos.y))
                     {
-                         Debug.Log("Not connected!");
+                        SCDebugHelper.Log("Not connected!");
                          return;
                     }
                 }
@@ -91,20 +111,14 @@ namespace GameCore.UI
                 case ERoomType.ENEMY:
                     EnterEnemyLevel();
                     break;
-                case ERoomType.ELITE:
-                    EnterEliteLevel();
-                    break;
                 case ERoomType.BOSS:
                     EnterBossLevel();
                     break;
                 case ERoomType.SHOP:
                     EnterShop();
                     break;
-                case ERoomType.REST:
-                    EnterRest();
-                    break;
-                case ERoomType.TREASURE:
-                    EnterTreasure();
+                case ERoomType.TRIAL:
+                    EnterTrial();
                     break;
                 case ERoomType.EVENT:
                     EnterEvent();
@@ -125,11 +139,6 @@ namespace GameCore.UI
             UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
         }
 
-        private void EnterEliteLevel()
-        {
-            // TODO: Enter Elite Level Logic
-        }
-
         private void EnterBossLevel()
         {
             AudioMgr.instance.PlaySfx("sfx_click");
@@ -146,12 +155,7 @@ namespace GameCore.UI
             UICoreMgr.instance.AddNode(new UINodeStore(SCUIShowType.FULL));
         }
 
-        private void EnterRest()
-        {
-            // TODO: Enter Rest Logic
-        }
-
-        private void EnterTreasure()
+        private void EnterTrial()
         {
             // TODO: Enter Treasure Logic
         }

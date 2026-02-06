@@ -301,9 +301,9 @@ namespace GameCore
         private List<Vector2Int> GetRotatedShape(GameCore.RefData.PartRefObj part, int rot)
         {
             List<Vector2Int> list = new List<Vector2Int>();
-            if (part.posList != null)
+            if (part.occupyPosList != null)
             {
-                foreach (var pObj in part.posList)
+                foreach (var pObj in part.occupyPosList)
                 {
                     Vector2Int p = new Vector2Int(pObj.x, pObj.y);
                     for (int k = 0; k < rot; k++) p = new Vector2Int(-p.y, p.x);

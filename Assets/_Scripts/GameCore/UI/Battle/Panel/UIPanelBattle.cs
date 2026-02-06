@@ -506,7 +506,7 @@ namespace GameCore.UI
              List<Vector2Int> grids = new List<Vector2Int>();
              if (part == null) return grids;
              
-             var shape = part.partRefObj.posList;
+             var shape = part.partRefObj.occupyPosList;
              Vector2Int origin = part.gridPos;
             int rot = 0;
              

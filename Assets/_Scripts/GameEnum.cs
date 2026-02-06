@@ -9,6 +9,7 @@ namespace GameCore
         EYE,
         NOSE,
         MOUTH,
+        SKIN,
     }
 
     public enum EGoodsType
@@ -26,16 +27,32 @@ namespace GameCore
         HEALTH,//回血
         REFLECT,//反射
         SUCK,//吸血
+        TRIGGER_DOUBLE,//触发两次
+        ATTACK_DOUBLE,//攻击两次
+        HIT_CHANCE_UP,//命中率上升
+        HIT_CHANCE_DOWN,//命中率下降
+        TRIGGER_CHANCE_UP,//触发上升
+        HEAL_PART,//给部位回血
+        CLEAR_DEFULL,//清除负面效果
+        CLEAR_BAD_SKIN,//清楚坏的皮肤
+        PENETRATE,//穿透
+        PART_LOSE_TURN,//部位无法行动
     }
     public enum ERoomType
     {
         NONE,
         ENEMY,
-        ELITE,
-        REST,
-        TREASURE,
         SHOP,
         EVENT,
         BOSS,
+        TRIAL,
     }
+
+    public enum EQualityType
+    {
+        NORMAL,//普通的
+        RARE,//稀有的
+        PRECIOUS,//珍贵的
+    }
+
 }

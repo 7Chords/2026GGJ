@@ -9,6 +9,7 @@ namespace GameCore.RefData
         public long id;
         public string partName;
         public EPartType partType;
+        public EQualityType qualityType;
         public int partHealth;
         public string partDesc;
         public string partSpriteObjName;
@@ -16,7 +17,8 @@ namespace GameCore.RefData
         public Vector2Int midPos;
         public string logicClassName; // Logic Class Name
         public List<EntryEffectObj> entryList;
-        public List<PosEffectObj> posList;
+        public List<PosEffectObj> occupyPosList;
+        public List<PosEffectObj> effectPosList;
 
         public PartRefObj()
         {
@@ -31,13 +33,15 @@ namespace GameCore.RefData
             id = getLong("id");
             partName = getString("partName");
             partType = (EPartType)getEnum("partType",typeof(EPartType));
+            qualityType = (EQualityType)getEnum("qualityType", typeof(EQualityType));
             partHealth = getInt("partHealth");
             partDesc = getString("partDesc");
             partSpriteObjName = getString("partSpriteObjName");
             partGameObjectName = getString("partGameObjectName");
             entryList = getList<EntryEffectObj>("entryList");
-            posList = getList<PosEffectObj>("posList");
-            
+            occupyPosList = getList<PosEffectObj>("occupyPosList");
+            effectPosList = getList<PosEffectObj>("effectPosList");
+
             logicClassName = getString("logicClassName");
 
             string midPosStr = getString("midPos");

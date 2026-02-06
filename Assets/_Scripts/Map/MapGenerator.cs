@@ -291,8 +291,8 @@ namespace GameCore
             var excludedTypes = new List<ERoomType> { ERoomType.NONE };
 
             // 屏蔽精英和休息点
-            excludedTypes.Add(ERoomType.ELITE);
-            excludedTypes.Add(ERoomType.REST);
+            //excludedTypes.Add(ERoomType.ELITE);
+            //excludedTypes.Add(ERoomType.REST);
 
             //如果上一个节点是战斗节点或者事件节点，则不允许重复
             //表示不会有同一层里不会有相邻的战斗节点或相邻的事件节点

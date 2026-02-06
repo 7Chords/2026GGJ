@@ -126,9 +126,9 @@ namespace GameCore.UI
                 if (info.gridPos == targetPos) return true;
                 
                 // Check shape overlap
-                if (info.partRefObj != null && info.partRefObj.posList != null && info.gridPos.x != -1)
+                if (info.partRefObj != null && info.partRefObj.occupyPosList != null && info.gridPos.x != -1)
                 {
-                    foreach (var p in info.partRefObj.posList)
+                    foreach (var p in info.partRefObj.occupyPosList)
                     {
                          // Apply rotation !
                          Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), 0);
@@ -165,9 +165,9 @@ namespace GameCore.UI
                 
                 // Get existing item's occupied cells
                 List<Vector2Int> existingOccupied = new List<Vector2Int>();
-                if (info.partRefObj != null && info.partRefObj.posList != null && info.partRefObj.posList.Count > 0)
+                if (info.partRefObj != null && info.partRefObj.occupyPosList != null && info.partRefObj.occupyPosList.Count > 0)
                 {
-                    foreach (var p in info.partRefObj.posList) 
+                    foreach (var p in info.partRefObj.occupyPosList) 
                     {
                         // Apply existing item's rotation
                         Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), 0);

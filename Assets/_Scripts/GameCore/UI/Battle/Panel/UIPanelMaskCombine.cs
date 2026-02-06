@@ -122,9 +122,9 @@ namespace GameCore.UI
         {
             int maxY = info.gridPos.y; // logical origin y
             
-            if (info.partRefObj != null && info.partRefObj.posList != null)
+            if (info.partRefObj != null && info.partRefObj.occupyPosList != null)
             {
-                foreach(var p in info.partRefObj.posList)
+                foreach(var p in info.partRefObj.occupyPosList)
                 {
                      // Apply rotation to shape offset
                      Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), 0);
@@ -140,9 +140,9 @@ namespace GameCore.UI
         {
             int minX = info.gridPos.x; // logical origin x
             
-            if (info.partRefObj != null && info.partRefObj.posList != null)
+            if (info.partRefObj != null && info.partRefObj.occupyPosList != null)
             {
-                foreach(var p in info.partRefObj.posList)
+                foreach(var p in info.partRefObj.occupyPosList)
                 {
                      // Apply rotation to shape offset
                      Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), 0);

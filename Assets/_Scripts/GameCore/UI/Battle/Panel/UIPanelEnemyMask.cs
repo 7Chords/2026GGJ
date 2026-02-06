@@ -272,9 +272,9 @@ namespace GameCore.UI
         {
             List<Vector2Int> list = new List<Vector2Int>();
             
-            if (part.posList != null && part.posList.Count > 0)
+            if (part.occupyPosList != null && part.occupyPosList.Count > 0)
             {
-                foreach(var pObj in part.posList)
+                foreach(var pObj in part.occupyPosList)
                 {
                     Vector2Int p = new Vector2Int(pObj.x, pObj.y);
                     // Rotate
