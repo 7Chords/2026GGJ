@@ -9,6 +9,7 @@ namespace GameCore.UI
     public class UIPanelMaskCombine : _ASCUIPanelBase<UIMonoMaskCombine>
     {
         private UIPanelMaskCombinePartContainer _m_partContainer;
+        private UIPanelMaskCombineFace _m_faceGrid;
         public UIPanelMaskCombine(UIMonoMaskCombine _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -20,8 +21,7 @@ namespace GameCore.UI
             
             if (mono.monoFace != null)
             {
-                var faceGrid = new UIPanelMaskCombineFaceGrid(mono.monoFace, SCUIShowType.INTERNAL);
-                faceGrid.ShowPanel();
+                _m_faceGrid = new UIPanelMaskCombineFace(mono.monoFace, SCUIShowType.INTERNAL);
             }
             
         }
@@ -38,6 +38,10 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+
+            _m_faceGrid?.ShowPanel();
+            _m_partContainer?.ShowPanel();
+
             if (GameModel.instance.needsRoundReset)
             {
                 GameModel.instance.PrepareNextBattleRound();
@@ -166,7 +170,6 @@ namespace GameCore.UI
 
         private void refreshShow()
         {
-            _m_partContainer?.ShowPanel();
             _m_partContainer?.ReloadParts();
 
             mono.imgHealthBar.fillAmount = (float)GameModel.instance.playerHealth / GameModel.instance.playerMaxHealth;

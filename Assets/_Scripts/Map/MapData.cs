@@ -16,11 +16,11 @@ namespace GameCore
         [Header("房间分布概率排布")]
         public List<RoomProbability> roomProbabilities;
 
-        public MapNodeType GetRandomMapNodeType(System.Random random)
+        public ERoomType GetRandomMapNodeType(System.Random random)
         {
             if (roomProbabilities == null || roomProbabilities.Count == 0)
             {
-                return new MapNodeType { nodeType = ERoomType.ENEMY };
+                return ERoomType.ENEMY;
             }
 
             int totalWeight = roomProbabilities.Sum(rp => rp.weight);
@@ -32,11 +32,11 @@ namespace GameCore
                 currentWeight += rp.weight;
                 if (randomValue < currentWeight)
                 {
-                    return new MapNodeType { nodeType = rp.type };
+                    return rp.type;
                 }
             }
 
-            return new MapNodeType { nodeType = ERoomType.ENEMY };
+            return ERoomType.ENEMY;
         }
     }
 
@@ -47,9 +47,4 @@ namespace GameCore
         public int weight;
     }
 
-    [Serializable]
-    public struct MapNodeType
-    {
-        public ERoomType nodeType;
-    }
 }

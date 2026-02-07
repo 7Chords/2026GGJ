@@ -332,7 +332,7 @@ namespace GameCore
 
             do
             {
-                nodeType = mapData.GetRandomMapNodeType(_mapRandom).nodeType;
+                nodeType = mapData.GetRandomMapNodeType(_mapRandom);
                 attempts++;
 
                 // 如果尝试次数过多，返回Enemy作为默认类型

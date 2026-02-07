@@ -10,8 +10,8 @@ namespace GameCore.UI
 {
     public class UIPanelBattle : _ASCUIPanelBase<UIMonoBattle>
     {
-        private UIPanelMaskCombineFace _playerFacePanel;
-        private UIPanelMaskCombineFace _enemyFacePanel;
+        private UIPanelBattleFace _playerFacePanel;
+        private UIPanelBattleFace _enemyFacePanel;
 
         public UIPanelBattle(UIMonoBattle _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
@@ -22,14 +22,14 @@ namespace GameCore.UI
             // Initialize Player Face Panel logic
             if (mono.playerFace != null)
             {
-                _playerFacePanel = new UIPanelMaskCombineFace(mono.playerFace, showType);
+                _playerFacePanel = new UIPanelBattleFace(mono.playerFace, showType);
                 _playerFacePanel.AfterInitialize();
             }
 
             // Initialize Enemy Face Panel logic
             if (mono.enemyFace != null)
             {
-                _enemyFacePanel = new UIPanelMaskCombineFace(mono.enemyFace, showType);
+                _enemyFacePanel = new UIPanelBattleFace(mono.enemyFace, showType);
                 _enemyFacePanel.AfterInitialize();
             }
         }
