@@ -8,6 +8,8 @@ namespace GameCore.UI
 {
     public class UIPanelEnemyMask : _ASCUIPanelBase<UIMonoEnemyMask>
     {
+
+        private List<UIMonoEnemyMaskGrid> _m_monoGridList;
         public UIPanelEnemyMask(UIMonoEnemyMask _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -23,13 +25,13 @@ namespace GameCore.UI
 
         private void CreateGrids()
         {
-            if (mono.gridPrefab == null)
+            if (mono.gridPrefabName == null)
             {
                 Debug.LogError("Grid Prefab is null in UIMonoEnemyMask!");
                 return;
             }
 
-            mono.monoGridList = new List<UIMonoEnemyMaskGrid>();
+            _m_monoGridList = new List<UIMonoEnemyMaskGrid>();
             
             int columns = 4; 
             int rows = 7;
@@ -43,7 +45,7 @@ namespace GameCore.UI
             
             for (int i = 0; i < columns * rows; i++)
             {
-                GameObject go = SCCommon.InstantiateGameObject(mono.gridPrefab, parent);
+                GameObject go = ResourcesHelper.LoadGameObject(mono.gridPrefabName, parent);
                 go.SetActive(true);
                 
                 var gridMono = go.GetComponent<UIMonoEnemyMaskGrid>();
@@ -71,11 +73,9 @@ namespace GameCore.UI
                          }
                     }
                     
-                    mono.monoGridList.Add(gridMono);
+                    _m_monoGridList?.Add(gridMono);
                 }
             }
-
-            if (mono.gridPrefab.activeSelf) mono.gridPrefab.SetActive(false);
         }
 
         public override void BeforeDiscard()
@@ -132,29 +132,28 @@ namespace GameCore.UI
                  // BUT `BeforeDiscard` is called on Destroy/Close.
                  
                  // Let's add specific Grid Clear logic if checking monoGridList
-                 if (mono.monoGridList != null)
+                 if (_m_monoGridList != null)
                  {
-                     foreach(var g in mono.monoGridList)
+                     foreach(var g in _m_monoGridList)
                      {
-                         if (g!=null) Object.Destroy(g.gameObject);
+                         if (g!=null) SCCommon.DestoryGameObject(g.gameObject);
                      }
-                     mono.monoGridList.Clear();
+                    _m_monoGridList.Clear();
                  }
                  
                  // Also fallback destroy children if list was lost but objects exist
                  for(int i = parent.childCount - 1; i >= 0; i--)
                  {
                      var child = parent.GetChild(i);
-                     if (mono.gridPrefab != null && child == mono.gridPrefab.transform) continue;
                      
                      Object.Destroy(child.gameObject);
                  }
             }
 
             // Reset Grid Colors
-            if (mono.monoGridList != null)
+            if (_m_monoGridList != null)
             {
-                foreach(var grid in mono.monoGridList)
+                foreach(var grid in _m_monoGridList)
                 {
                     if (grid != null && grid.imgBg != null)
                     {
@@ -292,15 +291,15 @@ namespace GameCore.UI
         private void CreatePartItem(PartInfo partInfo)
         {
             // Instantiate Item
-            if (mono.monoGridList == null || mono.monoGridList.Count == 0) return;
+            if (_m_monoGridList == null || _m_monoGridList.Count == 0) return;
             
             Vector2Int gridPos = partInfo.gridPos;
             
             int index = gridPos.y * 4 + gridPos.x;
-            if (index < 0 || index >= mono.monoGridList.Count) return;
+            if (index < 0 || index >= _m_monoGridList.Count) return;
             
             // Position: Match the grid cell position
-            var targetGrid = mono.monoGridList[index];
+            var targetGrid = _m_monoGridList[index];
 
             // Parent to the specific grid cell as requested
             var itemGO = ResourcesHelper.LoadGameObject("prefab_mask_combine_part_item", targetGrid.transform);
@@ -326,9 +325,9 @@ namespace GameCore.UI
                 if (p.x >= 0 && p.x < 4 && p.y >= 0 && p.y < 7)
                 {
                     int occIndex = p.y * 4 + p.x;
-                    if (occIndex >= 0 && occIndex < mono.monoGridList.Count)
+                    if (occIndex >= 0 && occIndex < _m_monoGridList.Count)
                     {
-                        var gridMono = mono.monoGridList[occIndex];
+                        var gridMono = _m_monoGridList[occIndex];
                         if (gridMono != null && gridMono.imgBg != null)
                         {
                             gridMono.imgBg.color = new Color(1f, 0.3f, 0.3f, 0.8f); // Red tint
