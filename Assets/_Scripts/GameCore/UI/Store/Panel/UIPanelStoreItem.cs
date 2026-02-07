@@ -40,9 +40,9 @@ namespace GameCore.UI
 
         private void onBtnPurchaseClickDonw(PointerEventData _arg, object[] _objs)
         {
-            //钱够了直接发送购买消息
+            //钱够了并且没有买过 发送购买消息
             if(GameModel.instance.playerMoney >= _m_goodsInfo.goodsRefObj.goodsPrice
-                && _m_goodsInfo.goodsAmount > 0)
+                && !_m_goodsInfo.hasBought)
             {
                 AudioMgr.instance.PlaySfx("sfx_buy");
                 SCMsgCenter.SendMsg(SCMsgConst.PURCHASE_GOODS, _m_goodsInfo.goodsRefObj.id);
@@ -83,7 +83,7 @@ namespace GameCore.UI
 
         private void refreshHasBuyShow()
         {
-            mono.canvasGroup.alpha = _m_goodsInfo.goodsAmount == 0 ? mono.hasPurchaseAlpha : 1;
+            mono.canvasGroup.alpha = _m_goodsInfo.hasBought ? mono.hasPurchaseAlpha : 1;
         }
         private void refreshActiveShow()
         {

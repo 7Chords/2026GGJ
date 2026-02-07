@@ -16,11 +16,13 @@ namespace GameCore.RefData
 
         }
         public long id;
+        public int floor;
         public EQualityType qualityType;
         public List<long> partList;
         protected override void _parseFromString()
         {
             id = getLong("id");
+            floor = getInt("floor");
             qualityType = (EQualityType)getEnum("qualityType",typeof(EQualityType));
             partList = getList<long>("partList");
         }

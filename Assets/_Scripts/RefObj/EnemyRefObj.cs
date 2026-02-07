@@ -8,6 +8,7 @@ namespace GameCore.RefData
     public class EnemyRefObj : SCRefDataCore
     {
         public long id;
+        public int floor;
         public string enemyName;
         public int enemyHealth;
         public List<PartEffectObj> initPartList;
@@ -16,6 +17,7 @@ namespace GameCore.RefData
         protected override void _parseFromString()
         {
             id = getLong("id");
+            floor = getInt("floor");
             enemyName = getString("enemyName");
             enemyHealth = getInt("enemyHealth");
             initPartList = getList<PartEffectObj>("initPartList");

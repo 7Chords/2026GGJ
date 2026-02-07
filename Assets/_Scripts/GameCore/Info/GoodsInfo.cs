@@ -8,12 +8,13 @@ namespace GameCore
     public class GoodsInfo
     {
         public GoodsRefObj goodsRefObj;
-        public int goodsAmount;
+        public int goodsLevel;
+        public bool hasBought;
 
-        public GoodsInfo(GoodsRefObj goodsRefObj, int goodsAmount)
+        public GoodsInfo(GoodsRefObj goodsRefObj, int goodsLevel)
         {
             this.goodsRefObj = goodsRefObj;
-            this.goodsAmount = goodsAmount;
+            this.goodsLevel = goodsLevel;
         }
     }
 }

@@ -101,7 +101,7 @@ namespace GameCore.UI
                 GoodsRefObj goodsRefObj = SCRefDataMgr.instance.goodsRefList.refDataList.Find(x => x.id == effectObj.goodsId);
                 if (goodsRefObj == null)
                     continue;
-                GoodsInfo info = new GoodsInfo(goodsRefObj, effectObj.goodsAmount);
+                GoodsInfo info = new GoodsInfo(goodsRefObj, effectObj.goodsLevel);
                 _m_goodsInfoList.Add(info);
             }
             refreshShow();
@@ -131,7 +131,7 @@ namespace GameCore.UI
                 return;
 
             //对数据层处理
-            info.goodsAmount = Mathf.Max(info.goodsAmount - 1, 0);
+            info.hasBought = true;
             GameModel.instance.playerMoney = Mathf.Max(GameModel.instance.playerMoney - info.goodsRefObj.goodsPrice, 0);
             switch (info.goodsRefObj.goodsType)
             {

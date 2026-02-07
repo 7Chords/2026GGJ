@@ -8,6 +8,7 @@ namespace GameCore.RefData
     public class StoreRefObj : SCRefDataCore
     {
         public long id;
+        public int floor;
         public string storeName;
         public string storeDesc;
         public List<GoodsEffectObj> goodsList;
@@ -23,6 +24,7 @@ namespace GameCore.RefData
         protected override void _parseFromString()
         {
             id = getLong("id");
+            floor = getInt("floor");
             storeName = getString("storeName");
             storeDesc = getString("storeDesc");
             goodsList = getList<GoodsEffectObj>("goodsList");

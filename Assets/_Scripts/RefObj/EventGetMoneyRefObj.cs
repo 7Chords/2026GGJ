@@ -16,10 +16,12 @@ namespace GameCore.RefData
 
         }
         public long id;
+        public int floor;
         public int money;
         protected override void _parseFromString()
         {
             id = getLong("id");
+            floor = getInt("floor");
             money = getInt("money");
         }
         public static string assetPath => "RefData/ExportTxt";
