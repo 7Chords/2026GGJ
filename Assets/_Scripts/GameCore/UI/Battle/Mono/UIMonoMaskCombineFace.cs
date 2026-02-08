@@ -2,6 +2,7 @@ using SCFrame.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GameCore.UI
 {
@@ -15,5 +16,8 @@ namespace GameCore.UI
         public int rowCount;
         [Header("禁用格子坐标列表")]
         public List<Vector2Int> disabledGrids;
+        [Header("格子layout")]
+        public GridLayoutGroup girdLayoutGroup;
+
     }
 }

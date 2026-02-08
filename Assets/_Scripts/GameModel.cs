@@ -14,16 +14,18 @@ namespace GameCore
         public List<PartInfo> bagPartInfoList; //背包部位列表(玩家局外拥有的全部)
         public List<PartInfo> deckPartInfoList; //牌堆部位列表(在牌堆里但是玩家当前未持有的)
         public List<PartInfo> busyPartInfoList; //玩家当前持有的部位列表
-
-        public List<PartInfo> playerBattleParts = new List<PartInfo>();//当前战斗中的部位列表（在脸上）
+        public List<PartInfo> playerBattleParts;//当前战斗中的部位列表（在脸上）
 
         public int playerHealth; //玩家生命
-        public int playerMaxHealth;
-        public int playerMoney;
+        public int playerMaxHealth;//玩家最大生命
+        public int playerMoney;//玩家金钱
 
         public long rollStoreId; //进入商店节点后roll到的商店id
         
-        public Vector2Int playerMapPosition = new Vector2Int(-1, -1); // Current Player Position in Map (Layer, Index)
+        public Vector2Int playerMapPosition = new Vector2Int(-1, -1);//玩家地图坐标位置
+
+
+        public List<FaceGridInfo> faceGridInfoList;//玩家当前脸部格子信息列表
 
         public override void OnInitialize()
         {
@@ -38,6 +40,8 @@ namespace GameCore
             busyPartInfoList = new List<PartInfo>();
             bagPartInfoList = new List<PartInfo>();
             deckPartInfoList = new List<PartInfo>();
+            playerBattleParts = new List<PartInfo>();
+
 
             PartEffectObj partEffectObj = null;
             PartInfo info = null;

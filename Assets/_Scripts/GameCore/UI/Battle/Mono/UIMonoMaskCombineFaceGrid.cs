@@ -14,9 +14,9 @@ namespace GameCore.UI
         public Color colorCanPlace;
         [Header("不可以放置的颜色")]
         public Color colorCanNotPlace;
-        [Header("作用范围的拥塞")]
+        [Header("作用范围的颜色")]
         public Color colorIsEffective;
         [Header("背景图片")]
-        public Image imgBg;
+        public Image imgGrid;
     }
 }

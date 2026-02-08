@@ -6,10 +6,11 @@ using UnityEngine.UI;
 using SCFrame;
 using System;
 using GameCore.RefData;
+using SCFrame.UI;
 
 namespace GameCore.UI
 {
-    public class FacePart : MonoBehaviour
+    public class UIMonoFacePart : _ASCUIMonoBase
     {
         [Header("ÎïÌåÍ¼Æ¬")]
         public Image imgGO;

@@ -6,5 +6,9 @@ namespace GameCore
 {
     public class GameConst
     {
+
+        #region TAG & LAYER
+        public const string FACE_GRID_TAG = "FaceGrid";
+        #endregion
     }
 }

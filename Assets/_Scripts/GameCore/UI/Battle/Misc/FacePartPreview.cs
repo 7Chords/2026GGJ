@@ -65,34 +65,34 @@ namespace GameCore.UI
                 _m_dragLoopCoroutine = null;
             }
 
-            //当前鼠标指向的脸部的格子
-            UIMonoMaskCombineFaceGrid hitGrid = GetHitGrid(_arg);
+            //当前鼠标指向的脸部的格子物体
+            GameObject girdGO = getHitGridGameObj(_arg);
             bool placementSuccess = false;//是否放置成功
 
-            if (hitGrid != null)
+            if (girdGO != null)
             {
-                if (TryCalculatePlacement(hitGrid, _arg, out Vector2Int logicalOrigin, out List<Vector2Int> rotatedShape))
-                {
-                    // Placement Success
-                    _m_partInfo.startGridPos = logicalOrigin;
+                //if (TryCalculatePlacement(girdGO, _arg, out Vector2Int logicalOrigin, out List<Vector2Int> rotatedShape))
+                //{
+                //    // Placement Success
+                //    _m_partInfo.startGridPos = logicalOrigin;
 
-                    //SnapToGrid(hitGrid);
-                    gameObject.transform.localRotation = Quaternion.Euler(0, 0, _m_currentRotateStep * 90);
+                //    //SnapToGrid(hitGrid);
+                //    gameObject.transform.localRotation = Quaternion.Euler(0, 0, _m_currentRotateStep * 90);
 
-                    //UpdateGridColors(true, rotatedShape);
+                //    //UpdateGridColors(true, rotatedShape);
 
-                    placementSuccess = true;
-                }
-                else
-                {
-                    SCDebugHelper.LogWarning("该区域已被占用或无效！");
-                }
+                //    placementSuccess = true;
+                //}
+                //else
+                //{
+                //    SCDebugHelper.LogWarning("该区域已被占用或无效！");
+                //}
             }
 
             if (!placementSuccess)
             {
                 SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_FAIL);
-                //SCCommon.DestoryGameObject(gameObject);
+                SCCommon.DestoryGameObject(gameObject);
             }
 
         }
@@ -112,14 +112,16 @@ namespace GameCore.UI
             }
         }
 
-        private UIMonoMaskCombineFaceGrid GetHitGrid(PointerEventData _eventData)
+        private GameObject getHitGridGameObj(PointerEventData _eventData)
         {
             List<RaycastResult> results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(_eventData, results);
             foreach (var result in results)
             {
-                var grid = result.gameObject.GetComponent<UIMonoMaskCombineFaceGrid>();
-                if (grid != null) return grid;
+                if(result.gameObject.tag == GameConst.FACE_GRID_TAG)
+                {
+                    return result.gameObject;
+                }
             }
             return null;
         }

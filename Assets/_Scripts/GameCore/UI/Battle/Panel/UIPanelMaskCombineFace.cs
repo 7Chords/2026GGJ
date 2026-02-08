@@ -8,7 +8,9 @@ namespace GameCore.UI
 {
     public class UIPanelMaskCombineFace : _ASCUIPanelBase<UIMonoMaskCombineFace>
     {
-        private List<UIMonoMaskCombineFaceGrid> _m_gridList;
+        private List<UIPanelMaskCombineFaceGrid> _m_gridList;
+
+        private List<FaceGridInfo> _m_gridInfoList;
 
         public UIPanelMaskCombineFace(UIMonoMaskCombineFace _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
@@ -16,12 +18,32 @@ namespace GameCore.UI
 
         public override void AfterInitialize()
         {
-            CreateGrids();
+
+            _m_gridList = new List<UIPanelMaskCombineFaceGrid>();
+            _m_gridInfoList = new List<FaceGridInfo>();
+
+            createGrids();
+
         }
 
-        private void CreateGrids()
+        private void createGrids()
         {
-            
+            for(int i =0;i<mono.columnCount;i++)
+            {
+                for(int j =0;j<mono.rowCount;j++)
+                {
+                    GameObject go = ResourcesHelper.LoadGameObject(mono.gridPrefabName, mono.girdLayoutGroup.transform);
+                    UIMonoMaskCombineFaceGrid gridMono = go.GetComponent<UIMonoMaskCombineFaceGrid>();
+                    if (gridMono != null)
+                    {
+                        UIPanelMaskCombineFaceGrid panel = new UIPanelMaskCombineFaceGrid(gridMono, SCUIShowType.INTERNAL);
+                        FaceGridInfo info = new FaceGridInfo(new Vector2Int(i, j), false);
+                        _m_gridInfoList.Add(info);
+                        _m_gridList.Add(panel);
+                    }
+                }
+            }
+            GameModel.instance.faceGridInfoList = _m_gridInfoList;
         }
 
         public override void BeforeDiscard()
@@ -30,7 +52,7 @@ namespace GameCore.UI
             {
                 foreach (var grid in _m_gridList)
                 {
-                    if (grid != null) SCCommon.DestoryGameObject(grid.gameObject);
+                    grid?.Discard();
                 }
                 _m_gridList.Clear();
                 _m_gridList = null;
@@ -39,10 +61,24 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
+            if (_m_gridList != null)
+            {
+                foreach (var grid in _m_gridList)
+                {
+                    grid?.HidePanel();
+                }
+            }
         }
 
         public override void OnShowPanel()
         {
+            if (_m_gridList != null)
+            {
+                foreach (var grid in _m_gridList)
+                {
+                    grid?.ShowPanel();
+                }
+            }
         }
         
     }
