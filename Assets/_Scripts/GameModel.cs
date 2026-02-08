@@ -104,7 +104,6 @@ namespace GameCore
             //修正坐标（转为相对于格子左上角的正数）
             pixelPosInGrid += new Vector2(gridSize.x / 2f, gridSize.y / 2f);
             Vector2 ratio = new Vector2(pixelPosInGrid.x / gridSize.x, 1 - pixelPosInGrid.y / gridSize.y);
-            Debug.Log("ratio" + ratio);
 
             //思路是这样 因为拖拽预览时拖拽的是图片的中心点
             //如果拖拽点在当前命中格子的第一象限 则当前命中格子当作原图形中心点的右下格子
@@ -113,48 +112,40 @@ namespace GameCore
             //如果拖拽点在当前命中格子的第四象限 则当前命中格子当作原图形中心点的右上格子
 
             Vector2 localCenterPos = GameCommon.CalculateCenterPos(_localGridList);
-            Vector2Int hitLocalGridPos = Vector2Int.zero;
+            Vector2Int hitAsLocalGridPos = Vector2Int.zero;//这个是重要的概念 表示的是鼠标所在的格子映射为本地格子列表中的哪一个格子（这个格子不一定在列表里 但是自做一个偏移参考）
 
             int goIndex = faceGOList.IndexOf(_hitGridGO);
 
-            Debug.Log("localCenterPos" + localCenterPos);
-
             if (ratio.x<0.5 && ratio.y <0.5)//第一象限
             {
-                hitLocalGridPos = new Vector2Int(Mathf.CeilToInt(localCenterPos.x),(int)Mathf.CeilToInt(localCenterPos.y));
+                hitAsLocalGridPos = new Vector2Int(Mathf.CeilToInt(localCenterPos.x),(int)Mathf.CeilToInt(localCenterPos.y));
             }
             else if(ratio.x >= 0.5 && ratio.y < 0.5)//第二象限
             {
-                hitLocalGridPos = new Vector2Int(Mathf.FloorToInt(localCenterPos.x), (int)Mathf.CeilToInt(localCenterPos.y));
+                hitAsLocalGridPos = new Vector2Int(Mathf.FloorToInt(localCenterPos.x), (int)Mathf.CeilToInt(localCenterPos.y));
 
             }
             else if(ratio.x >= 0.5 && ratio.y > 0.5)//第三象限
             {
-                hitLocalGridPos = new Vector2Int((int)Mathf.FloorToInt(localCenterPos.x), (int)Mathf.FloorToInt(localCenterPos.y));
+                hitAsLocalGridPos = new Vector2Int((int)Mathf.FloorToInt(localCenterPos.x), (int)Mathf.FloorToInt(localCenterPos.y));
 
             }
             else if(ratio.x < 0.5 && ratio.y >= 0.5)//第四象限
             {
-                hitLocalGridPos = new Vector2Int((int)Mathf.CeilToInt(localCenterPos.x), (int)Mathf.FloorToInt(localCenterPos.y));
+                hitAsLocalGridPos = new Vector2Int((int)Mathf.CeilToInt(localCenterPos.x), (int)Mathf.FloorToInt(localCenterPos.y));
             }
-            Debug.Log("hitLocalGridPos" + hitLocalGridPos);
+            Vector2Int partFacePos = Vector2Int.zero;
             for(int i =0;i<_localGridList.Count;i++)
             {
-                Debug.Log((_localGridList[i] - hitLocalGridPos) + faceGridInfoList[goIndex].pos);
+                partFacePos = (_localGridList[i] - hitAsLocalGridPos) + faceGridInfoList[goIndex].pos;
+                FaceGridInfo info = faceGridInfoList.Find(x => x.pos == partFacePos);
+                if (info == null || info.hasPart)
+                {
+                    return false;
+                }
             }
-            return false;
+            return true;
         }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -29,7 +29,7 @@ namespace GameCore.UI
 
         private int _m_currentRotateStep = 0;
         private bool _m_isDraging;
-         public void Initialize(PartInfo _info)
+        public void Initialize(PartInfo _info)
         {
             if (_info == null)
                 return;
@@ -40,7 +40,7 @@ namespace GameCore.UI
 
             _m_isDraging = true;
             if (_m_dragLoopCoroutine != null) StopCoroutine(_m_dragLoopCoroutine);
-            _m_dragLoopCoroutine = StartCoroutine(DragLoop());
+            _m_dragLoopCoroutine = StartCoroutine(dragLoop());
 
             _m_partInfo = _info;
 
@@ -71,10 +71,8 @@ namespace GameCore.UI
                 if (GameModel.instance.CanPlacePart(gridGO, _data.position ,_m_partInfo.gridPosList))
                 {
                     placementSuccess = true;
-
-
-
-                    
+                    SCDebugHelper.Log("ø…“‘∑≈÷√£°");
+                    SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_SUCCESS);
                 }
             }
 
@@ -88,7 +86,7 @@ namespace GameCore.UI
         }
 
 
-        private IEnumerator DragLoop()
+        private IEnumerator dragLoop()
         {
             while (_m_isDraging)
             {
