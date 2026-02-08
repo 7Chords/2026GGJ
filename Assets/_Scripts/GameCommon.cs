@@ -147,6 +147,18 @@ namespace GameCore
             return ret;
         }
 
+        public static Vector2 RotateVector(Vector2 v, int rotationSteps)
+        {
+            Vector2 ret = v;
+            for (int i = 0; i < rotationSteps; i++)
+            {
+                // (x, y) -> (-y, x) for 90 degrees counter-clockwise
+                ret = new Vector2(-ret.y, ret.x);
+            }
+            return ret;
+        }
+
+
         /// <summary>
         /// 绕着中心点旋转
         /// </summary>
@@ -163,6 +175,20 @@ namespace GameCore
             }
             Vector2Int ret = new Vector2Int((int)(vector.x + _centerPos.x), (int)(vector.y + _centerPos.y));
             return ret;
+        }
+
+
+        public static Vector2 ScreenPoint2UILocalPoint(RectTransform _parentTran,Vector2 _screentPoint)
+        {
+            Vector2 localPoint = Vector2.zero;
+            Camera uiCam = null;
+            Canvas canvas = _parentTran.GetComponentInParent<Canvas>();
+            if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
+            {
+                uiCam = canvas.worldCamera;
+            }
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(_parentTran, _screentPoint, uiCam, out localPoint);
+            return localPoint;
         }
     }
 }

@@ -25,8 +25,8 @@ namespace GameCore
             logicObj = PartLogicFactory.CreateLogic(partRefObj.id);
             if (logicObj != null)
                 logicObj.Initialize(this);
-            else
-                SCDebugHelper.LogError($"Failed to create logic: {partRefObj.partName}");
+            //else
+            //    SCDebugHelper.LogError($"Failed to create logic: {partRefObj.partName}");
         }
     }
 }

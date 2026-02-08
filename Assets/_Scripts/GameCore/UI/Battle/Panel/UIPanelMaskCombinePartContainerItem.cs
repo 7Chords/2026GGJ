@@ -113,9 +113,8 @@ namespace GameCore.UI
             if (_m_dragPartGO != null) return;
             _m_isDraging = true;
             //创建拖拽出来的部位
-            _m_dragPartGO = ResourcesHelper.LoadGameObject("prefab_face_part", SCGame.instance.topLayerRoot.transform);
-            _m_dragPartGO.GetComponent<FacePart>().Initialize(_m_partInfo);
-            _m_dragPartGO.GetComponent<FacePart>().onBeginDrag(_arg, _objs);
+            _m_dragPartGO = ResourcesHelper.LoadGameObject("prefab_face_part_preview", SCGame.instance.topLayerRoot.transform);
+            _m_dragPartGO.GetComponent<FacePartPreview>().Initialize(_m_partInfo);
 
             //隐藏原物体的交互和显示
             if (mono.canvasGroup != null)
@@ -131,8 +130,8 @@ namespace GameCore.UI
             if (_m_dragPartGO == null || !_m_isDraging)
                 return;
             _m_isDraging = false;
-
-            _m_dragPartGO.GetComponent<FacePart>().EndDrag(_arg);
+            _m_dragPartGO.GetComponent<FacePartPreview>().EndDrag(_arg);
+            _m_dragPartGO = null;
         }
 
         private void onDrag(PointerEventData _arg, object[] _objs)
@@ -140,7 +139,7 @@ namespace GameCore.UI
             if (_m_dragPartGO == null || !_m_isDraging)
                 return;
 
-            //_m_dragPartGO.GetComponent<FacePart>().Drag(_arg);
+            _m_dragPartGO.GetComponent<FacePartPreview>().Drag(_arg);
         }
 
 
