@@ -1417,7 +1417,7 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 0
   m_StartCorner: 0
-  m_StartAxis: 0
+  m_StartAxis: 1
   m_CellSize: {x: 110, y: 110}
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
@@ -1454,8 +1454,8 @@ MonoBehaviour:
   columnCount: 4
   rowCount: 7
   disabledGrids:
-  - {x: 3, y: 0}
   - {x: 0, y: 6}
+  - {x: 3, y: 0}
   - {x: 3, y: 6}
   girdLayoutGroup: {fileID: 629427676596701135}
 --- !u!1 &5390782702195404404

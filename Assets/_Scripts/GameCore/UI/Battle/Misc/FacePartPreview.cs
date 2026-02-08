@@ -48,12 +48,12 @@ namespace GameCore.UI
         }
 
 
-        public void Drag(PointerEventData eventData)
+        public void Drag(PointerEventData _data)
         {
             RectTransform parentRect = gameObject.transform.parent as RectTransform;
-            transform.localPosition = GameCommon.ScreenPoint2UILocalPoint(parentRect,eventData.position);
+            transform.localPosition = GameCommon.ScreenPoint2UILocalPoint(parentRect,_data.position);
         }
-        public void EndDrag(PointerEventData _arg)
+        public void EndDrag(PointerEventData _data)
         {
             _m_isDraging = false;
             if (_m_dragLoopCoroutine != null)
@@ -63,27 +63,19 @@ namespace GameCore.UI
             }
 
             //当前鼠标指向的脸部的格子物体
-            GameObject girdGO = getHitGridGameObj(_arg);
+            GameObject gridGO = getHitGridGameObj(_data);
             bool placementSuccess = false;//是否放置成功
 
-            if (girdGO != null)
+            if (gridGO != null)
             {
-                //if (TryCalculatePlacement(girdGO, _arg, out Vector2Int logicalOrigin, out List<Vector2Int> rotatedShape))
-                //{
-                //    // Placement Success
-                //    _m_partInfo.startGridPos = logicalOrigin;
+                if (GameModel.instance.CanPlacePart(gridGO, _data.position ,_m_partInfo.gridPosList))
+                {
+                    placementSuccess = true;
 
-                //    //SnapToGrid(hitGrid);
-                //    gameObject.transform.localRotation = Quaternion.Euler(0, 0, _m_currentRotateStep * 90);
 
-                //    //UpdateGridColors(true, rotatedShape);
 
-                //    placementSuccess = true;
-                //}
-                //else
-                //{
-                //    SCDebugHelper.LogWarning("该区域已被占用或无效！");
-                //}
+                    
+                }
             }
 
             if (!placementSuccess)
@@ -120,19 +112,11 @@ namespace GameCore.UI
             return null;
         }
 
-        private bool TryCalculatePlacement(UIMonoMaskCombineFaceGrid hitGrid, PointerEventData eventData, out Vector2Int logicalOrigin, out List<Vector2Int> rotatedShape)
-        {
-
-            logicalOrigin = default;
-            rotatedShape = default;
-            return true;
-        }
-
         private void rotatePart()
         {
             _m_currentRotateStep = (_m_currentRotateStep + 1) % 4;
             _m_partInfo.rotateStep = _m_currentRotateStep;
-            _m_partInfo.gridPosList = GameCommon.Rotate(_m_partInfo.gridPosList, 1);
+            _m_partInfo.gridPosList = GameCommon.RotateShape(_m_partInfo.gridPosList, 1);
             refreshShow();
         }
 

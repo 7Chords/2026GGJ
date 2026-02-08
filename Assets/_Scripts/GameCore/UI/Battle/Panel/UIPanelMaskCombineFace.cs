@@ -11,7 +11,7 @@ namespace GameCore.UI
         private List<UIPanelMaskCombineFaceGrid> _m_gridList;
 
         private List<FaceGridInfo> _m_gridInfoList;
-
+        private List<GameObject> _m_gridGOList;
         public UIPanelMaskCombineFace(UIMonoMaskCombineFace _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -21,6 +21,7 @@ namespace GameCore.UI
 
             _m_gridList = new List<UIPanelMaskCombineFaceGrid>();
             _m_gridInfoList = new List<FaceGridInfo>();
+            _m_gridGOList = new List<GameObject>();
 
             createGrids();
 
@@ -28,22 +29,43 @@ namespace GameCore.UI
 
         private void createGrids()
         {
-            for(int i =0;i<mono.columnCount;i++)
+            Vector2Int tmp = Vector2Int.zero;
+            UIPanelMaskCombineFaceGrid panel;
+            UIMonoMaskCombineFaceGrid gridMono;
+            for (int i =0;i<mono.columnCount; i++)//4
             {
-                for(int j =0;j<mono.rowCount;j++)
+                for(int j =0;j<mono.rowCount;j++)//7
                 {
+                    tmp.x = i;
+                    tmp.y = j;
                     GameObject go = ResourcesHelper.LoadGameObject(mono.gridPrefabName, mono.girdLayoutGroup.transform);
-                    UIMonoMaskCombineFaceGrid gridMono = go.GetComponent<UIMonoMaskCombineFaceGrid>();
+
+                    gridMono = go.GetComponent<UIMonoMaskCombineFaceGrid>();
                     if (gridMono != null)
                     {
-                        UIPanelMaskCombineFaceGrid panel = new UIPanelMaskCombineFaceGrid(gridMono, SCUIShowType.INTERNAL);
-                        FaceGridInfo info = new FaceGridInfo(new Vector2Int(i, j), false);
-                        _m_gridInfoList.Add(info);
-                        _m_gridList.Add(panel);
+                        panel = new UIPanelMaskCombineFaceGrid(gridMono, SCUIShowType.INTERNAL);
+
+                        if (mono.disabledGrids.Contains(tmp))
+                        {
+                            panel.ShowPanel();//单独show一下 失活状态会影响布局
+                            panel.SetDisable();
+                        }
+                        else
+                        {
+                            FaceGridInfo info = new FaceGridInfo(tmp, false);
+                            panel.SetInfo(info);
+                            _m_gridInfoList.Add(info);
+                            _m_gridList.Add(panel);
+                            _m_gridGOList.Add(go);
+                        }
                     }
+
+
                 }
             }
             GameModel.instance.faceGridInfoList = _m_gridInfoList;
+            GameModel.instance.faceGOList = _m_gridGOList;
+
         }
 
         public override void BeforeDiscard()

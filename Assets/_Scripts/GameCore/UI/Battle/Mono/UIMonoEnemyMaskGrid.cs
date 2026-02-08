@@ -8,9 +8,7 @@ namespace GameCore.UI
 {
     public class UIMonoEnemyMaskGrid : _ASCUIMonoBase
     {
-        [Header("����")]
-        public Vector2 gridPos;
-
-        public Image imgBg;
+        [Header("格子图片")]
+        public Image imgGrid;
     }
 }

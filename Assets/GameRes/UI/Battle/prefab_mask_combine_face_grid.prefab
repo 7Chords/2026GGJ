@@ -178,7 +178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiMask: {fileID: 0}
-  canvasGroup: {fileID: 0}
+  canvasGroup: {fileID: 1159352440032331558}
   fadeInDuration: 0
   fadeOutDuration: 0
   colorDefault: {r: 1, g: 1, b: 1, a: 0.5019608}

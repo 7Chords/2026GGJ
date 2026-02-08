@@ -193,6 +193,12 @@ namespace GameCore
             return localPoint;
         }
 
+        public static Vector2 CalculateCenterPos(List<Vector2Int> occupyPosList)
+        {
+            Vector2 dealPos = new Vector2(CalculateBounds(occupyPosList).x - 1, CalculateBounds(occupyPosList).y - 1);
+            return dealPos / 2f;
+        }
+
         public static Vector2 CalculateBounds(List<Vector2Int> occupyPosList)
         {
             if (occupyPosList == null || occupyPosList.Count == 0) return Vector2.zero;
@@ -223,22 +229,22 @@ namespace GameCore
         /// 每次旋转后，自动把最上最左点重置为 (0,0)
         /// X 右正，Y 下正
         /// </summary>
-        public static List<Vector2Int> Rotate(List<Vector2Int> originalPoints, int step)
+        public static List<Vector2Int> RotateShape(List<Vector2Int> originalPoints, int step)
         {
             if (originalPoints == null || originalPoints.Count == 0)
                 return new List<Vector2Int>();
 
-            // 1. 找到当前最上最左点（minX, minY）
+            //找到当前最上最左点（minX, minY）
             int minX = originalPoints.Min(p => p.x);
             int minY = originalPoints.Min(p => p.y);
 
-            // 2. 平移到本地坐标系（00 是最上最左）
+            //平移到本地坐标系（00 是最上最左）
             var localPoints = originalPoints.Select(p => new Vector2Int(p.x - minX, p.y - minY)).ToList();
 
-            // 3. 逆时针旋转
+            //逆时针旋转
             var rotated = localPoints.Select(p => RotatePoint(p, step)).ToList();
 
-            // 4. 关键！再次找到新的最上最左，平移回 00
+            //再次找到新的最上最左，平移回 00
             int newMinX = rotated.Min(p => p.x);
             int newMinY = rotated.Min(p => p.y);
 
@@ -248,7 +254,7 @@ namespace GameCore
         }
 
         /// <summary>
-        /// Unity 坐标系：逆时针旋转公式
+        /// 逆时针旋转公式
         /// </summary>
         private static Vector2Int RotatePoint(Vector2Int p, int step)
         {
