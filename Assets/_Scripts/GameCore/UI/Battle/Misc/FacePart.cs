@@ -121,7 +121,7 @@ namespace GameCore.UI
                 if (TryCalculatePlacement(hitGrid, _arg, out Vector2Int logicalOrigin,out List <Vector2Int> rotatedShape))
                 {
                     // Placement Success
-                    _m_partInfo.gridPos = logicalOrigin;
+                    _m_partInfo.startGridPos = logicalOrigin;
 
                     SnapToGrid(hitGrid);
                     gameObject.transform.localRotation = Quaternion.Euler(0, 0, _currentRotateStep * 90);

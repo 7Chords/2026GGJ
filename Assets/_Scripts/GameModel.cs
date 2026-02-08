@@ -21,9 +21,6 @@ namespace GameCore
         public int playerMaxHealth;
         public int playerMoney;
 
-        public List<FacePartInfo> facePartInfoList; //脸部装备的部位列表
-        public List<FaceGridInfo> faceGridInfoList; //脸部格子信息列表
-
         public long rollStoreId; //进入商店节点后roll到的商店id
         
         public Vector2Int playerMapPosition = new Vector2Int(-1, -1); // Current Player Position in Map (Layer, Index)
@@ -56,9 +53,7 @@ namespace GameCore
                     if (partRefObj == null)
                         continue;
                     info = new PartInfo(partRefObj);
-                    // busyPartInfoList.Add(info); // Don't add to hand directly
                     bagPartInfoList.Add(info);
-                    // deckPartInfoList.Add(info); // Don't add to Deck manually, PrepareNextBattleRound handles it
                 }
             }
             
@@ -138,7 +133,7 @@ namespace GameCore
                     if (part.currentHealth > 0)
                     {
                         // Reset State
-                        part.gridPos = new Vector2Int(-1, -1);
+                        part.startGridPos = new Vector2Int(-1, -1);
                         deckPartInfoList.Add(part);
                     }
                     else
@@ -232,14 +227,14 @@ namespace GameCore
             {
                 if (TryFindValidPlacement(occupiedGrid, part.partRefObj, out Vector2Int pos, out int rot))
                 {
-                    part.gridPos = pos;
+                    part.startGridPos = pos;
                     MarkOccupancy(occupiedGrid, part.partRefObj, pos, rot);
                 }
                 else
                 {
                     Debug.LogWarning($"[GameModel] Could not fit enemy part {part.partRefObj.partName}");
                     // Set to -1,-1 to indicate failure/hide
-                    part.gridPos = new Vector2Int(-1, -1);
+                    part.startGridPos = new Vector2Int(-1, -1);
                 }
             }
         }

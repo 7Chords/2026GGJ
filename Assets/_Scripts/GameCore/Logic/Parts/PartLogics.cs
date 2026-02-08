@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameCore.Logic.Parts
+namespace GameCore.Logic
 {
     public class NoseLogic : BasePartLogic
     {

@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace GameCore.Logic
 {
+
+    /// <summary>
+    /// 部位逻辑基类 只做逻辑的东西 效果不在这里做
+    /// </summary>
     public abstract class BasePartLogic
     {
         protected PartInfo partInfo;
@@ -13,21 +17,8 @@ namespace GameCore.Logic
             partInfo = _info;
         }
 
-        public virtual void OnGetHit(float damage)
-        {
-             GameCore.GameCommon.ShowDamageFloatText((int)damage, partInfo.GetAnchorTransformEvent?.Invoke());
-        }
-
-        /// <summary>
-        /// 部位破坏时的逻辑
-        /// </summary>
+        public virtual void OnGetHit(float damage) { }
         public virtual void OnPartBroken() { }
-
-        /// <summary>
-        /// 回合开始
-        /// </summary>
-        public virtual void OnTurnStart() { }
-
         public virtual void OnPartAction() { }
     }
 }

@@ -10,37 +10,23 @@ namespace GameCore
     {
         public PartRefObj partRefObj;
         public int currentHealth;
-        public Vector2Int gridPos; // Grid Coordinates
+        public int maxHealth;
+        public Vector2Int startGridPos;
         
-        public System.Func<Transform> GetAnchorTransformEvent;
-        
-        public BasePartLogic logicObj; // 逻辑实例
+        public BasePartLogic logicObj;//逻辑实例
 
         public PartInfo(PartRefObj _partRefObj)
         {
             partRefObj = _partRefObj;
-            currentHealth = partRefObj.partHealth;
-            gridPos = new Vector2Int(-1, -1);
-            
-            // 初始化逻辑对象
-            if (!string.IsNullOrEmpty(partRefObj.logicClassName))
-            {
-                 Debug.Log($"[PartInfo] Attempting to create logic for {partRefObj.partName}: {partRefObj.logicClassName}");
-                logicObj = PartLogicFactory.CreateLogic(partRefObj.logicClassName);
-                if (logicObj != null) 
-                {
-                    logicObj.Initialize(this);
-                     Debug.Log($"[PartInfo] Logic created successfully: {logicObj.GetType().Name}");
-                }
-                else
-                {
-                    Debug.LogError($"[PartInfo] Failed to create logic: {partRefObj.logicClassName}");
-                }
-            }
+            maxHealth = partRefObj.partHealth;
+            currentHealth = maxHealth;
+            startGridPos = new Vector2Int(-1, -1);
+
+            logicObj = PartLogicFactory.CreateLogic(partRefObj.id);
+            if (logicObj != null)
+                logicObj.Initialize(this);
             else
-            {
-                 Debug.Log($"[PartInfo] No logic class name for {partRefObj.partName}");
-            }
+                SCDebugHelper.LogError($"Failed to create logic: {partRefObj.partName}");
         }
     }
 }

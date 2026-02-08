@@ -63,7 +63,7 @@ namespace GameCore.UI
         // Helper to get Max Y (Top-most cell Y)
         private int GetPartMaxY(PartInfo info)
         {
-            int maxY = info.gridPos.y; // logical origin y
+            int maxY = info.startGridPos.y; // logical origin y
             
             if (info.partRefObj != null && info.partRefObj.occupyPosList != null)
             {
@@ -71,7 +71,7 @@ namespace GameCore.UI
                 {
                      // Apply rotation to shape offset
                      Vector2Int rotatedP = GameCommon.RotateVector(new Vector2Int(p.x, p.y), 0);
-                     int currentY = info.gridPos.y + rotatedP.y;
+                     int currentY = info.startGridPos.y + rotatedP.y;
                      if (currentY > maxY) maxY = currentY;
                 }
             }
@@ -81,7 +81,7 @@ namespace GameCore.UI
         // Helper to get Min X (Left-most cell X)
         private int GetPartMinX(PartInfo info)
         {
-            int minX = info.gridPos.x; // logical origin x
+            int minX = info.startGridPos.x; // logical origin x
             
             if (info.partRefObj != null && info.partRefObj.occupyPosList != null)
             {
@@ -89,7 +89,7 @@ namespace GameCore.UI
                 {
                      // Apply rotation to shape offset
                      Vector2Int rotatedP = GameCommon.RotateVector(new Vector2Int(p.x, p.y), 0);
-                     int currentX = info.gridPos.x + rotatedP.x;
+                     int currentX = info.startGridPos.x + rotatedP.x;
                      if (currentX < minX) minX = currentX;
                 }
             }
