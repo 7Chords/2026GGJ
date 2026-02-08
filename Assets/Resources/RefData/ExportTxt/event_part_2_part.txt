@@ -1,1 +1,1 @@
-﻿id	qualityType	partList
+﻿id	floor	qualityType	partList

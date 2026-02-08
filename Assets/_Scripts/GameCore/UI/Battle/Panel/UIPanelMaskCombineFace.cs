@@ -21,60 +21,7 @@ namespace GameCore.UI
 
         private void CreateGrids()
         {
-            if (mono.gridPrefabName == null)
-            {
-                Debug.LogError("Grid Prefab is null in UIMonoMaskCombineFace!");
-                return;
-            }
-
-            _m_gridList = new List<UIMonoMaskCombineFaceGrid>();
             
-            int columns = 4; 
-            int rows = 7;
-
-            Transform parent = mono.transform;
-            
-             Debug.Log($"[CombineFaceGrid] Disabled Grids Count: {(mono.disabledGrids!=null?mono.disabledGrids.Count:0)}");
-             
-            for (int i = 0; i < columns * rows; i++)
-            {
-                GameObject go = ResourcesHelper.LoadGameObject(mono.gridPrefabName, parent);
-                go.SetActive(true);
-                
-                var gridMono = go.GetComponent<UIMonoMaskCombineFaceGrid>();
-                if (gridMono != null)
-                {
-                    // 计算 GridPos (假设线性索引转二维)
-                    // 以前面6x7为例
-                    int x = i % columns;
-                    int y = i / columns;
-                    gridMono.gridPos = new Vector2(x, y);
-                    
-                    if (mono.disabledGrids != null && mono.disabledGrids.Contains(new Vector2Int(x, y)))
-                    {
-                         // Using GetComponent<Image> safely just in case
-                         var img = go.GetComponent<UnityEngine.UI.Image>();
-                         //if (img == null && gridMono is UIMonoEnemyMaskGrid casted) img = casted.imgBg; // fallback try
-                         
-                         if (img != null) {
-                             img.enabled = false; // Hide completely
-                         }
-                    }
-                    else
-                    {
-                         // Default
-                         var img = go.GetComponent<UnityEngine.UI.Image>(); 
-                         if (img != null) {
-                             img.enabled = true;
-                             // Don't force color, verify prefab settings
-                             if (gridMono != null) gridMono.colorDefault = img.color; // Capture prefab color
-                         }
-                    }
-                    
-                    _m_gridList.Add(gridMono);
-                }
-            }
-
         }
 
         public override void BeforeDiscard()
@@ -98,10 +45,5 @@ namespace GameCore.UI
         {
         }
         
-        public UIMonoMaskCombineFaceGrid GetGrid(Vector2 pos)
-        {
-             if (_m_gridList == null) return null;
-             return _m_gridList.Find(g => g.gridPos == pos);
-        }
     }
 }

@@ -10,16 +10,12 @@ namespace GameCore.UI
     {
         [Header("部位Container")]
         public UIMonoCommonContainer monoPartContainer;
-
         [Header("脸部mono")]
         public UIMonoMaskCombineFace monoFace;
-
         [Header("确定按钮")]
         public Button btnConfirm;
-
-        [Header("查看敌人面具按钮")]
-        public Button btnCheckEnemyMask;
-
+        [Header("敌人面具mono")]
+        public UIMonoEnemyMask monoEnemyMask;
         [Header("牌堆按钮")]
         public Button btnDeck;
         [Header("血条bar")]

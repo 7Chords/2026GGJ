@@ -32,11 +32,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d6a25a803e849c84883d0528ad092703
-    m_Address: panel_enemy_mask
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ae21ee737449ad843a15010eb32a71f7
     m_Address: panel_store
     m_ReadOnly: 0
@@ -114,6 +109,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f20b272ab1a641b4fac83337c8adac5c
     m_Address: prefab_enemy_mask_grid
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa24085d265dd5141af77aefce849c52
+    m_Address: prefab_face_part
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

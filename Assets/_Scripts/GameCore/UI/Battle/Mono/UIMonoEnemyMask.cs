@@ -8,6 +8,7 @@ namespace GameCore.UI
 {
     public class UIMonoEnemyMask : _ASCUIMonoBase
     {
+        [Header("格子预制体名字")]
         public string gridPrefabName;
         [Header("关闭按钮")]
         public Button btnClose;

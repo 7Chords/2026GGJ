@@ -7,6 +7,10 @@ public class SCMsgConst
     #region 玩法相关
     public const int PURCHASE_GOODS = 2001;
     public const int SELL_PART = 2002;
+    public const int SET_ENEMY_FACE = 2003;
+    public const int PLACE_PART_SUCCESS = 2004;
+    public const int PLACE_PART_FAIL = 2005;
+
     #endregion
 
     #region 系统相关 99

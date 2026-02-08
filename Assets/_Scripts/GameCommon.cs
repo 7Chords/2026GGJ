@@ -12,8 +12,6 @@ namespace GameCore
     public static class GameCommon
     {
 
-        public static System.Action OnRequestInitializeEnemy;
-
         private static GameObject _m_toolTipCache;
         /// <summary>
         /// 展示伤害飘字
@@ -135,6 +133,36 @@ namespace GameCore
                 return;
             _m_toolTipCache.GetComponent<CommonTooltip>().Discard();
             _m_toolTipCache = null;
+        }
+
+        // Helper to rotate vector around (0,0) logic
+        public static Vector2Int RotateVector(Vector2Int v, int rotationSteps)
+        {
+            Vector2Int ret = v;
+            for (int i = 0; i < rotationSteps; i++)
+            {
+                // (x, y) -> (-y, x) for 90 degrees counter-clockwise
+                ret = new Vector2Int(-ret.y, ret.x);
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// 绕着中心点旋转
+        /// </summary>
+        /// <param name="_originalPos"></param>
+        /// <param name="_centerPos"></param>
+        /// <param name="_rotateStep"></param>
+        /// <returns></returns>
+        public static Vector2Int RotateAroundCenter(Vector2Int _originalPos, Vector2 _centerPos,int _rotateStep)
+        {
+            Vector2 vector = _originalPos - _centerPos;
+            for (int i = 0; i < _rotateStep; i++)
+            {
+                vector = new Vector2(vector.y, -vector.x);
+            }
+            Vector2Int ret = new Vector2Int((int)(vector.x + _centerPos.x), (int)(vector.y + _centerPos.y));
+            return ret;
         }
     }
 }

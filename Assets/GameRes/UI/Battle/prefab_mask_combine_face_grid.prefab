@@ -37,7 +37,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 110, y: 100}
+  m_SizeDelta: {x: 1, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8481900452526961358
 CanvasRenderer:
@@ -105,8 +105,8 @@ MonoBehaviour:
   canvasGroup: {fileID: 0}
   fadeInDuration: 0
   fadeOutDuration: 0
-  gridPos: {x: 0, y: 0}
   colorDefault: {r: 1, g: 1, b: 1, a: 0.5019608}
   colorCanPlace: {r: 0, g: 1, b: 0, a: 0.5019608}
   colorCanNotPlace: {r: 1, g: 0, b: 0, a: 0.5019608}
+  colorIsEffective: {r: 0, g: 0, b: 0, a: 0}
   imgBg: {fileID: 2949146822614954430}

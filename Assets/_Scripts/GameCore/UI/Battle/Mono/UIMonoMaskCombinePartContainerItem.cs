@@ -8,16 +8,13 @@ namespace GameCore.UI
 {
     public class UIMonoMaskCombinePartContainerItem : _ASCUIMonoBase
     {
-        [Header("��Ʒͼ��")]
+        [Header("部位文本")]
         public Image imgGoods;
-        [Header("Ѫ���ı�")]
+        [Header("生命文本")]
         public Text txtHealth;
-        [Header("�����������")]
+        [Header("鼠标移入缩放")]
         public float scaleMouseEnter;
-        [Header("�����������ʱ��")]
+        [Header("缩放时间改变时间")]
         public float scaleChgDuration;
-        
-        public Canvas imgCanvas;
-        public bool useGameObjSpr;
     }
 }

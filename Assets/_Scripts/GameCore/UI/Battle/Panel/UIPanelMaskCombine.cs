@@ -16,24 +16,26 @@ namespace GameCore.UI
 
         public override void AfterInitialize()
         {
-            GameModel.instance.PrepareNextBattleRound();
             _m_partContainer = new UIPanelMaskCombinePartContainer(mono.monoPartContainer);
-            
-            if (mono.monoFace != null)
-            {
-                _m_faceGrid = new UIPanelMaskCombineFace(mono.monoFace, SCUIShowType.INTERNAL);
-            }
-            
+            _m_faceGrid = new UIPanelMaskCombineFace(mono.monoFace, SCUIShowType.INTERNAL);
+
         }
 
         public override void BeforeDiscard()
         {
             _m_partContainer?.Discard();
             _m_partContainer = null;
+            _m_faceGrid?.Discard();
+            _m_faceGrid = null;
         }
 
         public override void OnHidePanel()
         {
+
+            mono.btnConfirm.onClick.RemoveAllListeners();
+            mono.btnDeck.onClick.RemoveAllListeners();
+            _m_partContainer?.HidePanel();
+            _m_faceGrid?.HidePanel();
         }
 
         public override void OnShowPanel()
@@ -42,38 +44,7 @@ namespace GameCore.UI
             _m_faceGrid?.ShowPanel();
             _m_partContainer?.ShowPanel();
 
-            if (GameModel.instance.needsRoundReset)
-            {
-                GameModel.instance.PrepareNextBattleRound();
-                GameModel.instance.needsRoundReset = false;
-                
-                // Clear Player Face Grid Visualization too
-                // Assuming faceGrid logic is handled by _m_partContainer or similar? 
-                // Wait, FaceGrid is separate?
-                // In AfterInitialize: var faceGrid = new UIPanelMaskCombineFaceGrid(...)
-                // But we don't store reference to faceGrid except locally!
-                // If FaceGrid retains state, we have a leak.
-                // Re-creating faceGrid here might be needed if it's not managed.
-                // BUT, faceGrid is usually just the BACKGROUND grid. 
-                // The PLACED PARTS are in _m_partContainer.
-            }
-            
-            mono.btnConfirm.onClick.RemoveAllListeners();
             mono.btnConfirm.onClick.AddListener(OnConfirmClick);
-
-            mono.btnCheckEnemyMask.onClick.RemoveAllListeners();
-            
-            mono.btnCheckEnemyMask.onClick.AddListener(() =>
-            {
-                AudioMgr.instance.PlaySfx("sfx_click");
-                UICoreMgr.instance.AddNode(new UINodeEnemyMask(SCFrame.UI.SCUIShowType.ADDITION));
-                
-            });
-            UICoreMgr.instance.AddNode(new UINodeEnemyMask(SCFrame.UI.SCUIShowType.ADDITION),false);
-            GameCommon.OnRequestInitializeEnemy?.Invoke();
-
-            mono.btnDeck.onClick.RemoveAllListeners();
-
             mono.btnDeck.onClick.AddListener(() =>
             {
                 AudioMgr.instance.PlaySfx("sfx_click");
@@ -85,39 +56,7 @@ namespace GameCore.UI
 
         private void OnConfirmClick()
         {
-            if (_m_partContainer == null) return;
-            AudioMgr.instance.PlaySfx("sfx_click");
-
-            // 1. 获取所有放置的部位
-            List<PartInfo> placedParts = _m_partContainer.GetPlacedParts();
-            if (placedParts == null || placedParts.Count == 0)
-            {
-                Debug.Log("没有放置任何部位！");
-                return;
-            }
-            
-            // 2. 排序
-            // 规则：Top-to-Bottom (MaxY desc), then Left-to-Right (MinX asc)
-            placedParts.Sort((a, b) =>
-            {
-                int aMaxY = GetPartMaxY(a);
-                int bMaxY = GetPartMaxY(b);
-                
-                if (aMaxY != bMaxY)
-                {
-                    return aMaxY.CompareTo(bMaxY); // Descending Y
-                }
-                
-                int aMinX = GetPartMinX(a);
-                int bMinX = GetPartMinX(b);
-                
-                return bMinX.CompareTo(aMinX); // Ascending X
-            });
-            
-            // 3. Save to GameModel for Battle
-            GameModel.instance.playerBattleParts = placedParts;
-            
-            // 4. Open Battle Node
+            AudioMgr.instance.PlaySfx("sfx_click");            
             UICoreMgr.instance.AddNode(new UINodeBattle(SCUIShowType.FULL)); 
         }
         
@@ -131,7 +70,7 @@ namespace GameCore.UI
                 foreach(var p in info.partRefObj.occupyPosList)
                 {
                      // Apply rotation to shape offset
-                     Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), 0);
+                     Vector2Int rotatedP = GameCommon.RotateVector(new Vector2Int(p.x, p.y), 0);
                      int currentY = info.gridPos.y + rotatedP.y;
                      if (currentY > maxY) maxY = currentY;
                 }
@@ -149,24 +88,14 @@ namespace GameCore.UI
                 foreach(var p in info.partRefObj.occupyPosList)
                 {
                      // Apply rotation to shape offset
-                     Vector2Int rotatedP = RotateVector(new Vector2Int(p.x, p.y), 0);
+                     Vector2Int rotatedP = GameCommon.RotateVector(new Vector2Int(p.x, p.y), 0);
                      int currentX = info.gridPos.x + rotatedP.x;
                      if (currentX < minX) minX = currentX;
                 }
             }
             return minX;
         }
-        
-        // Duplicated helper, could be in Utility
-        private Vector2Int RotateVector(Vector2Int v, int rotationSteps)
-        {
-            Vector2Int ret = v;
-            for(int i=0; i<rotationSteps; i++)
-            {
-                ret = new Vector2Int(-ret.y, ret.x);
-            }
-            return ret;
-        }
+       
 
         private void refreshShow()
         {

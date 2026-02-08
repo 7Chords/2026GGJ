@@ -8,15 +8,15 @@ namespace GameCore.UI
 {
     public class UIMonoMaskCombineFaceGrid : _ASCUIMonoBase
     {
-        [Header("����")]
-        public Vector2 gridPos;
-        [Header("Ĭ����ɫ")]
+        [Header("默认的颜色")]
         public Color colorDefault;
-        [Header("���Է��õ���ɫ")]
+        [Header("可以放置的颜色")]
         public Color colorCanPlace;
-        [Header("�����Է��õ���ɫ")]
+        [Header("不可以放置的颜色")]
         public Color colorCanNotPlace;
-
+        [Header("作用范围的拥塞")]
+        public Color colorIsEffective;
+        [Header("背景图片")]
         public Image imgBg;
     }
 }

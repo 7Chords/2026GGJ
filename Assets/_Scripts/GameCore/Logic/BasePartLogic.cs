@@ -13,13 +13,7 @@ namespace GameCore.Logic
             partInfo = _info;
         }
 
-        /// <summary>
-        /// 头部受伤加倍等逻辑
-        /// </summary>
-        /// <param name="damage"></param>
-        public virtual void OnTakeDamage(ref float damage) { }
-
-        public virtual void OnDamageTaken(float damage)
+        public virtual void OnGetHit(float damage)
         {
              GameCore.GameCommon.ShowDamageFloatText((int)damage, partInfo.GetAnchorTransformEvent?.Invoke());
         }
@@ -33,5 +27,7 @@ namespace GameCore.Logic
         /// 回合开始
         /// </summary>
         public virtual void OnTurnStart() { }
+
+        public virtual void OnPartAction() { }
     }
 }
