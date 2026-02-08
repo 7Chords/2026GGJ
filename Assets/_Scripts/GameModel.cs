@@ -27,6 +27,8 @@ namespace GameCore
 
         public List<FaceGridInfo> faceGridInfoList;//玩家当前脸部格子信息列表
 
+
+        public EnemyInfo currentEnemy;
         public override void OnInitialize()
         {
             //初始化数据从配表读取
@@ -74,9 +76,36 @@ namespace GameCore
             playerHealth = Mathf.Clamp(playerHealth + _amount, 0, playerMaxHealth);
         }
 
+        public void TakeDamage(int _amount)
+        {
+            playerHealth = Mathf.Clamp(playerHealth - _amount, 0, playerMaxHealth);
+        }
 
-        // --- Enemy Logic ---
-        public EnemyInfo currentEnemy;
+
+        public bool CanPlacePart(GameObject _startFaceGridGO , List<Vector2Int> _localGridList)
+        {
+            return false;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public void GenerateRandomEnemy()
         {
@@ -136,8 +165,6 @@ namespace GameCore
                 {
                     if (part.currentHealth > 0)
                     {
-                        // Reset State
-                        part.startGridPos = new Vector2Int(-1, -1);
                         deckPartInfoList.Add(part);
                     }
                     else
@@ -231,14 +258,11 @@ namespace GameCore
             {
                 if (TryFindValidPlacement(occupiedGrid, part.partRefObj, out Vector2Int pos, out int rot))
                 {
-                    part.startGridPos = pos;
                     MarkOccupancy(occupiedGrid, part.partRefObj, pos, rot);
                 }
                 else
                 {
                     Debug.LogWarning($"[GameModel] Could not fit enemy part {part.partRefObj.partName}");
-                    // Set to -1,-1 to indicate failure/hide
-                    part.startGridPos = new Vector2Int(-1, -1);
                 }
             }
         }

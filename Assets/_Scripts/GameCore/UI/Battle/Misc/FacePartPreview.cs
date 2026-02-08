@@ -17,11 +17,11 @@ namespace GameCore.UI
         public Text txtHealth;
         [Header("顺序文本")]
         public Text txtOrder;
-
         [Header("生命信息物体")]
         public GameObject goHealthInfo;
         [Header("序号信息物体")]
         public GameObject goOrder;
+
 
         private PartInfo _m_partInfo;
 
@@ -29,7 +29,7 @@ namespace GameCore.UI
 
         private int _m_currentRotateStep = 0;
         private bool _m_isDraging;
-        public void Initialize(PartInfo _info)
+         public void Initialize(PartInfo _info)
         {
             if (_info == null)
                 return;
@@ -42,12 +42,9 @@ namespace GameCore.UI
             if (_m_dragLoopCoroutine != null) StopCoroutine(_m_dragLoopCoroutine);
             _m_dragLoopCoroutine = StartCoroutine(DragLoop());
 
-            imgGO.sprite = ResourcesHelper.LoadAsset<Sprite>(_info.partRefObj.partGameObjectName);
-            imgGO.SetNativeSize();
-            imgPart.sprite = ResourcesHelper.LoadAsset<Sprite>(_info.partRefObj.partGameObjectName);
-            imgPart.SetNativeSize();
+            _m_partInfo = _info;
 
-            UpdatePreview();
+            refreshShow();
         }
 
 
@@ -91,6 +88,7 @@ namespace GameCore.UI
 
             if (!placementSuccess)
             {
+                _m_partInfo.Reset();
                 SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_FAIL);
                 SCCommon.DestoryGameObject(gameObject);
             }
@@ -102,12 +100,8 @@ namespace GameCore.UI
         {
             while (_m_isDraging)
             {
-                //todo
                 if (Input.GetMouseButtonDown(1))
-                {
-                    _m_currentRotateStep = (_m_currentRotateStep + 1) % 4;
-                    UpdatePreview();
-                }
+                    rotatePart();
                 yield return null;
             }
         }
@@ -134,8 +128,24 @@ namespace GameCore.UI
             return true;
         }
 
-        private void UpdatePreview()
+        private void rotatePart()
         {
+            _m_currentRotateStep = (_m_currentRotateStep + 1) % 4;
+            _m_partInfo.rotateStep = _m_currentRotateStep;
+            _m_partInfo.gridPosList = GameCommon.Rotate(_m_partInfo.gridPosList, 1);
+            refreshShow();
+        }
+
+        private void refreshShow()
+        {
+            if (_m_partInfo == null)
+                return;
+            imgGO.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
+            imgGO.SetNativeSize();
+            imgPart.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
+            imgPart.SetNativeSize();
+
+            //信息不要跟着旋转
             imgGO.transform.rotation = Quaternion.Euler(0, 0, _m_currentRotateStep * 90);
             goHealthInfo.transform.eulerAngles = Vector3.zero;
             goOrder.transform.eulerAngles = Vector3.zero;

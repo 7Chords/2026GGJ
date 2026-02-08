@@ -2,6 +2,7 @@ using GameCore.UI;
 using SCFrame;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace GameCore
@@ -93,34 +94,35 @@ namespace GameCore
             damageGO.GetComponent<DamageFloatText>().Initialize(_healAmount, false);
         }
 
-        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector2 _localPos)
+        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector3 _worldPos)
         {
             DiscardToolTip();
             GameObject toolTipGo = ResourcesHelper.LoadGameObject(
                 "prefab_tooltip",
                 SCGame.instance.topLayerRoot.transform);
-                
+
+            Vector2 screenPos = Vector2.zero;
+            var _canvas = SCGame.instance.mainCanvas;
+            Camera cam = _canvas.worldCamera;
+
+            float itemScreenX = RectTransformUtility.WorldToScreenPoint(cam, _worldPos).x;
+            bool showOnLeft = itemScreenX > Screen.width * 0.7f;
+            Vector3 offset = showOnLeft ? new Vector3(-GameConst.TOOLTIP_SHOW_X_OFFSET, GameConst.TOOLTIP_SHOW_Y_OFFSET, 0) 
+                : new Vector3(GameConst.TOOLTIP_SHOW_X_OFFSET, GameConst.TOOLTIP_SHOW_Y_OFFSET, 0);
+            screenPos = RectTransformUtility.WorldToScreenPoint(cam, _worldPos + offset);
+
             RectTransform toolTipRT = toolTipGo.GetRectTransform();
             Vector2 localPoint;
-            
-            // Get correct camera
-            Camera uiCam = null;
-            Canvas canvas = toolTipRT.GetComponentInParent<Canvas>();
-            if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
-            {
-                uiCam = canvas.worldCamera;
-            }
-            
+
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                toolTipRT.parent as RectTransform,
-                _localPos,
-                uiCam,
+                SCGame.instance.topLayerRoot.GetRectTransform(),
+                screenPos,
+                cam,
                 out localPoint
             );
             
             toolTipRT.localPosition = localPoint;
             
-            // Fix: pass LOCAL POINT to ShowTooltip
             var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
             tooltipComp.ShowTooltip(_name, _desc, localPoint);
             _m_toolTipCache = toolTipGo;
@@ -189,6 +191,74 @@ namespace GameCore
             }
             RectTransformUtility.ScreenPointToLocalPointInRectangle(_parentTran, _screentPoint, uiCam, out localPoint);
             return localPoint;
+        }
+
+        public static Vector2 CalculateBounds(List<Vector2Int> occupyPosList)
+        {
+            if (occupyPosList == null || occupyPosList.Count == 0) return Vector2.zero;
+
+            //找包围盒的最小/最大x/y
+            int minX = int.MaxValue;
+            int maxX = int.MinValue;
+            int minY = int.MaxValue;
+            int maxY = int.MinValue;
+
+            foreach (var pos in occupyPosList)
+            {
+                minX = Mathf.Min(minX, pos.x);
+                maxX = Mathf.Max(maxX, pos.x);
+                minY = Mathf.Min(minY, pos.y);
+                maxY = Mathf.Max(maxY, pos.y);
+            }
+
+            int boundsWidth = maxX - minX + 1; // 宽度（格子数）
+            int boundsHeight = maxY - minY + 1; // 高度（格子数）
+
+            return new Vector2(boundsWidth, boundsHeight);
+        }
+
+
+        /// <summary>
+        /// 逆时针旋转格子形状
+        /// 每次旋转后，自动把最上最左点重置为 (0,0)
+        /// X 右正，Y 下正
+        /// </summary>
+        public static List<Vector2Int> Rotate(List<Vector2Int> originalPoints, int step)
+        {
+            if (originalPoints == null || originalPoints.Count == 0)
+                return new List<Vector2Int>();
+
+            // 1. 找到当前最上最左点（minX, minY）
+            int minX = originalPoints.Min(p => p.x);
+            int minY = originalPoints.Min(p => p.y);
+
+            // 2. 平移到本地坐标系（00 是最上最左）
+            var localPoints = originalPoints.Select(p => new Vector2Int(p.x - minX, p.y - minY)).ToList();
+
+            // 3. 逆时针旋转
+            var rotated = localPoints.Select(p => RotatePoint(p, step)).ToList();
+
+            // 4. 关键！再次找到新的最上最左，平移回 00
+            int newMinX = rotated.Min(p => p.x);
+            int newMinY = rotated.Min(p => p.y);
+
+            var result = rotated.Select(p => new Vector2Int(p.x - newMinX, p.y - newMinY)).ToList();
+
+            return result.Distinct().ToList();
+        }
+
+        /// <summary>
+        /// Unity 坐标系：逆时针旋转公式
+        /// </summary>
+        private static Vector2Int RotatePoint(Vector2Int p, int step)
+        {
+            return step switch
+            {
+                1 => new Vector2Int(-p.y, p.x),   // 逆时针 90
+                2 => new Vector2Int(-p.x, -p.y), // 180
+                3 => new Vector2Int(p.y, -p.x),   // 逆时针 270
+                _ => p
+            };
         }
     }
 }

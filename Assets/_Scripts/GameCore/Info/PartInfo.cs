@@ -11,8 +11,9 @@ namespace GameCore
         public PartRefObj partRefObj;
         public int currentHealth;
         public int maxHealth;
-        public Vector2Int startGridPos;
-        
+        public bool isOnFace;
+        public int rotateStep;
+        public List<Vector2Int> gridPosList;
         public BasePartLogic logicObj;//逻辑实例
 
         public PartInfo(PartRefObj _partRefObj)
@@ -20,7 +21,12 @@ namespace GameCore
             partRefObj = _partRefObj;
             maxHealth = partRefObj.partHealth;
             currentHealth = maxHealth;
-            startGridPos = new Vector2Int(-1, -1);
+            isOnFace = false;
+            gridPosList = new List<Vector2Int>();
+            for(int i =0;i<partRefObj.occupyPosList.Count;i++)
+            {
+                gridPosList.Add(new Vector2Int(partRefObj.occupyPosList[i].x, partRefObj.occupyPosList[i].y));
+            }
 
             logicObj = PartLogicFactory.CreateLogic(partRefObj.id);
             if (logicObj != null)
@@ -28,5 +34,14 @@ namespace GameCore
             //else
             //    SCDebugHelper.LogError($"Failed to create logic: {partRefObj.partName}");
         }
+        public void Reset()
+        {
+            gridPosList = new List<Vector2Int>();
+            for (int i = 0; i < partRefObj.occupyPosList.Count; i++)
+            {
+                gridPosList.Add(new Vector2Int(partRefObj.occupyPosList[i].x, partRefObj.occupyPosList[i].y));
+            }
+        }
+
     }
 }
