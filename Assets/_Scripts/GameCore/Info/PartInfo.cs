@@ -1,5 +1,5 @@
 using GameCore.RefData;
-using GameCore.Logic; // Added
+using GameCore.Logic;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,8 +13,11 @@ namespace GameCore
         public int maxHealth;
         public bool isOnFace;
         public int rotateStep;
-        public List<Vector2Int> localGridPosList;
-        public List<Vector2Int> curOccpuyFacePosList;
+        public List<Vector2Int> localOccupyPosList;
+        public List<Vector2Int> localEffectPosList;
+        public List<Vector2Int> curOccupyFacePosList;
+        public List<Vector2Int> curEffectFacePosList;
+
         public BasePartLogic logicObj;//逻辑实例
 
         public PartInfo(PartRefObj _partRefObj)
@@ -23,12 +26,21 @@ namespace GameCore
             maxHealth = partRefObj.partHealth;
             currentHealth = maxHealth;
             isOnFace = false;
-            localGridPosList = new List<Vector2Int>();
+            localOccupyPosList = new List<Vector2Int>();
             for(int i =0;i<partRefObj.occupyPosList.Count;i++)
             {
-                localGridPosList.Add(new Vector2Int(partRefObj.occupyPosList[i].x, partRefObj.occupyPosList[i].y));
+                localOccupyPosList.Add(new Vector2Int(partRefObj.occupyPosList[i].x, partRefObj.occupyPosList[i].y));
             }
-            curOccpuyFacePosList = new List<Vector2Int>();
+            localEffectPosList = new List<Vector2Int>();
+            for (int i = 0; i < partRefObj.effectPosList.Count; i++)
+            {
+                localEffectPosList.Add(new Vector2Int(partRefObj.effectPosList[i].x, partRefObj.effectPosList[i].y));
+            }
+
+            curOccupyFacePosList = new List<Vector2Int>();
+            curEffectFacePosList = new List<Vector2Int>();
+
+
             logicObj = PartLogicFactory.CreateLogic(partRefObj.id);
             if (logicObj != null)
                 logicObj.Initialize(this);
@@ -37,16 +49,30 @@ namespace GameCore
         }
         public void ResetToBusy()
         {
-            isOnFace = false;
             rotateStep = 0;
-            localGridPosList = new List<Vector2Int>();
+            localOccupyPosList = new List<Vector2Int>();
             for (int i = 0; i < partRefObj.occupyPosList.Count; i++)
             {
-                localGridPosList.Add(new Vector2Int(partRefObj.occupyPosList[i].x, partRefObj.occupyPosList[i].y));
+                localOccupyPosList.Add(new Vector2Int(partRefObj.occupyPosList[i].x, partRefObj.occupyPosList[i].y));
             }
-
-            curOccpuyFacePosList = new List<Vector2Int>();
+            localEffectPosList = new List<Vector2Int>();
+            for (int i = 0; i < partRefObj.effectPosList.Count; i++)
+            {
+                localEffectPosList.Add(new Vector2Int(partRefObj.effectPosList[i].x, partRefObj.effectPosList[i].y));
+            }
+            ClearOnFaceState();
+        }
+        public void ClearOnFaceState()
+        {
+            isOnFace = false;
+            curOccupyFacePosList = new List<Vector2Int>();
+            curEffectFacePosList = new List<Vector2Int>();
         }
 
+        public void RotateOnce()
+        {
+            rotateStep = (rotateStep + 1) % 4;
+            localOccupyPosList = GameCommon.RotateShape(localOccupyPosList, 1);
+        }
     }
 }

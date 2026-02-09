@@ -9,6 +9,7 @@ namespace GameCore.RefData
     {
         public int x;
         public int y;
+        //public EGridPosType gridPosType;
         protected override void OnDeserialize(string _str)
         {
             string[] strArr = _str.Split(':');
@@ -16,6 +17,7 @@ namespace GameCore.RefData
                 return;
             x = SCCommon.ParseInt(strArr[0]);
             y = SCCommon.ParseInt(strArr[1]);
+            //gridPosType = (EGridPosType)SCCommon.ParseEnum(strArr[2], typeof(EGridPosType));
         }
 
         protected override string OnSerialise()

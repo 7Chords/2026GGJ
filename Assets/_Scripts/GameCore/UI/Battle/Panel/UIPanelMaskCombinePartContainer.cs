@@ -40,6 +40,7 @@ namespace GameCore.UI
         public override void OnHidePanel()
         {
             SCMsgCenter.UnregisterMsg(SCMsgConst.PLACE_PART_SUCCESS, onPlacePartSuccess);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onReplacePartPosFail);
 
             foreach (var item in _m_partItemList)
             {
@@ -50,9 +51,10 @@ namespace GameCore.UI
         public override void OnShowPanel()
         {
             SCMsgCenter.RegisterMsg(SCMsgConst.PLACE_PART_SUCCESS, onPlacePartSuccess);
+            SCMsgCenter.RegisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onReplacePartPosFail);
+
             ReloadParts();
         }
-
 
         public void ReloadParts()
         {
@@ -107,5 +109,17 @@ namespace GameCore.UI
         }
 
 
+        private void onReplacePartPosFail(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            PartInfo partInfo = _objs[0] as PartInfo;
+            partInfo.ResetToBusy();
+            if (!GameModel.instance.busyPartInfoList.Contains(partInfo))
+            {
+                GameModel.instance.busyPartInfoList.Add(partInfo);
+                ReloadParts();
+            }
+        }
     }
 }

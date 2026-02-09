@@ -21,12 +21,8 @@ namespace GameCore
     public enum EAttributeType
     {
         ATTACK,//攻击力
-        CRITICAL_CHANCE,//暴击率
         HIT_CHANCE,//命中率
-        DEFEND,//护盾
-        HEALTH,//回血
         REFLECT,//反射
-        SUCK,//吸血
         TRIGGER_DOUBLE,//触发两次
         ATTACK_DOUBLE,//攻击两次
         HIT_CHANCE_UP,//命中率上升
@@ -55,4 +51,9 @@ namespace GameCore
         PRECIOUS,//珍贵的
     }
 
+    //public enum EGridPosType
+    //{
+    //    OCCUPY,
+    //    EFFECT,
+    //}
 }

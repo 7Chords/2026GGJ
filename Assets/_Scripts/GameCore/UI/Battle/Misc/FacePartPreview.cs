@@ -51,6 +51,9 @@ namespace GameCore.UI
         {
             RectTransform parentRect = gameObject.transform.parent as RectTransform;
             transform.localPosition = GameCommon.ScreenPoint2UILocalPoint(parentRect,_data.position);
+
+
+
         }
         public void EndDrag(PointerEventData _data)
         {
@@ -67,11 +70,10 @@ namespace GameCore.UI
 
             if (gridGO != null)
             {
-                if (GameModel.instance.CanPlacePart(gridGO, _data.position ,_m_partInfo.localGridPosList))
+                if (GameModel.instance.CanPlacePart(gridGO, _data.position ,_m_partInfo.localOccupyPosList))
                 {
                     placementSuccess = true;
-                    SCDebugHelper.Log("ø…“‘∑≈÷√£°");
-                    SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_SUCCESS, _m_partInfo,GameModel.instance.GetPlaceFacePosList(gridGO, _data.position, _m_partInfo.localGridPosList));
+                    SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_SUCCESS, _m_partInfo,GameModel.instance.GetPlaceFacePosList(gridGO, _data.position, _m_partInfo.localOccupyPosList));
                     SCCommon.DestoryGameObject(gameObject);
 
                 }
@@ -80,7 +82,7 @@ namespace GameCore.UI
             if (!placementSuccess)
             {
                 _m_partInfo.ResetToBusy();
-                SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_FAIL);
+                SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_FAIL,_m_partInfo);
                 SCCommon.DestoryGameObject(gameObject);
             }
 
@@ -92,18 +94,14 @@ namespace GameCore.UI
             while (_m_isDraging)
             {
                 if (Input.GetMouseButtonDown(1))
-                    rotatePart();
+                {
+                    _m_partInfo.RotateOnce();
+                    refreshShow();
+                }
                 yield return null;
             }
         }
 
-
-        private void rotatePart()
-        {
-            _m_partInfo.rotateStep = (_m_partInfo.rotateStep + 1) % 4;
-            _m_partInfo.localGridPosList = GameCommon.RotateShape(_m_partInfo.localGridPosList, 1);
-            refreshShow();
-        }
 
         private void refreshShow()
         {

@@ -74,6 +74,12 @@ namespace GameCore.UI
         }
         private void onPlacePartFail(object[] _objs)
         {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            PartInfo partInfo = _objs[0] as PartInfo;
+
+            if (partInfo != _m_partInfo)
+                return;
             // 恢复物体的显示和交互
             if (mono.canvasGroup != null)
             {

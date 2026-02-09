@@ -97,6 +97,9 @@ namespace GameCore.UI
         public override void OnHidePanel()
         {
             SCMsgCenter.UnregisterMsg(SCMsgConst.PLACE_PART_SUCCESS, onPlacePartSuccess);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.REPLACE_PART_POS_SUCCESS, onReplacePartPosSuccess);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onReplacePartPosFail);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PLACE_PART_PREVIEW, onPlacePartPreview);
 
             if (_m_gridPanelList != null)
             {
@@ -115,9 +118,13 @@ namespace GameCore.UI
 
         }
 
+
         public override void OnShowPanel()
         {
             SCMsgCenter.RegisterMsg(SCMsgConst.PLACE_PART_SUCCESS, onPlacePartSuccess);
+            SCMsgCenter.RegisterMsg(SCMsgConst.REPLACE_PART_POS_SUCCESS, onReplacePartPosSuccess);
+            SCMsgCenter.RegisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onReplacePartPosFail);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PLACE_PART_PREVIEW, onPlacePartPreview);
 
             if (_m_gridPanelList != null)
             {
@@ -144,7 +151,7 @@ namespace GameCore.UI
             if (gridPosList == null)
                 return;
             //设置部位当前占据的脸部格子信息
-            partInfo.curOccpuyFacePosList = gridPosList;
+            partInfo.curOccupyFacePosList = gridPosList;
 
             UIPanelMaskCombineFaceGrid tmpGrid = null;
             FaceGridInfo tmpInfo = null;
@@ -164,10 +171,51 @@ namespace GameCore.UI
             GameObject partGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_FACE_PART, mono.tranParentPart);
             UIMonoFacePart monoFacePart = partGO.GetComponent<UIMonoFacePart>();
             UIPanelFacePart panel = new UIPanelFacePart(monoFacePart, SCUIShowType.INTERNAL);
+            panel.SetLocalPos(placeWorldPos);
             panel.SetInfo(partInfo);
             panel.ShowPanel();
             _m_facePartPanelList.Add(panel);
-            partGO.GetRectTransform().localPosition = placeWorldPos;
+        }
+
+        private void onReplacePartPosSuccess(object[] _objs)
+        {
+            if (_objs == null || _objs.Length < 2)
+                return;
+            UIPanelFacePart panel = _objs[0] as UIPanelFacePart;
+            List<Vector2Int> gridPosList = _objs[1] as List<Vector2Int>;
+            //设置部位当前占据的脸部格子信息
+            panel.partInfo.curOccupyFacePosList = gridPosList;
+
+
+            FaceGridInfo tmpInfo = null;
+            List<Vector3> tmpGOList = new List<Vector3>();
+            for (int i = 0; i < gridPosList.Count; i++)
+            {
+                tmpInfo = _m_gridInfoList.Find(x => x.pos == gridPosList[i]);
+                if (tmpInfo == null)
+                    continue;
+                tmpInfo.hasPart = true;
+                int index = _m_gridInfoList.IndexOf(tmpInfo);
+                tmpGOList.Add(_m_gridGOList[index].transform.localPosition);
+            }
+            //计算生成的位置
+            Vector2 placeWorldPos = GameCommon.CalculateWorldCenterPos(tmpGOList);
+            panel.SetLocalPos(placeWorldPos);
+        }
+
+        private void onReplacePartPosFail(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            PartInfo partInfo = _objs[0] as PartInfo;
+
+            UIPanelFacePart panel = _m_facePartPanelList.Find(x => x.partInfo == partInfo);
+            _m_facePartPanelList.Remove(panel);
+        }
+
+        private void onPlacePartPreview(object[] _objs)
+        {
+
         }
     }
 }

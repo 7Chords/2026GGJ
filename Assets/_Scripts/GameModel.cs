@@ -142,6 +142,8 @@ namespace GameCore
             return retList;
         }
 
+
+
         public bool CanPlacePart(GameObject _hitGridGO ,Vector3 _mousePos, List<Vector2Int> _localGridList)
         {
             List<Vector2Int> facePosList = GetPlaceFacePosList(_hitGridGO, _mousePos, _localGridList);

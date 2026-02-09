@@ -11,6 +11,7 @@ namespace GameCore.UI
     {
 
         private PartInfo _m_partInfo;
+        public PartInfo partInfo => _m_partInfo;
 
         private string _m_dragLoopCoroutineId;
 
@@ -47,7 +48,10 @@ namespace GameCore.UI
             _m_partInfo = _info;
             refreshShow();
         }
-
+        public void SetLocalPos(Vector2 _pos)
+        {
+            GetGameObject().transform.localPosition = _pos;
+        }
         private void refreshShow()
         {
             if (_m_partInfo == null)
@@ -75,7 +79,11 @@ namespace GameCore.UI
             _m_isDraging = true;
             if (!string.IsNullOrEmpty(_m_dragLoopCoroutineId)) SCTaskHelper.instance.KillAllCoroutines(this);
             _m_dragLoopCoroutineId = SCTaskHelper.instance.CreateCoroutine(this,dragLoop());
-            GameModel.instance.SetGridsEmpty(_m_partInfo.curOccpuyFacePosList);
+
+            //设置占据的格子的状态
+            GameModel.instance.SetGridsEmpty(_m_partInfo.curOccupyFacePosList);
+            //取消信息的脸部状态
+            partInfo.ClearOnFaceState();
 
         }
         private void onEndDrag(PointerEventData _data, object[] _objs)
@@ -93,20 +101,17 @@ namespace GameCore.UI
 
             if (gridGO != null)
             {
-                if (GameModel.instance.CanPlacePart(gridGO, _data.position, _m_partInfo.localGridPosList))
+                if (GameModel.instance.CanPlacePart(gridGO, _data.position, _m_partInfo.localOccupyPosList))
                 {
                     placementSuccess = true;
-                    SCDebugHelper.Log("可以放置！");
-                    SCMsgCenter.SendMsg(SCMsgConst.REPLACE_PART_POS, _m_partInfo, GameModel.instance.GetPlaceFacePosList(gridGO, _data.position, _m_partInfo.localGridPosList));
-                    SCCommon.DestoryGameObject(GetGameObject());
+                    SCMsgCenter.SendMsg(SCMsgConst.REPLACE_PART_POS_SUCCESS, this, GameModel.instance.GetPlaceFacePosList(gridGO, _data.position, _m_partInfo.localOccupyPosList));
 
                 }
             }
 
             if (!placementSuccess)
             {
-                _m_partInfo.ResetToBusy();
-                SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_FAIL);
+                SCMsgCenter.SendMsg(SCMsgConst.REPLACE_PART_POS_FAIL,_m_partInfo);
                 SCCommon.DestoryGameObject(GetGameObject());
             }
         }
@@ -131,7 +136,8 @@ namespace GameCore.UI
             {
                 if (Input.GetMouseButtonDown(1))
                 {
-                    _m_partInfo.rotateStep = (_m_partInfo.rotateStep + 1) % 4;
+                    _m_partInfo.RotateOnce();
+                    refreshShow();
                 }
                 yield return null;
             }
