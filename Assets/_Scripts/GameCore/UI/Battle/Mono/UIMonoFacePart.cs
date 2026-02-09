@@ -19,6 +19,5 @@ namespace GameCore.UI
         [Header("序号信息物体")]
         public GameObject goOrder;
 
-
     }
 }

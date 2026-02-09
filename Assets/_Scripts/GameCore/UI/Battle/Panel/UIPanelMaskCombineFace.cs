@@ -100,6 +100,7 @@ namespace GameCore.UI
             SCMsgCenter.UnregisterMsg(SCMsgConst.REPLACE_PART_POS_SUCCESS, onReplacePartPosSuccess);
             SCMsgCenter.UnregisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onReplacePartPosFail);
             SCMsgCenter.UnregisterMsg(SCMsgConst.PLACE_PART_PREVIEW, onPlacePartPreview);
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.CLEAR_PREVIEW, onClearPreview);
 
             if (_m_gridPanelList != null)
             {
@@ -118,13 +119,13 @@ namespace GameCore.UI
 
         }
 
-
         public override void OnShowPanel()
         {
             SCMsgCenter.RegisterMsg(SCMsgConst.PLACE_PART_SUCCESS, onPlacePartSuccess);
             SCMsgCenter.RegisterMsg(SCMsgConst.REPLACE_PART_POS_SUCCESS, onReplacePartPosSuccess);
             SCMsgCenter.RegisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onReplacePartPosFail);
             SCMsgCenter.RegisterMsg(SCMsgConst.PLACE_PART_PREVIEW, onPlacePartPreview);
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.CLEAR_PREVIEW, onClearPreview);
 
             if (_m_gridPanelList != null)
             {
@@ -152,6 +153,10 @@ namespace GameCore.UI
 
             if (occupyPosList == null || effectPosList == null)
                 return;
+
+            foreach (var gridPanel in _m_gridPanelList)
+                gridPanel.SetNoPreview();
+
             //设置部位当前占据的脸部格子信息
             partInfo.curOccupyFacePosList = occupyPosList;
             partInfo.curEffectFacePosList = effectPosList;
@@ -189,6 +194,10 @@ namespace GameCore.UI
             List<Vector2Int> effectPosList = _objs[2] as List<Vector2Int>;
             if (occupyPosList == null || effectPosList == null)
                 return;
+
+            foreach (var gridPanel in _m_gridPanelList)
+                gridPanel.SetNoPreview();
+
             //设置部位当前占据的脸部格子信息
             panel.partInfo.curOccupyFacePosList = occupyPosList;
             panel.partInfo.curEffectFacePosList = effectPosList;
@@ -216,12 +225,49 @@ namespace GameCore.UI
             PartInfo partInfo = _objs[0] as PartInfo;
 
             UIPanelFacePart panel = _m_facePartPanelList.Find(x => x.partInfo == partInfo);
+            panel.Discard();
             _m_facePartPanelList.Remove(panel);
         }
 
         private void onPlacePartPreview(object[] _objs)
         {
+            if (_objs == null || _objs.Length < 2)
+                return;
+            List<Vector2Int> occupyPosList = _objs[0] as List<Vector2Int>;
+            List<Vector2Int> effectPosList = _objs[1] as List<Vector2Int>;
+            if (occupyPosList == null || effectPosList == null)
+                return;
+            foreach (var panel in _m_gridPanelList)
+                panel.SetNoPreview();
 
+            bool canPlace = GameModel.instance.CanPlacePart(occupyPosList);
+            UIPanelMaskCombineFaceGrid tmpGrid = null;
+            for (int i =0;i<occupyPosList.Count;i++)
+            {
+                tmpGrid = _m_gridPanelList.Find(x => x.gridInfo.pos == occupyPosList[i]);
+                if (tmpGrid == null)
+                    continue;
+                tmpGrid.SetOccupyPreview(canPlace);
+            }
+            //可以放置再显示效果预览 以放置颜色优先
+            if (canPlace && !occupyPosList.Vector2IntListEquals(effectPosList))
+            {
+                for (int i = 0; i < effectPosList.Count; i++)
+                {
+                    tmpGrid = _m_gridPanelList.Find(x => x.gridInfo.pos == effectPosList[i]);
+                    if (tmpGrid == null)
+                        continue;
+                    tmpGrid.SetEffectPreview();
+                }
+            }
         }
+
+
+        private void onClearPreview()
+        {
+            foreach (var gridPanel in _m_gridPanelList)
+                gridPanel.SetNoPreview();
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,6 +52,22 @@ namespace SCFrame
             else
             {
                 return false;
+            }
+            return true;
+        }
+
+        public static bool Vector2IntListEquals(this List<Vector2Int> _list, List<Vector2Int> _other)
+        {
+            if (_list.Count != _other.Count)
+            {
+                return false;
+            }
+            for (int i = 0; i < _list.Count; i++)
+            {
+                if (!_list[i].Equals(_other[i]))
+                {
+                    return false;
+                }
             }
             return true;
         }

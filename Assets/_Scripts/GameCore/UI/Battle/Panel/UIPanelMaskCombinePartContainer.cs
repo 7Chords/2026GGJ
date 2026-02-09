@@ -80,14 +80,14 @@ namespace GameCore.UI
             }
         }
         
-        public void addItem(PartInfo info)
+        public void addItem(PartInfo _info)
         {
              GameObject go = creatItemGO();
              UIMonoMaskCombinePartContainerItem itemMono = go.GetComponent<UIMonoMaskCombinePartContainerItem>();
              if (itemMono != null)
              {
                  var panel = creatItemPanel(itemMono);
-                 panel.SetInfo(info);
+                 panel.SetInfo(_info);
                  panel.ShowPanel();
                  _m_partItemList.Add(panel);
              }

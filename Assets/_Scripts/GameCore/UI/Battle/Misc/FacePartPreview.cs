@@ -27,6 +27,8 @@ namespace GameCore.UI
 
         private Coroutine _m_dragLoopCoroutine;
 
+        private GameObject _m_curHitGridGO;
+
         private bool _m_isDraging;
         public void Initialize(PartInfo _info)
         {
@@ -38,6 +40,9 @@ namespace GameCore.UI
             canvasGroup.blocksRaycasts = false;
 
             _m_isDraging = true;
+            SCMsgCenter.SendMsg(SCMsgConst.BEGIN_DRAG_PART,gameObject);
+
+
             if (_m_dragLoopCoroutine != null) StopCoroutine(_m_dragLoopCoroutine);
             _m_dragLoopCoroutine = StartCoroutine(dragLoop());
 
@@ -49,15 +54,35 @@ namespace GameCore.UI
 
         public void Drag(PointerEventData _data)
         {
+            if (!_m_isDraging)
+                return;
+            if (_m_partInfo == null)
+                return;
             RectTransform parentRect = gameObject.transform.parent as RectTransform;
             transform.localPosition = GameCommon.ScreenPoint2UILocalPoint(parentRect,_data.position);
 
-
+            _m_curHitGridGO = GameCommon.GetHitGridGameObj(_data);
+            if (_m_curHitGridGO == null)
+            {
+                SCMsgCenter.SendMsg(SCMsgConst.CLEAR_PREVIEW);
+            }
+            else
+            {
+                List<Vector2Int> faceOccupyPosList = GameModel.instance.GetPlaceFaceOccupyPosList(_m_curHitGridGO, _data.position, _m_partInfo.localOccupyPosList);
+                List<Vector2Int> faceEffectPosList = GameModel.instance.GetPlaceFaceEffectPosList(_m_partInfo.localEffectPosList, faceOccupyPosList, _m_partInfo.localOccupyPosList);
+                SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_PREVIEW, faceOccupyPosList, faceEffectPosList);
+            }
 
         }
         public void EndDrag(PointerEventData _data)
         {
+            if (!_m_isDraging)
+                return;
             _m_isDraging = false;
+            if (_m_partInfo == null)
+                return;
+            SCMsgCenter.SendMsg(SCMsgConst.FINISH_DRAG_PART);
+
             if (_m_dragLoopCoroutine != null)
             {
                 StopCoroutine(_m_dragLoopCoroutine);
@@ -65,15 +90,15 @@ namespace GameCore.UI
             }
 
             //当前鼠标指向的脸部的格子物体
-            GameObject gridGO = GameCommon.GetHitGridGameObj(_data);
+            _m_curHitGridGO = GameCommon.GetHitGridGameObj(_data);
             bool placementSuccess = false;//是否放置成功
 
-            if (gridGO != null)
+            if (_m_curHitGridGO != null)
             {
-                if (GameModel.instance.CanPlacePart(gridGO, _data.position ,_m_partInfo.localOccupyPosList))
+                if (GameModel.instance.CanPlacePart(_m_curHitGridGO, _data.position ,_m_partInfo.localOccupyPosList))
                 {
                     placementSuccess = true;
-                    List<Vector2Int> faceOccupyPosList = GameModel.instance.GetPlaceFaceOccupyPosList(gridGO, _data.position, _m_partInfo.localOccupyPosList);
+                    List<Vector2Int> faceOccupyPosList = GameModel.instance.GetPlaceFaceOccupyPosList(_m_curHitGridGO, _data.position, _m_partInfo.localOccupyPosList);
                     List<Vector2Int> faceEffectPosList = GameModel.instance.GetPlaceFaceEffectPosList(_m_partInfo.localEffectPosList, faceOccupyPosList, _m_partInfo.localOccupyPosList);
                     SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_SUCCESS,
                         _m_partInfo,
@@ -88,6 +113,7 @@ namespace GameCore.UI
             {
                 _m_partInfo.ResetToBusy();
                 SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_FAIL,_m_partInfo);
+                SCMsgCenter.SendMsg(SCMsgConst.CLEAR_PREVIEW);
                 SCCommon.DestoryGameObject(gameObject);
             }
 
@@ -100,8 +126,16 @@ namespace GameCore.UI
             {
                 if (Input.GetMouseButtonDown(1))
                 {
+
                     _m_partInfo.RotateOnce();
                     refreshShow();
+
+                    if (_m_curHitGridGO != null)
+                    {
+                        List<Vector2Int> faceOccupyPosList = GameModel.instance.GetPlaceFaceOccupyPosList(_m_curHitGridGO, Input.mousePosition, _m_partInfo.localOccupyPosList);
+                        List<Vector2Int> faceEffectPosList = GameModel.instance.GetPlaceFaceEffectPosList(_m_partInfo.localEffectPosList, faceOccupyPosList, _m_partInfo.localOccupyPosList);
+                        SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_PREVIEW, faceOccupyPosList, faceEffectPosList);
+                    }
                 }
                 yield return null;
             }

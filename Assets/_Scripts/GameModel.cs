@@ -30,6 +30,7 @@ namespace GameCore
         public List<GameObject> faceGOList;
 
         public EnemyInfo currentEnemy;
+
         public override void OnInitialize()
         {
             //初始化数据从配表读取
@@ -165,6 +166,20 @@ namespace GameCore
                     return false;
             }
             return true;
+        }
+        public bool CanPlacePart(List<Vector2Int> _faceOccupyPosList)
+        {
+            if (_faceOccupyPosList == null)
+                return false;
+            FaceGridInfo info = null;
+            for (int i = 0; i < _faceOccupyPosList.Count; i++)
+            {
+                info = faceGridInfoList.Find(x => x.pos == _faceOccupyPosList[i]);
+                if (info == null || info.hasPart)
+                    return false;
+            }
+            return true;
+
         }
 
         public void SetGridsEmpty(List<Vector2Int> _posList)

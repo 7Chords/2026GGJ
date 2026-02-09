@@ -13,6 +13,10 @@ public class SCMsgConst
     public const int REPLACE_PART_POS_SUCCESS = 2006;
     public const int REPLACE_PART_POS_FAIL = 2007;
     public const int PLACE_PART_PREVIEW = 2008;
+    public const int CLEAR_PREVIEW = 2009;
+    public const int BEGIN_DRAG_PART = 2010;
+    public const int FINISH_DRAG_PART = 2011;
+
     #endregion
 
     #region 系统相关 99

@@ -184,5 +184,5 @@ MonoBehaviour:
   colorDefault: {r: 1, g: 1, b: 1, a: 0.5019608}
   colorCanPlace: {r: 0, g: 1, b: 0, a: 0.5019608}
   colorCanNotPlace: {r: 1, g: 0, b: 0, a: 0.5019608}
-  colorIsEffective: {r: 1, g: 0.4, b: 0, a: 0.5019608}
-  imgGrid: {fileID: 0}
+  colorIsEffective: {r: 1, g: 1, b: 0, a: 0.5019608}
+  imgGrid: {fileID: 3940513986518713037}

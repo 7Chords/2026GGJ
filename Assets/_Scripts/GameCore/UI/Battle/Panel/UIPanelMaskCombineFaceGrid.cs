@@ -8,7 +8,8 @@ namespace GameCore.UI
     public class UIPanelMaskCombineFaceGrid : _ASCUIPanelBase<UIMonoMaskCombineFaceGrid>
     {
 
-        private FaceGridInfo _m_info;
+        private FaceGridInfo _m_gridInfo;
+        public FaceGridInfo gridInfo => _m_gridInfo;
         public UIPanelMaskCombineFaceGrid(UIMonoMaskCombineFaceGrid _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -35,7 +36,7 @@ namespace GameCore.UI
 
         public void SetInfo(FaceGridInfo _info)
         {
-            _m_info = _info;
+            _m_gridInfo = _info;
         }
 
         public void SetDisable()
@@ -45,7 +46,20 @@ namespace GameCore.UI
             mono.canvasGroup.blocksRaycasts = false;
         }
 
+        public void SetOccupyPreview(bool _canPlace)
+        {
+            mono.imgGrid.color = _canPlace?mono.colorCanPlace:mono.colorCanNotPlace;
+        }
 
+        public void SetEffectPreview()
+        {
+            mono.imgGrid.color = mono.colorIsEffective;
+        }
+
+        public void SetNoPreview()
+        {
+            mono.imgGrid.color = mono.colorDefault;
+        }
 
     }
 
