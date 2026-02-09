@@ -104,7 +104,13 @@ namespace GameCore.UI
                 if (GameModel.instance.CanPlacePart(gridGO, _data.position, _m_partInfo.localOccupyPosList))
                 {
                     placementSuccess = true;
-                    SCMsgCenter.SendMsg(SCMsgConst.REPLACE_PART_POS_SUCCESS, this, GameModel.instance.GetPlaceFacePosList(gridGO, _data.position, _m_partInfo.localOccupyPosList));
+
+                    List<Vector2Int> faceOccupyPosList = GameModel.instance.GetPlaceFaceOccupyPosList(gridGO, _data.position, _m_partInfo.localOccupyPosList);
+                    List<Vector2Int> faceEffectPosList = GameModel.instance.GetPlaceFaceEffectPosList(_m_partInfo.localEffectPosList, faceOccupyPosList, _m_partInfo.localOccupyPosList);
+                    SCMsgCenter.SendMsg(SCMsgConst.REPLACE_PART_POS_SUCCESS, 
+                        this,
+                        faceOccupyPosList,
+                        faceEffectPosList);
 
                 }
             }

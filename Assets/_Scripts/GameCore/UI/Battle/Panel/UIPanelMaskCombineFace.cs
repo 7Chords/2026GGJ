@@ -144,22 +144,25 @@ namespace GameCore.UI
 
         private void onPlacePartSuccess(object[] _objs)
         {
-            if (_objs == null || _objs.Length < 2)
+            if (_objs == null || _objs.Length < 3)
                 return;
             PartInfo partInfo = _objs[0] as PartInfo;
-            List<Vector2Int> gridPosList = _objs[1] as List<Vector2Int>;
-            if (gridPosList == null)
+            List<Vector2Int> occupyPosList = _objs[1] as List<Vector2Int>;
+            List<Vector2Int> effectPosList = _objs[2] as List<Vector2Int>;
+
+            if (occupyPosList == null || effectPosList == null)
                 return;
             //设置部位当前占据的脸部格子信息
-            partInfo.curOccupyFacePosList = gridPosList;
+            partInfo.curOccupyFacePosList = occupyPosList;
+            partInfo.curEffectFacePosList = effectPosList;
 
             UIPanelMaskCombineFaceGrid tmpGrid = null;
             FaceGridInfo tmpInfo = null;
             GameObject tmpGO = null;
             List<Vector3> tmpGOList = new List<Vector3>();
-            for(int i =0;i<gridPosList.Count;i++)
+            for(int i =0;i<occupyPosList.Count;i++)
             {
-                tmpInfo = _m_gridInfoList.Find(x => x.pos == gridPosList[i]);
+                tmpInfo = _m_gridInfoList.Find(x => x.pos == occupyPosList[i]);
                 if (tmpInfo == null)
                     continue;
                 tmpInfo.hasPart = true;
@@ -179,19 +182,22 @@ namespace GameCore.UI
 
         private void onReplacePartPosSuccess(object[] _objs)
         {
-            if (_objs == null || _objs.Length < 2)
+            if (_objs == null || _objs.Length < 3)
                 return;
             UIPanelFacePart panel = _objs[0] as UIPanelFacePart;
-            List<Vector2Int> gridPosList = _objs[1] as List<Vector2Int>;
+            List<Vector2Int> occupyPosList = _objs[1] as List<Vector2Int>;
+            List<Vector2Int> effectPosList = _objs[2] as List<Vector2Int>;
+            if (occupyPosList == null || effectPosList == null)
+                return;
             //设置部位当前占据的脸部格子信息
-            panel.partInfo.curOccupyFacePosList = gridPosList;
-
+            panel.partInfo.curOccupyFacePosList = occupyPosList;
+            panel.partInfo.curEffectFacePosList = effectPosList;
 
             FaceGridInfo tmpInfo = null;
             List<Vector3> tmpGOList = new List<Vector3>();
-            for (int i = 0; i < gridPosList.Count; i++)
+            for (int i = 0; i < occupyPosList.Count; i++)
             {
-                tmpInfo = _m_gridInfoList.Find(x => x.pos == gridPosList[i]);
+                tmpInfo = _m_gridInfoList.Find(x => x.pos == occupyPosList[i]);
                 if (tmpInfo == null)
                     continue;
                 tmpInfo.hasPart = true;

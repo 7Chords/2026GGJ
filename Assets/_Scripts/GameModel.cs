@@ -2,6 +2,7 @@ using GameCore.RefData;
 using SCFrame;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace GameCore
@@ -81,7 +82,7 @@ namespace GameCore
             playerHealth = Mathf.Clamp(playerHealth - _amount, 0, playerMaxHealth);
         }
 
-        public List<Vector2Int> GetPlaceFacePosList(GameObject _hitGridGO, Vector3 _mousePos, List<Vector2Int> _localGridList)
+        public List<Vector2Int> GetPlaceFaceOccupyPosList(GameObject _hitGridGO, Vector3 _mousePos, List<Vector2Int> _localGridList)
         {
             RectTransform gridRect = _hitGridGO.GetComponent<RectTransform>();
             if (gridRect == null) return null;
@@ -142,11 +143,18 @@ namespace GameCore
             return retList;
         }
 
-
+        public List<Vector2Int> GetPlaceFaceEffectPosList(List<Vector2Int> _localEffectPosList,List<Vector2Int> _faceOccupyPosList, List<Vector2Int> _localOccupyPosList)
+        {
+            if (_localEffectPosList == null || _faceOccupyPosList == null || _localOccupyPosList == null)
+                return null;
+            Vector2Int offset = _faceOccupyPosList[0] - _localOccupyPosList[0];
+            List<Vector2Int> retList = _localEffectPosList.Select(p => p = new Vector2Int(p.x + offset.x, p.y + offset.y)).ToList();
+            return retList;
+        }
 
         public bool CanPlacePart(GameObject _hitGridGO ,Vector3 _mousePos, List<Vector2Int> _localGridList)
         {
-            List<Vector2Int> facePosList = GetPlaceFacePosList(_hitGridGO, _mousePos, _localGridList);
+            List<Vector2Int> facePosList = GetPlaceFaceOccupyPosList(_hitGridGO, _mousePos, _localGridList);
             if (facePosList == null)
                 return false;
             FaceGridInfo info = null;

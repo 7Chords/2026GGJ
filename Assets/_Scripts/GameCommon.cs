@@ -138,28 +138,6 @@ namespace GameCore
             _m_toolTipCache = null;
         }
 
-        // Helper to rotate vector around (0,0) logic
-        public static Vector2Int RotateVector(Vector2Int v, int rotationSteps)
-        {
-            Vector2Int ret = v;
-            for (int i = 0; i < rotationSteps; i++)
-            {
-                // (x, y) -> (-y, x) for 90 degrees counter-clockwise
-                ret = new Vector2Int(-ret.y, ret.x);
-            }
-            return ret;
-        }
-
-        public static Vector2 RotateVector(Vector2 v, int rotationSteps)
-        {
-            Vector2 ret = v;
-            for (int i = 0; i < rotationSteps; i++)
-            {
-                // (x, y) -> (-y, x) for 90 degrees counter-clockwise
-                ret = new Vector2(-ret.y, ret.x);
-            }
-            return ret;
-        }
 
 
         /// <summary>
@@ -209,7 +187,7 @@ namespace GameCore
                 maxY = Mathf.Max(maxY, pos.y);
             }
 
-            return new Vector2(minX + maxX / 2, minY + maxY / 2);
+            return new Vector2((minX + maxX) / 2, (minY + maxY) / 2);
         }
 
         public static Vector2 CalculateWorldCenterPos(List<Vector3> _occupyPosList)
@@ -261,11 +239,8 @@ namespace GameCore
             return new Vector2(boundsWidth, boundsHeight);
         }
 
-
         /// <summary>
         /// 逆时针旋转格子形状
-        /// 每次旋转后，自动把最上最左点重置为 (0,0)
-        /// X 右正，Y 下正
         /// </summary>
         public static List<Vector2Int> RotateShape(List<Vector2Int> _originalPoints, int _step)
         {
@@ -277,10 +252,26 @@ namespace GameCore
             int minY = _originalPoints.Min(p => p.y);
 
             //平移到本地坐标系（00 是最上最左）
-            var localPoints = _originalPoints.Select(p => new Vector2Int(p.x - minX, p.y - minY)).ToList();
+            List<Vector2Int> localPoints = _originalPoints.Select(p => new Vector2Int(p.x - minX, p.y - minY)).ToList();
 
             //逆时针旋转
-            var rotated = localPoints.Select(p => RotatePoint(p, _step)).ToList();
+            List<Vector2Int> rotated = localPoints.Select(p => RotatePoint(p, _step)).ToList();
+
+            return rotated;
+        }
+
+        /// <summary>
+        /// 逆时针旋转格子形状
+        /// 旋转后把最上最左点重置为 (0,0)
+        /// X 右正，Y 下正
+        /// </summary>
+        public static List<Vector2Int> RotateShapeAndMove2Zero(List<Vector2Int> _originalPoints, int _step)
+        {
+            if (_originalPoints == null || _originalPoints.Count == 0)
+                return new List<Vector2Int>();
+
+            //逆时针旋转
+            List<Vector2Int> rotated = RotateShape(_originalPoints, _step);
 
             //再次找到新的最上最左，平移回 00
             int newMinX = rotated.Min(p => p.x);
@@ -292,15 +283,39 @@ namespace GameCore
         }
 
         /// <summary>
-        /// 逆时针旋转公式
+        /// 逆时针旋转格子形状
+        /// 旋转后根据参考的旋转列表归0所需要的偏移 进行格子偏移 用于效果格子的旋转
+        /// </summary>
+        public static List<Vector2Int> RotateShapeAndMoveBySample(List<Vector2Int> _originalPoints, int _step, List<Vector2Int> _sampleList)
+        {
+            if (_originalPoints == null || _originalPoints.Count == 0)
+                return new List<Vector2Int>();
+            //逆时针旋转
+            List<Vector2Int> rotated = _originalPoints.Select(p => RotatePoint(p, _step)).ToList();
+
+            List<Vector2Int> originalSampleRotateList = RotateShape(_sampleList, _step);
+            List<Vector2Int> dealSampleRotateList = RotateShapeAndMove2Zero(_sampleList, _step);
+            Vector2Int sampleMove = dealSampleRotateList[0] - originalSampleRotateList[0];
+
+            List<Vector2Int> ret = rotated.Select(p => new Vector2Int(p.x + sampleMove.x,p.y + sampleMove.y)).ToList();
+
+
+            return ret;
+        }
+
+
+
+
+        /// <summary>
+        /// 逆时针旋转公式 y轴以下为正 因为游戏里的设计
         /// </summary>
         private static Vector2Int RotatePoint(Vector2Int _p, int _step)
         {
             return _step switch
             {
-                1 => new Vector2Int(-_p.y, _p.x),   // 逆时针 90
+                1 => new Vector2Int(_p.y, -_p.x),   // 逆时针 90
                 2 => new Vector2Int(-_p.x, -_p.y), // 180
-                3 => new Vector2Int(_p.y, -_p.x),   // 逆时针 270
+                3 => new Vector2Int(-_p.y, _p.x),   // 逆时针 270
                 _ => _p
             };
         }
