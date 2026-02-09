@@ -81,15 +81,13 @@ namespace GameCore
             playerHealth = Mathf.Clamp(playerHealth - _amount, 0, playerMaxHealth);
         }
 
-
-        public bool CanPlacePart(GameObject _hitGridGO ,Vector3 _mousePos, List<Vector2Int> _localGridList)
+        public List<Vector2Int> GetPlaceFacePosList(GameObject _hitGridGO, Vector3 _mousePos, List<Vector2Int> _localGridList)
         {
-
             RectTransform gridRect = _hitGridGO.GetComponent<RectTransform>();
-            if (gridRect == null) return false;
+            if (gridRect == null) return null;
 
             //获取格子的像素尺寸
-            Vector2 gridSize= new Vector2(gridRect.rect.width, gridRect.rect.height);
+            Vector2 gridSize = new Vector2(gridRect.rect.width, gridRect.rect.height);
             Vector2 pixelPosInGrid;
             //转换鼠标屏幕坐标到格子Rect内的本地坐标
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -98,7 +96,7 @@ namespace GameCore
                 SCGame.instance.gameCamera,
                 out pixelPosInGrid))
             {
-                return false;
+                return null;
             }
 
             //修正坐标（转为相对于格子左上角的正数）
@@ -116,33 +114,45 @@ namespace GameCore
 
             int goIndex = faceGOList.IndexOf(_hitGridGO);
 
-            if (ratio.x<0.5 && ratio.y <0.5)//第一象限
+            if (ratio.x < 0.5 && ratio.y < 0.5)//第一象限
             {
-                hitAsLocalGridPos = new Vector2Int(Mathf.CeilToInt(localCenterPos.x),(int)Mathf.CeilToInt(localCenterPos.y));
+                hitAsLocalGridPos = new Vector2Int(Mathf.CeilToInt(localCenterPos.x), (int)Mathf.CeilToInt(localCenterPos.y));
             }
-            else if(ratio.x >= 0.5 && ratio.y < 0.5)//第二象限
+            else if (ratio.x >= 0.5 && ratio.y < 0.5)//第二象限
             {
                 hitAsLocalGridPos = new Vector2Int(Mathf.FloorToInt(localCenterPos.x), (int)Mathf.CeilToInt(localCenterPos.y));
 
             }
-            else if(ratio.x >= 0.5 && ratio.y > 0.5)//第三象限
+            else if (ratio.x >= 0.5 && ratio.y > 0.5)//第三象限
             {
                 hitAsLocalGridPos = new Vector2Int((int)Mathf.FloorToInt(localCenterPos.x), (int)Mathf.FloorToInt(localCenterPos.y));
 
             }
-            else if(ratio.x < 0.5 && ratio.y >= 0.5)//第四象限
+            else if (ratio.x < 0.5 && ratio.y >= 0.5)//第四象限
             {
                 hitAsLocalGridPos = new Vector2Int((int)Mathf.CeilToInt(localCenterPos.x), (int)Mathf.FloorToInt(localCenterPos.y));
             }
+            List<Vector2Int> retList = new List<Vector2Int>();
             Vector2Int partFacePos = Vector2Int.zero;
-            for(int i =0;i<_localGridList.Count;i++)
+            for (int i = 0; i < _localGridList.Count; i++)
             {
                 partFacePos = (_localGridList[i] - hitAsLocalGridPos) + faceGridInfoList[goIndex].pos;
-                FaceGridInfo info = faceGridInfoList.Find(x => x.pos == partFacePos);
+                retList.Add(partFacePos);
+            }
+            return retList;
+        }
+
+        public bool CanPlacePart(GameObject _hitGridGO ,Vector3 _mousePos, List<Vector2Int> _localGridList)
+        {
+            List<Vector2Int> facePosList = GetPlaceFacePosList(_hitGridGO, _mousePos, _localGridList);
+            if (facePosList == null)
+                return false;
+            FaceGridInfo info = null;
+            for(int i =0;i<facePosList.Count;i++)
+            {
+                info = faceGridInfoList.Find(x => x.pos == facePosList[i]);
                 if (info == null || info.hasPart)
-                {
                     return false;
-                }
             }
             return true;
         }

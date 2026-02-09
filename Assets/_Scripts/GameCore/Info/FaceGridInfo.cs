@@ -9,7 +9,7 @@ namespace GameCore
         public Vector2Int pos;
         public bool hasPart;
 
-        public FaceGridInfo(Vector2Int _pos,bool _hasPart)
+        public FaceGridInfo(Vector2Int _pos, bool _hasPart)
         {
             pos = _pos;
             hasPart = _hasPart;

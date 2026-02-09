@@ -45,6 +45,8 @@ namespace GameCore.UI
             mono.canvasGroup.blocksRaycasts = false;
         }
 
+
+
     }
 
 }

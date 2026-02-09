@@ -72,7 +72,7 @@ namespace GameCore.UI
                 {
                     placementSuccess = true;
                     SCDebugHelper.Log("ø…“‘∑≈÷√£°");
-                    SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_SUCCESS);
+                    SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_SUCCESS,GameModel.instance.GetPlaceFacePosList(gridGO, _data.position, _m_partInfo.gridPosList));
                 }
             }
 
