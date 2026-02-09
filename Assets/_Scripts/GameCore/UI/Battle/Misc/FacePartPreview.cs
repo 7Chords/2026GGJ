@@ -51,7 +51,6 @@ namespace GameCore.UI
             refreshShow();
         }
 
-
         public void Drag(PointerEventData _data)
         {
             if (!_m_isDraging)
@@ -119,7 +118,6 @@ namespace GameCore.UI
 
         }
 
-
         private IEnumerator dragLoop()
         {
             while (_m_isDraging)
@@ -140,7 +138,6 @@ namespace GameCore.UI
                 yield return null;
             }
         }
-
 
         private void refreshShow()
         {

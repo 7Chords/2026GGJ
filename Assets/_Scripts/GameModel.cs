@@ -15,7 +15,7 @@ namespace GameCore
         public List<PartInfo> bagPartInfoList; //背包部位列表(玩家局外拥有的全部)
         public List<PartInfo> deckPartInfoList; //牌堆部位列表(在牌堆里但是玩家当前未持有的)
         public List<PartInfo> busyPartInfoList; //玩家当前持有的部位列表
-        public List<PartInfo> playerBattleParts;//当前战斗中的部位列表（在脸上）
+        public List<PartInfo> playerBattlePartInfoList;//当前战斗中的部位列表（在脸上）
 
         public int playerHealth; //玩家生命
         public int playerMaxHealth;//玩家最大生命
@@ -44,7 +44,7 @@ namespace GameCore
             busyPartInfoList = new List<PartInfo>();
             bagPartInfoList = new List<PartInfo>();
             deckPartInfoList = new List<PartInfo>();
-            playerBattleParts = new List<PartInfo>();
+            playerBattlePartInfoList = new List<PartInfo>();
 
 
             PartEffectObj partEffectObj = null;
@@ -195,6 +195,22 @@ namespace GameCore
             }
         }
 
+        public int GetBattleOrderByPartInfo(PartInfo _info)
+        {
+            if (_info == null)
+                return -1;
+            if (playerBattlePartInfoList == null || !playerBattlePartInfoList.Contains(_info))
+                return -1;
+            playerBattlePartInfoList.Sort((a, b) =>
+            {
+                Vector2Int aPos = a.GetMinGridPos();
+                Vector2Int bPos = b.GetMinGridPos();
+                if (aPos.y != bPos.y)
+                    return aPos.y.CompareTo(bPos.y);
+                return aPos.x.CompareTo(bPos.x);
+            });
+            return playerBattlePartInfoList.IndexOf(_info) + 1;//索引加1用于显示
+        }
 
 
 
@@ -241,7 +257,7 @@ namespace GameCore
         
         public void PrepareNextBattleRound()
         {
-            Debug.Log($"[GameModel] PrepareNextBattleRound Start. Deck: {deckPartInfoList.Count}, Busy: {busyPartInfoList.Count}, Battle: {playerBattleParts.Count}");
+            Debug.Log($"[GameModel] PrepareNextBattleRound Start. Deck: {deckPartInfoList.Count}, Busy: {busyPartInfoList.Count}, Battle: {playerBattlePartInfoList.Count}");
             
             // 1. Reset Lists
             if (deckPartInfoList == null) deckPartInfoList = new List<PartInfo>();
@@ -250,8 +266,8 @@ namespace GameCore
             if (busyPartInfoList == null) busyPartInfoList = new List<PartInfo>();
             else busyPartInfoList.Clear();
             
-            if (playerBattleParts == null) playerBattleParts = new List<PartInfo>();
-            else playerBattleParts.Clear(); // Just clear the reference list, parts are in Bag
+            if (playerBattlePartInfoList == null) playerBattlePartInfoList = new List<PartInfo>();
+            else playerBattlePartInfoList.Clear(); // Just clear the reference list, parts are in Bag
 
             // 2. Return All Living Parts from Bag to Deck
             if (bagPartInfoList != null)

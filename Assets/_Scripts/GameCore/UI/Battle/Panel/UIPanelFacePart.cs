@@ -1,6 +1,5 @@
 using SCFrame;
 using SCFrame.UI;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,6 +35,8 @@ namespace GameCore.UI
         {
             SCMsgCenter.UnregisterMsg(SCMsgConst.BEGIN_DRAG_PART, onBeginDragPart);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.FINISH_DRAG_PART, onFinishDragPart);
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.FACE_PART_ORDER_CHG, refreshShow);
+
 
             mono.imgGO.RemoveBeginDrag(onBeginDrag);
             mono.imgGO.RemoveDrag(onDrag);
@@ -47,6 +48,8 @@ namespace GameCore.UI
         {
             SCMsgCenter.RegisterMsg(SCMsgConst.BEGIN_DRAG_PART, onBeginDragPart);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.FINISH_DRAG_PART, onFinishDragPart);
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.FACE_PART_ORDER_CHG, refreshShow);
+
 
             mono.imgGO.AddBeginDrag(onBeginDrag);
             mono.imgGO.AddDrag(onDrag);
@@ -72,8 +75,7 @@ namespace GameCore.UI
             mono.imgPart.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
             mono.imgPart.SetNativeSize();
             mono.txtHealth.text = _m_partInfo.currentHealth +"/" + _m_partInfo.maxHealth;
-            //todo:order
-
+            mono.txtOrder.text = GameModel.instance.GetBattleOrderByPartInfo(_m_partInfo).ToString();
             //信息不要跟着旋转
             mono.imgGO.transform.rotation = Quaternion.Euler(0, 0, _m_partInfo.rotateStep * 90);
             mono.goHealthInfo.transform.eulerAngles = Vector3.zero;
@@ -99,9 +101,7 @@ namespace GameCore.UI
             }
         }
 
-
-
-
+        #region 拖拽
         public void onBeginDrag(PointerEventData _data, object[] _objs)
         {
             if (_m_isDraging)
@@ -109,6 +109,7 @@ namespace GameCore.UI
             _m_isDraging = true;
             //放到最下面 显示在最前面
             GetGameObject().transform.SetAsLastSibling();
+
             SCMsgCenter.SendMsg(SCMsgConst.BEGIN_DRAG_PART, GetGameObject());
 
             if (!string.IsNullOrEmpty(_m_dragLoopCoroutineId)) SCTaskHelper.instance.KillAllCoroutines(this);
@@ -125,10 +126,10 @@ namespace GameCore.UI
             if (!_m_isDraging)
                 return;
             _m_isDraging = false;
+            SCMsgCenter.SendMsg(SCMsgConst.FINISH_DRAG_PART);
+
             if (!string.IsNullOrEmpty(_m_dragLoopCoroutineId))
                 SCTaskHelper.instance.KillAllCoroutines(this);
-
-
 
             //当前鼠标指向的脸部的格子物体
             _m_curHitGridGO = GameCommon.GetHitGridGameObj(_data);
@@ -158,14 +159,10 @@ namespace GameCore.UI
                 Discard();
             }
         }
-
         private void onDrag(PointerEventData _data, object[] _objs)
         {
             if (!_m_isDraging)
                 return;
-
-
-            SCMsgCenter.SendMsg(SCMsgConst.FINISH_DRAG_PART);
 
             RectTransform parentRect = GetGameObject().transform.parent as RectTransform;
             GetGameObject().transform.localPosition = GameCommon.ScreenPoint2UILocalPoint(parentRect, _data.position);
@@ -183,7 +180,9 @@ namespace GameCore.UI
             }
 
         }
+        #endregion
 
+        #region 事件回调
         private void onFinishDragPart()
         {
             mono.canvasGroup.blocksRaycasts = true;
@@ -196,8 +195,9 @@ namespace GameCore.UI
             GameObject go = _objs[0] as GameObject;
             if (go != GetGameObject())
                 mono.canvasGroup.blocksRaycasts = false;
-
         }
+
+        #endregion
 
     }
 }

@@ -10,6 +10,7 @@ namespace GameCore.UI
     {
         private UIPanelMaskCombinePartContainer _m_partContainer;
         private UIPanelMaskCombineFace _m_faceGrid;
+        private UIPanelEnemyMask _m_enemyMask;
         public UIPanelMaskCombine(UIMonoMaskCombine _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -18,6 +19,7 @@ namespace GameCore.UI
         {
             _m_partContainer = new UIPanelMaskCombinePartContainer(mono.monoPartContainer);
             _m_faceGrid = new UIPanelMaskCombineFace(mono.monoFace, SCUIShowType.INTERNAL);
+            _m_enemyMask = new UIPanelEnemyMask(mono.monoEnemyMask, SCUIShowType.INTERNAL);
 
         }
 
@@ -27,6 +29,8 @@ namespace GameCore.UI
             _m_partContainer = null;
             _m_faceGrid?.Discard();
             _m_faceGrid = null;
+            _m_enemyMask?.Discard();
+            _m_enemyMask = null;
         }
 
         public override void OnHidePanel()
@@ -36,6 +40,8 @@ namespace GameCore.UI
             mono.btnDeck.onClick.RemoveAllListeners();
             _m_partContainer?.HidePanel();
             _m_faceGrid?.HidePanel();
+            _m_enemyMask?.HidePanel();
+
         }
 
         public override void OnShowPanel()
@@ -43,6 +49,7 @@ namespace GameCore.UI
 
             _m_faceGrid?.ShowPanel();
             _m_partContainer?.ShowPanel();
+            _m_enemyMask?.ShowPanel();
 
             mono.btnConfirm.onClick.AddListener(OnConfirmClick);
             mono.btnDeck.onClick.AddListener(() =>
@@ -60,43 +67,6 @@ namespace GameCore.UI
             UICoreMgr.instance.AddNode(new UINodeBattle(SCUIShowType.FULL)); 
         }
         
-        // Helper to get Max Y (Top-most cell Y)
-        //private int GetPartMaxY(PartInfo info)
-        //{
-        //    int maxY = info.startGridPos.y; // logical origin y
-            
-        //    if (info.partRefObj != null && info.partRefObj.occupyPosList != null)
-        //    {
-        //        foreach(var p in info.partRefObj.occupyPosList)
-        //        {
-        //             // Apply rotation to shape offset
-        //             Vector2Int rotatedP = GameCommon.RotateVector(new Vector2Int(p.x, p.y), 0);
-        //             int currentY = info.startGridPos.y + rotatedP.y;
-        //             if (currentY > maxY) maxY = currentY;
-        //        }
-        //    }
-        //    return maxY;
-        //}
-
-        // Helper to get Min X (Left-most cell X)
-        //private int GetPartMinX(PartInfo info)
-        //{
-        //    int minX = info.startGridPos.x; // logical origin x
-            
-        //    if (info.partRefObj != null && info.partRefObj.occupyPosList != null)
-        //    {
-        //        foreach(var p in info.partRefObj.occupyPosList)
-        //        {
-        //             // Apply rotation to shape offset
-        //             Vector2Int rotatedP = GameCommon.RotateVector(new Vector2Int(p.x, p.y), 0);
-        //             int currentX = info.startGridPos.x + rotatedP.x;
-        //             if (currentX < minX) minX = currentX;
-        //        }
-        //    }
-        //    return minX;
-        //}
-       
-
         private void refreshShow()
         {
             _m_partContainer?.ReloadParts();

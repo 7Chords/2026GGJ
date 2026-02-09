@@ -1,9 +1,7 @@
-using SCFrame.UI;
-using System.Collections;
-using System.Collections.Generic;
 using SCFrame;
+using SCFrame.UI;
+using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 namespace GameCore.UI
 {
@@ -15,6 +13,7 @@ namespace GameCore.UI
         private List<GameObject> _m_gridGOList;
 
         private List<UIPanelFacePart> _m_facePartPanelList;
+        private List<PartInfo> _m_playerBattlePartInfoList;
         public UIPanelMaskCombineFace(UIMonoMaskCombineFace _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -26,6 +25,7 @@ namespace GameCore.UI
             _m_gridInfoList = new List<FaceGridInfo>();
             _m_gridGOList = new List<GameObject>();
             _m_facePartPanelList = new List<UIPanelFacePart>();
+            _m_playerBattlePartInfoList = new List<PartInfo>();
 
             createGrids();
 
@@ -69,6 +69,7 @@ namespace GameCore.UI
             }
             GameModel.instance.faceGridInfoList = _m_gridInfoList;
             GameModel.instance.faceGOList = _m_gridGOList;
+            GameModel.instance.playerBattlePartInfoList = _m_playerBattlePartInfoList;
 
         }
 
@@ -157,6 +158,8 @@ namespace GameCore.UI
             foreach (var gridPanel in _m_gridPanelList)
                 gridPanel.SetNoPreview();
 
+            _m_playerBattlePartInfoList.Add(partInfo);
+
             //设置部位当前占据的脸部格子信息
             partInfo.curOccupyFacePosList = occupyPosList;
             partInfo.curEffectFacePosList = effectPosList;
@@ -183,6 +186,9 @@ namespace GameCore.UI
             panel.SetInfo(partInfo);
             panel.ShowPanel();
             _m_facePartPanelList.Add(panel);
+
+            SCMsgCenter.SendMsg(SCMsgConst.FACE_PART_ORDER_CHG);
+
         }
 
         private void onReplacePartPosSuccess(object[] _objs)
@@ -216,6 +222,7 @@ namespace GameCore.UI
             //计算生成的位置
             Vector2 placeWorldPos = GameCommon.CalculateWorldCenterPos(tmpGOList);
             panel.SetLocalPos(placeWorldPos);
+            SCMsgCenter.SendMsg(SCMsgConst.FACE_PART_ORDER_CHG);
         }
 
         private void onReplacePartPosFail(object[] _objs)
@@ -223,10 +230,12 @@ namespace GameCore.UI
             if (_objs == null || _objs.Length == 0)
                 return;
             PartInfo partInfo = _objs[0] as PartInfo;
+            _m_playerBattlePartInfoList.Remove(partInfo);
 
             UIPanelFacePart panel = _m_facePartPanelList.Find(x => x.partInfo == partInfo);
-            panel.Discard();
             _m_facePartPanelList.Remove(panel);
+            SCMsgCenter.SendMsg(SCMsgConst.FACE_PART_ORDER_CHG);
+
         }
 
         private void onPlacePartPreview(object[] _objs)

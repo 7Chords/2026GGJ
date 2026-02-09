@@ -68,7 +68,6 @@ namespace GameCore
             curOccupyFacePosList = new List<Vector2Int>();
             curEffectFacePosList = new List<Vector2Int>();
         }
-
         public void RotateOnce()
         {
             rotateStep = (rotateStep + 1) % 4;
@@ -85,6 +84,18 @@ namespace GameCore
             {
                 SCDebugHelper.LogWarning("effectPos:" + localEffectPosList[i]);
             }
+        }
+
+        public Vector2Int GetMinGridPos()
+        {
+            int minX = int.MaxValue;
+            int minY = int.MaxValue;
+            for(int i=0;i<curOccupyFacePosList.Count;i++)
+            {
+                minX = Mathf.Min(curOccupyFacePosList[i].x, minX);
+                minY = Mathf.Min(curOccupyFacePosList[i].y, minY);
+            }
+            return new Vector2Int(minX, minY);
         }
     }
 }

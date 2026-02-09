@@ -68,4 +68,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5b9740ed3d84af4c82ecb1571cbc2cf, type: 3}
   m_Name: TintRenderFeature
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0

@@ -4,7 +4,7 @@ public class SCMsgConst
     #endregion
 
 
-    #region 玩法相关
+    #region 玩法相关 20
     public const int PURCHASE_GOODS = 2001;
     public const int SELL_PART = 2002;
     public const int SET_ENEMY_FACE = 2003;
@@ -16,6 +16,7 @@ public class SCMsgConst
     public const int CLEAR_PREVIEW = 2009;
     public const int BEGIN_DRAG_PART = 2010;
     public const int FINISH_DRAG_PART = 2011;
+    public const int FACE_PART_ORDER_CHG = 2012;
 
     #endregion
 

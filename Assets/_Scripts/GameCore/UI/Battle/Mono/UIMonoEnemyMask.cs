@@ -10,11 +10,12 @@ namespace GameCore.UI
     {
         [Header("格子预制体名字")]
         public string gridPrefabName;
-        [Header("关闭按钮")]
-        public Button btnClose;
         [Header("Grid内容父节点")]
-        public Transform content_grid;
-
+        public GridLayoutGroup layoutGrid;
+        [Header("列数")]
+        public int column;
+        [Header("行数")]
+        public int row;
         [Header("禁用格子坐标列表")] 
         public List<Vector2Int> disabledGrids;
     }
