@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 5448004880447840508}
   - component: {fileID: 5655853299787517017}
   m_Layer: 5
-  m_Name: go_left_up
+  m_Name: go_left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -404,6 +404,8 @@ MonoBehaviour:
   imgPart: {fileID: 6783100560751295621}
   txtHealth: {fileID: 926267406453320684}
   txtOrder: {fileID: 7034344718893202328}
+  goHealthInfo: {fileID: 6692865887880802804}
+  goOrder: {fileID: 5799995615946025734}
 --- !u!114 &939463417216329967
 MonoBehaviour:
   m_ObjectHideFlags: 0

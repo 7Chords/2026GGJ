@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace GameCore
 {
@@ -193,15 +194,52 @@ namespace GameCore
             return localPoint;
         }
 
-        public static Vector2 CalculateCenterPos(List<Vector2Int> occupyPosList)
+        public static Vector2 CalculateWorldCenterPos(List<Vector2> _occupyPosList)
         {
-            Vector2 dealPos = new Vector2(CalculateBounds(occupyPosList).x - 1, CalculateBounds(occupyPosList).y - 1);
+            float minX = float.MaxValue;
+            float maxX = float.MinValue;
+            float minY = float.MaxValue;
+            float maxY = float.MinValue;
+
+            foreach (var pos in _occupyPosList)
+            {
+                minX = Mathf.Min(minX, pos.x);
+                maxX = Mathf.Max(maxX, pos.x);
+                minY = Mathf.Min(minY, pos.y);
+                maxY = Mathf.Max(maxY, pos.y);
+            }
+
+            return new Vector2(minX + maxX / 2, minY + maxY / 2);
+        }
+
+        public static Vector2 CalculateWorldCenterPos(List<Vector3> _occupyPosList)
+        {
+            float minX = float.MaxValue;
+            float maxX = float.MinValue;
+            float minY = float.MaxValue;
+            float maxY = float.MinValue;
+
+            foreach (var pos in _occupyPosList)
+            {
+                minX = Mathf.Min(minX, pos.x);
+                maxX = Mathf.Max(maxX, pos.x);
+                minY = Mathf.Min(minY, pos.y);
+                maxY = Mathf.Max(maxY, pos.y);
+            }
+
+            return new Vector2((minX + maxX) / 2, (minY + maxY) / 2);
+        }
+
+
+        public static Vector2 CalculateLocalCenterPos(List<Vector2Int> _occupyPosList)
+        {
+            Vector2 dealPos = new Vector2(CalculateBounds(_occupyPosList).x - 1, CalculateBounds(_occupyPosList).y - 1);
             return dealPos / 2f;
         }
 
-        public static Vector2 CalculateBounds(List<Vector2Int> occupyPosList)
+        public static Vector2 CalculateBounds(List<Vector2Int> _occupyPosList)
         {
-            if (occupyPosList == null || occupyPosList.Count == 0) return Vector2.zero;
+            if (_occupyPosList == null || _occupyPosList.Count == 0) return Vector2.zero;
 
             //找包围盒的最小/最大x/y
             int minX = int.MaxValue;
@@ -209,7 +247,7 @@ namespace GameCore
             int minY = int.MaxValue;
             int maxY = int.MinValue;
 
-            foreach (var pos in occupyPosList)
+            foreach (var pos in _occupyPosList)
             {
                 minX = Mathf.Min(minX, pos.x);
                 maxX = Mathf.Max(maxX, pos.x);
@@ -229,20 +267,20 @@ namespace GameCore
         /// 每次旋转后，自动把最上最左点重置为 (0,0)
         /// X 右正，Y 下正
         /// </summary>
-        public static List<Vector2Int> RotateShape(List<Vector2Int> originalPoints, int step)
+        public static List<Vector2Int> RotateShape(List<Vector2Int> _originalPoints, int _step)
         {
-            if (originalPoints == null || originalPoints.Count == 0)
+            if (_originalPoints == null || _originalPoints.Count == 0)
                 return new List<Vector2Int>();
 
             //找到当前最上最左点（minX, minY）
-            int minX = originalPoints.Min(p => p.x);
-            int minY = originalPoints.Min(p => p.y);
+            int minX = _originalPoints.Min(p => p.x);
+            int minY = _originalPoints.Min(p => p.y);
 
             //平移到本地坐标系（00 是最上最左）
-            var localPoints = originalPoints.Select(p => new Vector2Int(p.x - minX, p.y - minY)).ToList();
+            var localPoints = _originalPoints.Select(p => new Vector2Int(p.x - minX, p.y - minY)).ToList();
 
             //逆时针旋转
-            var rotated = localPoints.Select(p => RotatePoint(p, step)).ToList();
+            var rotated = localPoints.Select(p => RotatePoint(p, _step)).ToList();
 
             //再次找到新的最上最左，平移回 00
             int newMinX = rotated.Min(p => p.x);
@@ -256,15 +294,29 @@ namespace GameCore
         /// <summary>
         /// 逆时针旋转公式
         /// </summary>
-        private static Vector2Int RotatePoint(Vector2Int p, int step)
+        private static Vector2Int RotatePoint(Vector2Int _p, int _step)
         {
-            return step switch
+            return _step switch
             {
-                1 => new Vector2Int(-p.y, p.x),   // 逆时针 90
-                2 => new Vector2Int(-p.x, -p.y), // 180
-                3 => new Vector2Int(p.y, -p.x),   // 逆时针 270
-                _ => p
+                1 => new Vector2Int(-_p.y, _p.x),   // 逆时针 90
+                2 => new Vector2Int(-_p.x, -_p.y), // 180
+                3 => new Vector2Int(_p.y, -_p.x),   // 逆时针 270
+                _ => _p
             };
+        }
+
+        public static GameObject GetHitGridGameObj(PointerEventData _eventData)
+        {
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(_eventData, results);
+            foreach (var result in results)
+            {
+                if (result.gameObject.tag == GameConst.FACE_GRID_TAG)
+                {
+                    return result.gameObject;
+                }
+            }
+            return null;
         }
     }
 }

@@ -13,6 +13,8 @@ namespace GameCore.UI
 
         private List<FaceGridInfo> _m_gridInfoList;
         private List<GameObject> _m_gridGOList;
+
+        private List<UIPanelFacePart> _m_facePartPanelList;
         public UIPanelMaskCombineFace(UIMonoMaskCombineFace _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -23,6 +25,7 @@ namespace GameCore.UI
             _m_gridPanelList = new List<UIPanelMaskCombineFaceGrid>();
             _m_gridInfoList = new List<FaceGridInfo>();
             _m_gridGOList = new List<GameObject>();
+            _m_facePartPanelList = new List<UIPanelFacePart>();
 
             createGrids();
 
@@ -80,6 +83,15 @@ namespace GameCore.UI
                 _m_gridPanelList.Clear();
                 _m_gridPanelList = null;
             }
+            if (_m_facePartPanelList != null)
+            {
+                foreach (var grid in _m_facePartPanelList)
+                {
+                    grid?.Discard();
+                }
+                _m_facePartPanelList.Clear();
+                _m_facePartPanelList = null;
+            }
         }
 
         public override void OnHidePanel()
@@ -93,6 +105,14 @@ namespace GameCore.UI
                     grid?.HidePanel();
                 }
             }
+            if (_m_facePartPanelList != null)
+            {
+                foreach (var grid in _m_facePartPanelList)
+                {
+                    grid?.HidePanel();
+                }
+            }
+
         }
 
         public override void OnShowPanel()
@@ -106,19 +126,30 @@ namespace GameCore.UI
                     grid?.ShowPanel();
                 }
             }
+            if (_m_facePartPanelList != null)
+            {
+                foreach (var grid in _m_facePartPanelList)
+                {
+                    grid?.ShowPanel();
+                }
+            }
         }
 
         private void onPlacePartSuccess(object[] _objs)
         {
-            if (_objs == null || _objs.Length == 0)
+            if (_objs == null || _objs.Length < 2)
                 return;
-            List<Vector2Int> gridPosList = (List<Vector2Int>)_objs[0];
+            PartInfo partInfo = _objs[0] as PartInfo;
+            List<Vector2Int> gridPosList = _objs[1] as List<Vector2Int>;
             if (gridPosList == null)
                 return;
+            //设置部位当前占据的脸部格子信息
+            partInfo.curOccpuyFacePosList = gridPosList;
+
             UIPanelMaskCombineFaceGrid tmpGrid = null;
             FaceGridInfo tmpInfo = null;
             GameObject tmpGO = null;
-            List<GameObject> tmpGOList = new List<GameObject>();
+            List<Vector3> tmpGOList = new List<Vector3>();
             for(int i =0;i<gridPosList.Count;i++)
             {
                 tmpInfo = _m_gridInfoList.Find(x => x.pos == gridPosList[i]);
@@ -126,15 +157,17 @@ namespace GameCore.UI
                     continue;
                 tmpInfo.hasPart = true;
                 int index = _m_gridInfoList.IndexOf(tmpInfo);
-                tmpGOList.Add(_m_gridGOList[index]);
+                tmpGOList.Add(_m_gridGOList[index].transform.localPosition);
             }
-            Vector3 placeWorldPos = Vector2.zero;
-            for (int i = 0; i < tmpGOList.Count; i++)
-            {
-                placeWorldPos += tmpGOList[i].transform.position;
-            }
-            placeWorldPos /= tmpGOList.Count;
-
+            //计算生成的位置
+            Vector2 placeWorldPos = GameCommon.CalculateWorldCenterPos(tmpGOList);
+            GameObject partGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_FACE_PART, mono.tranParentPart);
+            UIMonoFacePart monoFacePart = partGO.GetComponent<UIMonoFacePart>();
+            UIPanelFacePart panel = new UIPanelFacePart(monoFacePart, SCUIShowType.INTERNAL);
+            panel.SetInfo(partInfo);
+            panel.ShowPanel();
+            _m_facePartPanelList.Add(panel);
+            partGO.GetRectTransform().localPosition = placeWorldPos;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace SCFrame
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 _rt.parent as RectTransform,
                 _screenPoint,
-                null,
+                SCGame.instance.gameCamera,
                 out localPoint
             );
             return localPoint;

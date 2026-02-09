@@ -109,7 +109,7 @@ namespace GameCore
             //如果拖拽点在当前命中格子的第三象限 则当前命中格子当作原图形中心点的左上格子
             //如果拖拽点在当前命中格子的第四象限 则当前命中格子当作原图形中心点的右上格子
 
-            Vector2 localCenterPos = GameCommon.CalculateCenterPos(_localGridList);
+            Vector2 localCenterPos = GameCommon.CalculateLocalCenterPos(_localGridList);
             Vector2Int hitAsLocalGridPos = Vector2Int.zero;//这个是重要的概念 表示的是鼠标所在的格子映射为本地格子列表中的哪一个格子（这个格子不一定在列表里 但是自做一个偏移参考）
 
             int goIndex = faceGOList.IndexOf(_hitGridGO);
@@ -157,7 +157,18 @@ namespace GameCore
             return true;
         }
 
-
+        public void SetGridsEmpty(List<Vector2Int> _posList)
+        {
+            if (_posList == null)
+                return;
+            for(int i =0;i<_posList.Count;i++)
+            {
+                FaceGridInfo info = faceGridInfoList.Find(x => x.pos == _posList[i]);
+                if (info == null)
+                    continue;
+                info.hasPart = false;
+            }
+        }
 
 
 

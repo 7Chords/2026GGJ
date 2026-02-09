@@ -18,6 +18,8 @@ namespace GameCore.UI
         public List<Vector2Int> disabledGrids;
         [Header("格子layout")]
         public GridLayoutGroup girdLayoutGroup;
+        [Header("部位父物体")]
+        public Transform tranParentPart;
 
     }
 }

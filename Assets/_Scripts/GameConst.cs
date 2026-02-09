@@ -6,6 +6,11 @@ namespace GameCore
 {
     public class GameConst
     {
+        #region UI RES NAME
+        public const string PREFAB_FACE_PART = "prefab_face_part";
+        public const string PREFAB_FACE_PART_PREVIEW = "prefab_face_part_preview";
+        #endregion
+
 
         #region TAG & LAYER
         public const string FACE_GRID_TAG = "FaceGrid";

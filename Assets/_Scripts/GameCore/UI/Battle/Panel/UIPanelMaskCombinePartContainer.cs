@@ -1,5 +1,6 @@
 using SCFrame;
 using SCFrame.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +14,16 @@ namespace GameCore.UI
         public UIPanelMaskCombinePartContainer(UIMonoCommonContainer _mono, SCUIShowType _showType = SCUIShowType.INTERNAL) : base(_mono, _showType)
         {
         }
+        protected override GameObject creatItemGO()
+        {
+            return ResourcesHelper.LoadGameObject(mono.prefabItemObjName, mono.layoutGroup.transform);
+        }
 
+        protected override UIPanelMaskCombinePartContainerItem creatItemPanel(UIMonoMaskCombinePartContainerItem _mono)
+        {
+            var item = new UIPanelMaskCombinePartContainerItem(_mono, SCUIShowType.INTERNAL);
+            return item;
+        }
         public override void AfterInitialize()
         {
             _m_partItemList = new List<UIPanelMaskCombinePartContainerItem>();
@@ -29,6 +39,8 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PLACE_PART_SUCCESS, onPlacePartSuccess);
+
             foreach (var item in _m_partItemList)
             {
                 item?.HidePanel();
@@ -37,8 +49,10 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            SCMsgCenter.RegisterMsg(SCMsgConst.PLACE_PART_SUCCESS, onPlacePartSuccess);
             ReloadParts();
         }
+
 
         public void ReloadParts()
         {
@@ -64,7 +78,6 @@ namespace GameCore.UI
             }
         }
         
-        // Override AddItem to handle initialization
         public void addItem(PartInfo info)
         {
              GameObject go = creatItemGO();
@@ -78,17 +91,21 @@ namespace GameCore.UI
              }
         }
 
-        protected override GameObject creatItemGO()
+
+        private void onPlacePartSuccess(object[] _objs)
         {
-            return ResourcesHelper.LoadGameObject(mono.prefabItemObjName,mono.layoutGroup.transform);
+            if (_objs == null || _objs.Length < 2)
+                return;
+            PartInfo partInfo = _objs[0] as PartInfo;
+
+            if (GameModel.instance.busyPartInfoList.Contains(partInfo))
+            {
+                GameModel.instance.busyPartInfoList.Remove(partInfo);
+                ReloadParts();
+            }
+
         }
 
-
-        protected override UIPanelMaskCombinePartContainerItem creatItemPanel(UIMonoMaskCombinePartContainerItem _mono)
-        {
-            var item = new UIPanelMaskCombinePartContainerItem(_mono, SCUIShowType.INTERNAL);
-            return item;
-        }
 
     }
 }

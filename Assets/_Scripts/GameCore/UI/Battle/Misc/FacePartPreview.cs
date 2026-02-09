@@ -27,7 +27,6 @@ namespace GameCore.UI
 
         private Coroutine _m_dragLoopCoroutine;
 
-        private int _m_currentRotateStep = 0;
         private bool _m_isDraging;
         public void Initialize(PartInfo _info)
         {
@@ -63,22 +62,24 @@ namespace GameCore.UI
             }
 
             //当前鼠标指向的脸部的格子物体
-            GameObject gridGO = getHitGridGameObj(_data);
+            GameObject gridGO = GameCommon.GetHitGridGameObj(_data);
             bool placementSuccess = false;//是否放置成功
 
             if (gridGO != null)
             {
-                if (GameModel.instance.CanPlacePart(gridGO, _data.position ,_m_partInfo.gridPosList))
+                if (GameModel.instance.CanPlacePart(gridGO, _data.position ,_m_partInfo.localGridPosList))
                 {
                     placementSuccess = true;
                     SCDebugHelper.Log("可以放置！");
-                    SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_SUCCESS,GameModel.instance.GetPlaceFacePosList(gridGO, _data.position, _m_partInfo.gridPosList));
+                    SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_SUCCESS, _m_partInfo,GameModel.instance.GetPlaceFacePosList(gridGO, _data.position, _m_partInfo.localGridPosList));
+                    SCCommon.DestoryGameObject(gameObject);
+
                 }
             }
 
             if (!placementSuccess)
             {
-                _m_partInfo.Reset();
+                _m_partInfo.ResetToBusy();
                 SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_FAIL);
                 SCCommon.DestoryGameObject(gameObject);
             }
@@ -96,25 +97,11 @@ namespace GameCore.UI
             }
         }
 
-        private GameObject getHitGridGameObj(PointerEventData _eventData)
-        {
-            List<RaycastResult> results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(_eventData, results);
-            foreach (var result in results)
-            {
-                if(result.gameObject.tag == GameConst.FACE_GRID_TAG)
-                {
-                    return result.gameObject;
-                }
-            }
-            return null;
-        }
 
         private void rotatePart()
         {
-            _m_currentRotateStep = (_m_currentRotateStep + 1) % 4;
-            _m_partInfo.rotateStep = _m_currentRotateStep;
-            _m_partInfo.gridPosList = GameCommon.RotateShape(_m_partInfo.gridPosList, 1);
+            _m_partInfo.rotateStep = (_m_partInfo.rotateStep + 1) % 4;
+            _m_partInfo.localGridPosList = GameCommon.RotateShape(_m_partInfo.localGridPosList, 1);
             refreshShow();
         }
 
@@ -128,7 +115,7 @@ namespace GameCore.UI
             imgPart.SetNativeSize();
 
             //信息不要跟着旋转
-            imgGO.transform.rotation = Quaternion.Euler(0, 0, _m_currentRotateStep * 90);
+            imgGO.transform.rotation = Quaternion.Euler(0, 0, _m_partInfo.rotateStep * 90);
             goHealthInfo.transform.eulerAngles = Vector3.zero;
             goOrder.transform.eulerAngles = Vector3.zero;
 

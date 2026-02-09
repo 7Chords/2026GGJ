@@ -10,6 +10,7 @@ public class SCMsgConst
     public const int SET_ENEMY_FACE = 2003;
     public const int PLACE_PART_SUCCESS = 2004;
     public const int PLACE_PART_FAIL = 2005;
+    public const int REPLACE_PART_POS = 2006;
 
     #endregion
 
