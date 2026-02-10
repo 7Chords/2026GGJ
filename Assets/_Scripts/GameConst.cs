@@ -25,5 +25,9 @@ namespace GameCore
         public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_Y = 0.2f;
 
         #endregion
+
+        #region GAME
+        public const int INIT_ENEMY_PART_COUNT = 3;
+        #endregion
     }
 }

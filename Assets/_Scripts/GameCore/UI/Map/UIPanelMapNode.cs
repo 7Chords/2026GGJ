@@ -128,7 +128,7 @@ namespace GameCore.UI
             }
         }
 
-        #region Level Entry Logic (Placeholders)
+        #region 进入节点
 
         private void EnterEnemyLevel()
         {
@@ -150,9 +150,7 @@ namespace GameCore.UI
         private void EnterShop()
         {
             AudioMgr.instance.PlaySfx("sfx_click");
-            List<StoreRefObj> storeRefList = SCRefDataMgr.instance.storeRefList.refDataList;
-            long id = storeRefList[Random.Range(0, storeRefList.Count)].id;
-            GameModel.instance.rollStoreId = id;
+            GameModel.instance.RollRandomShop();
             UICoreMgr.instance.AddNode(new UINodeStore(SCUIShowType.FULL));
         }
 

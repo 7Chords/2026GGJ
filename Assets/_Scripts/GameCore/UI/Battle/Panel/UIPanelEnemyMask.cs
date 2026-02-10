@@ -83,7 +83,7 @@ namespace GameCore.UI
 
                 }
             }
-
+            GameModel.instance.enemyFaceGridInfoList = _m_gridInfoList;
         }
     }
 }

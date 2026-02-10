@@ -67,9 +67,9 @@ namespace GameCore.UI
 
                 }
             }
-            GameModel.instance.faceGridInfoList = _m_gridInfoList;
-            GameModel.instance.faceGOList = _m_gridGOList;
-            GameModel.instance.playerBattlePartInfoList = _m_playerBattlePartInfoList;
+            GameModel.instance.playerFaceGridInfoList = _m_gridInfoList;
+            GameModel.instance.playerFaceGridGOList = _m_gridGOList;
+            GameModel.instance.battlePartInfoList = _m_playerBattlePartInfoList;
 
         }
 
