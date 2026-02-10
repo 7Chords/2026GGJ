@@ -103,14 +103,14 @@ namespace GameCore
                 SCGame.instance.topLayerRoot.transform);
 
             Vector2 screenPos = Vector2.zero;
-            var _canvas = SCGame.instance.mainCanvas;
-            Camera cam = _canvas.worldCamera;
 
-            float itemScreenX = RectTransformUtility.WorldToScreenPoint(cam, _worldPos).x;
-            bool showOnLeft = itemScreenX > Screen.width * 0.7f;
-            Vector3 offset = showOnLeft ? new Vector3(-GameConst.TOOLTIP_SHOW_X_OFFSET, GameConst.TOOLTIP_SHOW_Y_OFFSET, 0) 
-                : new Vector3(GameConst.TOOLTIP_SHOW_X_OFFSET, GameConst.TOOLTIP_SHOW_Y_OFFSET, 0);
-            screenPos = RectTransformUtility.WorldToScreenPoint(cam, _worldPos + offset);
+            float itemScreenX = RectTransformUtility.WorldToScreenPoint(SCGame.instance.gameCamera, _worldPos).x;
+
+            bool showOnLeft = itemScreenX > Screen.width * GameConst.TOOLTIP_SHOW_ON_LEFT_THRESHOLD;
+
+            Vector2 offset = showOnLeft ? new Vector3(-GameConst.TOOLTIP_SHOW_X_OFFSET_SCREEN_RATIO * Screen.width, GameConst.TOOLTIP_SHOW_Y_OFFSET_SCREEN_RATIO * Screen.height) 
+                : new Vector3(GameConst.TOOLTIP_SHOW_X_OFFSET_SCREEN_RATIO * Screen.width, GameConst.TOOLTIP_SHOW_Y_OFFSET_SCREEN_RATIO * Screen.height);
+            screenPos = RectTransformUtility.WorldToScreenPoint(SCGame.instance.gameCamera, _worldPos) + offset;
 
             RectTransform toolTipRT = toolTipGo.GetRectTransform();
             Vector2 localPoint;
@@ -118,7 +118,7 @@ namespace GameCore
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 SCGame.instance.topLayerRoot.GetRectTransform(),
                 screenPos,
-                cam,
+                SCGame.instance.gameCamera,
                 out localPoint
             );
             
@@ -129,7 +129,60 @@ namespace GameCore
             _m_toolTipCache = toolTipGo;
             return tooltipComp;
         }
+        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector3 _worldPos, Vector2 _showScreenRatioOffset)
+        {
+            DiscardToolTip();
+            GameObject toolTipGo = ResourcesHelper.LoadGameObject(
+                "prefab_tooltip",
+                SCGame.instance.topLayerRoot.transform);
 
+            Vector2 offset = new Vector3(_showScreenRatioOffset.x * Screen.width, _showScreenRatioOffset.y * Screen.height);
+            Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(SCGame.instance.gameCamera, _worldPos) + offset;
+
+            RectTransform toolTipRT = toolTipGo.GetRectTransform();
+            Vector2 localPoint;
+
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                SCGame.instance.topLayerRoot.GetRectTransform(),
+                screenPos,
+                SCGame.instance.gameCamera,
+                out localPoint
+            );
+
+            toolTipRT.localPosition = localPoint;
+
+            var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
+            tooltipComp.ShowTooltip(_name, _desc, localPoint);
+            _m_toolTipCache = toolTipGo;
+            return tooltipComp;
+        }
+
+        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector2 _screenRatio)
+        {
+            DiscardToolTip();
+            GameObject toolTipGo = ResourcesHelper.LoadGameObject(
+                "prefab_tooltip",
+                SCGame.instance.topLayerRoot.transform);
+
+            Vector2 screenPos = new Vector2(Screen.width * _screenRatio.x, Screen.height * _screenRatio.y);
+
+            RectTransform toolTipRT = toolTipGo.GetRectTransform();
+            Vector2 localPoint;
+
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                SCGame.instance.topLayerRoot.GetRectTransform(),
+                screenPos,
+                SCGame.instance.gameCamera,
+                out localPoint
+            );
+
+            toolTipRT.localPosition = localPoint;
+
+            var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
+            tooltipComp.ShowTooltip(_name, _desc, localPoint);
+            _m_toolTipCache = toolTipGo;
+            return tooltipComp;
+        }
         public static void DiscardToolTip()
         {
             if (_m_toolTipCache == null)

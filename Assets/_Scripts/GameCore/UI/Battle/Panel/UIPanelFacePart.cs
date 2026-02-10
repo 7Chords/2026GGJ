@@ -1,5 +1,7 @@
+using DG.Tweening;
 using SCFrame;
 using SCFrame.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,16 +21,22 @@ namespace GameCore.UI
 
         private bool _m_isDraging;
 
+        private TweenContainer _m_tweenContainer;
+
         public UIPanelFacePart(UIMonoFacePart _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
 
         public override void AfterInitialize()
         {
+            _m_tweenContainer = new TweenContainer();
         }
 
         public override void BeforeDiscard()
         {
+            GameCommon.DiscardToolTip();
+            _m_tweenContainer?.KillAllDoTween();
+            _m_tweenContainer = null;
         }
 
         public override void OnHidePanel()
@@ -37,6 +45,8 @@ namespace GameCore.UI
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.FINISH_DRAG_PART, onFinishDragPart);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.FACE_PART_ORDER_CHG, refreshShow);
 
+            mono.imgGO.RemoveMouseEnter(onMouseEnter);
+            mono.imgGO.RemoveMouseExit(onMouseExit);
 
             mono.imgGO.RemoveBeginDrag(onBeginDrag);
             mono.imgGO.RemoveDrag(onDrag);
@@ -49,6 +59,9 @@ namespace GameCore.UI
             SCMsgCenter.RegisterMsg(SCMsgConst.BEGIN_DRAG_PART, onBeginDragPart);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.FINISH_DRAG_PART, onFinishDragPart);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.FACE_PART_ORDER_CHG, refreshShow);
+
+            mono.imgGO.AddMouseEnter(onMouseEnter);
+            mono.imgGO.AddMouseExit(onMouseExit);
 
 
             mono.imgGO.AddBeginDrag(onBeginDrag);
@@ -101,7 +114,7 @@ namespace GameCore.UI
             }
         }
 
-        #region ÍÏ×§
+        #region UIÏìÓ¦»Øµ÷
         public void onBeginDrag(PointerEventData _data, object[] _objs)
         {
             if (_m_isDraging)
@@ -179,6 +192,22 @@ namespace GameCore.UI
                 SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_PREVIEW, faceOccupyPosList, faceEffectPosList);
             }
 
+        }
+
+        private void onMouseExit(PointerEventData _data, object[] _objs)
+        {
+            if (_m_isDraging)
+                return;
+            _m_tweenContainer.RegDoTween(mono.imgGO.transform.DOScale(Vector3.one, mono.scaleChgDuration));
+            GameCommon.DiscardToolTip();
+        }
+
+        private void onMouseEnter(PointerEventData _data, object[] _objs)
+        {
+            if (_m_isDraging)
+                return;
+            _m_tweenContainer.RegDoTween(mono.imgGO.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
+            GameCommon.ShowTooltip(_m_partInfo.partRefObj.partName, _m_partInfo.partRefObj.partDesc, new Vector2(GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_X, GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_Y));
         }
         #endregion
 

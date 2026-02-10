@@ -18,6 +18,10 @@ namespace GameCore.UI
         public GameObject goHealthInfo;
         [Header("序号信息物体")]
         public GameObject goOrder;
+        [Header("鼠标移除缩放")]
+        public float scaleMouseEnter;
+        [Header("缩放时间")]
+        public float scaleChgDuration;
 
     }
 }

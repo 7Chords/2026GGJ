@@ -85,6 +85,8 @@ namespace GameCore.UI
             {
                 mono.canvasGroup.alpha = 1f;
                 mono.canvasGroup.blocksRaycasts = true;
+                mono.canvasGroup.interactable = true;
+
             }
         }
         public void SetInfo(PartInfo _info)
@@ -127,6 +129,7 @@ namespace GameCore.UI
             {
                 mono.canvasGroup.alpha = 0f;
                 mono.canvasGroup.blocksRaycasts = false;
+                mono.canvasGroup.interactable = false;
             }
 
 

@@ -406,6 +406,8 @@ MonoBehaviour:
   txtOrder: {fileID: 7034344718893202328}
   goHealthInfo: {fileID: 6692865887880802804}
   goOrder: {fileID: 5799995615946025734}
+  scaleMouseEnter: 1.03
+  scaleChgDuration: 0.1
 --- !u!114 &939463417216329967
 MonoBehaviour:
   m_ObjectHideFlags: 0

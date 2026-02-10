@@ -16,8 +16,14 @@ namespace GameCore
         public const string FACE_GRID_TAG = "FaceGrid";
         #endregion
 
+        #region TIP
+
         public const float TOOLTIP_SHOW_ON_LEFT_THRESHOLD = 0.7f;
-        public const float TOOLTIP_SHOW_Y_OFFSET = -20f;
-        public const float TOOLTIP_SHOW_X_OFFSET = 20f;
+        public const float TOOLTIP_SHOW_Y_OFFSET_SCREEN_RATIO = -0.1f;
+        public const float TOOLTIP_SHOW_X_OFFSET_SCREEN_RATIO = 0.1f;
+        public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_X = 0.3f;
+        public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_Y = 0.2f;
+
+        #endregion
     }
 }
