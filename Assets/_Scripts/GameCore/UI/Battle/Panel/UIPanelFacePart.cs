@@ -200,6 +200,7 @@ namespace GameCore.UI
                 return;
             _m_tweenContainer.RegDoTween(mono.imgGO.transform.DOScale(Vector3.one, mono.scaleChgDuration));
             GameCommon.DiscardToolTip();
+            SCMsgCenter.SendMsg(SCMsgConst.CLEAR_PREVIEW);
         }
 
         private void onMouseEnter(PointerEventData _data, object[] _objs)
@@ -208,6 +209,8 @@ namespace GameCore.UI
                 return;
             _m_tweenContainer.RegDoTween(mono.imgGO.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
             GameCommon.ShowTooltip(_m_partInfo.partRefObj.partName, _m_partInfo.partRefObj.partDesc, new Vector2(GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_X, GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_Y));
+            SCMsgCenter.SendMsg(SCMsgConst.FACE_PART_RANGE_HIGHLIGHT,_m_partInfo);
+
         }
         #endregion
 

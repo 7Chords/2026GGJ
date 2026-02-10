@@ -118,45 +118,6 @@ namespace SCFrame
         }
         #endregion
 
-        //#region 本地化
-        ///// <summary>
-        ///// 从本地化系统中修改内容
-        ///// </summary>
-        ///// <param name="packName"></param>
-        ///// <param name="contentKey"></param>
-        //public static void JKLocaSet(this Text text, string packName, string contentKey)
-        //{
-        //    text.text = LocalizationManager.Instance.GetContent<L_Text>(packName, contentKey).content;
-        //}
-        ///// <summary>
-        ///// 从本地化系统中修改内容
-        ///// </summary>
-        ///// <param name="packName"></param>
-        ///// <param name="contentKey"></param>
-        //public static void JKLocaSet(this Image image, string packName, string contentKey)
-        //{
-        //    image.sprite = LocalizationManager.Instance.GetContent<L_Image>(packName, contentKey).content;
-        //}
-        ///// <summary>
-        ///// 从本地化系统中修改内容
-        ///// </summary>
-        ///// <param name="packName"></param>
-        ///// <param name="contentKey"></param>
-        //public static void JKLocaSet(this AudioSource audioSource, string packName, string contentKey)
-        //{
-        //    audioSource.clip = LocalizationManager.Instance.GetContent<L_Audio>(packName, contentKey).content;
-        //}
-        ///// <summary>
-        ///// 从本地化系统中修改内容
-        ///// </summary>
-        ///// <param name="packName"></param>
-        ///// <param name="contentKey"></param>
-        //public static void JKLocaSet(this VideoPlayer videoPlayer, string packName, string contentKey)
-        //{
-        //    videoPlayer.clip = LocalizationManager.Instance.GetContent<L_Video>(packName, contentKey).content;
-        //}
-        //#endregion
-
         #region Mono
 
         /// <summary>

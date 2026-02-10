@@ -1,5 +1,6 @@
 using SCFrame;
 using SCFrame.UI;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -102,6 +103,7 @@ namespace GameCore.UI
             SCMsgCenter.UnregisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onReplacePartPosFail);
             SCMsgCenter.UnregisterMsg(SCMsgConst.PLACE_PART_PREVIEW, onPlacePartPreview);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.CLEAR_PREVIEW, onClearPreview);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.FACE_PART_RANGE_HIGHLIGHT, onFacePartRangeHighlight);
 
             if (_m_gridPanelList != null)
             {
@@ -127,6 +129,7 @@ namespace GameCore.UI
             SCMsgCenter.RegisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onReplacePartPosFail);
             SCMsgCenter.RegisterMsg(SCMsgConst.PLACE_PART_PREVIEW, onPlacePartPreview);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.CLEAR_PREVIEW, onClearPreview);
+            SCMsgCenter.RegisterMsg(SCMsgConst.FACE_PART_RANGE_HIGHLIGHT, onFacePartRangeHighlight);
 
             if (_m_gridPanelList != null)
             {
@@ -143,6 +146,7 @@ namespace GameCore.UI
                 }
             }
         }
+
 
         private void onPlacePartSuccess(object[] _objs)
         {
@@ -270,12 +274,35 @@ namespace GameCore.UI
                 }
             }
         }
-
-
         private void onClearPreview()
         {
             foreach (var gridPanel in _m_gridPanelList)
                 gridPanel.SetNoPreview();
+        }
+
+        private void onFacePartRangeHighlight(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            PartInfo partInfo = _objs[0] as PartInfo;
+            if (partInfo == null)
+                return;
+            UIPanelMaskCombineFaceGrid grid = null;
+            for (int i =0;i<partInfo.curOccupyFacePosList.Count;i++)
+            {
+                grid = _m_gridPanelList.Find(x => x.gridInfo.pos == partInfo.curOccupyFacePosList[i]);
+                if (grid != null)
+                    grid.SetOccupyPreview(true);
+            }
+            if(!partInfo.curOccupyFacePosList.Vector2IntListEquals(partInfo.curEffectFacePosList))
+            {
+                for (int i = 0; i < partInfo.curEffectFacePosList.Count; i++)
+                {
+                    grid = _m_gridPanelList.Find(x => x.gridInfo.pos == partInfo.curEffectFacePosList[i]);
+                    if (grid != null)
+                        grid.SetEffectPreview();
+                }
+            }
         }
 
     }

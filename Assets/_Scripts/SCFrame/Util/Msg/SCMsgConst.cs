@@ -17,6 +17,7 @@ public class SCMsgConst
     public const int BEGIN_DRAG_PART = 2010;
     public const int FINISH_DRAG_PART = 2011;
     public const int FACE_PART_ORDER_CHG = 2012;
+    public const int FACE_PART_RANGE_HIGHLIGHT = 2013;
 
     #endregion
 
