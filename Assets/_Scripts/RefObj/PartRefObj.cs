@@ -41,6 +41,26 @@ namespace GameCore.RefData
             effectPosList = getList<PosEffectObj>("effectPosList");
         }
 
+        public List<Vector2Int> GetOccupyPosList()
+        {
+            List<Vector2Int> result = new List<Vector2Int>();
+            foreach (PosEffectObj obj in occupyPosList)
+            {
+                result.Add(new Vector2Int(obj.x, obj.y));
+            }
+            return result;
+        }
+
+        public List<Vector2Int> GetEffectPosList()
+        {
+            List<Vector2Int> result = new List<Vector2Int>();
+            foreach (PosEffectObj obj in effectPosList)
+            {
+                result.Add(new Vector2Int(obj.x, obj.y));
+            }
+            return result;
+        }
+
         public static string assetPath => "RefData/ExportTxt";
         public static string sheetName => "part";
     }

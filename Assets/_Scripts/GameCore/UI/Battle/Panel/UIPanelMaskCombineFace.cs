@@ -159,14 +159,13 @@ namespace GameCore.UI
             if (occupyPosList == null || effectPosList == null)
                 return;
 
-            foreach (var gridPanel in _m_gridPanelList)
-                gridPanel.SetNoPreview();
 
             _m_playerBattlePartInfoList.Add(partInfo);
 
             //设置部位当前占据的脸部格子信息
             partInfo.curOccupyFacePosList = occupyPosList;
             partInfo.curEffectFacePosList = effectPosList;
+            partInfo.isOnFace = true;
 
             UIPanelMaskCombineFaceGrid tmpGrid = null;
             FaceGridInfo tmpInfo = null;
@@ -205,12 +204,10 @@ namespace GameCore.UI
             if (occupyPosList == null || effectPosList == null)
                 return;
 
-            foreach (var gridPanel in _m_gridPanelList)
-                gridPanel.SetNoPreview();
-
             //设置部位当前占据的脸部格子信息
             panel.partInfo.curOccupyFacePosList = occupyPosList;
             panel.partInfo.curEffectFacePosList = effectPosList;
+            panel.partInfo.isOnFace = true;
 
             FaceGridInfo tmpInfo = null;
             List<Vector3> tmpGOList = new List<Vector3>();

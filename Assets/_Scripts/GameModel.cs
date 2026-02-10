@@ -121,21 +121,21 @@ namespace GameCore
 
             if (ratio.x < 0.5 && ratio.y < 0.5)//第一象限
             {
-                hitAsLocalGridPos = new Vector2Int(Mathf.CeilToInt(localCenterPos.x), (int)Mathf.CeilToInt(localCenterPos.y));
+                hitAsLocalGridPos = new Vector2Int(Mathf.CeilToInt(localCenterPos.x), Mathf.CeilToInt(localCenterPos.y));
             }
             else if (ratio.x >= 0.5 && ratio.y < 0.5)//第二象限
             {
-                hitAsLocalGridPos = new Vector2Int(Mathf.FloorToInt(localCenterPos.x), (int)Mathf.CeilToInt(localCenterPos.y));
+                hitAsLocalGridPos = new Vector2Int(Mathf.FloorToInt(localCenterPos.x), Mathf.CeilToInt(localCenterPos.y));
 
             }
             else if (ratio.x >= 0.5 && ratio.y > 0.5)//第三象限
             {
-                hitAsLocalGridPos = new Vector2Int((int)Mathf.FloorToInt(localCenterPos.x), (int)Mathf.FloorToInt(localCenterPos.y));
+                hitAsLocalGridPos = new Vector2Int(Mathf.FloorToInt(localCenterPos.x), Mathf.FloorToInt(localCenterPos.y));
 
             }
             else if (ratio.x < 0.5 && ratio.y >= 0.5)//第四象限
             {
-                hitAsLocalGridPos = new Vector2Int((int)Mathf.CeilToInt(localCenterPos.x), (int)Mathf.FloorToInt(localCenterPos.y));
+                hitAsLocalGridPos = new Vector2Int(Mathf.CeilToInt(localCenterPos.x), Mathf.FloorToInt(localCenterPos.y));
             }
             List<Vector2Int> retList = new List<Vector2Int>();
             Vector2Int partFacePos = Vector2Int.zero;
@@ -372,37 +372,30 @@ namespace GameCore
 
         private void GenerateEnemyLayout(EnemyInfo _enemyInfo)
         {
-            //EnsureEnemyDisabledGridsLoaded();
-
-            // 6x7 Grid (Hardcoded size for Model logic, or could read from prefab too if needed)
-            bool[,] occupiedGrid = new bool[4, 7];
-
             foreach (var part in _enemyInfo.battleParts)
             {
-                if (TryFindValidPlacement(occupiedGrid, part.partRefObj, out Vector2Int pos, out int rot))
+                if (TryFindValidPlacement(part.partRefObj, out Vector2Int pos, out int rotStep))
                 {
-                    MarkOccupancy(occupiedGrid, part.partRefObj, pos, rot);
+                    MarkOccupancy(part, pos, rotStep);
                 }
                 else
                 {
-                    Debug.LogWarning($"[GameModel] Could not fit enemy part {part.partRefObj.partName}");
+                    SCDebugHelper.LogWarning($"[GameModel] Could not fit enemy part {part.partRefObj.partName}");
                 }
             }
         }
         
-        // Copied helper methods from UIPanelEnemyMask (simplified)
-        private bool TryFindValidPlacement(bool[,] grid, GameCore.RefData.PartRefObj part, out Vector2Int resultPos,
-            out int resultRot)
+
+        private bool TryFindValidPlacement(PartRefObj part, out Vector2Int resultPos,out int resultRot)
         {
             resultPos = Vector2Int.zero;
             resultRot = 0;
             for (int i = 0; i < 50; i++)
             {
                 int rot = Random.Range(0, 4);
-                int x = Random.Range(0, 4);
-                int y = Random.Range(0, 7);
-                Vector2Int origin = new Vector2Int(x, y);
-                if (IsValidPlacement(grid, part, origin, rot))
+                FaceGridInfo gridInfo = enemyFaceGridInfoList[Random.Range(0, enemyFaceGridInfoList.Count)];
+                Vector2Int origin = gridInfo.pos;
+                if (IsValidPlacement(part, origin, rot))
                 {
                     resultPos = origin;
                     resultRot = rot;
@@ -413,51 +406,46 @@ namespace GameCore
             return false;
         }
 
-        private bool IsValidPlacement(bool[,] grid, GameCore.RefData.PartRefObj part, Vector2Int origin, int rot)
+        private bool IsValidPlacement(PartRefObj _part, Vector2Int _originFacePos, int _rotStep)
         {
-            List<Vector2Int> shape = GetRotatedShape(part, rot);
+            List<Vector2Int> shape = GameCommon.RotateShape(_part.GetOccupyPosList(), _rotStep);
             foreach (var offset in shape)
             {
-                Vector2Int p = origin + offset;
-                if (p.x < 0 || p.x >= 4 || p.y < 0 || p.y >= 7) return false;
-                if (grid[p.x, p.y]) return false;
-                
-                // Check Disabled Grids
-                if (_cachedEnemyDisabledGrids != null && _cachedEnemyDisabledGrids.Contains(p))
-                {
+                Vector2Int p = _originFacePos + offset;
+                FaceGridInfo gridInfo = null;
+                gridInfo = enemyFaceGridInfoList.Find(x => x.pos == p);
+                if (gridInfo == null || gridInfo.hasPart)
                     return false;
-                }
             }
 
             return true;
         }
 
-        private void MarkOccupancy(bool[,] grid, GameCore.RefData.PartRefObj part, Vector2Int origin, int rot)
+        private void MarkOccupancy(PartInfo part, Vector2Int origin, int rot)
         {
-            List<Vector2Int> shape = GetRotatedShape(part, rot);
-            foreach (var offset in shape)
+            List<Vector2Int> rotateLocalOccupyPosList = GameCommon.RotateShape(part.localOccupyPosList, rot);
+            List<Vector2Int> rotateLocalEffectPosList = GameCommon.RotateShapeAndMoveBySample(part.localEffectPosList, rot, part.localOccupyPosList);
+
+            foreach (var offset in rotateLocalOccupyPosList)
             {
                 Vector2Int p = origin + offset;
-                grid[p.x, p.y] = true;
+                FaceGridInfo gridInfo = enemyFaceGridInfoList.Find(x => x.pos == p);
+                if (gridInfo == null)
+                    continue;
+                gridInfo.hasPart = true;
+                part.curOccupyFacePosList.Add(p);
             }
-        }
-
-        private List<Vector2Int> GetRotatedShape(GameCore.RefData.PartRefObj part, int rot)
-        {
-            List<Vector2Int> list = new List<Vector2Int>();
-            if (part.occupyPosList != null)
+            foreach (var offset in rotateLocalEffectPosList)
             {
-                foreach (var pObj in part.occupyPosList)
-                {
-                    Vector2Int p = new Vector2Int(pObj.x, pObj.y);
-                    for (int k = 0; k < rot; k++) p = new Vector2Int(-p.y, p.x);
-                    list.Add(p);
-                }
+                Vector2Int p = origin + offset;
+                FaceGridInfo gridInfo = enemyFaceGridInfoList.Find(x => x.pos == p);
+                if (gridInfo == null)
+                    continue;
+                part.curEffectFacePosList.Add(p);
             }
-            else list.Add(Vector2Int.zero);
-
-            return list;
+            part.isOnFace = true;
         }
+
     }
 
 }
