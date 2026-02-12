@@ -23,8 +23,8 @@ namespace GameCore
         ATTACK,//攻击力
         HIT_CHANCE,//命中率
         REFLECT,//反射
-        TRIGGER_DOUBLE,//触发两次
-        ATTACK_DOUBLE,//攻击两次
+        TRIGGER_MORE,//触发两次
+        ATTACK_MORE,//攻击两次
         HIT_CHANCE_UP,//命中率上升
         HIT_CHANCE_DOWN,//命中率下降
         TRIGGER_CHANCE_UP,//触发上升
@@ -39,7 +39,8 @@ namespace GameCore
     {
         ACTIVE,
         GET_HIT,
-        DIE
+        DIE,
+        GET_EFFECT,
     }
 
     public enum ERoomType
