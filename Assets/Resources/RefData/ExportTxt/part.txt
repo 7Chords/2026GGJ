@@ -1,8 +1,8 @@
 ﻿id	partName	partType	qualityType	partHealth	partDesc	partSpriteObjName	partGameObjectName	entryList	occupyPosList	effectPosList
-101001	贝斯顿之鼻	NOSE	NORMAL	20	暴击率：30%; 护盾：没做	spr_icon_nose_1	spr_nose_1	*	0:0;0:1	0:0;0:1
-101002	贝斯顿之眼	EYE	NORMAL	20	命中率：20%; 护盾：没做	spr_icon_eye_1	spr_eye_1	*	0:0	0:0
-101003	贝斯顿之嘴	MOUTH	NORMAL	20	伤害：20; 护盾：没做	spr_icon_mouth_1	spr_mouth_1	*	0:0;1:0	0:0;1:0
-101004	希尔之鼻	NOSE	NORMAL	15	暴击率：40%; 恢复量：没做	spr_icon_nose_2	spr_nose_2	*	0:0	0:0
+101001	贝斯顿之鼻	NOSE	NORMAL	20	暴击率：30%; 护盾：没做	spr_icon_nose_1	spr_nose_1	ACTIVE:HEAL_PART:8	0:0;0:1	0:0;0:1
+101002	贝斯顿之眼	EYE	NORMAL	20	命中率：20%; 护盾：没做	spr_icon_eye_1	spr_eye_1	ACTIVE:TRIGGER_DOUBLE:0.5	0:0	0:0
+101003	贝斯顿之嘴	MOUTH	NORMAL	20	伤害：20; 护盾：没做	spr_icon_mouth_1	spr_mouth_1	ACTIVE:ATTACK:5	0:0;1:0	0:0;1:0
+101004	希尔之鼻	NOSE	NORMAL	15	暴击率：40%; 恢复量：没做	spr_icon_nose_2	spr_nose_2	ACTIVE:HEAL_PART:8	0:0	0:0
 101005	希尔之眼	EYE	NORMAL	20	命中率：20%; 恢复量：没做	spr_icon_eye_2	spr_eye_2	*	0:0;1:0;0:1;1:1	-1:0;-2:0;0:-1
 101006	希尔之嘴	MOUTH	NORMAL	20	伤害：15; 恢复量：没做	spr_icon_mouth_2	spr_mouth_2	*	0:0;1:0	0:0;1:0
 101007	里卡多之鼻	NOSE	NORMAL	20	暴击率：30%; 反伤：没做	spr_icon_nose_3	spr_nose_3	*	0:0;0:1;0:2	0:-1;-1:1;1:1;-1:2;1:2;0:3

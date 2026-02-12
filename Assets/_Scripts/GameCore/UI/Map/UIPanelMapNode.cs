@@ -134,14 +134,14 @@ namespace GameCore.UI
         {
             AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
-            BattleManager.instance.EnterBattle();
+            GameModel.instance.GenerateNewBattle();
         }
 
         private void EnterBossLevel()
         {
             AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
-            BattleManager.instance.EnterBattle();
+            GameModel.instance.GenerateNewBattle();
         }
 
         private void EnterShop()

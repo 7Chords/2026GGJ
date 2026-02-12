@@ -18,7 +18,7 @@ namespace GameCore
         public List<Vector2Int> curOccupyFacePosList;
         public List<Vector2Int> curEffectFacePosList;
 
-        public BasePartLogic logicObj;//逻辑实例
+        public PartLogic logicObj;//逻辑实例
         public bool isEnemyPart;
 
         public PartInfo(PartRefObj _partRefObj,bool _isEnemyPart)
@@ -44,10 +44,6 @@ namespace GameCore
 
 
             logicObj = PartLogicFactory.CreateLogic(partRefObj.id);
-            if (logicObj != null)
-                logicObj.Initialize(this);
-            //else
-            //    SCDebugHelper.LogError($"Failed to create logic: {partRefObj.partName}");
         }
         public void ResetToBusy()
         {

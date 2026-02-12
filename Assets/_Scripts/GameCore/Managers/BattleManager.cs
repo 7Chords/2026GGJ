@@ -8,15 +8,16 @@ namespace GameCore
 {
     public class BattleManager : Singleton<BattleManager>
     {
-        public void EnterBattle()
+
+        public void StartBattle()
         {
-            EnterNextTurn();
+            PartInfo partInfo = null;
+            for(int i =0;i<GameModel.instance.battlePartInfoList.Count;i++)
+            {
+                partInfo = GameModel.instance.battlePartInfoList[i];
+            }
         }
 
-        public void ExitBattle()
-        {
-
-        }
         public void EnterNextTurn()
         {
             GameModel.instance.GenerateNewBattle();

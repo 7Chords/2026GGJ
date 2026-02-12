@@ -34,6 +34,14 @@ namespace GameCore
         PENETRATE,//穿透
         PART_LOSE_TURN,//部位无法行动
     }
+
+    public enum EAttributeTriggerPointType
+    {
+        ACTIVE,
+        GET_HIT,
+        DIE
+    }
+
     public enum ERoomType
     {
         NONE,
@@ -57,4 +65,11 @@ namespace GameCore
         OCCUPY,
         EFFECT,
     }
+
+    public enum ETurnOwnerType
+    {
+        PLAYER,
+        ENEMY,
+    }
+
 }

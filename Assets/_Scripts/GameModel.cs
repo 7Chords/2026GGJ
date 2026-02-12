@@ -32,7 +32,8 @@ namespace GameCore
         public EnemyInfo curEnemyInfo;
         public List<FaceGridInfo> enemyFaceGridInfoList;//敌人当前脸部格子信息列表
 
-
+        public ETurnOwnerType curTurnOwner;//当前行动方
+        public int curActivePartIndex;//当前行动的部位索引
 
         public override void OnInitialize()
         {

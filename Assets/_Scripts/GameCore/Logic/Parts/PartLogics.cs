@@ -2,15 +2,15 @@ using UnityEngine;
 
 namespace GameCore.Logic
 {
-    public class NoseLogic : BasePartLogic
+    public class NoseLogic : PartLogic
     {
     }
 
-    public class MouthLogic : BasePartLogic
+    public class MouthLogic : PartLogic
     {
     }
 
-    public class EyeLogic : BasePartLogic
+    public class EyeLogic : PartLogic
     {
     }
 }
