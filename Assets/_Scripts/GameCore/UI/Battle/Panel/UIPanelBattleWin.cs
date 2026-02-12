@@ -91,7 +91,7 @@ namespace GameCore.UI
             for (int i = 0; i < count; i++)
             {
                 PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == tempList[i].partId);
-                resultList.Add(new PartInfo(partRefObj));
+                resultList.Add(new PartInfo(partRefObj,false));
             }
 
             return resultList;

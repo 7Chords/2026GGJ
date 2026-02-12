@@ -1,42 +1,34 @@
-using DG.Tweening;
 using SCFrame;
 using SCFrame.UI;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace GameCore.UI
 {
-    public class UIPanelEnemyFacePart : _ASCUIPanelBase<UIMonoEnemyFacePart>
+    public class UIPanelBattlePart : _ASCUIPanelBase<UIMonoBattlePart>
     {
         private PartInfo _m_partInfo;
         public PartInfo partInfo => _m_partInfo;
-
-        private TweenContainer _m_tweenContainer;
-
-        public UIPanelEnemyFacePart(UIMonoEnemyFacePart _mono, SCUIShowType _showType) : base(_mono, _showType)
+        public UIPanelBattlePart(UIMonoBattlePart _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
 
         public override void AfterInitialize()
         {
-            _m_tweenContainer = new TweenContainer();
         }
 
         public override void BeforeDiscard()
         {
-            GameCommon.DiscardToolTip();
-            _m_tweenContainer?.KillAllDoTween();
-            _m_tweenContainer = null;
         }
 
         public override void OnHidePanel()
         {
-
             mono.imgGO.RemoveMouseEnter(onMouseEnter);
             mono.imgGO.RemoveMouseExit(onMouseExit);
-
         }
-
 
         public override void OnShowPanel()
         {
@@ -62,39 +54,17 @@ namespace GameCore.UI
             mono.imgPart.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
             mono.imgPart.SetNativeSize();
             mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.maxHealth;
-            mono.txtOrder.text = GameModel.instance.GetEnemyBattleOrderByPartInfo(_m_partInfo).ToString();
+
+            if(_m_partInfo.isEnemyPart)
+                mono.txtOrder.text = GameModel.instance.GetEnemyBattleOrderByPartInfo(_m_partInfo).ToString();
+            else
+                mono.txtOrder.text = GameModel.instance.GetPlayerBattleOrderByPartInfo(_m_partInfo).ToString();
 
             mono.imgGO.transform.rotation = Quaternion.Euler(0, 0, _m_partInfo.rotateStep * 90);
-
             //信息子物体自动适配旋转和rect大小
             autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goHealthInfo, mono.goHealthPosPivot);
             autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goOrder, mono.goOrderPosPivot);
-            mono.imgGO.transform.localScale = mono.scaleGO * Vector3.one;
         }
-
-        private void onMouseExit(PointerEventData _data, object[] _objs)
-        {
-            _m_tweenContainer.RegDoTween(mono.imgGO.transform.DOScale(mono.scaleGO, mono.scaleChgDuration));
-            GameCommon.DiscardToolTip();
-            SCMsgCenter.SendMsg(SCMsgConst.CLEAR_ENEMY_PREVIEW);
-        }
-
-        private void onMouseEnter(PointerEventData _data, object[] _objs)
-        {
-            //放到最下面 显示在最前面
-            GetGameObject().transform.SetAsLastSibling();
-            _m_tweenContainer.RegDoTween(mono.imgGO.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
-            GameCommon.ShowTooltip(_m_partInfo.partRefObj.partName,
-                _m_partInfo.partRefObj.partDesc,
-                new Vector2(GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_COMBINE, GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_COMBINE),
-                _m_partInfo.partRefObj.qualityType,
-                false);
-            SCMsgCenter.SendMsg(SCMsgConst.ENEMY_FACE_PART_RANGE_HIGHLIGHT, _m_partInfo);
-
-        }
-
-
-
         private void autoAdjustPosAndRotate(GameObject _parent, GameObject _child, Vector2 _pivotPos)
         {
             RectTransform parentRT = _parent.GetComponent<RectTransform>();
@@ -130,6 +100,23 @@ namespace GameCore.UI
             _child.transform.position = targetPos;
             // 永远不旋转
             _child.transform.rotation = Quaternion.identity;
+        }
+
+        private void onMouseExit(PointerEventData arg1, object[] arg2)
+        {
+            GameCommon.DiscardToolTip();
+
+        }
+
+        private void onMouseEnter(PointerEventData arg1, object[] arg2)
+        {
+            //放到最下面 显示在最前面
+            GetGameObject().transform.SetAsLastSibling();
+            GameCommon.ShowTooltip(_m_partInfo.partRefObj.partName,
+                _m_partInfo.partRefObj.partDesc,
+                new Vector2(GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_BATTLE, GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_BATTLE),
+                _m_partInfo.partRefObj.qualityType,
+                false);
         }
     }
 }

@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 5448004880447840508}
   - component: {fileID: 5655853299787517017}
   m_Layer: 5
-  m_Name: go_left
+  m_Name: go_up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -110,7 +110,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 26.8}
+  m_AnchoredPosition: {x: -30.1, y: 29.4}
   m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5448004880447840508
@@ -314,11 +314,11 @@ GameObject:
   - component: {fileID: 224673872836932980}
   - component: {fileID: 8970321608239681295}
   - component: {fileID: 2761328458269806129}
-  - component: {fileID: 6168831718757968878}
   - component: {fileID: 939463417216329967}
   - component: {fileID: 6192236285445351515}
+  - component: {fileID: 2543085428815878987}
   m_Layer: 5
-  m_Name: prefab_player_face_part
+  m_Name: prefab_battle_part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -384,32 +384,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6168831718757968878
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7322490686464373989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edf93bfc9a2110642a5e065ac6f31a19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiMask: {fileID: 0}
-  canvasGroup: {fileID: 6192236285445351515}
-  fadeInDuration: 0
-  fadeOutDuration: 0
-  imgGO: {fileID: 2761328458269806129}
-  imgPart: {fileID: 6783100560751295621}
-  txtHealth: {fileID: 926267406453320684}
-  txtOrder: {fileID: 7034344718893202328}
-  goHealthInfo: {fileID: 6692865887880802804}
-  goOrder: {fileID: 5799995615946025734}
-  goHealthPosPivot: {x: 0, y: -1}
-  goOrderPosPivot: {x: -0.7, y: 0.7}
-  scaleMouseEnter: 1.03
-  scaleChgDuration: 0.1
 --- !u!114 &939463417216329967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,6 +408,30 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &2543085428815878987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7322490686464373989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4df790e52c4a3c4c8ba9c5346186ed7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiMask: {fileID: 0}
+  canvasGroup: {fileID: 6192236285445351515}
+  fadeInDuration: 0
+  fadeOutDuration: 0
+  imgGO: {fileID: 2761328458269806129}
+  imgPart: {fileID: 6783100560751295621}
+  txtHealth: {fileID: 926267406453320684}
+  txtOrder: {fileID: 7034344718893202328}
+  goHealthInfo: {fileID: 6692865887880802804}
+  goHealthPosPivot: {x: 0, y: -1}
+  goOrderPosPivot: {x: -0.7, y: 0.7}
+  goOrder: {fileID: 5799995615946025734}
 --- !u!1 &8092995272627141411
 GameObject:
   m_ObjectHideFlags: 0

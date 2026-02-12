@@ -93,8 +93,8 @@ namespace GameCore.UI
             mono.imgGO.transform.rotation = Quaternion.Euler(0, 0, _m_partInfo.rotateStep * 90);
 
             //信息子物体自动适配旋转和rect大小
-            autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goHealthInfo,new Vector2(0,-1));
-            autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goOrder, new Vector2(-1, 1));
+            autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goHealthInfo,mono.goHealthPosPivot);
+            autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goOrder, mono.goOrderPosPivot);
         }
 
         private IEnumerator dragLoop()
@@ -226,7 +226,7 @@ namespace GameCore.UI
             _m_tweenContainer.RegDoTween(mono.imgGO.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
             GameCommon.ShowTooltip(_m_partInfo.partRefObj.partName, 
                 _m_partInfo.partRefObj.partDesc, 
-                new Vector2(GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_X, GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_Y),
+                new Vector2(GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_COMBINE, GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_COMBINE),
                 _m_partInfo.partRefObj.qualityType,
                 false);
             SCMsgCenter.SendMsg(SCMsgConst.PLAYER_FACE_PART_RANGE_HIGHLIGHT,_m_partInfo);

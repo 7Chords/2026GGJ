@@ -63,7 +63,7 @@ namespace GameCore
                     partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == partEffectObj.partId);
                     if (partRefObj == null)
                         continue;
-                    info = new PartInfo(partRefObj);
+                    info = new PartInfo(partRefObj,false);
                     bagPartInfoList.Add(info);
                 }
             }
@@ -261,7 +261,7 @@ namespace GameCore
 
             //todo：由于unity gridlayout的创建问题 要等一段时间格子坐标啥的才创建完成不能马上创建敌人部位
             //否则位置出错 后续优化
-            SCTimeCaller.instance.CallDealy(0.5f, () =>
+            SCTimeCaller.instance.CallDealy(1f, () =>
             {
                 SCMsgCenter.SendMsg(SCMsgConst.NEW_TURN_START);
             });
@@ -296,7 +296,7 @@ namespace GameCore
                 //生成牌堆
                 for (int i = 0; i < partRefList.Count; i++)
                 {
-                    PartInfo info = new PartInfo(partRefList[i]);
+                    PartInfo info = new PartInfo(partRefList[i],true);
                     curEnemyInfo.deckParts.Add(info);
                 }
 

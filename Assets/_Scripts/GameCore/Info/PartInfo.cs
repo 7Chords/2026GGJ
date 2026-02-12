@@ -19,10 +19,12 @@ namespace GameCore
         public List<Vector2Int> curEffectFacePosList;
 
         public BasePartLogic logicObj;//逻辑实例
+        public bool isEnemyPart;
 
-        public PartInfo(PartRefObj _partRefObj)
+        public PartInfo(PartRefObj _partRefObj,bool _isEnemyPart)
         {
             partRefObj = _partRefObj;
+            isEnemyPart = _isEnemyPart;
             maxHealth = partRefObj.partHealth;
             currentHealth = maxHealth;
             isOnFace = false;

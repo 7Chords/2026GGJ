@@ -1,10 +1,12 @@
 using SCFrame.UI;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace GameCore.UI
 {
-    public class UIMonoPlayerFacePart : _ASCUIMonoBase
+    public class UIMonoBattlePart : _ASCUIMonoBase
     {
         [Header("物体图片")]
         public Image imgGO;
@@ -16,16 +18,11 @@ namespace GameCore.UI
         public Text txtOrder;
         [Header("生命信息物体")]
         public GameObject goHealthInfo;
-        [Header("序号信息物体")]
-        public GameObject goOrder;
         [Header("生命信息物体所处位置比例")]
         public Vector2 goHealthPosPivot;
         [Header("序号信息物体所处位置比例")]
         public Vector2 goOrderPosPivot;
-        [Header("鼠标移入缩放")]
-        public float scaleMouseEnter;
-        [Header("缩放时间")]
-        public float scaleChgDuration;
-
+        [Header("序号信息物体")]
+        public GameObject goOrder;
     }
 }

@@ -11,7 +11,7 @@ namespace GameCore
         public const string PREFAB_FACE_PART_PREVIEW = "prefab_face_part_preview";
         public const string PREFAB_TOOLTIP_GIRD = "prefab_tooltip_grid";
         public const string PREFAB_ENEMY_FACE_PART = "prefab_enemy_face_part";
-
+        public const string PREFAB_BATTLE_PART = "prefab_battle_part";
         #endregion
 
 
@@ -24,8 +24,11 @@ namespace GameCore
         public const float TOOLTIP_SHOW_ON_LEFT_THRESHOLD = 0.7f;
         public const float TOOLTIP_SHOW_Y_OFFSET_SCREEN_RATIO = -0.25f;
         public const float TOOLTIP_SHOW_X_OFFSET_SCREEN_RATIO = 0.15f;
-        public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_X = 0.3f;
-        public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_Y = 0.2f;
+        public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_COMBINE = 0.3f;
+        public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_COMBINE = 0.2f;
+
+        public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_BATTLE = 0.5f;
+        public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_BATTLE = 0.15f;
 
         #endregion
 
