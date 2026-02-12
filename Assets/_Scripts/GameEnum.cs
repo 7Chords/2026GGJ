@@ -46,14 +46,15 @@ namespace GameCore
 
     public enum EQualityType
     {
+        NONE,
         NORMAL,//普通的
         RARE,//稀有的
         PRECIOUS,//珍贵的
     }
 
-    //public enum EGridPosType
-    //{
-    //    OCCUPY,
-    //    EFFECT,
-    //}
+    public enum EGridPosType
+    {
+        OCCUPY,
+        EFFECT,
+    }
 }

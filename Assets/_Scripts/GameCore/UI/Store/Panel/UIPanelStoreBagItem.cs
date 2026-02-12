@@ -76,7 +76,7 @@ namespace GameCore.UI
                 return;
 
 
-            GameCommon.ShowTooltip(_m_partInfo.partRefObj.partName, _m_partInfo.partRefObj.partDesc, GetGameObject().transform.position);
+            GameCommon.ShowTooltip(_m_partInfo, GetGameObject().transform.position);
 
             _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
 

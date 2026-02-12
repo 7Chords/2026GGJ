@@ -35,6 +35,7 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.NEW_TURN_START, refreshShow);
 
             mono.btnConfirm.onClick.RemoveAllListeners();
             mono.btnDeck.onClick.RemoveAllListeners();
@@ -46,6 +47,7 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.NEW_TURN_START, refreshShow);
 
             _m_faceGrid?.ShowPanel();
             _m_partContainer?.ShowPanel();

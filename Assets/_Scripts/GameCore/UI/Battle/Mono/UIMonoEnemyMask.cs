@@ -18,5 +18,7 @@ namespace GameCore.UI
         public int row;
         [Header("禁用格子坐标列表")] 
         public List<Vector2Int> disabledGrids;
+        [Header("部位父物体")]
+        public Transform tranParentPart;
     }
 }

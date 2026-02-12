@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using SCFrame;
 using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
+using System;
 
 namespace GameCore.UI
 {
@@ -10,6 +13,10 @@ namespace GameCore.UI
     {
         private List<UIPanelEnemyMaskGrid> _m_gridPanelList;
         private List<FaceGridInfo> _m_gridInfoList;
+        private List<GameObject> _m_gridGOList;
+
+        private EnemyInfo _m_curEnemyInfo;
+        private List<UIPanelEnemyFacePart> _m_facePartPanelList;
         public UIPanelEnemyMask(UIMonoEnemyMask _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -18,6 +25,8 @@ namespace GameCore.UI
         {
             _m_gridPanelList = new List<UIPanelEnemyMaskGrid>();
             _m_gridInfoList = new List<FaceGridInfo>();
+            _m_gridGOList = new List<GameObject>();
+            _m_facePartPanelList = new List<UIPanelEnemyFacePart>();
             createGrids();
         }
 
@@ -28,23 +37,46 @@ namespace GameCore.UI
                 foreach (var grid in _m_gridPanelList)
                     grid?.Discard();
             }
+            if (_m_facePartPanelList != null)
+            {
+                foreach (var panel in _m_facePartPanelList)
+                    panel?.Discard();
+            }
         }
 
         public override void OnHidePanel()
         {
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.NEW_TURN_START, refreshShow);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.ENEMY_FACE_PART_RANGE_HIGHLIGHT, onEnemyFacePartRangeHighlight);
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.CLEAR_ENEMY_PREVIEW, onClearPreview);
+
             if (_m_gridPanelList != null)
             {
                 foreach (var grid in _m_gridPanelList)
                     grid?.HidePanel();
             }
+            if (_m_facePartPanelList != null)
+            {
+                foreach (var panel in _m_facePartPanelList)
+                    panel?.HidePanel();
+            }
         }
 
         public override void OnShowPanel()
         {
-            if(_m_gridPanelList != null)
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.NEW_TURN_START, refreshShow);
+            SCMsgCenter.RegisterMsg(SCMsgConst.ENEMY_FACE_PART_RANGE_HIGHLIGHT, onEnemyFacePartRangeHighlight);
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.CLEAR_ENEMY_PREVIEW, onClearPreview);
+
+            if (_m_gridPanelList != null)
             {
                 foreach (var grid in _m_gridPanelList)
                     grid?.ShowPanel();
+            }
+            if (_m_facePartPanelList != null)
+            {
+                foreach (var panel in _m_facePartPanelList)
+                    panel?.ShowPanel();
             }
         }
         private void createGrids()
@@ -76,7 +108,7 @@ namespace GameCore.UI
                             panel.SetInfo(info);
                             _m_gridInfoList.Add(info);
                             _m_gridPanelList.Add(panel);
-                            //_m_gridGOList.Add(go);
+                            _m_gridGOList.Add(go);
                         }
                     }
 
@@ -84,6 +116,77 @@ namespace GameCore.UI
                 }
             }
             GameModel.instance.enemyFaceGridInfoList = _m_gridInfoList;
+            //LayoutRebuilder.ForceRebuildLayoutImmediate(mono.layoutGrid.gameObject.GetRectTransform());
+            //LayoutRebuilder.ForceRebuildLayoutImmediate(mono.layoutGrid.gameObject.GetRectTransform());
+            //Canvas.ForceUpdateCanvases();
+        }
+
+        private void refreshShow()
+        {
+            _m_curEnemyInfo = GameModel.instance.curEnemyInfo;
+
+            if (_m_curEnemyInfo == null)
+                return;
+
+            PartInfo partInfo = null;
+            for(int i =0;i<_m_curEnemyInfo.battleParts.Count;i++)
+            {
+                partInfo = _m_curEnemyInfo.battleParts[i];
+                if (partInfo == null)
+                    continue;
+
+                FaceGridInfo tmpInfo = null;
+                List<Vector3> tmpGOList = new List<Vector3>();
+                for (int j = 0; j < partInfo.curOccupyFacePosList.Count; j++)
+                {
+                    tmpInfo = _m_gridInfoList.Find(x => x.pos == partInfo.curOccupyFacePosList[j]);
+                    if (tmpInfo == null)
+                        continue;
+                    int index = _m_gridInfoList.IndexOf(tmpInfo);
+                    tmpGOList.Add(_m_gridGOList[index].transform.localPosition) ;
+                }
+                //计算生成的位置
+                Vector2 placeWorldPos = GameCommon.CalculateWorldCenterPos(tmpGOList);
+                GameObject partGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_ENEMY_FACE_PART, mono.tranParentPart);
+                UIMonoEnemyFacePart monoFacePart = partGO.GetComponent<UIMonoEnemyFacePart>();
+                UIPanelEnemyFacePart panel = new UIPanelEnemyFacePart(monoFacePart, SCUIShowType.INTERNAL);
+                panel.SetLocalPos(placeWorldPos);
+                panel.SetInfo(partInfo);
+                panel.ShowPanel();
+                _m_facePartPanelList.Add(panel);
+            }
+        }
+
+        private void onEnemyFacePartRangeHighlight(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            PartInfo partInfo = _objs[0] as PartInfo;
+            if (partInfo == null)
+                return;
+            UIPanelEnemyMaskGrid grid = null;
+            for (int i = 0; i < partInfo.curOccupyFacePosList.Count; i++)
+            {
+                grid = _m_gridPanelList.Find(x => x.gridInfo.pos == partInfo.curOccupyFacePosList[i]);
+                if (grid != null)
+                    grid.SetOccupyPreview(true);
+            }
+            if (!partInfo.curOccupyFacePosList.Vector2IntListEquals(partInfo.curEffectFacePosList))
+            {
+                for (int i = 0; i < partInfo.curEffectFacePosList.Count; i++)
+                {
+                    grid = _m_gridPanelList.Find(x => x.gridInfo.pos == partInfo.curEffectFacePosList[i]);
+                    if (grid != null)
+                        grid.SetEffectPreview();
+                }
+            }
+
+        }
+
+        private void onClearPreview()
+        {
+            foreach (var gridPanel in _m_gridPanelList)
+                gridPanel.SetNoPreview();
         }
     }
 }

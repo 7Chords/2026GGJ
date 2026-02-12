@@ -133,17 +133,14 @@ namespace GameCore.UI
         private void EnterEnemyLevel()
         {
             AudioMgr.instance.PlaySfx("sfx_click");
-
             UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
-            GameModel.instance.GenerateRandomEnemy();
             BattleManager.instance.EnterBattle();
         }
 
         private void EnterBossLevel()
         {
-            UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
             AudioMgr.instance.PlaySfx("sfx_click");
-            GameModel.instance.GenerateRandomEnemy();
+            UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
             BattleManager.instance.EnterBattle();
         }
 

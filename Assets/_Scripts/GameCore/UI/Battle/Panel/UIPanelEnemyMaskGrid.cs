@@ -9,6 +9,7 @@ namespace GameCore.UI
     public class UIPanelEnemyMaskGrid : _ASCUIPanelBase<UIMonoEnemyMaskGrid>
     {
         private FaceGridInfo _m_faceGridInfo;
+        public FaceGridInfo gridInfo => _m_faceGridInfo;
         public UIPanelEnemyMaskGrid(UIMonoEnemyMaskGrid _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -38,6 +39,20 @@ namespace GameCore.UI
             mono.canvasGroup.alpha = 0;
             mono.canvasGroup.interactable = false;
             mono.canvasGroup.blocksRaycasts = false;
+        }
+        public void SetOccupyPreview(bool _canPlace)
+        {
+            mono.imgGrid.color = _canPlace ? mono.colorCanPlace : mono.colorCanNotPlace;
+        }
+
+        public void SetEffectPreview()
+        {
+            mono.imgGrid.color = mono.colorIsEffective;
+        }
+
+        public void SetNoPreview()
+        {
+            mono.imgGrid.color = mono.colorDefault;
         }
     }
 }

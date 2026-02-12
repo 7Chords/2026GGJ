@@ -63,7 +63,7 @@ namespace GameCore.UI
             _m_curHitGridGO = GameCommon.GetHitGridGameObj(_data);
             if (_m_curHitGridGO == null)
             {
-                SCMsgCenter.SendMsg(SCMsgConst.CLEAR_PREVIEW);
+                SCMsgCenter.SendMsg(SCMsgConst.CLEAR_PLAYER_PREVIEW);
             }
             else
             {
@@ -112,7 +112,7 @@ namespace GameCore.UI
             {
                 _m_partInfo.ResetToBusy();
                 SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_FAIL,_m_partInfo);
-                SCMsgCenter.SendMsg(SCMsgConst.CLEAR_PREVIEW);
+                SCMsgCenter.SendMsg(SCMsgConst.CLEAR_PLAYER_PREVIEW);
                 SCCommon.DestoryGameObject(gameObject);
             }
 

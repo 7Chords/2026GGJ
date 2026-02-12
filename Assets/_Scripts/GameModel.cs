@@ -24,12 +24,12 @@ namespace GameCore
         public long rollStoreId; //进入商店节点后roll到的商店id
         
         public Vector2Int playerMapPosition = new Vector2Int(-1, -1);//玩家地图坐标位置
-        public int playerFloor;//玩家当前在第几个楼层
+        public int playerFloor = 1;//玩家当前在第几个楼层
 
         public List<FaceGridInfo> playerFaceGridInfoList;//玩家当前脸部格子信息列表
         public List<GameObject> playerFaceGridGOList;//玩家当前脸部格子物体列表
 
-        public EnemyInfo currentEnemy;
+        public EnemyInfo curEnemyInfo;
         public List<FaceGridInfo> enemyFaceGridInfoList;//敌人当前脸部格子信息列表
 
 
@@ -68,12 +68,6 @@ namespace GameCore
                 }
             }
             
-            Debug.Log($"[GameModel] OnInitialize Loop Done. Bag Count: {bagPartInfoList.Count}");
-
-            // Initial Setup using Unified Logic
-            PrepareNextBattleRound();
-            
-            Debug.Log($"[GameModel] OnInitialize Complete. Bag: {bagPartInfoList.Count}, Deck: {deckPartInfoList.Count}, Busy: {busyPartInfoList.Count}");
         }
 
         public void Heal(int _amount)
@@ -198,7 +192,7 @@ namespace GameCore
             }
         }
 
-        public int GetBattleOrderByPartInfo(PartInfo _info)
+        public int GetPlayerBattleOrderByPartInfo(PartInfo _info)
         {
             if (_info == null)
                 return -1;
@@ -214,7 +208,22 @@ namespace GameCore
             });
             return battlePartInfoList.IndexOf(_info) + 1;//索引加1用于显示
         }
-
+        public int GetEnemyBattleOrderByPartInfo(PartInfo _info)
+        {
+            if (_info == null)
+                return -1;
+            if (curEnemyInfo == null || !curEnemyInfo.battleParts.Contains(_info))
+                return -1;
+            curEnemyInfo.battleParts.Sort((a, b) =>
+            {
+                Vector2Int aPos = a.GetMinGridPos();
+                Vector2Int bPos = b.GetMinGridPos();
+                if (aPos.y != bPos.y)
+                    return aPos.y.CompareTo(bPos.y);
+                return aPos.x.CompareTo(bPos.x);
+            });
+            return curEnemyInfo.battleParts.IndexOf(_info) + 1;//索引加1用于显示
+        }
 
 
 
@@ -226,6 +235,43 @@ namespace GameCore
             long id = storeRefList[Random.Range(0, storeRefList.Count)].id;
             rollStoreId = id;
         }
+        public void GenerateNewBattle()
+        {
+            if (deckPartInfoList == null) deckPartInfoList = new List<PartInfo>();
+            else deckPartInfoList.Clear();
+
+            if (busyPartInfoList == null) busyPartInfoList = new List<PartInfo>();
+            else busyPartInfoList.Clear();
+
+            if (battlePartInfoList == null) battlePartInfoList = new List<PartInfo>();
+            else battlePartInfoList.Clear();
+
+            if (bagPartInfoList != null)
+            {
+                foreach (var part in bagPartInfoList)
+                {
+                    if (part.currentHealth > 0)
+                    {
+                        deckPartInfoList.Add(part);
+                    }
+                }
+            }
+            DrawParts(GameConst.PLAYER_DRAW_CARD_COUNT);
+            GenerateRandomEnemy();
+
+            //todo：由于unity gridlayout的创建问题 要等一段时间格子坐标啥的才创建完成不能马上创建敌人部位
+            //否则位置出错 后续优化
+            SCTimeCaller.instance.CallDealy(0.5f, () =>
+            {
+                SCMsgCenter.SendMsg(SCMsgConst.NEW_TURN_START);
+            });
+        }
+
+        public void NextTurn()
+        {
+
+        }
+
         public void GenerateRandomEnemy()
         {
 
@@ -233,7 +279,7 @@ namespace GameCore
             List<EnemyRefObj> enemies = SCRefDataMgr.instance.enemyRefList.refDataList.Where(refObj => refObj.floor == playerFloor).ToList();
             if (enemies == null || enemies.Count == 0) return;
             EnemyRefObj enemyRef = enemies[Random.Range(0, enemies.Count)];
-            currentEnemy = new EnemyInfo(enemyRef);
+            curEnemyInfo = new EnemyInfo(enemyRef);
 
 
             if (enemyRef.initPartList != null && enemyRef.initPartList.Count > 0)
@@ -251,72 +297,22 @@ namespace GameCore
                 for (int i = 0; i < partRefList.Count; i++)
                 {
                     PartInfo info = new PartInfo(partRefList[i]);
-                    currentEnemy.deckParts.Add(info);
+                    curEnemyInfo.deckParts.Add(info);
                 }
 
                 //随机出战斗的部位
-                int pickCount = Mathf.Min(GameConst.INIT_ENEMY_PART_COUNT, currentEnemy.deckParts.Count);
+                int pickCount = Mathf.Min(GameConst.INIT_ENEMY_PART_COUNT, curEnemyInfo.deckParts.Count);
                 for (int i = 0; i < pickCount; i++)
                 {
-                    int idx = Random.Range(0, currentEnemy.deckParts.Count);
-                    PartInfo selectPartRefObj = currentEnemy.deckParts[idx];
-                    currentEnemy.deckParts.RemoveAt(idx);
-                    currentEnemy.battleParts.Add(selectPartRefObj);
+                    int idx = Random.Range(0, curEnemyInfo.deckParts.Count);
+                    PartInfo selectPartRefObj = curEnemyInfo.deckParts[idx];
+                    curEnemyInfo.deckParts.RemoveAt(idx);
+                    curEnemyInfo.battleParts.Add(selectPartRefObj);
                 }
             }
 
             //生成敌人的随机布局
-            GenerateEnemyLayout(currentEnemy);
-        }
-        
-        public void PrepareNextBattleRound()
-        {
-            Debug.Log($"[GameModel] PrepareNextBattleRound Start. Deck: {deckPartInfoList.Count}, Busy: {busyPartInfoList.Count}, Battle: {battlePartInfoList.Count}");
-            
-            // 1. Reset Lists
-            if (deckPartInfoList == null) deckPartInfoList = new List<PartInfo>();
-            else deckPartInfoList.Clear();
-            
-            if (busyPartInfoList == null) busyPartInfoList = new List<PartInfo>();
-            else busyPartInfoList.Clear();
-            
-            if (battlePartInfoList == null) battlePartInfoList = new List<PartInfo>();
-            else battlePartInfoList.Clear(); // Just clear the reference list, parts are in Bag
-
-            // 2. Return All Living Parts from Bag to Deck
-            if (bagPartInfoList != null)
-            {
-                foreach(var part in bagPartInfoList)
-                {
-                    if (part.currentHealth > 0)
-                    {
-                        deckPartInfoList.Add(part);
-                    }
-                    else
-                    {
-                         Debug.Log($"[GameModel] Part {part.partRefObj.partName} is Dead/Broken. Remaining in Bag but not in Deck.");
-                    }
-                }
-            }
-            
-            Debug.Log($"[GameModel] After Return - Deck: {deckPartInfoList.Count}");
-            
-            // 3. Random Draw 3
-            DrawParts(4);
-            
-            Debug.Log($"[GameModel] After Draw - Deck: {deckPartInfoList.Count}, Busy: {busyPartInfoList.Count}");
-            
-            // 4. Reset Enemy (But Keep HP if valid)
-            int preservedHp = -1;
-            if (currentEnemy != null) preservedHp = currentEnemy.currentHealth;
-            
-            GenerateRandomEnemy();
-            
-            if (preservedHp > 0 && currentEnemy != null)
-            {
-                currentEnemy.currentHealth = preservedHp;
-                Debug.Log($"[GameModel] Preserved Enemy HP: {preservedHp}");
-            }
+            GenerateEnemyLayout(curEnemyInfo);
         }
         
         public void DrawParts(int count)
@@ -330,7 +326,7 @@ namespace GameCore
             for(int i=0; i<count; i++)
             {
                 if (deckPartInfoList.Count == 0) break;
-                
+                if (busyPartInfoList.Count == GameConst.PLAYER_CARD_MAX_COUNT) break;
                 int idx = Random.Range(0, deckPartInfoList.Count);
                 PartInfo drawn = deckPartInfoList[idx];
                 deckPartInfoList.RemoveAt(idx);
@@ -341,39 +337,12 @@ namespace GameCore
             }
         }
 
-        private List<Vector2Int> _cachedEnemyDisabledGrids;
-
-        //private void EnsureEnemyDisabledGridsLoaded()
-        //{
-        //    if (_cachedEnemyDisabledGrids != null) return;
-        //    _cachedEnemyDisabledGrids = new List<Vector2Int>();
-
-        //    // Lazy load UI prefab to get config
-        //    // Use GameCore.UI.UIMonoBattle to resolve ambiguity if any
-        //    GameObject uiGO = ResourcesHelper.LoadGameObject("panel_battle");
-        //    if (uiGO != null)
-        //    {
-        //        var battleMono = uiGO.GetComponent<UIMonoBattle>();
-        //        if (battleMono != null && battleMono.enemyFace != null)
-        //        {
-        //            if (battleMono.enemyFace.disabledGrids != null)
-        //            {
-        //                _cachedEnemyDisabledGrids.AddRange(battleMono.enemyFace.disabledGrids);
-        //                Debug.Log($"[GameModel] Loaded {_cachedEnemyDisabledGrids.Count} disabled grids from Enemy Face UI.");
-        //            }
-        //        }
-        //        ResourcesHelper.ReleaseInstance(uiGO);
-        //    }
-        //    else
-        //    {
-        //        Debug.LogWarning("[GameModel] Failed to load panel_battle for disabled grids config.");
-        //    }
-        //}
 
         private void GenerateEnemyLayout(EnemyInfo _enemyInfo)
         {
             foreach (var part in _enemyInfo.battleParts)
             {
+                part.ResetToBusy();
                 if (TryFindValidPlacement(part.partRefObj, out Vector2Int pos, out int rotStep))
                 {
                     MarkOccupancy(part, pos, rotStep);
@@ -408,7 +377,7 @@ namespace GameCore
 
         private bool IsValidPlacement(PartRefObj _part, Vector2Int _originFacePos, int _rotStep)
         {
-            List<Vector2Int> shape = GameCommon.RotateShape(_part.GetOccupyPosList(), _rotStep);
+            List<Vector2Int> shape = GameCommon.RotateShapeAndMove2Zero(_part.GetOccupyPosList(), _rotStep);
             foreach (var offset in shape)
             {
                 Vector2Int p = _originFacePos + offset;
@@ -423,10 +392,9 @@ namespace GameCore
 
         private void MarkOccupancy(PartInfo part, Vector2Int origin, int rot)
         {
-            List<Vector2Int> rotateLocalOccupyPosList = GameCommon.RotateShape(part.localOccupyPosList, rot);
-            List<Vector2Int> rotateLocalEffectPosList = GameCommon.RotateShapeAndMoveBySample(part.localEffectPosList, rot, part.localOccupyPosList);
-
-            foreach (var offset in rotateLocalOccupyPosList)
+            for(int i =0;i<rot;i++)
+                part.RotateOnce();
+            foreach (var offset in part.localOccupyPosList)
             {
                 Vector2Int p = origin + offset;
                 FaceGridInfo gridInfo = enemyFaceGridInfoList.Find(x => x.pos == p);
@@ -435,12 +403,12 @@ namespace GameCore
                 gridInfo.hasPart = true;
                 part.curOccupyFacePosList.Add(p);
             }
-            foreach (var offset in rotateLocalEffectPosList)
+            foreach (var offset in part.localEffectPosList)
             {
                 Vector2Int p = origin + offset;
-                FaceGridInfo gridInfo = enemyFaceGridInfoList.Find(x => x.pos == p);
-                if (gridInfo == null)
-                    continue;
+                //FaceGridInfo gridInfo = enemyFaceGridInfoList.Find(x => x.pos == p);
+                //if (gridInfo == null)
+                //    continue;
                 part.curEffectFacePosList.Add(p);
             }
             part.isOnFace = true;

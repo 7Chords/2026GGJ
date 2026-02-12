@@ -113,12 +113,22 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa24085d265dd5141af77aefce849c52
-    m_Address: prefab_face_part
+    m_Address: prefab_player_face_part
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c58dcb5f2ea09f542ae248c98cfe43af
     m_Address: prefab_face_part_preview
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1cd77df39aae53a4ea6e54b4db7e71f3
+    m_Address: prefab_tooltip_grid
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 889944d27b98160409c58a4cd5b759ce
+    m_Address: prefab_enemy_face_part
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

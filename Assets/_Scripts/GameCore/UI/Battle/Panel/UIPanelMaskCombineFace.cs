@@ -13,7 +13,7 @@ namespace GameCore.UI
         private List<FaceGridInfo> _m_gridInfoList;
         private List<GameObject> _m_gridGOList;
 
-        private List<UIPanelFacePart> _m_facePartPanelList;
+        private List<UIPanelPlayerFacePart> _m_facePartPanelList;
         private List<PartInfo> _m_playerBattlePartInfoList;
         public UIPanelMaskCombineFace(UIMonoMaskCombineFace _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
@@ -25,7 +25,7 @@ namespace GameCore.UI
             _m_gridPanelList = new List<UIPanelMaskCombineFaceGrid>();
             _m_gridInfoList = new List<FaceGridInfo>();
             _m_gridGOList = new List<GameObject>();
-            _m_facePartPanelList = new List<UIPanelFacePart>();
+            _m_facePartPanelList = new List<UIPanelPlayerFacePart>();
             _m_playerBattlePartInfoList = new List<PartInfo>();
 
             createGrids();
@@ -102,8 +102,8 @@ namespace GameCore.UI
             SCMsgCenter.UnregisterMsg(SCMsgConst.REPLACE_PART_POS_SUCCESS, onReplacePartPosSuccess);
             SCMsgCenter.UnregisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onReplacePartPosFail);
             SCMsgCenter.UnregisterMsg(SCMsgConst.PLACE_PART_PREVIEW, onPlacePartPreview);
-            SCMsgCenter.UnregisterMsgAct(SCMsgConst.CLEAR_PREVIEW, onClearPreview);
-            SCMsgCenter.UnregisterMsg(SCMsgConst.FACE_PART_RANGE_HIGHLIGHT, onFacePartRangeHighlight);
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.CLEAR_PLAYER_PREVIEW, onClearPreview);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PLAYER_FACE_PART_RANGE_HIGHLIGHT, onFacePartRangeHighlight);
 
             if (_m_gridPanelList != null)
             {
@@ -128,8 +128,8 @@ namespace GameCore.UI
             SCMsgCenter.RegisterMsg(SCMsgConst.REPLACE_PART_POS_SUCCESS, onReplacePartPosSuccess);
             SCMsgCenter.RegisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onReplacePartPosFail);
             SCMsgCenter.RegisterMsg(SCMsgConst.PLACE_PART_PREVIEW, onPlacePartPreview);
-            SCMsgCenter.RegisterMsgAct(SCMsgConst.CLEAR_PREVIEW, onClearPreview);
-            SCMsgCenter.RegisterMsg(SCMsgConst.FACE_PART_RANGE_HIGHLIGHT, onFacePartRangeHighlight);
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.CLEAR_PLAYER_PREVIEW, onClearPreview);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PLAYER_FACE_PART_RANGE_HIGHLIGHT, onFacePartRangeHighlight);
 
             if (_m_gridPanelList != null)
             {
@@ -167,9 +167,7 @@ namespace GameCore.UI
             partInfo.curEffectFacePosList = effectPosList;
             partInfo.isOnFace = true;
 
-            UIPanelMaskCombineFaceGrid tmpGrid = null;
             FaceGridInfo tmpInfo = null;
-            GameObject tmpGO = null;
             List<Vector3> tmpGOList = new List<Vector3>();
             for(int i =0;i<occupyPosList.Count;i++)
             {
@@ -182,9 +180,9 @@ namespace GameCore.UI
             }
             //计算生成的位置
             Vector2 placeWorldPos = GameCommon.CalculateWorldCenterPos(tmpGOList);
-            GameObject partGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_FACE_PART, mono.tranParentPart);
-            UIMonoFacePart monoFacePart = partGO.GetComponent<UIMonoFacePart>();
-            UIPanelFacePart panel = new UIPanelFacePart(monoFacePart, SCUIShowType.INTERNAL);
+            GameObject partGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_PLAYER_FACE_PART, mono.tranParentPart);
+            UIMonoPlayerFacePart monoFacePart = partGO.GetComponent<UIMonoPlayerFacePart>();
+            UIPanelPlayerFacePart panel = new UIPanelPlayerFacePart(monoFacePart, SCUIShowType.INTERNAL);
             panel.SetLocalPos(placeWorldPos);
             panel.SetInfo(partInfo);
             panel.ShowPanel();
@@ -198,7 +196,7 @@ namespace GameCore.UI
         {
             if (_objs == null || _objs.Length < 3)
                 return;
-            UIPanelFacePart panel = _objs[0] as UIPanelFacePart;
+            UIPanelPlayerFacePart panel = _objs[0] as UIPanelPlayerFacePart;
             List<Vector2Int> occupyPosList = _objs[1] as List<Vector2Int>;
             List<Vector2Int> effectPosList = _objs[2] as List<Vector2Int>;
             if (occupyPosList == null || effectPosList == null)
@@ -233,7 +231,7 @@ namespace GameCore.UI
             PartInfo partInfo = _objs[0] as PartInfo;
             _m_playerBattlePartInfoList.Remove(partInfo);
 
-            UIPanelFacePart panel = _m_facePartPanelList.Find(x => x.partInfo == partInfo);
+            UIPanelPlayerFacePart panel = _m_facePartPanelList.Find(x => x.partInfo == partInfo);
             _m_facePartPanelList.Remove(panel);
             SCMsgCenter.SendMsg(SCMsgConst.FACE_PART_ORDER_CHG);
 

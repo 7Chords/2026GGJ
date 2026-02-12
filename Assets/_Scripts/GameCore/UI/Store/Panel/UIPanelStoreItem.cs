@@ -97,7 +97,10 @@ namespace GameCore.UI
                 return;
             AudioMgr.instance.PlaySfx("sfx_mouse_enter");
 
-            GameCommon.ShowTooltip(_m_goodsInfo.goodsRefObj.goodsName, _m_goodsInfo.goodsRefObj.goodsDesc, GetGameObject().transform.position);
+            //todo
+            GameCommon.ShowTooltip(_m_goodsInfo.goodsRefObj.goodsName, 
+                _m_goodsInfo.goodsRefObj.goodsDesc,
+                GetGameObject().transform.position);
 
             _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
 

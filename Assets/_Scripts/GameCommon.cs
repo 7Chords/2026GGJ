@@ -29,7 +29,9 @@ namespace GameCore
             damageGO.GetComponent<DamageFloatText>().Initialize(_damage, true);
             Debug.Break();
         }
-
+        /// <summary>
+        /// 展示伤害飘字
+        /// </summary>
         public static void ShowDamageFloatText(int _damage, Vector2 _screenPos)
         {
             GameObject damageGO = ResourcesHelper.LoadGameObject(
@@ -40,7 +42,9 @@ namespace GameCore
                 _screenPos);
             damageGO.GetComponent<DamageFloatText>().Initialize(_damage, true);
         }
-
+        /// <summary>
+        /// 展示伤害飘字
+        /// </summary>
         public static void ShowDamageFloatText(int _damage, Transform _anchor)
         {
             Transform parent = _anchor != null ? _anchor.parent.parent : SCGame.instance.topLayerRoot.transform;
@@ -69,7 +73,9 @@ namespace GameCore
                 _worldPos);
             damageGO.GetComponent<DamageFloatText>().Initialize(_healAmount, false);
         }
-
+        /// <summary>
+        /// 展示治疗量飘字
+        /// </summary>
         public static void ShowHealFloatText(int _healAmount, Vector2 _screenPos)
         {
             GameObject damageGO = ResourcesHelper.LoadGameObject(
@@ -81,21 +87,9 @@ namespace GameCore
             damageGO.GetComponent<DamageFloatText>().Initialize(_healAmount, false);
         }
 
-        public static void ShowHealFloatText(int _healAmount, Transform _anchor)
-        {
-            Transform parent = _anchor != null ? _anchor : SCGame.instance.topLayerRoot.transform;
-            GameObject damageGO = ResourcesHelper.LoadGameObject(
-                "prefab_damage_num",
-                parent);
-            
-            damageGO.transform.localPosition = Vector3.zero;
-            damageGO.transform.localScale = Vector3.one;
-            damageGO.transform.localRotation = Quaternion.identity;
 
-            damageGO.GetComponent<DamageFloatText>().Initialize(_healAmount, false);
-        }
 
-        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector3 _worldPos)
+        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector3 _worldPos, EQualityType _qualityType = EQualityType.NONE, bool _showGridInfo = true)
         {
             DiscardToolTip();
             GameObject toolTipGo = ResourcesHelper.LoadGameObject(
@@ -125,11 +119,11 @@ namespace GameCore
             toolTipRT.localPosition = localPoint;
             
             var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
-            tooltipComp.ShowTooltip(_name, _desc, localPoint);
+            tooltipComp.ShowTooltip(_name, _desc, localPoint, _qualityType,_showGridInfo);
             _m_toolTipCache = toolTipGo;
             return tooltipComp;
         }
-        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector3 _worldPos, Vector2 _showScreenRatioOffset)
+        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector3 _worldPos, Vector2 _showScreenRatioOffset, EQualityType _qualityType = EQualityType.NONE,bool _showGridInfo = true)
         {
             DiscardToolTip();
             GameObject toolTipGo = ResourcesHelper.LoadGameObject(
@@ -152,12 +146,11 @@ namespace GameCore
             toolTipRT.localPosition = localPoint;
 
             var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
-            tooltipComp.ShowTooltip(_name, _desc, localPoint);
+            tooltipComp.ShowTooltip(_name, _desc, localPoint, _qualityType, _showGridInfo);
             _m_toolTipCache = toolTipGo;
             return tooltipComp;
         }
-
-        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector2 _screenRatio)
+        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector2 _screenRatio, EQualityType _qualityType = EQualityType.NONE, bool _showGridInfo = true)
         {
             DiscardToolTip();
             GameObject toolTipGo = ResourcesHelper.LoadGameObject(
@@ -179,7 +172,67 @@ namespace GameCore
             toolTipRT.localPosition = localPoint;
 
             var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
-            tooltipComp.ShowTooltip(_name, _desc, localPoint);
+            tooltipComp.ShowTooltip(_name, _desc, localPoint, _qualityType,_showGridInfo);
+            _m_toolTipCache = toolTipGo;
+            return tooltipComp;
+        }
+        public static CommonTooltip ShowTooltip(PartInfo _partInfo, Vector2 _screenRatio, bool _showGridInfo = true)
+        {
+            DiscardToolTip();
+            GameObject toolTipGo = ResourcesHelper.LoadGameObject(
+                "prefab_tooltip",
+                SCGame.instance.topLayerRoot.transform);
+
+            Vector2 screenPos = new Vector2(Screen.width * _screenRatio.x, Screen.height * _screenRatio.y);
+
+            RectTransform toolTipRT = toolTipGo.GetRectTransform();
+            Vector2 localPoint;
+
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                SCGame.instance.topLayerRoot.GetRectTransform(),
+                screenPos,
+                SCGame.instance.gameCamera,
+                out localPoint
+            );
+
+            toolTipRT.localPosition = localPoint;
+
+            var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
+            tooltipComp.ShowTooltip(_partInfo, localPoint, _showGridInfo);
+            _m_toolTipCache = toolTipGo;
+            return tooltipComp;
+        }
+        public static CommonTooltip ShowTooltip(PartInfo _partInfo, Vector3 _worldPos, bool _showGridInfo = true)
+        {
+            DiscardToolTip();
+            GameObject toolTipGo = ResourcesHelper.LoadGameObject(
+                "prefab_tooltip",
+                SCGame.instance.topLayerRoot.transform);
+
+            Vector2 screenPos = Vector2.zero;
+
+            float itemScreenX = RectTransformUtility.WorldToScreenPoint(SCGame.instance.gameCamera, _worldPos).x;
+
+            bool showOnLeft = itemScreenX > Screen.width * GameConst.TOOLTIP_SHOW_ON_LEFT_THRESHOLD;
+
+            Vector2 offset = showOnLeft ? new Vector3(-GameConst.TOOLTIP_SHOW_X_OFFSET_SCREEN_RATIO * Screen.width, GameConst.TOOLTIP_SHOW_Y_OFFSET_SCREEN_RATIO * Screen.height)
+                : new Vector3(GameConst.TOOLTIP_SHOW_X_OFFSET_SCREEN_RATIO * Screen.width, GameConst.TOOLTIP_SHOW_Y_OFFSET_SCREEN_RATIO * Screen.height);
+            screenPos = RectTransformUtility.WorldToScreenPoint(SCGame.instance.gameCamera, _worldPos) + offset;
+
+            RectTransform toolTipRT = toolTipGo.GetRectTransform();
+            Vector2 localPoint;
+
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                SCGame.instance.topLayerRoot.GetRectTransform(),
+                screenPos,
+                SCGame.instance.gameCamera,
+                out localPoint
+            );
+
+            toolTipRT.localPosition = localPoint;
+
+            var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
+            tooltipComp.ShowTooltip(_partInfo, localPoint, _showGridInfo);
             _m_toolTipCache = toolTipGo;
             return tooltipComp;
         }

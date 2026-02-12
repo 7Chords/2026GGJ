@@ -25,6 +25,7 @@ namespace GameCore
         public override void OnInitialize()
         {
             SCRefDataMgr.instance.Initialize();
+            SCTimeCaller.instance.Initialize();
             SCTaskHelper.instance.Initialize();
             SCMsgCenter.instance.Initialize();
             SCPoolMgr.instance.Initialize();
@@ -46,6 +47,8 @@ namespace GameCore
             SCMsgCenter.instance.Discard();
             SCTaskHelper.instance.Discard();
             SCRefDataMgr.instance.Discard();
+            SCTimeCaller.instance.Discard();
+
             GameModel.instance.Discard();
         }
 

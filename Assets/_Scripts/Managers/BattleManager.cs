@@ -19,8 +19,7 @@ namespace GameCore
         }
         public void EnterNextTurn()
         {
-            GameModel.instance.PrepareNextBattleRound();
-            SCMsgCenter.SendMsg(SCMsgConst.SET_ENEMY_FACE);
+            GameModel.instance.GenerateNewBattle();
         }
     }
 }

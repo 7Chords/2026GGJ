@@ -10,5 +10,13 @@ namespace GameCore.UI
     {
         [Header("格子图片")]
         public Image imgGrid;
+        [Header("可以放置的颜色")]
+        public Color colorCanPlace;
+        [Header("不可以放置的颜色")]
+        public Color colorCanNotPlace;
+        [Header("作用范围的颜色")]
+        public Color colorIsEffective;
+        [Header("默认颜色")]
+        public Color colorDefault;
     }
 }

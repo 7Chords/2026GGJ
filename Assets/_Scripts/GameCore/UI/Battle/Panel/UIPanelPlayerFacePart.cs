@@ -9,7 +9,7 @@ using UnityEngine.EventSystems;
 
 namespace GameCore.UI
 {
-    public class UIPanelFacePart : _ASCUIPanelBase<UIMonoFacePart>
+    public class UIPanelPlayerFacePart : _ASCUIPanelBase<UIMonoPlayerFacePart>
     {
 
         private PartInfo _m_partInfo;
@@ -23,7 +23,7 @@ namespace GameCore.UI
 
         private TweenContainer _m_tweenContainer;
 
-        public UIPanelFacePart(UIMonoFacePart _mono, SCUIShowType _showType) : base(_mono, _showType)
+        public UIPanelPlayerFacePart(UIMonoPlayerFacePart _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
 
@@ -88,7 +88,7 @@ namespace GameCore.UI
             mono.imgPart.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
             mono.imgPart.SetNativeSize();
             mono.txtHealth.text = _m_partInfo.currentHealth +"/" + _m_partInfo.maxHealth;
-            mono.txtOrder.text = GameModel.instance.GetBattleOrderByPartInfo(_m_partInfo).ToString();
+            mono.txtOrder.text = GameModel.instance.GetPlayerBattleOrderByPartInfo(_m_partInfo).ToString();
             
             mono.imgGO.transform.rotation = Quaternion.Euler(0, 0, _m_partInfo.rotateStep * 90);
 
@@ -121,6 +121,9 @@ namespace GameCore.UI
         {
             if (_m_isDraging)
                 return;
+            //只有鼠标左键才处理
+            if (_data.button != PointerEventData.InputButton.Left)
+                return;
             _m_isDraging = true;
             //放到最下面 显示在最前面
             GetGameObject().transform.SetAsLastSibling();
@@ -140,6 +143,9 @@ namespace GameCore.UI
         private void onEndDrag(PointerEventData _data, object[] _objs)
         {
             if (!_m_isDraging)
+                return;
+            //只有鼠标左键才处理
+            if (_data.button != PointerEventData.InputButton.Left)
                 return;
             _m_isDraging = false;
 
@@ -173,7 +179,7 @@ namespace GameCore.UI
             if (!placementSuccess)
             {
                 SCMsgCenter.SendMsg(SCMsgConst.REPLACE_PART_POS_FAIL,_m_partInfo);
-                SCMsgCenter.SendMsg(SCMsgConst.CLEAR_PREVIEW);
+                SCMsgCenter.SendMsg(SCMsgConst.CLEAR_PLAYER_PREVIEW);
                 HidePanel();
                 Discard();
             }
@@ -182,14 +188,16 @@ namespace GameCore.UI
         {
             if (!_m_isDraging)
                 return;
-
+            //只有鼠标左键才处理
+            if (_data.button != PointerEventData.InputButton.Left)
+                return;
             RectTransform parentRect = GetGameObject().transform.parent as RectTransform;
             GetGameObject().transform.localPosition = GameCommon.ScreenPoint2UILocalPoint(parentRect, _data.position);
 
             _m_curHitGridGO = GameCommon.GetHitGridGameObj(_data);
             if (_m_curHitGridGO == null)
             {
-                SCMsgCenter.SendMsg(SCMsgConst.CLEAR_PREVIEW);
+                SCMsgCenter.SendMsg(SCMsgConst.CLEAR_PLAYER_PREVIEW);
             }
             else
             {
@@ -206,16 +214,22 @@ namespace GameCore.UI
                 return;
             _m_tweenContainer.RegDoTween(mono.imgGO.transform.DOScale(Vector3.one, mono.scaleChgDuration));
             GameCommon.DiscardToolTip();
-            SCMsgCenter.SendMsg(SCMsgConst.CLEAR_PREVIEW);
+            SCMsgCenter.SendMsg(SCMsgConst.CLEAR_PLAYER_PREVIEW);
         }
 
         private void onMouseEnter(PointerEventData _data, object[] _objs)
         {
             if (_m_isDraging)
                 return;
+            //放到最下面 显示在最前面
+            GetGameObject().transform.SetAsLastSibling();
             _m_tweenContainer.RegDoTween(mono.imgGO.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
-            GameCommon.ShowTooltip(_m_partInfo.partRefObj.partName, _m_partInfo.partRefObj.partDesc, new Vector2(GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_X, GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_Y));
-            SCMsgCenter.SendMsg(SCMsgConst.FACE_PART_RANGE_HIGHLIGHT,_m_partInfo);
+            GameCommon.ShowTooltip(_m_partInfo.partRefObj.partName, 
+                _m_partInfo.partRefObj.partDesc, 
+                new Vector2(GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_X, GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_Y),
+                _m_partInfo.partRefObj.qualityType,
+                false);
+            SCMsgCenter.SendMsg(SCMsgConst.PLAYER_FACE_PART_RANGE_HIGHLIGHT,_m_partInfo);
 
         }
         #endregion
