@@ -39,6 +39,7 @@ namespace SCFrame
         /// <param name="_needShow"></param>
         public void AddNode(_ASCUINodeBase _node,bool _needShow = true)
         {
+
             if (_m_nodeList == null)
                 return;
             _ASCUINodeBase lastTopNode = GetTopNode(false);
@@ -49,7 +50,6 @@ namespace SCFrame
                 node.CopyData(_node);
                 if (node.hasHideNode)
                 {
-                    //������ԭ���ʹ��ڸ�node������չʾ���ƶ���β��
                     node.ShowNode();
                     _m_nodeList.Remove(node);
                     _m_nodeList.Add(node);
@@ -63,10 +63,8 @@ namespace SCFrame
                     _m_nodeList.Add(_node);
             }
 
-            //�㲥���ڵ�仯����Ϣ
             SCMsgCenter.SendMsg(SCMsgConst.UI_NODE_CHG, lastTopNode, _node);
 
-            //��һ��ͬ���͵Ľڵ�
             _ASCUINodeBase lastSameTypeNode = null;
             for (int i = _m_nodeList.Count - 2; i > -1; i--)
             {
@@ -91,6 +89,7 @@ namespace SCFrame
 
             if (node == null && _needShow)
                 _node.ShowNode();
+
         }
 
         /// <summary>

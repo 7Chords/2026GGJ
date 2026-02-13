@@ -27,6 +27,7 @@ public class SCMsgConst
     public const int GAME_START = 9901;
     public const int GAME_END = 9902;
     public const int UI_NODE_CHG = 9903;//ui节点变化事件
+    public const int UI_PANEL_HIDE_ANIM_OVER = 9904;
 
     #endregion
 }

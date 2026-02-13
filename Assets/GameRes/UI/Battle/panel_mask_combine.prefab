@@ -836,6 +836,8 @@ GameObject:
   - component: {fileID: 8653428886938019181}
   - component: {fileID: 7955790303324487742}
   - component: {fileID: 3732223678577455298}
+  - component: {fileID: 5787995672640483047}
+  - component: {fileID: 8060760320882791377}
   - component: {fileID: 8566195473696943022}
   m_Layer: 5
   m_Name: panel_mask_combine
@@ -921,6 +923,39 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!95 &5787995672640483047
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3944008937906124512}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e35b18e7ab9d99a4d8a163cf32da4c4b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8060760320882791377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3944008937906124512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbb5f1e6c1432ad42b0dd410c97cd74a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8566195473696943022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -937,6 +972,10 @@ MonoBehaviour:
   canvasGroup: {fileID: 3732223678577455298}
   fadeInDuration: 0.25
   fadeOutDuration: 0.25
+  uiAnimator: {fileID: 5787995672640483047}
+  showUIName: show_mask_combine
+  hideUIName: hide_mask_combine
+  animEventTrigger: {fileID: 8060760320882791377}
   monoPartContainer: {fileID: 341772300786419045}
   monoFace: {fileID: 8379582960683370995}
   btnConfirm: {fileID: 406136977904402997}

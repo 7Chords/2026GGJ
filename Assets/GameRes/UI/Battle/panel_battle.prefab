@@ -717,6 +717,8 @@ GameObject:
   - component: {fileID: 8653428886938019181}
   - component: {fileID: 7955790303324487742}
   - component: {fileID: 3732223678577455298}
+  - component: {fileID: 8111743482726580353}
+  - component: {fileID: 1559690589298214496}
   - component: {fileID: 8843880900882409472}
   m_Layer: 5
   m_Name: panel_battle
@@ -804,6 +806,39 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!95 &8111743482726580353
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3944008937906124512}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c8b14287a7ef3274f88088750eb8f7a8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1559690589298214496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3944008937906124512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbb5f1e6c1432ad42b0dd410c97cd74a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8843880900882409472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -818,8 +853,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiMask: {fileID: 0}
   canvasGroup: {fileID: 3732223678577455298}
-  fadeInDuration: 0
-  fadeOutDuration: 0
+  fadeInDuration: 0.5
+  fadeOutDuration: 0.5
+  uiAnimator: {fileID: 8111743482726580353}
+  showUIName: show_battle
+  hideUIName: hide_battle
+  animEventTrigger: {fileID: 1559690589298214496}
   monoPlayerFace: {fileID: 302918236810301695}
   monoEnemyFace: {fileID: 7045966149966732392}
   imgHealthBar_player: {fileID: 8283567675382119546}

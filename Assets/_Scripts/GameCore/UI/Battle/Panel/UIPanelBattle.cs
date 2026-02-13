@@ -8,7 +8,7 @@ using SCFrame;
 
 namespace GameCore.UI
 {
-    public class UIPanelBattle : _ASCUIPanelBase<UIMonoBattle>
+    public class UIPanelBattle : _ASCUIAnimPanelBase<UIMonoBattle>
     {
         private UIPanelBattleFace _m_playerBattleFace;
         private UIPanelBattleFace _m_enemyBattleFace;

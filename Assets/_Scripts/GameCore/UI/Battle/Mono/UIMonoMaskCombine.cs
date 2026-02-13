@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace GameCore.UI
 {
-    public class UIMonoMaskCombine : _ASCUIMonoBase
+    public class UIMonoMaskCombine : _ASCUIAnimMonoBase
     {
         [Header("²¿Î»Container")]
         public UIMonoCommonContainer monoPartContainer;

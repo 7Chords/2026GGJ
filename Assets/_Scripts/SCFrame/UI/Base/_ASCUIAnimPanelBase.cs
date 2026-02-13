@@ -44,8 +44,8 @@ namespace SCFrame.UI
                         if (showType != SCUIShowType.INTERNAL)
                             SCInputListener.instance.SetCanInput(true);
                     });
-                    mono.uiAnimator.Play(mono.showUIName, 0, 0f); //在0层播放动画并从0秒处开始（即第一帧）
-                    mono.uiAnimator.Update(0f); //立即强制更新一帧，确保状态应用
+                    //mono.uiAnimator.Play(mono.showUIName, 0, 0f); //在0层播放动画并从0秒处开始（即第一帧）
+                    //mono.uiAnimator.Update(0f); //立即强制更新一帧，确保状态应用
                     mono.uiAnimator.Play(mono.showUIName);
                 });
             }

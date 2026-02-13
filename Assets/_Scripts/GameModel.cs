@@ -243,10 +243,6 @@ namespace GameCore
 
             //todo：由于unity gridlayout的创建问题 要等一段时间格子坐标啥的才创建完成不能马上创建敌人部位
             //否则位置出错 后续优化 采用一段动画表现显示页面给unity留出时间
-            //SCTimeCaller.instance.CallDealy(0.5f, () =>
-            //{
-            //    SCMsgCenter.SendMsg(SCMsgConst.NEW_TURN_START);
-            //});
             SCMsgCenter.SendMsg(SCMsgConst.NEW_TURN_START);
         }
 

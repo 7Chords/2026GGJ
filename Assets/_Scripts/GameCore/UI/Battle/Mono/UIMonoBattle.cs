@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace GameCore.UI
 {
-    public class UIMonoBattle : _ASCUIMonoBase
+    public class UIMonoBattle : _ASCUIAnimMonoBase
     {
         [Header("玩家面具")]
         public UIMonoBattleFace monoPlayerFace;

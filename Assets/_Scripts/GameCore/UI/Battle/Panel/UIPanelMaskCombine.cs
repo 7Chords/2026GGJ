@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GameCore.UI
 {
-    public class UIPanelMaskCombine : _ASCUIPanelBase<UIMonoMaskCombine>
+    public class UIPanelMaskCombine : _ASCUIAnimPanelBase<UIMonoMaskCombine>
     {
         private UIPanelMaskCombinePartContainer _m_partContainer;
         private UIPanelMaskCombineFace _m_faceGrid;

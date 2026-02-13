@@ -73,6 +73,11 @@ namespace GameCore.UI
         public void SetInfo(PartInfo _info)
         {
             _m_partInfo = _info;
+            //Sequence seq = DOTween.Sequence();
+            //seq.Append(mono.imgGO.transform.DOScale(mono.scaleMouseEnter * 1.2f, mono.scaleChgDuration + 0.2f));
+            //seq.Append(mono.imgGO.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration + 0.2f));
+            //_m_tweenContainer.RegDoTween(seq);
+
             refreshShow();
         }
         public void SetLocalPos(Vector2 _pos)

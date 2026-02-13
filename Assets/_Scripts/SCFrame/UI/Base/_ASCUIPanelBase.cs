@@ -61,7 +61,7 @@ namespace SCFrame.UI
             _m_hasShowed = true;
             _m_hasHided = false;
             if (showType == SCUIShowType.INTERNAL)
-                SCCommon.SetGameObjectEnable(GetGameObject(),true);
+                OnBeforeShow();
             else
                 ShowPanelAnim(OnBeforeShow);
             OnShowPanel();
@@ -104,7 +104,7 @@ namespace SCFrame.UI
             _m_hasHided = true;
             OnHidePanel();
             if (showType == SCUIShowType.INTERNAL)
-                SCCommon.SetGameObjectEnable(GetGameObject(), false);
+                OnHideOver();
             else
                 HidePanelAnim(OnHideOver);
         }
@@ -125,6 +125,7 @@ namespace SCFrame.UI
         protected virtual void OnHideOver()
         {
             SCCommon.SetGameObjectEnable(GetGameObject(), false);
+            //SCMsgCenter.SendMsg(SCMsgConst.UI_PANEL_HIDE_ANIM_OVER,mono.gameObject);
         }
         public abstract void OnHidePanel();
 
