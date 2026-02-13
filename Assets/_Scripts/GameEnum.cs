@@ -21,7 +21,6 @@ namespace GameCore
     public enum EAttributeType
     {
         ATTACK,//攻击力
-        HIT_CHANCE,//命中率
         REFLECT,//反射
         TRIGGER_MORE,//触发两次
         ATTACK_MORE,//攻击两次

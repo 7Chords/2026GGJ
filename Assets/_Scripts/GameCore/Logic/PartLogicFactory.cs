@@ -22,42 +22,40 @@ namespace GameCore.Logic
             }
         }
 
-        public static PartLogic CreateLogic(long _id)
+        public static PartLogic CreateLogic(long _id , PartInfo _partInfo)
         {
             if (_m_logicTypeMap == null)
                 Initialize();
 
-            if (_id < 0)
+            if (_id < 0 || _partInfo == null)
                 return null;
 
             if (_m_logicTypeMap.TryGetValue(_id, out PartLogic logicObj))
             {
                 return logicObj;
             }
-            logicObj = new PartLogic();
-            PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == _id);
-            if (partRefObj == null)
-                return null;
-            EntryEffectObj entryRefObj = null;
-            for (int i =0;i< partRefObj.entryList.Count;i++)
+            logicObj = new PartLogic(_partInfo);
+            EntryInfo entryInfo = null;
+            for (int i =0;i< _partInfo.entryInfoList.Count;i++)
             {
-                entryRefObj = partRefObj.entryList[i];
-                if (entryRefObj == null)
+                entryInfo = _partInfo.entryInfoList[i];
+                if (entryInfo == null)
                     continue;
-                switch (entryRefObj.triggerPointType)
+                switch (entryInfo.triggerPointType)
                 {
                     case EAttributeTriggerPointType.ACTIVE:
                         {
-                            
+                            logicObj.RegisterPartActiveAction(GetActionByAttributeType(_partInfo, entryInfo));
                         }
                         break;
                     case EAttributeTriggerPointType.GET_HIT:
                         {
-
+                            logicObj.RegisterPartGetHitAction(GetActionByAttributeType(_partInfo, entryInfo));
                         }
                         break;
                     case EAttributeTriggerPointType.DIE:
                         {
+                            logicObj.RegisterPartDieAction(GetActionByAttributeType(_partInfo, entryInfo));
 
                         }
                         break;
@@ -67,8 +65,78 @@ namespace GameCore.Logic
             return logicObj;
         }
 
-        public static Action GetActionByAttributeType(EAttributeType _attributeType)
+        public static Action GetActionByAttributeType(PartInfo _info,EntryInfo _entryInfo)
         {
+            if (_info == null)
+                return null;
+            switch (_entryInfo.attributeType)
+            {
+                case EAttributeType.ATTACK:
+                    {
+                        return () =>
+                        {
+                            PartLogicHandler.DealAttack(_info,_entryInfo);
+                        };
+                    }
+                case EAttributeType.REFLECT:
+                    {
+
+                    }
+                    break;
+                case EAttributeType.TRIGGER_MORE:
+                    {
+
+                    }
+                    break;
+                case EAttributeType.ATTACK_MORE:
+                    {
+
+                    }
+                    break;
+                case EAttributeType.HIT_CHANCE_UP:
+                    {
+
+                    }
+                    break;
+                case EAttributeType.HIT_CHANCE_DOWN:
+                    {
+
+                    }
+                    break;
+                case EAttributeType.TRIGGER_CHANCE_UP:
+                    {
+
+                    }
+                    break;
+                case EAttributeType.HEAL_PART:
+                    {
+
+                    }
+                    break;
+                case EAttributeType.CLEAR_DEFULL:
+                    {
+
+                    }
+                    break;
+                case EAttributeType.CLEAR_BAD_SKIN:
+                    {
+
+                    }
+                    break;
+                case EAttributeType.PENETRATE:
+                    {
+
+                    }
+                    break;
+                case EAttributeType.PART_LOSE_TURN:
+                    {
+
+                    }
+                    break;
+            }
+
+
+
             return null;
         }
     }

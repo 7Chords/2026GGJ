@@ -16,12 +16,16 @@ namespace GameCore
         public List<Vector2Int> localEffectPosList;
         public List<Vector2Int> curOccupyFacePosList;
         public List<Vector2Int> curEffectFacePosList;
+        public List<EntryInfo> entryInfoList;
 
         public PartLogic logicObj;//逻辑实例
         public bool isEnemyPart;
 
+
         public PartInfo(PartRefObj _partRefObj,bool _isEnemyPart)
         {
+            if (_partRefObj == null)
+                return;
             partRefObj = _partRefObj;
             isEnemyPart = _isEnemyPart;
             maxHealth = partRefObj.partHealth;
@@ -41,8 +45,15 @@ namespace GameCore
             curOccupyFacePosList = new List<Vector2Int>();
             curEffectFacePosList = new List<Vector2Int>();
 
+            entryInfoList = new List<EntryInfo>();
+            EntryInfo entryInfo = null;
+            foreach(var entry in partRefObj.entryList)
+            {
+                entryInfo = new EntryInfo(entry);
+                entryInfoList.Add(entryInfo);
+            }
 
-            logicObj = PartLogicFactory.CreateLogic(partRefObj.id);
+            logicObj = PartLogicFactory.CreateLogic(partRefObj.id,this);
         }
         public void ResetToBusy()
         {

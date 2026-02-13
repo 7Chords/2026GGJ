@@ -10,7 +10,6 @@ namespace GameCore.RefData
         public EAttributeTriggerPointType triggerPointType;
         public EAttributeType attributeType;
         public float attributeChance;
-
         public float attributeValue;
         protected override void OnDeserialize(string _str)
         {

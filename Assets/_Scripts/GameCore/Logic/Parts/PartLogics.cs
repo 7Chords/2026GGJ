@@ -1,16 +1,16 @@
-using UnityEngine;
+//using UnityEngine;
 
-namespace GameCore.Logic
-{
-    public class NoseLogic : PartLogic
-    {
-    }
+//namespace GameCore.Logic
+//{
+//    public class NoseLogic : PartLogic
+//    {
+//    }
 
-    public class MouthLogic : PartLogic
-    {
-    }
+//    public class MouthLogic : PartLogic
+//    {
+//    }
 
-    public class EyeLogic : PartLogic
-    {
-    }
-}
+//    public class EyeLogic : PartLogic
+//    {
+//    }
+//}

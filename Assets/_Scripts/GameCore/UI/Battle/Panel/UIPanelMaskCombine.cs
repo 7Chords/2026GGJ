@@ -1,9 +1,5 @@
-using SCFrame.UI;
-using System.Collections;
-using System.Collections.Generic;
 using SCFrame;
-using UnityEngine;
-using System;
+using SCFrame.UI;
 
 namespace GameCore.UI
 {

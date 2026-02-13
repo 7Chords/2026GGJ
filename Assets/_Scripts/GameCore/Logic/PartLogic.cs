@@ -11,12 +11,16 @@ namespace GameCore.Logic
     /// </summary>
     public class PartLogic
     {
-        protected PartInfo partInfo;
+        private PartInfo _m_partInfo;
 
         private Action onPartActiveAction;
         private Action onPartGetHitAction;
         private Action onPartDieAction;
 
+        public PartLogic(PartInfo _info)
+        {
+            _m_partInfo = _info;
+        }
         public void RegisterPartActiveAction(Action _action)
         {
             onPartActiveAction += _action;
