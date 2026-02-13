@@ -116,10 +116,10 @@ namespace GameCore.UI
             {
                 _m_storeItemList[i].SetInfo(_m_goodsInfoList[i]);
             }
-            mono.txtPlayerMoney.text = GameModel.instance.playerMoney.ToString();
-            Tween healthTween = mono.imgHealthBar.DOFillAmount((float)GameModel.instance.playerHealth / GameModel.instance.playerMaxHealth, mono.healthBarFadeDuration);
+            mono.txtPlayerMoney.text = GameModel.instance.playerInfo.playerMoney.ToString();
+            Tween healthTween = mono.imgHealthBar.DOFillAmount((float)GameModel.instance.playerInfo.playerHealth / GameModel.instance.playerInfo.playerMaxHealth, mono.healthBarFadeDuration);
             _m_tweenContainer.RegDoTween(healthTween);
-            mono.txtHealth.text = GameModel.instance.playerHealth + "/" + GameModel.instance.playerMaxHealth;
+            mono.txtHealth.text = GameModel.instance.playerInfo.playerHealth + "/" + GameModel.instance.playerInfo.playerMaxHealth;
         }
         private void onPurchaseGoods(object[] _objs)
         {
@@ -132,13 +132,13 @@ namespace GameCore.UI
 
             //对数据层处理
             info.hasBought = true;
-            GameModel.instance.playerMoney = Mathf.Max(GameModel.instance.playerMoney - info.goodsRefObj.goodsPrice, 0);
+            GameModel.instance.playerInfo.playerMoney = Mathf.Max(GameModel.instance.playerInfo.playerMoney - info.goodsRefObj.goodsPrice, 0);
             switch (info.goodsRefObj.goodsType)
             {
                 case EGoodsType.PART:
                     {
                         PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x=>x.id == info.goodsRefObj.partId);
-                        GameModel.instance.bagPartInfoList.Add(new PartInfo(partRefObj,false));
+                        GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj,false));
                     }
                     break;
                 case EGoodsType.HEAL:
@@ -188,7 +188,7 @@ namespace GameCore.UI
                 return;
             PartInfo partInfo = _objs[0] as PartInfo;
             GoodsRefObj goodsRefObj = SCRefDataMgr.instance.goodsRefList.refDataList.Find(x => x.partId == partInfo.partRefObj.id);
-            GameModel.instance.playerMoney += goodsRefObj.goodsPrice / 2;
+            GameModel.instance.playerInfo.playerMoney += goodsRefObj.goodsPrice / 2;
             refreshShow();
         }
     }

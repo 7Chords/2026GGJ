@@ -65,7 +65,7 @@ namespace GameCore.UI
         private void OnClickEnter()
         {
             // 1. Validation Logic
-            var playerPos = GameModel.instance.playerMapPosition;
+            var playerPos = GameModel.instance.playerInfo.playerMapPosition;
             var targetPos = _m_mapNode.GridPosition;
 
             // Case A: First Move (Player not on map yet)
@@ -101,7 +101,7 @@ namespace GameCore.UI
             }
 
             // 2. Update Position
-            GameModel.instance.playerMapPosition = targetPos;
+            GameModel.instance.playerInfo.playerMapPosition = targetPos;
             
             // 3. Enter Logic
             Debug.Log($"Enter Node Type: {_m_roomType} at {_m_mapNode.GridPosition}");

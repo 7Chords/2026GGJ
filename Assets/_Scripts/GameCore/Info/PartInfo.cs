@@ -1,6 +1,5 @@
-using GameCore.RefData;
 using GameCore.Logic;
-using System.Collections;
+using GameCore.RefData;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -60,6 +59,15 @@ namespace GameCore
             }
             ClearOnFaceState();
         }
+        public void ResetToDeck()
+        {
+            ResetToBusy();
+        }
+        public void ResetToBag()
+        {
+            ResetToBusy();
+            currentHealth = maxHealth;
+        }
         public void ClearOnFaceState()
         {
             isOnFace = false;
@@ -83,7 +91,6 @@ namespace GameCore
                 SCDebugHelper.LogWarning("effectPos:" + localEffectPosList[i]);
             }
         }
-
         public Vector2Int GetMinGridPos()
         {
             int minX = int.MaxValue;

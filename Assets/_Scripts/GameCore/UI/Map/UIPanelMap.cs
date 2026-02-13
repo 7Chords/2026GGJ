@@ -29,7 +29,7 @@ namespace GameCore.UI
 
         private void UpdatePlayerIcon()
         {
-            var pos = GameModel.instance.playerMapPosition;
+            var pos = GameModel.instance.playerInfo.playerMapPosition;
             if (pos.x == -1 || MapManager.instance.currentMapNodes == null) return; // Not started or invalid
 
             var targetNode = MapManager.instance.GetNode(pos.x, pos.y);

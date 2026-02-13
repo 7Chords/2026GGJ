@@ -1,15 +1,14 @@
 using GameCore.RefData;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace GameCore
 {
     public class EnemyInfo
     {
         public EnemyRefObj enemyRefObj;
-        public List<PartInfo> battleParts;
-        public List<PartInfo> deckParts;
+        public List<PartInfo> battlePartInfoList;
+        public List<PartInfo> busyPartInfoList;
+        public List<PartInfo> deckPartInfoList;
         public int maxHealth;
         public int currentHealth;
 
@@ -18,8 +17,9 @@ namespace GameCore
             if (_enemyRefObj == null)
                 return;
             enemyRefObj = _enemyRefObj;
-            battleParts = new List<PartInfo>();
-            deckParts = new List<PartInfo>();
+            battlePartInfoList = new List<PartInfo>();
+            busyPartInfoList = new List<PartInfo>();
+            deckPartInfoList = new List<PartInfo>();
             maxHealth = _enemyRefObj.enemyHealth;
             currentHealth = maxHealth;
         }

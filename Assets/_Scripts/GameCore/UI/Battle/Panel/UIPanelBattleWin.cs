@@ -63,8 +63,8 @@ namespace GameCore.UI
 
             mono.txtMoney.text = _m_enemyRefObj.winMoney.ToString();
 
-            GameModel.instance.bagPartInfoList.AddRange(randomSelectedList);
-            GameModel.instance.playerMoney += _m_enemyRefObj.winMoney;
+            GameModel.instance.playerInfo.bagPartInfoList.AddRange(randomSelectedList);
+            GameModel.instance.playerInfo.playerMoney += _m_enemyRefObj.winMoney;
         }
 
         /// <summary>

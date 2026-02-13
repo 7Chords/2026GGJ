@@ -11,16 +11,47 @@ namespace GameCore
 
         public void StartBattle()
         {
+            GameModel.instance.curTurnOwner = ETurnOwnerType.PLAYER;
+            TriggerParts(true);
+            ChangeTurnOwner();
+            TriggerParts(false);
+            FinishBattle();
+        }
+        public void TriggerParts(bool _isPlayer)
+        {
+
             PartInfo partInfo = null;
-            for(int i =0;i<GameModel.instance.battlePartInfoList.Count;i++)
+            if (_isPlayer)
             {
-                partInfo = GameModel.instance.battlePartInfoList[i];
+                for (int i = 0; i < GameModel.instance.playerInfo.battlePartInfoList.Count; i++)
+                {
+                    partInfo = GameModel.instance.playerInfo.battlePartInfoList[i];
+                    if (partInfo == null)
+                        continue;
+                    partInfo.logicObj?.OnPartActive();
+                }
+            }
+            else
+            {
+                for (int i = 0; i < GameModel.instance.curEnemyInfo.battlePartInfoList.Count; i++)
+                {
+                    partInfo = GameModel.instance.playerInfo.battlePartInfoList[i];
+                    if (partInfo == null)
+                        continue;
+                    partInfo.logicObj?.OnPartActive();
+                }
             }
         }
-
-        public void EnterNextTurn()
+        public void ChangeTurnOwner()
         {
-            GameModel.instance.GenerateNewBattle();
+            GameModel.instance.curTurnOwner = GameModel.instance.curTurnOwner == ETurnOwnerType.PLAYER 
+                ? ETurnOwnerType.ENEMY 
+                : ETurnOwnerType.PLAYER;
+        }
+
+        public void FinishBattle()
+        {
+            GameModel.instance.DealNextTurn();
         }
     }
 }

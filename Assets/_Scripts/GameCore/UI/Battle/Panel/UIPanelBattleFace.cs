@@ -143,12 +143,12 @@ namespace GameCore.UI
             if (mono.isEnemyFace)
             {
                 _m_gridInfoList = GameModel.instance.enemyFaceGridInfoList;
-                infoList = GameModel.instance.curEnemyInfo.battleParts;
+                infoList = GameModel.instance.curEnemyInfo.battlePartInfoList;
             }
             else
             {
                 _m_gridInfoList = GameModel.instance.playerFaceGridInfoList;
-                infoList = GameModel.instance.battlePartInfoList;
+                infoList = GameModel.instance.playerInfo.battlePartInfoList;
             }
 
 

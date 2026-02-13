@@ -129,9 +129,9 @@ namespace GameCore.UI
                 return;
 
             PartInfo partInfo = null;
-            for(int i =0;i<_m_curEnemyInfo.battleParts.Count;i++)
+            for(int i =0;i<_m_curEnemyInfo.battlePartInfoList.Count;i++)
             {
-                partInfo = _m_curEnemyInfo.battleParts[i];
+                partInfo = _m_curEnemyInfo.battlePartInfoList[i];
                 if (partInfo == null)
                     continue;
 

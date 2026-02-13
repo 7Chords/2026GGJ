@@ -41,7 +41,7 @@ namespace GameCore.UI
         private void onBtnPurchaseClickDonw(PointerEventData _arg, object[] _objs)
         {
             //钱够了并且没有买过 发送购买消息
-            if(GameModel.instance.playerMoney >= _m_goodsInfo.goodsRefObj.goodsPrice
+            if(GameModel.instance.playerInfo.playerMoney >= _m_goodsInfo.goodsRefObj.goodsPrice
                 && !_m_goodsInfo.hasBought)
             {
                 AudioMgr.instance.PlaySfx("sfx_buy");

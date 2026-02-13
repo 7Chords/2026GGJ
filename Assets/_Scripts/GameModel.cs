@@ -12,20 +12,11 @@ namespace GameCore
     /// </summary>
     public class GameModel : Singleton<GameModel>
     {
-        public List<PartInfo> bagPartInfoList; //背包部位列表(玩家局外拥有的全部)
-        public List<PartInfo> deckPartInfoList; //牌堆部位列表(在牌堆里但是玩家当前未持有的)
-        public List<PartInfo> busyPartInfoList; //玩家当前持有的部位列表
-        public List<PartInfo> battlePartInfoList;//当前战斗中的部位列表（在脸上）
 
-        public int playerHealth; //玩家生命
-        public int playerMaxHealth;//玩家最大生命
-        public int playerMoney;//玩家金钱
 
         public long rollStoreId; //进入商店节点后roll到的商店id
-        
-        public Vector2Int playerMapPosition = new Vector2Int(-1, -1);//玩家地图坐标位置
-        public int playerFloor = 1;//玩家当前在第几个楼层
 
+        public PlayerInfo playerInfo;
         public List<FaceGridInfo> playerFaceGridInfoList;//玩家当前脸部格子信息列表
         public List<GameObject> playerFaceGridGOList;//玩家当前脸部格子物体列表
 
@@ -41,14 +32,7 @@ namespace GameCore
             PlayerRefObj playerRefObj = SCRefDataMgr.instance.playerConfigRefObj;
             if (playerRefObj == null)
                 return;
-            playerMaxHealth = playerRefObj.playerHealth;
-            playerHealth = playerMaxHealth;
-            playerMoney = playerRefObj.playerMoney;
-
-            busyPartInfoList = new List<PartInfo>();
-            bagPartInfoList = new List<PartInfo>();
-            deckPartInfoList = new List<PartInfo>();
-            battlePartInfoList = new List<PartInfo>();
+            playerInfo = new PlayerInfo(playerRefObj);
 
 
             PartEffectObj partEffectObj = null;
@@ -65,7 +49,7 @@ namespace GameCore
                     if (partRefObj == null)
                         continue;
                     info = new PartInfo(partRefObj,false);
-                    bagPartInfoList.Add(info);
+                    playerInfo.bagPartInfoList.Add(info);
                 }
             }
             
@@ -73,12 +57,12 @@ namespace GameCore
 
         public void Heal(int _amount)
         {
-            playerHealth = Mathf.Clamp(playerHealth + _amount, 0, playerMaxHealth);
+            playerInfo.playerHealth = Mathf.Clamp(playerInfo.playerHealth + _amount, 0, playerInfo.playerMaxHealth);
         }
 
         public void TakeDamage(int _amount)
         {
-            playerHealth = Mathf.Clamp(playerHealth - _amount, 0, playerMaxHealth);
+            playerInfo.playerHealth = Mathf.Clamp(playerInfo.playerHealth - _amount, 0, playerInfo.playerMaxHealth);
         }
 
         public List<Vector2Int> GetPlaceFaceOccupyPosList(GameObject _hitGridGO, Vector3 _mousePos, List<Vector2Int> _localGridList)
@@ -197,9 +181,9 @@ namespace GameCore
         {
             if (_info == null)
                 return -1;
-            if (battlePartInfoList == null || !battlePartInfoList.Contains(_info))
+            if (playerInfo.battlePartInfoList == null || !playerInfo.battlePartInfoList.Contains(_info))
                 return -1;
-            battlePartInfoList.Sort((a, b) =>
+            playerInfo.battlePartInfoList.Sort((a, b) =>
             {
                 Vector2Int aPos = a.GetMinGridPos();
                 Vector2Int bPos = b.GetMinGridPos();
@@ -207,15 +191,15 @@ namespace GameCore
                     return aPos.y.CompareTo(bPos.y);
                 return aPos.x.CompareTo(bPos.x);
             });
-            return battlePartInfoList.IndexOf(_info) + 1;//索引加1用于显示
+            return playerInfo.battlePartInfoList.IndexOf(_info) + 1;//索引加1用于显示
         }
         public int GetEnemyBattleOrderByPartInfo(PartInfo _info)
         {
             if (_info == null)
                 return -1;
-            if (curEnemyInfo == null || !curEnemyInfo.battleParts.Contains(_info))
+            if (curEnemyInfo == null || !curEnemyInfo.battlePartInfoList.Contains(_info))
                 return -1;
-            curEnemyInfo.battleParts.Sort((a, b) =>
+            curEnemyInfo.battlePartInfoList.Sort((a, b) =>
             {
                 Vector2Int aPos = a.GetMinGridPos();
                 Vector2Int bPos = b.GetMinGridPos();
@@ -223,7 +207,7 @@ namespace GameCore
                     return aPos.y.CompareTo(bPos.y);
                 return aPos.x.CompareTo(bPos.x);
             });
-            return curEnemyInfo.battleParts.IndexOf(_info) + 1;//索引加1用于显示
+            return curEnemyInfo.battlePartInfoList.IndexOf(_info) + 1;//索引加1用于显示
         }
 
 
@@ -232,52 +216,98 @@ namespace GameCore
 
         public void RollRandomShop()
         {
-            List<StoreRefObj> storeRefList = SCRefDataMgr.instance.storeRefList.refDataList.Where(refObj => refObj.floor == playerFloor).ToList();
+            List<StoreRefObj> storeRefList = SCRefDataMgr.instance.storeRefList.refDataList.Where(refObj => refObj.floor == playerInfo.playerFloor).ToList();
             long id = storeRefList[Random.Range(0, storeRefList.Count)].id;
             rollStoreId = id;
         }
         public void GenerateNewBattle()
         {
-            if (deckPartInfoList == null) deckPartInfoList = new List<PartInfo>();
-            else deckPartInfoList.Clear();
+            playerInfo.ClearListForNewBattle();
 
-            if (busyPartInfoList == null) busyPartInfoList = new List<PartInfo>();
-            else busyPartInfoList.Clear();
-
-            if (battlePartInfoList == null) battlePartInfoList = new List<PartInfo>();
-            else battlePartInfoList.Clear();
-
-            if (bagPartInfoList != null)
+            if (playerInfo.bagPartInfoList != null)
             {
-                foreach (var part in bagPartInfoList)
+                foreach (var part in playerInfo.bagPartInfoList)
                 {
                     if (part.currentHealth > 0)
                     {
-                        deckPartInfoList.Add(part);
+                        playerInfo.deckPartInfoList.Add(part);
                     }
                 }
             }
-            DrawParts(GameConst.PLAYER_DRAW_CARD_COUNT);
+            PlayerDrawParts(GameConst.DRAW_CARD_COUNT_PER_TURN);
             GenerateRandomEnemy();
 
             //todo：由于unity gridlayout的创建问题 要等一段时间格子坐标啥的才创建完成不能马上创建敌人部位
-            //否则位置出错 后续优化
+            //否则位置出错 后续优化 采用一段动画表现显示页面给unity留出时间
             SCTimeCaller.instance.CallDealy(1f, () =>
             {
                 SCMsgCenter.SendMsg(SCMsgConst.NEW_TURN_START);
             });
         }
 
-        public void NextTurn()
+        public void DealNextTurn()
         {
+            //下个回合要做的处理
+            //敌人和玩家都要做：把脸部五官回收到busy 原来busy回收到deck deck抽min(3,busyMax-curBusy)
+            //敌人还要重新生成一份布局
+            playerInfo.deckPartInfoList.AddRange(playerInfo.busyPartInfoList);
+            playerInfo.busyPartInfoList.Clear();
+            playerInfo.busyPartInfoList.AddRange(playerInfo.battlePartInfoList);
+            int playerDrawCnt = Mathf.Min(GameConst.DRAW_CARD_COUNT_PER_TURN, GameConst.BUSY_CARD_MAX_COUNT - playerInfo.battlePartInfoList.Count);
+            PlayerDrawParts(playerDrawCnt);
 
+            curEnemyInfo.deckPartInfoList.AddRange(curEnemyInfo.busyPartInfoList);
+            curEnemyInfo.busyPartInfoList.Clear();
+            curEnemyInfo.busyPartInfoList.AddRange(curEnemyInfo.battlePartInfoList);
+            int enemyDrawCnt = Mathf.Min(GameConst.DRAW_CARD_COUNT_PER_TURN, GameConst.BUSY_CARD_MAX_COUNT - curEnemyInfo.battlePartInfoList.Count);
+            EnemyDrawParts(enemyDrawCnt);
+
+            GenerateEnemyLayout(curEnemyInfo);
+        }
+
+        public void PlayerDrawParts(int _count)
+        {
+            if (playerInfo.deckPartInfoList == null || playerInfo.deckPartInfoList.Count == 0)
+            {
+                return;
+            }
+            for (int i = 0; i < _count; i++)
+            {
+                if (playerInfo.deckPartInfoList.Count == 0) break;
+                if (playerInfo.busyPartInfoList.Count == GameConst.BUSY_CARD_MAX_COUNT) break;
+                int idx = Random.Range(0, playerInfo.deckPartInfoList.Count);
+                PartInfo drawn = playerInfo.deckPartInfoList[idx];
+                playerInfo.deckPartInfoList.RemoveAt(idx);
+
+                if (playerInfo.busyPartInfoList == null) playerInfo.busyPartInfoList = new List<PartInfo>();
+                playerInfo.busyPartInfoList.Add(drawn);
+            }
+        }
+
+        public void EnemyDrawParts(int _count)
+        {
+            if (curEnemyInfo.deckPartInfoList == null || curEnemyInfo.deckPartInfoList.Count == 0)
+            {
+                return;
+            }
+            for (int i = 0; i < _count; i++)
+            {
+                if (curEnemyInfo.deckPartInfoList.Count == 0) break;
+                if (curEnemyInfo.busyPartInfoList.Count == GameConst.BUSY_CARD_MAX_COUNT) break;
+                int idx = Random.Range(0, curEnemyInfo.deckPartInfoList.Count);
+                PartInfo drawn = curEnemyInfo.deckPartInfoList[idx];
+                curEnemyInfo.deckPartInfoList.RemoveAt(idx);
+
+                if (curEnemyInfo.busyPartInfoList == null) curEnemyInfo.busyPartInfoList = new List<PartInfo>();
+                curEnemyInfo.busyPartInfoList.Add(drawn);
+            }
         }
 
         public void GenerateRandomEnemy()
         {
 
             //获得一个当前楼层的随机敌人的配表
-            List<EnemyRefObj> enemies = SCRefDataMgr.instance.enemyRefList.refDataList.Where(refObj => refObj.floor == playerFloor).ToList();
+            List<EnemyRefObj> enemies = SCRefDataMgr.instance.enemyRefList.refDataList.Where(refObj => refObj.floor == playerInfo.playerFloor).ToList();
             if (enemies == null || enemies.Count == 0) return;
             EnemyRefObj enemyRef = enemies[Random.Range(0, enemies.Count)];
             curEnemyInfo = new EnemyInfo(enemyRef);
@@ -298,50 +328,27 @@ namespace GameCore
                 for (int i = 0; i < partRefList.Count; i++)
                 {
                     PartInfo info = new PartInfo(partRefList[i],true);
-                    curEnemyInfo.deckParts.Add(info);
+                    curEnemyInfo.deckPartInfoList.Add(info);
                 }
 
-                //随机出战斗的部位
-                int pickCount = Mathf.Min(GameConst.INIT_ENEMY_PART_COUNT, curEnemyInfo.deckParts.Count);
+                //随机出手牌区
+                int pickCount = Mathf.Min(GameConst.INIT_ENEMY_PART_COUNT, curEnemyInfo.deckPartInfoList.Count);
                 for (int i = 0; i < pickCount; i++)
                 {
-                    int idx = Random.Range(0, curEnemyInfo.deckParts.Count);
-                    PartInfo selectPartRefObj = curEnemyInfo.deckParts[idx];
-                    curEnemyInfo.deckParts.RemoveAt(idx);
-                    curEnemyInfo.battleParts.Add(selectPartRefObj);
+                    int idx = Random.Range(0, curEnemyInfo.deckPartInfoList.Count);
+                    PartInfo selectPartRefObj = curEnemyInfo.deckPartInfoList[idx];
+                    curEnemyInfo.deckPartInfoList.RemoveAt(idx);
+                    curEnemyInfo.busyPartInfoList.Add(selectPartRefObj);
                 }
             }
 
             //生成敌人的随机布局
             GenerateEnemyLayout(curEnemyInfo);
         }
-        
-        public void DrawParts(int count)
-        {
-            if (deckPartInfoList == null || deckPartInfoList.Count == 0) 
-            {
-                Debug.LogWarning("[GameModel] Deck is Empty! Cannot draw.");
-                return;
-            }
-            
-            for(int i=0; i<count; i++)
-            {
-                if (deckPartInfoList.Count == 0) break;
-                if (busyPartInfoList.Count == GameConst.PLAYER_CARD_MAX_COUNT) break;
-                int idx = Random.Range(0, deckPartInfoList.Count);
-                PartInfo drawn = deckPartInfoList[idx];
-                deckPartInfoList.RemoveAt(idx);
-                
-                if (busyPartInfoList == null) busyPartInfoList = new List<PartInfo>();
-                busyPartInfoList.Add(drawn);
-                Debug.Log($"[GameModel] Drawn part: {drawn.partRefObj.partName}");
-            }
-        }
-
-
+      
         private void GenerateEnemyLayout(EnemyInfo _enemyInfo)
         {
-            foreach (var part in _enemyInfo.battleParts)
+            foreach (var part in _enemyInfo.busyPartInfoList)
             {
                 part.ResetToBusy();
                 if (TryFindValidPlacement(part.partRefObj, out Vector2Int pos, out int rotStep))
@@ -355,7 +362,6 @@ namespace GameCore
             }
         }
         
-
         private bool TryFindValidPlacement(PartRefObj part, out Vector2Int resultPos,out int resultRot)
         {
             resultPos = Vector2Int.zero;
@@ -413,6 +419,9 @@ namespace GameCore
                 part.curEffectFacePosList.Add(p);
             }
             part.isOnFace = true;
+
+            curEnemyInfo.busyPartInfoList.Remove(part);
+            curEnemyInfo.battlePartInfoList.Add(part);
         }
 
     }

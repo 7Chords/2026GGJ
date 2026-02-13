@@ -34,8 +34,8 @@ namespace GameCore
 
         #region GAME
         public const int INIT_ENEMY_PART_COUNT = 3;
-        public const int PLAYER_DRAW_CARD_COUNT = 3;
-        public const int PLAYER_CARD_MAX_COUNT = 5;
+        public const int DRAW_CARD_COUNT_PER_TURN = 3;
+        public const int BUSY_CARD_MAX_COUNT = 5;
         #endregion
     }
 }

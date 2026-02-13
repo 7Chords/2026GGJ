@@ -71,9 +71,9 @@ namespace GameCore.UI
                 _m_partItemList = new List<UIPanelMaskCombinePartContainerItem>();
             }
 
-            if (GameModel.instance.busyPartInfoList != null)
+            if (GameModel.instance.playerInfo.busyPartInfoList != null)
             {
-                foreach(var info in GameModel.instance.busyPartInfoList)
+                foreach(var info in GameModel.instance.playerInfo.busyPartInfoList)
                 {
                     addItem(info);
                 }
@@ -100,9 +100,9 @@ namespace GameCore.UI
                 return;
             PartInfo partInfo = _objs[0] as PartInfo;
 
-            if (GameModel.instance.busyPartInfoList.Contains(partInfo))
+            if (GameModel.instance.playerInfo.busyPartInfoList.Contains(partInfo))
             {
-                GameModel.instance.busyPartInfoList.Remove(partInfo);
+                GameModel.instance.playerInfo.busyPartInfoList.Remove(partInfo);
                 ReloadParts();
             }
 
@@ -115,9 +115,9 @@ namespace GameCore.UI
                 return;
             PartInfo partInfo = _objs[0] as PartInfo;
             partInfo.ResetToBusy();
-            if (!GameModel.instance.busyPartInfoList.Contains(partInfo))
+            if (!GameModel.instance.playerInfo.busyPartInfoList.Contains(partInfo))
             {
-                GameModel.instance.busyPartInfoList.Add(partInfo);
+                GameModel.instance.playerInfo.busyPartInfoList.Add(partInfo);
                 ReloadParts();
             }
         }

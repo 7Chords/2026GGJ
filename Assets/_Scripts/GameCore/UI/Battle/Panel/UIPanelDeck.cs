@@ -43,7 +43,7 @@ namespace GameCore.UI
 
         private void refreshShow()
         {
-            _m_deckContainer.SetListInfo(GameModel.instance.deckPartInfoList);
+            _m_deckContainer.SetListInfo(GameModel.instance.playerInfo.deckPartInfoList);
         }
 
 
