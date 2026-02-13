@@ -129,7 +129,13 @@ namespace GameCore.UI
                 return;
 
             PartInfo partInfo = null;
-            for(int i =0;i<_m_curEnemyInfo.battlePartInfoList.Count;i++)
+
+            float cellWidth = _m_gridGOList[0].GetRectTransform().rect.width;
+            float cellHeight = _m_gridGOList[0].GetRectTransform().rect.height;
+            float parentWidth = mono.tranParentPart.GetComponent<RectTransform>().rect.width;
+            float parentHeight = mono.tranParentPart.GetComponent<RectTransform>().rect.height;
+
+            for (int i =0;i<_m_curEnemyInfo.battlePartInfoList.Count;i++)
             {
                 partInfo = _m_curEnemyInfo.battlePartInfoList[i];
                 if (partInfo == null)
@@ -143,10 +149,12 @@ namespace GameCore.UI
                     if (tmpInfo == null)
                         continue;
                     int index = _m_gridInfoList.IndexOf(tmpInfo);
-                    tmpGOList.Add(_m_gridGOList[index].transform.localPosition) ;
+                    tmpGOList.Add(new Vector3(cellWidth * partInfo.curOccupyFacePosList[j].x + cellWidth/2 - parentWidth/2,
+                        -cellHeight * partInfo.curOccupyFacePosList[j].y - cellHeight/2 + parentHeight/2,
+                        0));
                 }
                 //计算生成的位置
-                Vector2 placeWorldPos = GameCommon.CalculateWorldCenterPos(tmpGOList);
+                Vector2 placeWorldPos = GameCommon.CalculateStandardCenterPos(tmpGOList);
                 GameObject partGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_ENEMY_FACE_PART, mono.tranParentPart);
                 UIMonoEnemyFacePart monoFacePart = partGO.GetComponent<UIMonoEnemyFacePart>();
                 UIPanelEnemyFacePart panel = new UIPanelEnemyFacePart(monoFacePart, SCUIShowType.INTERNAL);

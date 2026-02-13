@@ -296,7 +296,7 @@ namespace GameCore
             return new Vector2((minX + maxX) / 2, (minY + maxY) / 2);
         }
 
-        public static Vector2 CalculateWorldCenterPos(List<Vector3> _occupyPosList)
+        public static Vector2 CalculateStandardCenterPos(List<Vector3> _occupyPosList)
         {
             float minX = float.MaxValue;
             float maxX = float.MinValue;
@@ -315,7 +315,7 @@ namespace GameCore
         }
 
 
-        public static Vector2 CalculateLocalCenterPos(List<Vector2Int> _occupyPosList)
+        public static Vector2 CalculateGridCenterPos(List<Vector2Int> _occupyPosList)
         {
             Vector2 dealPos = new Vector2(CalculateBounds(_occupyPosList).x - 1, CalculateBounds(_occupyPosList).y - 1);
             return dealPos / 2f;

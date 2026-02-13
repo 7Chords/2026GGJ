@@ -179,7 +179,7 @@ namespace GameCore.UI
                 tmpGOList.Add(_m_gridGOList[index].transform.localPosition);
             }
             //计算生成的位置
-            Vector2 placeWorldPos = GameCommon.CalculateWorldCenterPos(tmpGOList);
+            Vector2 placeWorldPos = GameCommon.CalculateStandardCenterPos(tmpGOList);
             GameObject partGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_PLAYER_FACE_PART, mono.tranParentPart);
             UIMonoPlayerFacePart monoFacePart = partGO.GetComponent<UIMonoPlayerFacePart>();
             UIPanelPlayerFacePart panel = new UIPanelPlayerFacePart(monoFacePart, SCUIShowType.INTERNAL);
@@ -219,7 +219,7 @@ namespace GameCore.UI
                 tmpGOList.Add(_m_gridGOList[index].transform.localPosition);
             }
             //计算生成的位置
-            Vector2 placeWorldPos = GameCommon.CalculateWorldCenterPos(tmpGOList);
+            Vector2 placeWorldPos = GameCommon.CalculateStandardCenterPos(tmpGOList);
             panel.SetLocalPos(placeWorldPos);
             SCMsgCenter.SendMsg(SCMsgConst.FACE_PART_ORDER_CHG);
         }

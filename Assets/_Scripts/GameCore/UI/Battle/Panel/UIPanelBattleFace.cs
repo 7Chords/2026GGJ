@@ -172,7 +172,7 @@ namespace GameCore.UI
                     tmpGOList.Add(_m_gridGOList[index].transform.localPosition);
                 }
                 //计算生成的位置
-                Vector2 placeWorldPos = GameCommon.CalculateWorldCenterPos(tmpGOList);
+                Vector2 placeWorldPos = GameCommon.CalculateStandardCenterPos(tmpGOList);
                 GameObject partGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_BATTLE_PART, mono.tranParentPart);
                 UIMonoBattlePart monoFacePart = partGO.GetComponent<UIMonoBattlePart>();
                 UIPanelBattlePart panel = new UIPanelBattlePart(monoFacePart, SCUIShowType.INTERNAL);
