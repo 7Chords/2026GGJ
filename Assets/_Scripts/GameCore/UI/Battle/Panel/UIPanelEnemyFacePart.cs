@@ -43,9 +43,6 @@ namespace GameCore.UI
             mono.imgGO.AddMouseEnter(onMouseEnter);
             mono.imgGO.AddMouseExit(onMouseExit);
 
-            mono.imgGO.transform.localScale = Vector3.zero;
-            _m_tweenContainer.RegDoTween(mono.imgGO.transform.DOScale(mono.scaleGO, mono.scaleChgDuration));
-
         }
 
         public void SetInfo(PartInfo _info)
@@ -73,7 +70,7 @@ namespace GameCore.UI
             //信息子物体自动适配旋转和rect大小
             autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goHealthInfo, mono.goHealthPosPivot);
             autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goOrder, mono.goOrderPosPivot);
-            //mono.imgGO.transform.localScale = mono.scaleGO * Vector3.one;
+            mono.imgGO.transform.localScale = mono.scaleGO * Vector3.one;
         }
 
         private void onMouseExit(PointerEventData _data, object[] _objs)

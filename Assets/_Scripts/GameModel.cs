@@ -243,27 +243,35 @@ namespace GameCore
 
             //todo：由于unity gridlayout的创建问题 要等一段时间格子坐标啥的才创建完成不能马上创建敌人部位
             //否则位置出错 后续优化 采用一段动画表现显示页面给unity留出时间
-            SCMsgCenter.SendMsg(SCMsgConst.NEW_TURN_START);
+            SCMsgCenter.SendMsg(SCMsgConst.NEW_GANE_START);
         }
 
         public void DealNextTurn()
         {
             //下个回合要做的处理
-            //敌人和玩家都要做：把脸部五官回收到busy 原来busy回收到deck deck抽min(3,busyMax-curBusy)
+            //敌人和玩家都要做：把脸部五官回收到busy 原来busy回收到deck deck抽min(3,busyMax-curBusy) 格子全部设置为不占用
             //敌人还要重新生成一份布局
             playerInfo.deckPartInfoList.AddRange(playerInfo.busyPartInfoList);
             playerInfo.busyPartInfoList.Clear();
             playerInfo.busyPartInfoList.AddRange(playerInfo.battlePartInfoList);
+            playerInfo.battlePartInfoList.Clear();
             int playerDrawCnt = Mathf.Min(GameConst.DRAW_CARD_COUNT_PER_TURN, GameConst.BUSY_CARD_MAX_COUNT - playerInfo.battlePartInfoList.Count);
             PlayerDrawParts(playerDrawCnt);
+            foreach (var info in playerFaceGridInfoList)
+                info.hasPart = false;
 
             curEnemyInfo.deckPartInfoList.AddRange(curEnemyInfo.busyPartInfoList);
             curEnemyInfo.busyPartInfoList.Clear();
             curEnemyInfo.busyPartInfoList.AddRange(curEnemyInfo.battlePartInfoList);
+            curEnemyInfo.battlePartInfoList.Clear();
             int enemyDrawCnt = Mathf.Min(GameConst.DRAW_CARD_COUNT_PER_TURN, GameConst.BUSY_CARD_MAX_COUNT - curEnemyInfo.battlePartInfoList.Count);
             EnemyDrawParts(enemyDrawCnt);
+            foreach (var info in enemyFaceGridInfoList)
+                info.hasPart = false;
 
             GenerateEnemyLayout(curEnemyInfo);
+            //SCMsgCenter.SendMsg(SCMsgConst.NEW_TURN_START);
+
         }
 
         public void PlayerDrawParts(int _count)

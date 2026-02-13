@@ -7,7 +7,7 @@ public class SCMsgConst
     #region Íæ·¨Ïà¹Ø 20
     public const int PURCHASE_GOODS = 2001;
     public const int SELL_PART = 2002;
-    public const int NEW_TURN_START = 2003;
+    public const int NEW_GANE_START = 2003;
     public const int PLACE_PART_SUCCESS = 2004;
     public const int PLACE_PART_FAIL = 2005;
     public const int REPLACE_PART_POS_SUCCESS = 2006;
@@ -20,6 +20,7 @@ public class SCMsgConst
     public const int PLAYER_FACE_PART_RANGE_HIGHLIGHT = 2013;
     public const int ENEMY_FACE_PART_RANGE_HIGHLIGHT = 2014;
     public const int CLEAR_ENEMY_PREVIEW = 2015;
+    public const int NEW_TURN_START = 2016;
 
     #endregion
 

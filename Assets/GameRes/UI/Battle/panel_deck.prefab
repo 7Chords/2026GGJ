@@ -532,7 +532,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiMask: {fileID: 0}
-  canvasGroup: {fileID: 0}
+  canvasGroup: {fileID: 9175164999928418392}
   fadeInDuration: 0
   fadeOutDuration: 0
   prefabItemObjName: prefab_deck_item

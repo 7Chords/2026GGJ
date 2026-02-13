@@ -226,8 +226,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiMask: {fileID: 0}
   canvasGroup: {fileID: 3097579614790143819}
-  fadeInDuration: 0
-  fadeOutDuration: 0
+  fadeInDuration: 0.2
+  fadeOutDuration: 0.2
   gridPrefabName: prefab_battle_face_grid
   columnCount: 4
   rowCount: 7
@@ -853,8 +853,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiMask: {fileID: 0}
   canvasGroup: {fileID: 3732223678577455298}
-  fadeInDuration: 0.5
-  fadeOutDuration: 0.5
+  fadeInDuration: 0.2
+  fadeOutDuration: 0.2
   uiAnimator: {fileID: 8111743482726580353}
   showUIName: show_battle
   hideUIName: hide_battle
@@ -1320,8 +1320,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiMask: {fileID: 0}
   canvasGroup: {fileID: 3718939248638778227}
-  fadeInDuration: 0
-  fadeOutDuration: 0
+  fadeInDuration: 0.2
+  fadeOutDuration: 0.2
   gridPrefabName: prefab_battle_face_grid
   columnCount: 4
   rowCount: 7

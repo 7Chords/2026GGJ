@@ -36,17 +36,20 @@ namespace GameCore.UI
             {
                 foreach (var grid in _m_gridPanelList)
                     grid?.Discard();
+                _m_gridPanelList.Clear();
             }
+
             if (_m_facePartPanelList != null)
             {
                 foreach (var panel in _m_facePartPanelList)
                     panel?.Discard();
+                _m_facePartPanelList.Clear();
             }
         }
 
         public override void OnHidePanel()
         {
-            SCMsgCenter.UnregisterMsgAct(SCMsgConst.NEW_TURN_START, refreshShow);
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.NEW_GANE_START, onNewGameStart);
             SCMsgCenter.UnregisterMsg(SCMsgConst.ENEMY_FACE_PART_RANGE_HIGHLIGHT, onEnemyFacePartRangeHighlight);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.CLEAR_ENEMY_PREVIEW, onClearPreview);
 
@@ -64,7 +67,7 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
-            SCMsgCenter.RegisterMsgAct(SCMsgConst.NEW_TURN_START, refreshShow);
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.NEW_GANE_START, onNewGameStart);
             SCMsgCenter.RegisterMsg(SCMsgConst.ENEMY_FACE_PART_RANGE_HIGHLIGHT, onEnemyFacePartRangeHighlight);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.CLEAR_ENEMY_PREVIEW, onClearPreview);
 
@@ -76,8 +79,13 @@ namespace GameCore.UI
             if (_m_facePartPanelList != null)
             {
                 foreach (var panel in _m_facePartPanelList)
-                    panel?.ShowPanel();
+                {
+                    panel?.HidePanel();
+                    panel?.Discard();
+                }
+                _m_facePartPanelList.Clear();
             }
+            refreshShow();
         }
         private void createGrids()
         {
@@ -99,7 +107,7 @@ namespace GameCore.UI
 
                         if (mono.disabledGrids.Contains(tmp))
                         {
-                            panel.ShowPanel();//单独show一下 失活状态会影响布局
+                            SCCommon.SetGameObjectEnable(go, true);
                             panel.SetDisable();
                         }
                         else
@@ -195,6 +203,11 @@ namespace GameCore.UI
         {
             foreach (var gridPanel in _m_gridPanelList)
                 gridPanel.SetNoPreview();
+        }
+
+        private void onNewGameStart()
+        {
+            refreshShow();
         }
     }
 }

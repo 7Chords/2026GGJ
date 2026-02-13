@@ -60,11 +60,15 @@ namespace SCFrame.UI
         {
             _m_hasShowed = true;
             _m_hasHided = false;
-            if (showType == SCUIShowType.INTERNAL)
-                OnBeforeShow();
-            else
-                ShowPanelAnim(OnBeforeShow);
+            //if (showType == SCUIShowType.INTERNAL)
+            //    OnBeforeShow();
+            //else
+            //    ShowPanelAnim(OnBeforeShow);
+            //OnShowPanel();
+
+            ShowPanelAnim(OnBeforeShow);
             OnShowPanel();
+
         }
 
         protected virtual void ShowPanelAnim(Action _onBeforeShow)
@@ -103,10 +107,11 @@ namespace SCFrame.UI
             _m_hasShowed = false;
             _m_hasHided = true;
             OnHidePanel();
-            if (showType == SCUIShowType.INTERNAL)
-                OnHideOver();
-            else
-                HidePanelAnim(OnHideOver);
+            //if (showType == SCUIShowType.INTERNAL)
+            //    OnHideOver();
+            //else
+            //    HidePanelAnim(OnHideOver);
+            HidePanelAnim(OnHideOver);
         }
 
         protected virtual void HidePanelAnim(Action _onHideOver)

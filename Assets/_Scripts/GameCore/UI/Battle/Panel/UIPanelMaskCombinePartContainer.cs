@@ -39,6 +39,7 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.NEW_GANE_START, onNewGameStart);
             SCMsgCenter.UnregisterMsg(SCMsgConst.PLACE_PART_SUCCESS, onPlacePartSuccess);
             SCMsgCenter.UnregisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onReplacePartPosFail);
 
@@ -50,13 +51,19 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.NEW_GANE_START, onNewGameStart);
             SCMsgCenter.RegisterMsg(SCMsgConst.PLACE_PART_SUCCESS, onPlacePartSuccess);
             SCMsgCenter.RegisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onReplacePartPosFail);
 
-            ReloadParts();
+            reloadParts();
         }
 
-        public void ReloadParts()
+        private void onNewGameStart()
+        {
+            reloadParts();
+        }
+
+        private void reloadParts()
         {
             if (_m_partItemList != null)
             {
@@ -103,7 +110,7 @@ namespace GameCore.UI
             if (GameModel.instance.playerInfo.busyPartInfoList.Contains(partInfo))
             {
                 GameModel.instance.playerInfo.busyPartInfoList.Remove(partInfo);
-                ReloadParts();
+                reloadParts();
             }
 
         }
@@ -118,7 +125,7 @@ namespace GameCore.UI
             if (!GameModel.instance.playerInfo.busyPartInfoList.Contains(partInfo))
             {
                 GameModel.instance.playerInfo.busyPartInfoList.Add(partInfo);
-                ReloadParts();
+                reloadParts();
             }
         }
     }

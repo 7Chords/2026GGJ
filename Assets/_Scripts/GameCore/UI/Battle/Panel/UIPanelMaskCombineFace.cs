@@ -52,7 +52,7 @@ namespace GameCore.UI
 
                         if (mono.disabledGrids.Contains(tmp))
                         {
-                            panel.ShowPanel();//单独show一下 失活状态会影响布局
+                            SCCommon.SetGameObjectEnable(go, true);
                             panel.SetDisable();
                         }
                         else
@@ -142,11 +142,12 @@ namespace GameCore.UI
             {
                 foreach (var grid in _m_facePartPanelList)
                 {
-                    grid?.ShowPanel();
+                    grid?.HidePanel();
+                    grid?.Discard();
                 }
+                _m_facePartPanelList.Clear();
             }
         }
-
 
         private void onPlacePartSuccess(object[] _objs)
         {
@@ -191,7 +192,6 @@ namespace GameCore.UI
             SCMsgCenter.SendMsg(SCMsgConst.FACE_PART_ORDER_CHG);
 
         }
-
         private void onReplacePartPosSuccess(object[] _objs)
         {
             if (_objs == null || _objs.Length < 3)
@@ -223,7 +223,6 @@ namespace GameCore.UI
             panel.SetLocalPos(placeWorldPos);
             SCMsgCenter.SendMsg(SCMsgConst.FACE_PART_ORDER_CHG);
         }
-
         private void onReplacePartPosFail(object[] _objs)
         {
             if (_objs == null || _objs.Length == 0)
@@ -236,7 +235,6 @@ namespace GameCore.UI
             SCMsgCenter.SendMsg(SCMsgConst.FACE_PART_ORDER_CHG);
 
         }
-
         private void onPlacePartPreview(object[] _objs)
         {
             if (_objs == null || _objs.Length < 2)
@@ -274,7 +272,6 @@ namespace GameCore.UI
             foreach (var gridPanel in _m_gridPanelList)
                 gridPanel.SetNoPreview();
         }
-
         private void onFacePartRangeHighlight(object[] _objs)
         {
             if (_objs == null || _objs.Length == 0)

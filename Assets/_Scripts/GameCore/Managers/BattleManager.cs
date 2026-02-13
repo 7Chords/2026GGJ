@@ -1,3 +1,5 @@
+using DG.Tweening;
+using GameCore.UI;
 using SCFrame;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,11 +13,14 @@ namespace GameCore
 
         public void StartBattle()
         {
-            GameModel.instance.curTurnOwner = ETurnOwnerType.PLAYER;
-            TriggerParts(true);
-            ChangeTurnOwner();
-            TriggerParts(false);
-            FinishBattle();
+            DOVirtual.DelayedCall(2f, () =>
+            {
+                GameModel.instance.curTurnOwner = ETurnOwnerType.PLAYER;
+                TriggerParts(true);
+                ChangeTurnOwner();
+                TriggerParts(false);
+                FinishBattle();
+            });
         }
         public void TriggerParts(bool _isPlayer)
         {
@@ -35,7 +40,7 @@ namespace GameCore
             {
                 for (int i = 0; i < GameModel.instance.curEnemyInfo.battlePartInfoList.Count; i++)
                 {
-                    partInfo = GameModel.instance.playerInfo.battlePartInfoList[i];
+                    partInfo = GameModel.instance.curEnemyInfo.battlePartInfoList[i];
                     if (partInfo == null)
                         continue;
                     partInfo.logicObj?.OnPartActive();
@@ -52,6 +57,7 @@ namespace GameCore
         public void FinishBattle()
         {
             GameModel.instance.DealNextTurn();
+            UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCFrame.UI.SCUIShowType.FULL));
         }
     }
 }

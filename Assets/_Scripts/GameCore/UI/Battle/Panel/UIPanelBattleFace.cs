@@ -79,8 +79,10 @@ namespace GameCore.UI
             {
                 foreach (var grid in _m_partPanelList)
                 {
-                    grid?.ShowPanel();
+                    grid?.HidePanel();
+                    grid?.Discard();
                 }
+                _m_partPanelList.Clear();
             }
 
             SCTimeCaller.instance.CallDealy(0.5f, () =>
@@ -109,7 +111,7 @@ namespace GameCore.UI
 
                         if (mono.disabledGrids.Contains(tmpPos))
                         {
-                            panel.ShowPanel();//单独show一下 失活状态会影响布局
+                            SCCommon.SetGameObjectEnable(go, true);
                             panel.SetDisable();
                         }
                         else
@@ -137,7 +139,6 @@ namespace GameCore.UI
 
         private void refreshShow()
         {
-            
 
             List<PartInfo> infoList = null;
             if (mono.isEnemyFace)
