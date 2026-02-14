@@ -85,13 +85,13 @@ namespace GameCore
         public void PartTakeDamage(PartInfo _partInfo,int _amount)
         {
             _partInfo.currentHealth = Mathf.Clamp(_partInfo.currentHealth - _amount, 0, _partInfo.maxHealth);
-            SCMsgCenter.SendMsg(SCMsgConst.PART_HURT, _partInfo);
+            SCMsgCenter.SendMsg(SCMsgConst.PART_HURT, _partInfo, _amount);
 
         }
         public void PartHeal(PartInfo _partInfo, int _amount)
         {
             _partInfo.currentHealth = Mathf.Clamp(_partInfo.currentHealth + _amount, 0, _partInfo.maxHealth);
-            SCMsgCenter.SendMsg(SCMsgConst.PART_HEAL, _partInfo);
+            SCMsgCenter.SendMsg(SCMsgConst.PART_HEAL, _partInfo, _amount);
 
         }
 

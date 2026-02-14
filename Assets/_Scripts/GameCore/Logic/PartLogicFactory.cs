@@ -90,9 +90,11 @@ namespace GameCore.Logic
                     break;
                 case EAttributeType.HEAL_PART:
                     {
-
+                        return () =>
+                        {
+                            PartLogicHandler.DealHealPart(_info, _entryInfo);
+                        };
                     }
-                    break;
                 case EAttributeType.CLEAR_DEFULL:
                     {
 

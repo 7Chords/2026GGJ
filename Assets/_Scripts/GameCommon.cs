@@ -27,7 +27,6 @@ namespace GameCore
                 SCGame.instance.topLayerRoot.GetRectTransform(),
                 _worldPos);
             damageGO.GetComponent<DamageFloatText>().Initialize(_damage, true);
-            Debug.Break();
         }
         /// <summary>
         /// 展示伤害飘字

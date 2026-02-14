@@ -1,16 +1,13 @@
 ﻿id	goodsName	goodsDesc	goodsType	goodsPrice	partId	healthValue	goodsSpriteObjName
-100001	贝斯顿之鼻	暴击率：10%; 护盾：15	PART	75	101001	0	spr_icon_nose_1
-100002	贝斯顿之眼	命中率：45%; 护盾：15	PART	50	101002	0	spr_icon_eye_1
-100003	贝斯顿之嘴	伤害：10; 护盾：15	PART	50	101003	0	spr_icon_mouth_1
-100004	希尔之鼻	暴击率：30%; 恢复量：5	PART	100	101004	0	spr_icon_nose_2
-100005	希尔之眼	命中率：40%; 恢复量：5	PART	100	101005	0	spr_icon_eye_2
-100006	希尔之嘴	伤害：7; 恢复量：5	PART	100	101006	0	spr_icon_mouth_2
-100007	里卡多之鼻	暴击率：40%; 反伤：5	PART	100	101007	0	spr_icon_nose_3
-100008	里卡多之眼	命中率：33%; 反伤：5	PART	100	101008	0	spr_icon_eye_3
-100009	里卡多之嘴	伤害：10; 反伤：5	PART	100	101009	0	spr_icon_mouth_3
-100010	阿卡多之鼻	暴击率：25%; 吸血：5	PART	100	101010	0	spr_icon_nose_4
-100011	阿卡多之眼	命中率：33%; 吸血：5	PART	100	101011	0	spr_icon_eye_4
-100012	阿卡多之嘴	伤害：10; 吸血：5	PART	100	101012	0	spr_icon_mouth_4
-100013	小血药	恢复HP：25	HEAL	25	0	25	spr_medic_small
-100014	中血药	恢复HP：30	HEAL	30	0	30	spr_medic_middle
-100015	大血药	恢复HP：35	HEAL	35	0	35	spr_medic_big
+101001	瑞卡瓦之鼻	消除作用范围上的部位上的负面效果	PART	75	101001	0	spr_icon_nose_1
+101002	里昂之眼	作用范围上的部位有10%概率触发两次效果	PART	50	101002	0	spr_icon_eye_1
+101003	尖嘴	直接对本体造成15点伤害	PART	50	101003	0	spr_icon_mouth_1
+101004	希尔之鼻	回复作用范围内部位10点生命值	PART	100	101004	0	spr_icon_nose_2
+101005	美杜莎之眼	使命中范围内的目标无法移动	PART	100	101005	0	spr_icon_eye_2
+101006	大只嘴	对大范围内的目标造成10点伤害	PART	100	101006	0	spr_icon_mouth_4
+101007	伊莉米蕾之鼻	去除作用范围内的负面部位	PART	100	101007	0	spr_icon_nose_3
+101008	虎之眼	作用范围上的嘴巴有20%概率造成双倍伤害	PART	100	101008	0	spr_icon_eye_3
+100013	小血药	恢复HP：20	HEAL	50	0	20	spr_medic_small
+100014	中血药	恢复HP：30	HEAL	75	0	30	spr_medic_middle
+100015	大血药	恢复HP：40	HEAL	100	0	40	spr_medic_big
+

@@ -32,6 +32,7 @@ namespace GameCore.UI
         {
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_HURT, onPartHurt);
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_HEAL, onPartHeal);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_ACTIVE, onPartActive);
 
             mono.imgGO.RemoveMouseEnter(onMouseEnter);
             mono.imgGO.RemoveMouseExit(onMouseExit);
@@ -41,6 +42,7 @@ namespace GameCore.UI
         {
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_HURT, onPartHurt);
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_HEAL, onPartHeal);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PART_ACTIVE, onPartActive);
 
             mono.imgGO.AddMouseEnter(onMouseEnter);
             mono.imgGO.AddMouseExit(onMouseExit);
@@ -134,10 +136,14 @@ namespace GameCore.UI
             if (_objs == null || _objs.Length == 0)
                 return;
             PartInfo info = _objs[0] as PartInfo;
-            if(_m_partInfo == info)
+            int amount = (int)_objs[1];
+
+            if (_m_partInfo == info)
             {
                 _m_tweenContainer.RegDoTween(GetGameObject().transform.DOShakePosition(mono.hurtShakeDuration, mono.hurtShakeStrength));
                 mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.maxHealth;
+                GameCommon.ShowDamageFloatText(amount, GetGameObject().transform.position);
+
             }
         }
         private void onPartHeal(object[] _objs)
@@ -145,10 +151,26 @@ namespace GameCore.UI
             if (_objs == null || _objs.Length == 0)
                 return;
             PartInfo info = _objs[0] as PartInfo;
+            int amount = (int)_objs[1];
             if (_m_partInfo == info)
             {
                 mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.maxHealth;
+                GameCommon.ShowHealFloatText(amount, GetGameObject().transform.position);
             }
+        }
+        private void onPartActive(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            PartInfo info = _objs[0] as PartInfo;
+            if (_m_partInfo == info)
+            {
+                Sequence seq = DOTween.Sequence();
+                seq.Append(GetGameObject().transform.DOScale(mono.activeScale, mono.scaleChgDuration));
+                seq.Append(GetGameObject().transform.DOScale(Vector3.one, mono.scaleChgDuration));
+                _m_tweenContainer?.RegDoTween(seq);
+            }
+
         }
     }
 }

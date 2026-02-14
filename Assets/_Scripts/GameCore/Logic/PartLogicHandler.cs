@@ -97,7 +97,7 @@ namespace GameCore.Logic
                             FaceGridInfo gridInfo = GameModel.instance.playerFaceGridInfoList.Find(x => x.pos == _partInfo.curEffectFacePosList[i]);
                             if (gridInfo == null)
                                 continue;
-                            if (gridInfo.hasPart)
+                            if (gridInfo.hasPart && gridInfo.ownerPart != null)
                                 partInfoList.Add(gridInfo.ownerPart);
                         }
                         for (int i = 0; i < partInfoList.Count; i++)
@@ -110,7 +110,7 @@ namespace GameCore.Logic
                             FaceGridInfo gridInfo = GameModel.instance.enemyFaceGridInfoList.Find(x => x.pos == _partInfo.curEffectFacePosList[i]);
                             if (gridInfo == null)
                                 continue;
-                            if (gridInfo.hasPart)
+                            if (gridInfo.hasPart && gridInfo.ownerPart != null)
                                 partInfoList.Add(gridInfo.ownerPart);
                         }
                         for (int i = 0; i < partInfoList.Count; i++)
@@ -134,6 +134,38 @@ namespace GameCore.Logic
         public static void DealTriggerChanceUp(PartInfo _partInfo, EntryInfo _entryInfo)
         {
 
+        }
+        public static void DealHealPart(PartInfo _partInfo, EntryInfo _entryInfo)
+        {
+            float healAmount = _entryInfo.attributeValue;
+            List<PartInfo> partInfoList = new List<PartInfo>();
+
+            if (!_partInfo.isEnemyPart)
+            {
+                for (int i = 0; i < _partInfo.curEffectFacePosList.Count; i++)
+                {
+                    FaceGridInfo gridInfo = GameModel.instance.playerFaceGridInfoList.Find(x => x.pos == _partInfo.curEffectFacePosList[i]);
+                    if (gridInfo == null)
+                        continue;
+                    if (gridInfo.hasPart && gridInfo.ownerPart != null)
+                        partInfoList.Add(gridInfo.ownerPart);
+                }
+                for (int i = 0; i < partInfoList.Count; i++)
+                    GameModel.instance.PartHeal(partInfoList[i], Mathf.RoundToInt(healAmount));
+            }
+            else
+            {
+                for (int i = 0; i < _partInfo.curEffectFacePosList.Count; i++)
+                {
+                    FaceGridInfo gridInfo = GameModel.instance.enemyFaceGridInfoList.Find(x => x.pos == _partInfo.curEffectFacePosList[i]);
+                    if (gridInfo == null)
+                        continue;
+                    if (gridInfo.hasPart && gridInfo.ownerPart != null)
+                        partInfoList.Add(gridInfo.ownerPart);
+                }
+                for (int i = 0; i < partInfoList.Count; i++)
+                    GameModel.instance.PartHeal(partInfoList[i], Mathf.RoundToInt(healAmount));
+            }
         }
     }
 }

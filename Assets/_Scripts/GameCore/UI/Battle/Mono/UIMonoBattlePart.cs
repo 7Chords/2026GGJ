@@ -28,5 +28,9 @@ namespace GameCore.UI
         public float hurtShakeStrength;
         [Header("受伤震动时间")]
         public float hurtShakeDuration;
+        [Header("行动缩放")]
+        public float activeScale;
+        [Header("行动缩放时间")]
+        public float scaleChgDuration;
     }
 }

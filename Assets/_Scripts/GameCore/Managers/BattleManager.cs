@@ -1,6 +1,7 @@
 using DG.Tweening;
 using GameCore.UI;
 using SCFrame;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,14 +16,14 @@ namespace GameCore
         private TweenContainer _m_tweenContainer;
 
         // 核心：真正支持任意插入的执行队列
-        private List<PartInfo> _playerExecQueue = new List<PartInfo>();
-        private List<PartInfo> _enemyExecQueue = new List<PartInfo>();
+        private List<PartInfo> _m_playerExecQueue;
+        private List<PartInfo> _m_enemyExecQueue;
 
-        private bool _isPlayerExecuting;
-        private bool _isEnemyExecuting;
+        private bool _m_isPlayerExecuting;
+        private bool _m_isEnemyExecuting;
 
-        private System.Action _onPlayerFinish;
-        private System.Action _onEnemyFinish;
+        private Action _m_onPlayerFinish;
+        private Action _m_onEnemyFinish;
 
         // 当前执行到第几个
         private int _playerCurrentIndex = -1;
@@ -32,6 +33,8 @@ namespace GameCore
         {
             playerExcuteInfoList = new List<PartInfo>();
             enemyExcuteInfoList = new List<PartInfo>();
+            _m_playerExecQueue = new List<PartInfo>();
+            _m_enemyExecQueue = new List<PartInfo>();
             _m_tweenContainer = new TweenContainer();
         }
         public override void OnDiscard()
@@ -63,7 +66,7 @@ namespace GameCore
         /// </summary>
         public void StartExecuteParts(bool isPlayer, List<PartInfo> parts, System.Action onFinish = null)
         {
-            var queue = isPlayer ? _playerExecQueue : _enemyExecQueue;
+            var queue = isPlayer ? _m_playerExecQueue : _m_enemyExecQueue;
             queue.Clear();
 
             if (parts != null)
@@ -77,14 +80,14 @@ namespace GameCore
 
             if (isPlayer)
             {
-                _onPlayerFinish = onFinish;
-                _isPlayerExecuting = true;
+                _m_onPlayerFinish = onFinish;
+                _m_isPlayerExecuting = true;
                 _playerCurrentIndex = -1;
             }
             else
             {
-                _onEnemyFinish = onFinish;
-                _isEnemyExecuting = true;
+                _m_onEnemyFinish = onFinish;
+                _m_isEnemyExecuting = true;
                 _enemyCurrentIndex = -1;
             }
 
@@ -101,12 +104,12 @@ namespace GameCore
         {
             if (part == null) return;
 
-            var queue = isPlayer ? _playerExecQueue : _enemyExecQueue;
+            var queue = isPlayer ? _m_playerExecQueue : _m_enemyExecQueue;
             index = Mathf.Clamp(index, 0, queue.Count);
             queue.Insert(index, part);
 
             // 如果没在执行，启动
-            if (!(isPlayer ? _isPlayerExecuting : _isEnemyExecuting))
+            if (!(isPlayer ? _m_isPlayerExecuting : _m_isEnemyExecuting))
             {
                 if (isPlayer) _playerCurrentIndex = -1;
                 else _enemyCurrentIndex = -1;
@@ -119,7 +122,7 @@ namespace GameCore
         /// </summary>
         public void AddPartToLast(bool isPlayer, PartInfo part)
         {
-            var queue = isPlayer ? _playerExecQueue : _enemyExecQueue;
+            var queue = isPlayer ? _m_playerExecQueue : _m_enemyExecQueue;
             InsertPartAt(isPlayer, queue.Count, part);
         }
 
@@ -137,7 +140,7 @@ namespace GameCore
         /// </summary>
         public void InsertPartAfterTarget(bool isPlayer, PartInfo targetPart, PartInfo newPart)
         {
-            var queue = isPlayer ? _playerExecQueue : _enemyExecQueue;
+            var queue = isPlayer ? _m_playerExecQueue : _m_enemyExecQueue;
             int index = queue.IndexOf(targetPart);
             if (index < 0)
             {
@@ -149,7 +152,7 @@ namespace GameCore
 
         private void ExecuteNext(bool isPlayer)
         {
-            var queue = isPlayer ? _playerExecQueue : _enemyExecQueue;
+            var queue = isPlayer ? _m_playerExecQueue : _m_enemyExecQueue;
             ref int curIndex = ref (isPlayer ? ref _playerCurrentIndex : ref _enemyCurrentIndex);
 
             curIndex++;
@@ -159,26 +162,27 @@ namespace GameCore
             {
                 if (isPlayer)
                 {
-                    _isPlayerExecuting = false;
-                    _onPlayerFinish?.Invoke();
-                    _onPlayerFinish = null;
+                    _m_isPlayerExecuting = false;
+                    _m_onPlayerFinish?.Invoke();
+                    _m_onPlayerFinish = null;
                 }
                 else
                 {
-                    _isEnemyExecuting = false;
-                    _onEnemyFinish?.Invoke();
-                    _onEnemyFinish = null;
+                    _m_isEnemyExecuting = false;
+                    _m_onEnemyFinish?.Invoke();
+                    _m_onEnemyFinish = null;
                 }
                 return;
             }
 
-            var part = queue[curIndex];
+            PartInfo part = queue[curIndex];
             SCTaskHelper.instance.CreateCoroutine(this,ExecuteOneRoutine(isPlayer, part));
         }
 
         private IEnumerator ExecuteOneRoutine(bool isPlayer, PartInfo part)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
+            SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE, part);
             part.TriggerActiveLogic(EAttributeTriggerPointType.ACTIVE);
             ExecuteNext(isPlayer);
         }
@@ -194,8 +198,11 @@ namespace GameCore
 
         public void FinishBattle()
         {
-            GameModel.instance.DealNextTurn();
-            UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCFrame.UI.SCUIShowType.FULL));
+            SCTimeCaller.instance.CallDealy(1f, () =>
+            {
+                GameModel.instance.DealNextTurn();
+                UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCFrame.UI.SCUIShowType.FULL));
+            });
         }
 
         //public void InsertExcuteInfo2List(PartInfo _info, int _idx, bool _isPlayer)

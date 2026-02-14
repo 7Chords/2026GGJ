@@ -870,7 +870,7 @@ MonoBehaviour:
   goPlayerHealth: {fileID: 5318357167648126702}
   goEnemyHealth: {fileID: 8021020676144894332}
   healthShakeStrength: 100
-  healthShakeDuration: 0.2
+  healthShakeDuration: 0.5
 --- !u!1 &4867686386474847951
 GameObject:
   m_ObjectHideFlags: 0

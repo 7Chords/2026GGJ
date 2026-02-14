@@ -432,9 +432,9 @@ MonoBehaviour:
   goOrder: {fileID: 5799995615946025734}
   goHealthPosPivot: {x: 0, y: -0.8}
   goOrderPosPivot: {x: -0.7, y: 0.7}
-  scaleMouseEnter: 0.75
+  scaleMouseEnter: 0.7
   scaleChgDuration: 0.1
-  scaleGO: 0.7
+  scaleGO: 0.6
 --- !u!1 &8092995272627141411
 GameObject:
   m_ObjectHideFlags: 0

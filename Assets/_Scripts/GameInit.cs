@@ -34,11 +34,13 @@ namespace GameCore
             GameModel.instance.Initialize();
             MapManager.instance.Initialize();
             AudioMgr.instance.Initialize();
+            BattleManager.instance.Initialize();
             startGame();
         }
 
         public override void OnDiscard()
         {
+            BattleManager.instance.Discard();
             AudioMgr.instance.Discard();
             MapManager.instance.Discard();
             UICoreMgr.instance.Discard();

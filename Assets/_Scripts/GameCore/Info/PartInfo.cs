@@ -89,16 +89,6 @@ namespace GameCore
             localEffectPosList = GameCommon.RotateShapeAndMoveBySample(localEffectPosList, 1, localOccupyPosList);
             localOccupyPosList = GameCommon.RotateShapeAndMove2Zero(localOccupyPosList, 1);
 
-            SCDebugHelper.LogWarning("------------------------");
-
-            for (int i = 0; i < localOccupyPosList.Count; i++)
-            {
-                SCDebugHelper.LogWarning("occupyPos:" + localOccupyPosList[i]);
-            }
-            for (int i =0;i< localEffectPosList.Count;i++)
-            {
-                SCDebugHelper.LogWarning("effectPos:" + localEffectPosList[i]);
-            }
         }
         public Vector2Int GetMinGridPos()
         {

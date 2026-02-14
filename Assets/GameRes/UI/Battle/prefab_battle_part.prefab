@@ -434,6 +434,8 @@ MonoBehaviour:
   goOrder: {fileID: 5799995615946025734}
   hurtShakeStrength: 15
   hurtShakeDuration: 0.15
+  activeScale: 1.1
+  scaleChgDuration: 0.1
 --- !u!1 &8092995272627141411
 GameObject:
   m_ObjectHideFlags: 0
