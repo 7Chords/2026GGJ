@@ -67,8 +67,8 @@ namespace GameCore.UI
         
         private void refreshShow()
         {
-            mono.imgHealthBar.fillAmount = (float)GameModel.instance.playerInfo.playerHealth / GameModel.instance.playerInfo.playerMaxHealth;
-            mono.txtHealth.text = GameModel.instance.playerInfo.playerHealth +"/" + GameModel.instance.playerInfo.playerMaxHealth;
+            mono.imgHealthBar.fillAmount = (float)GameModel.instance.playerInfo.currentHealth / GameModel.instance.playerInfo.maxHealth;
+            mono.txtHealth.text = GameModel.instance.playerInfo.currentHealth +"/" + GameModel.instance.playerInfo.maxHealth;
         }
 
     }

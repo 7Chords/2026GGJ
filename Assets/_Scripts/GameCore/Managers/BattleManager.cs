@@ -33,7 +33,7 @@ namespace GameCore
                     partInfo = GameModel.instance.playerInfo.battlePartInfoList[i];
                     if (partInfo == null)
                         continue;
-                    partInfo.logicObj?.OnPartActive();
+                    partInfo.TriggerActiveLogic(EAttributeTriggerPointType.ACTIVE);
                 }
             }
             else
@@ -43,7 +43,7 @@ namespace GameCore
                     partInfo = GameModel.instance.curEnemyInfo.battlePartInfoList[i];
                     if (partInfo == null)
                         continue;
-                    partInfo.logicObj?.OnPartActive();
+                    partInfo.TriggerActiveLogic(EAttributeTriggerPointType.ACTIVE);
                 }
             }
         }

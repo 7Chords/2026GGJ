@@ -6,35 +6,14 @@ namespace GameCore.Logic
 {
     public static class PartLogicFactory
     {
-        //key 部位id  value 部件逻辑
-        private static Dictionary<long, PartLogic> _m_logicTypeMap;
 
-        public static void Initialize()
-        {
-            _m_logicTypeMap = new Dictionary<long, PartLogic>();
-        }
-
-        private static void RegisterLogic(long _id, PartLogic _logicObj)
-        {
-            if (!_m_logicTypeMap.ContainsKey(_id))
-            {
-                _m_logicTypeMap.Add(_id, _logicObj);
-            }
-        }
 
         public static PartLogic CreateLogic(long _id , PartInfo _partInfo)
         {
-            if (_m_logicTypeMap == null)
-                Initialize();
-
             if (_id < 0 || _partInfo == null)
                 return null;
 
-            if (_m_logicTypeMap.TryGetValue(_id, out PartLogic logicObj))
-            {
-                return logicObj;
-            }
-            logicObj = new PartLogic(_partInfo);
+            PartLogic logicObj = new PartLogic(_partInfo);
             EntryInfo entryInfo = null;
             for (int i =0;i< _partInfo.entryInfoList.Count;i++)
             {
@@ -61,7 +40,6 @@ namespace GameCore.Logic
                         break;
                 }
             }
-            RegisterLogic(_id, logicObj);
             return logicObj;
         }
 

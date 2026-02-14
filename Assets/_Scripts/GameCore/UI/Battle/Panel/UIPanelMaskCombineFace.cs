@@ -175,7 +175,7 @@ namespace GameCore.UI
                 tmpInfo = _m_gridInfoList.Find(x => x.pos == occupyPosList[i]);
                 if (tmpInfo == null)
                     continue;
-                tmpInfo.hasPart = true;
+                tmpInfo.SetOwnerPart(partInfo);
                 int index = _m_gridInfoList.IndexOf(tmpInfo);
                 tmpGOList.Add(_m_gridGOList[index].transform.localPosition);
             }
@@ -214,7 +214,7 @@ namespace GameCore.UI
                 tmpInfo = _m_gridInfoList.Find(x => x.pos == occupyPosList[i]);
                 if (tmpInfo == null)
                     continue;
-                tmpInfo.hasPart = true;
+                tmpInfo.SetOwnerPart(panel.partInfo);
                 int index = _m_gridInfoList.IndexOf(tmpInfo);
                 tmpGOList.Add(_m_gridGOList[index].transform.localPosition);
             }

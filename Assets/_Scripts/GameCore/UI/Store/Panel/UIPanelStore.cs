@@ -117,9 +117,9 @@ namespace GameCore.UI
                 _m_storeItemList[i].SetInfo(_m_goodsInfoList[i]);
             }
             mono.txtPlayerMoney.text = GameModel.instance.playerInfo.playerMoney.ToString();
-            Tween healthTween = mono.imgHealthBar.DOFillAmount((float)GameModel.instance.playerInfo.playerHealth / GameModel.instance.playerInfo.playerMaxHealth, mono.healthBarFadeDuration);
+            Tween healthTween = mono.imgHealthBar.DOFillAmount((float)GameModel.instance.playerInfo.currentHealth / GameModel.instance.playerInfo.maxHealth, mono.healthBarFadeDuration);
             _m_tweenContainer.RegDoTween(healthTween);
-            mono.txtHealth.text = GameModel.instance.playerInfo.playerHealth + "/" + GameModel.instance.playerInfo.playerMaxHealth;
+            mono.txtHealth.text = GameModel.instance.playerInfo.currentHealth + "/" + GameModel.instance.playerInfo.maxHealth;
         }
         private void onPurchaseGoods(object[] _objs)
         {
@@ -143,7 +143,7 @@ namespace GameCore.UI
                     break;
                 case EGoodsType.HEAL:
                     {
-                        GameModel.instance.Heal(info.goodsRefObj.healthValue);
+                        GameModel.instance.PlayerHeal(info.goodsRefObj.healthValue);
                     }
                     break;
             }

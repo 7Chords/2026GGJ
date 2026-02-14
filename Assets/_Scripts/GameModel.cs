@@ -55,14 +55,44 @@ namespace GameCore
             
         }
 
-        public void Heal(int _amount)
+        public void PlayerHeal(int _amount)
         {
-            playerInfo.playerHealth = Mathf.Clamp(playerInfo.playerHealth + _amount, 0, playerInfo.playerMaxHealth);
+            playerInfo.currentHealth = Mathf.Clamp(playerInfo.currentHealth + _amount, 0, playerInfo.maxHealth);
+            SCMsgCenter.SendMsg(SCMsgConst.PLAYER_HEAL);
         }
 
-        public void TakeDamage(int _amount)
+        public void PlayerTakeDamage(int _amount)
         {
-            playerInfo.playerHealth = Mathf.Clamp(playerInfo.playerHealth - _amount, 0, playerInfo.playerMaxHealth);
+            playerInfo.currentHealth = Mathf.Clamp(playerInfo.currentHealth - _amount, 0, playerInfo.maxHealth);
+            SCMsgCenter.SendMsg(SCMsgConst.PLAYER_HURT);
+
+        }
+
+        public void EnemyHeal(int _amount)
+        {
+            curEnemyInfo.currentHealth = Mathf.Clamp(curEnemyInfo.currentHealth + _amount, 0, curEnemyInfo.maxHealth);
+            SCMsgCenter.SendMsg(SCMsgConst.ENEMY_HEAL);
+
+        }
+
+        public void EnemyTakeDamage(int _amount)
+        {
+            curEnemyInfo.currentHealth = Mathf.Clamp(curEnemyInfo.currentHealth - _amount, 0, curEnemyInfo.maxHealth);
+            SCMsgCenter.SendMsg(SCMsgConst.ENEMY_HURT);
+
+        }
+
+        public void PartTakeDamage(PartInfo _partInfo,int _amount)
+        {
+            _partInfo.currentHealth = Mathf.Clamp(_partInfo.currentHealth - _amount, 0, _partInfo.maxHealth);
+            SCMsgCenter.SendMsg(SCMsgConst.PART_HURT, _partInfo);
+
+        }
+        public void PartHeal(PartInfo _partInfo, int _amount)
+        {
+            _partInfo.currentHealth = Mathf.Clamp(_partInfo.currentHealth + _amount, 0, _partInfo.maxHealth);
+            SCMsgCenter.SendMsg(SCMsgConst.PART_HEAL, _partInfo);
+
         }
 
         public List<Vector2Int> GetPlaceFaceOccupyPosList(GameObject _hitGridGO, Vector3 _mousePos, List<Vector2Int> _localGridList)
@@ -173,7 +203,7 @@ namespace GameCore
                 FaceGridInfo info = playerFaceGridInfoList.Find(x => x.pos == _posList[i]);
                 if (info == null)
                     continue;
-                info.hasPart = false;
+                info.SetEmpty();
             }
         }
 
@@ -258,7 +288,7 @@ namespace GameCore
             int playerDrawCnt = Mathf.Min(GameConst.DRAW_CARD_COUNT_PER_TURN, GameConst.BUSY_CARD_MAX_COUNT - playerInfo.battlePartInfoList.Count);
             PlayerDrawParts(playerDrawCnt);
             foreach (var info in playerFaceGridInfoList)
-                info.hasPart = false;
+                info.SetEmpty();
 
             curEnemyInfo.deckPartInfoList.AddRange(curEnemyInfo.busyPartInfoList);
             curEnemyInfo.busyPartInfoList.Clear();
@@ -267,7 +297,7 @@ namespace GameCore
             int enemyDrawCnt = Mathf.Min(GameConst.DRAW_CARD_COUNT_PER_TURN, GameConst.BUSY_CARD_MAX_COUNT - curEnemyInfo.battlePartInfoList.Count);
             EnemyDrawParts(enemyDrawCnt);
             foreach (var info in enemyFaceGridInfoList)
-                info.hasPart = false;
+                info.SetEmpty();
 
             GenerateEnemyLayout(curEnemyInfo);
             //SCMsgCenter.SendMsg(SCMsgConst.NEW_TURN_START);
@@ -423,7 +453,7 @@ namespace GameCore
                 FaceGridInfo gridInfo = enemyFaceGridInfoList.Find(x => x.pos == p);
                 if (gridInfo == null)
                     continue;
-                gridInfo.hasPart = true;
+                gridInfo.SetOwnerPart(part);
                 part.curOccupyFacePosList.Add(p);
             }
             foreach (var offset in part.localEffectPosList)

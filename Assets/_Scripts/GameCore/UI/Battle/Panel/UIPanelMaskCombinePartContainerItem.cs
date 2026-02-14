@@ -119,6 +119,7 @@ namespace GameCore.UI
         private void onBeginDrag(PointerEventData _arg, object[] _objs)
         {
             if (_m_dragPartGO != null) return;
+
             _m_isDraging = true;
             //创建拖拽出来的部位
             _m_dragPartGO = ResourcesHelper.LoadGameObject("prefab_face_part_preview", SCGame.instance.topLayerRoot.transform);
@@ -164,7 +165,7 @@ namespace GameCore.UI
         {
             if (_m_partInfo == null)
                 return;
-
+            AudioMgr.instance.PlaySfx("sfx_mouse_enter");
             GameCommon.ShowTooltip(_m_partInfo, GetGameObject().transform.position);
 
             _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));

@@ -12,8 +12,8 @@ namespace GameCore
         public List<PartInfo> busyPartInfoList; //玩家当前持有的部位列表
         public List<PartInfo> battlePartInfoList;//当前战斗中的部位列表（在脸上）
 
-        public int playerHealth; //玩家生命
-        public int playerMaxHealth;//玩家最大生命
+        public int currentHealth; //玩家生命
+        public int maxHealth;//玩家最大生命
         public int playerMoney;//玩家金钱
 
         public Vector2Int playerMapPosition = new Vector2Int(-1, -1);//玩家地图坐标位置
@@ -21,8 +21,8 @@ namespace GameCore
 
         public PlayerInfo(PlayerRefObj _refObj)
         {
-            playerMaxHealth = _refObj.playerHealth;
-            playerHealth = playerMaxHealth;
+            maxHealth = _refObj.playerHealth;
+            currentHealth = maxHealth;
             playerMoney = _refObj.playerMoney;
 
             busyPartInfoList = new List<PartInfo>();

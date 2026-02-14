@@ -33,14 +33,31 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.PLAYER_HURT, refreshShow);
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.PLAYER_HEAL, refreshShow);
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.ENEMY_HURT, refreshShow);
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.ENEMY_HEAL, refreshShow);
             _m_playerBattleFace?.HidePanel();
             _m_enemyBattleFace?.HidePanel();
         }
 
         public override void OnShowPanel()
         {
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.PLAYER_HURT, refreshShow);
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.PLAYER_HEAL, refreshShow);
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.ENEMY_HURT, refreshShow);
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.ENEMY_HEAL, refreshShow);
+
             _m_playerBattleFace?.ShowPanel();
             _m_enemyBattleFace?.ShowPanel();
+            refreshShow();
+        }
+
+        private void refreshShow()
+        {
+            mono.txtHealth_player.text = GameModel.instance.playerInfo.currentHealth + "/" + GameModel.instance.playerInfo.maxHealth;
+            mono.txtHealth_enemy.text = GameModel.instance.curEnemyInfo.currentHealth + "/" + GameModel.instance.curEnemyInfo.maxHealth;
+
         }
     }
 }

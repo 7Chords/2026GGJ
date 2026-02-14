@@ -226,6 +226,8 @@ namespace GameCore.UI
         {
             if (_m_isDraging)
                 return;
+            AudioMgr.instance.PlaySfx("sfx_mouse_enter");
+
             //放到最下面 显示在最前面
             GetGameObject().transform.SetAsLastSibling();
             _m_tweenContainer.RegDoTween(mono.imgGO.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));

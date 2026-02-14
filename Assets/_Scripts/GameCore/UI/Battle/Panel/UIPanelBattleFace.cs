@@ -68,6 +68,7 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            
             if (_m_gridPanelList != null)
             {
                 foreach (var grid in _m_gridPanelList)

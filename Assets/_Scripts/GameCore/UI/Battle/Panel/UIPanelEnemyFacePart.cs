@@ -82,6 +82,8 @@ namespace GameCore.UI
 
         private void onMouseEnter(PointerEventData _data, object[] _objs)
         {
+            AudioMgr.instance.PlaySfx("sfx_mouse_enter");
+
             //放到最下面 显示在最前面
             GetGameObject().transform.SetAsLastSibling();
             _m_tweenContainer.RegDoTween(mono.imgGO.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));

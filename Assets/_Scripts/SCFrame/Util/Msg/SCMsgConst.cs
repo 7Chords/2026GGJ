@@ -21,7 +21,12 @@ public class SCMsgConst
     public const int ENEMY_FACE_PART_RANGE_HIGHLIGHT = 2014;
     public const int CLEAR_ENEMY_PREVIEW = 2015;
     public const int NEW_TURN_START = 2016;
-
+    public const int PART_HURT = 2017;
+    public const int PLAYER_HURT = 2018;
+    public const int ENEMY_HURT = 2019;
+    public const int PART_HEAL = 2020;
+    public const int PLAYER_HEAL = 2021;
+    public const int ENEMY_HEAL = 2022;
     #endregion
 
     #region 系统相关 99
