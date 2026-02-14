@@ -1,3 +1,4 @@
+using DG.Tweening;
 using SCFrame;
 using SCFrame.UI;
 using System;
@@ -11,27 +12,36 @@ namespace GameCore.UI
     public class UIPanelBattlePart : _ASCUIPanelBase<UIMonoBattlePart>
     {
         private PartInfo _m_partInfo;
-        public PartInfo partInfo => _m_partInfo;
+        private TweenContainer _m_tweenContainer;
         public UIPanelBattlePart(UIMonoBattlePart _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
 
         public override void AfterInitialize()
         {
+            _m_tweenContainer = new TweenContainer();
         }
 
         public override void BeforeDiscard()
         {
+            _m_tweenContainer?.KillAllDoTween();
+            _m_tweenContainer = null;
         }
 
         public override void OnHidePanel()
         {
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_HURT, onPartHurt);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_HEAL, onPartHeal);
+
             mono.imgGO.RemoveMouseEnter(onMouseEnter);
             mono.imgGO.RemoveMouseExit(onMouseExit);
         }
 
         public override void OnShowPanel()
         {
+            SCMsgCenter.RegisterMsg(SCMsgConst.PART_HURT, onPartHurt);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PART_HEAL, onPartHeal);
+
             mono.imgGO.AddMouseEnter(onMouseEnter);
             mono.imgGO.AddMouseExit(onMouseExit);
         }
@@ -117,6 +127,28 @@ namespace GameCore.UI
                 new Vector2(GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_BATTLE, GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_BATTLE),
                 _m_partInfo.partRefObj.qualityType,
                 false);
+        }
+
+        private void onPartHurt(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            PartInfo info = _objs[0] as PartInfo;
+            if(_m_partInfo == info)
+            {
+                _m_tweenContainer.RegDoTween(GetGameObject().transform.DOShakePosition(mono.hurtShakeDuration, mono.hurtShakeStrength));
+                mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.maxHealth;
+            }
+        }
+        private void onPartHeal(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            PartInfo info = _objs[0] as PartInfo;
+            if (_m_partInfo == info)
+            {
+                mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.maxHealth;
+            }
         }
     }
 }

@@ -12,18 +12,25 @@ namespace GameCore.UI
         public UIMonoBattleFace monoPlayerFace;
         [Header("敌方面具")]
         public UIMonoBattleFace monoEnemyFace;
-        [Header("血条bar")]
-        public Image imgHealthBar_player;
-        [Header("血量文本")]
-        public Text txtHealth_player;
-        [Header("血条bar")]
-        public Image imgHealthBar_enemy;
-        [Header("血量文本")]
-        public Text txtHealth_enemy;
+        [Header("玩家血条bar")]
+        public Image imgPlayerHealthBar;
+        [Header("玩家血量文本")]
+        public Text txtPlayerHealth;
+        [Header("敌人血条bar")]
+        public Image imgEnemyHealthBar;
+        [Header("敌人血量文本")]
+        public Text txtEnemyHealth;
         [Header("玩家部位触发信息")]
         public Text playerPartInfoText;
         [Header("敌人部位触发信息")]
         public Text enemyPartInfoText;
-
+        [Header("玩家血条物体")]
+        public GameObject goPlayerHealth;
+        [Header("敌人血条物体")]
+        public GameObject goEnemyHealth;
+        [Header("血条物体震动强度")]
+        public float healthShakeStrength;
+        [Header("血条物体震动时间")]
+        public float healthShakeDuration;
     }
 }

@@ -61,13 +61,63 @@ namespace GameCore.Logic
                 GameModel.instance.PartTakeDamage(pair.Key, Mathf.RoundToInt(pair.Value * perGridDamage));
             }
         }
-        public static void DealReflect(PartInfo _partInfo, EntryInfo _entryInfo)
-        {
 
+        public static void DealRealAttack(PartInfo _partInfo, EntryInfo _entryInfo)
+        {
+            float damage = _entryInfo.attributeValue;
+            if (!_partInfo.isEnemyPart)
+            {
+                GameModel.instance.EnemyTakeDamage(Mathf.RoundToInt(damage));
+            }
+            else
+            {
+                GameModel.instance.PlayerTakeDamage(Mathf.RoundToInt(damage));
+            }
+        }
+        public static void DealReflect(PartInfo _receiverInfo, EntryInfo _entryInfo,PartInfo _senderInfo)
+        {
+            float damage = _entryInfo.attributeValue;
+            GameModel.instance.PartTakeDamage(_senderInfo, Mathf.RoundToInt(damage));
         }
         public static void DealTriggerMore(PartInfo _partInfo, EntryInfo _entryInfo)
         {
+            float chance = _entryInfo.attributeChance;
+            float triggerMoreTimes = _entryInfo.attributeValue;
+            float randomNum = RandomUtility.GetRandomGenerator(EModuleType.COMBAT).Next(0, 1);
+            List<PartInfo> partInfoList = new List<PartInfo>();
 
+            if(randomNum < chance)
+            {
+                for(int j =0;j< triggerMoreTimes-1;j++)
+                {
+                    if (!_partInfo.isEnemyPart)
+                    {
+                        for (int i = 0; i < _partInfo.curEffectFacePosList.Count; i++)
+                        {
+                            FaceGridInfo gridInfo = GameModel.instance.playerFaceGridInfoList.Find(x => x.pos == _partInfo.curEffectFacePosList[i]);
+                            if (gridInfo == null)
+                                continue;
+                            if (gridInfo.hasPart)
+                                partInfoList.Add(gridInfo.ownerPart);
+                        }
+                        for (int i = 0; i < partInfoList.Count; i++)
+                            BattleManager.instance.InsertPartAt(true, BattleManager.instance.GetIndexOfPartInfo(partInfoList[i], true), partInfoList[i]);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < _partInfo.curEffectFacePosList.Count; i++)
+                        {
+                            FaceGridInfo gridInfo = GameModel.instance.enemyFaceGridInfoList.Find(x => x.pos == _partInfo.curEffectFacePosList[i]);
+                            if (gridInfo == null)
+                                continue;
+                            if (gridInfo.hasPart)
+                                partInfoList.Add(gridInfo.ownerPart);
+                        }
+                        for (int i = 0; i < partInfoList.Count; i++)
+                            BattleManager.instance.InsertPartAt(false, BattleManager.instance.GetIndexOfPartInfo(partInfoList[i], false), partInfoList[i]);
+                    }
+                }
+            }
         }
         public static void DealAttackMore(PartInfo _partInfo, EntryInfo _entryInfo)
         {

@@ -21,6 +21,7 @@ namespace GameCore
     public enum EAttributeType
     {
         ATTACK,//攻击力
+        REAL_ATTACK,//真实伤害
         REFLECT,//反射
         TRIGGER_MORE,//触发两次
         ATTACK_MORE,//攻击两次
@@ -30,7 +31,6 @@ namespace GameCore
         HEAL_PART,//给部位回血
         CLEAR_DEFULL,//清除负面效果
         CLEAR_BAD_SKIN,//清楚坏的皮肤
-        PENETRATE,//穿透
         PART_LOSE_TURN,//部位无法行动
     }
 

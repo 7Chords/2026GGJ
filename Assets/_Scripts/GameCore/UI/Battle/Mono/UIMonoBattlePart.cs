@@ -24,5 +24,9 @@ namespace GameCore.UI
         public Vector2 goOrderPosPivot;
         [Header("序号信息物体")]
         public GameObject goOrder;
+        [Header("受伤震动强度")]
+        public float hurtShakeStrength;
+        [Header("受伤震动时间")]
+        public float hurtShakeDuration;
     }
 }

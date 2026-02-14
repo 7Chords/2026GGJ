@@ -352,7 +352,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 591, y: 900}
+  m_SizeDelta: {x: 570.3506, y: 868.5542}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1994751961430564675
 CanvasRenderer:
@@ -747,8 +747,8 @@ RectTransform:
   - {fileID: 2388904135563160574}
   - {fileID: 696625145456591139}
   - {fileID: 6091979496908046994}
-  - {fileID: 3159089947277866421}
   - {fileID: 2867521836839754343}
+  - {fileID: 3159089947277866421}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -861,12 +861,16 @@ MonoBehaviour:
   animEventTrigger: {fileID: 1559690589298214496}
   monoPlayerFace: {fileID: 302918236810301695}
   monoEnemyFace: {fileID: 7045966149966732392}
-  imgHealthBar_player: {fileID: 8283567675382119546}
-  txtHealth_player: {fileID: 2317594735432864644}
-  imgHealthBar_enemy: {fileID: 1704887379221684444}
-  txtHealth_enemy: {fileID: 3871567916339607648}
+  imgPlayerHealthBar: {fileID: 8283567675382119546}
+  txtPlayerHealth: {fileID: 2317594735432864644}
+  imgEnemyHealthBar: {fileID: 1704887379221684444}
+  txtEnemyHealth: {fileID: 3871567916339607648}
   playerPartInfoText: {fileID: 7851097414838027075}
   enemyPartInfoText: {fileID: 7116630804477933126}
+  goPlayerHealth: {fileID: 5318357167648126702}
+  goEnemyHealth: {fileID: 8021020676144894332}
+  healthShakeStrength: 100
+  healthShakeDuration: 0.2
 --- !u!1 &4867686386474847951
 GameObject:
   m_ObjectHideFlags: 0
@@ -1205,7 +1209,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0.000030517578, y: 0}
-  m_SizeDelta: {x: 589, y: 997}
+  m_SizeDelta: {x: 564.3887, y: 955.3403}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &646309431074978360
 CanvasRenderer:

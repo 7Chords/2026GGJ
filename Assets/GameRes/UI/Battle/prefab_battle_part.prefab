@@ -432,6 +432,8 @@ MonoBehaviour:
   goHealthPosPivot: {x: 0, y: -0.8}
   goOrderPosPivot: {x: -0.7, y: 0.7}
   goOrder: {fileID: 5799995615946025734}
+  hurtShakeStrength: 15
+  hurtShakeDuration: 0.15
 --- !u!1 &8092995272627141411
 GameObject:
   m_ObjectHideFlags: 0

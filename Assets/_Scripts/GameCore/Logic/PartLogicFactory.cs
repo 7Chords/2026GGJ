@@ -59,13 +59,15 @@ namespace GameCore.Logic
                 case EAttributeType.REFLECT:
                     {
 
+                        return null;
                     }
-                    break;
                 case EAttributeType.TRIGGER_MORE:
                     {
-
+                        return () =>
+                        {
+                            PartLogicHandler.DealTriggerMore(_info, _entryInfo);
+                        };
                     }
-                    break;
                 case EAttributeType.ATTACK_MORE:
                     {
 
@@ -101,9 +103,12 @@ namespace GameCore.Logic
 
                     }
                     break;
-                case EAttributeType.PENETRATE:
+                case EAttributeType.REAL_ATTACK:
                     {
-
+                        return () =>
+                        {
+                            PartLogicHandler.DealRealAttack(_info, _entryInfo);
+                        };
                     }
                     break;
                 case EAttributeType.PART_LOSE_TURN:
