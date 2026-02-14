@@ -64,47 +64,44 @@ namespace GameCore.UI
 
         private void OnClickEnter()
         {
-            // 1. Validation Logic
-            var playerPos = GameModel.instance.playerInfo.playerMapPosition;
-            var targetPos = _m_mapNode.GridPosition;
+            //// 1. Validation Logic
+            //var playerPos = GameModel.instance.playerInfo.playerMapPosition;
+            //var targetPos = _m_mapNode.GridPosition;
 
-            // Case A: First Move (Player not on map yet)
-            if (playerPos.x == -1)
-            {
-                if (targetPos.x != 0) 
-                {
-                    SCDebugHelper.Log("Must start at Layer 0!");
-                    return;
-                }
-            }
-            // Case B: Normal Move
-            else
-            {
-                // Check Layer (Must be Next Layer)
-                if (targetPos.x != playerPos.x + 1)
-                {
-                    SCDebugHelper.Log($"Can only move to Next Layer! Current: {playerPos.x}, Target: {targetPos.x}");
-                    return;
-                }
+            //// Case A: First Move (Player not on map yet)
+            //if (playerPos.x == -1)
+            //{
+            //    if (targetPos.x != 0) 
+            //    {
+            //        SCDebugHelper.Log("Must start at Layer 0!");
+            //        return;
+            //    }
+            //}
+            //// Case B: Normal Move
+            //else
+            //{
+            //    // Check Layer (Must be Next Layer)
+            //    if (targetPos.x != playerPos.x + 1)
+            //    {
+            //        SCDebugHelper.Log($"Can only move to Next Layer! Current: {playerPos.x}, Target: {targetPos.x}");
+            //        return;
+            //    }
 
-                // Check Connection
-                // Find Logic: Get Previous Node and check if it connects to Target Index
-                var prevNode = MapManager.instance.GetNode(playerPos.x, playerPos.y);
-                if (prevNode != null)
-                {
-                    if (!prevNode.nextLayerConnectedNodes.Contains(targetPos.y))
-                    {
-                        SCDebugHelper.Log("Not connected!");
-                         return;
-                    }
-                }
-            }
+            //    // Check Connection
+            //    // Find Logic: Get Previous Node and check if it connects to Target Index
+            //    var prevNode = MapManager.instance.GetNode(playerPos.x, playerPos.y);
+            //    if (prevNode != null)
+            //    {
+            //        if (!prevNode.nextLayerConnectedNodes.Contains(targetPos.y))
+            //        {
+            //            SCDebugHelper.Log("Not connected!");
+            //             return;
+            //        }
+            //    }
+            //}
 
-            // 2. Update Position
-            GameModel.instance.playerInfo.playerMapPosition = targetPos;
-            
-            // 3. Enter Logic
-            Debug.Log($"Enter Node Type: {_m_roomType} at {_m_mapNode.GridPosition}");
+            //// 2. Update Position
+            //GameModel.instance.playerInfo.playerMapPosition = targetPos;
 
             switch (_m_roomType)
             {

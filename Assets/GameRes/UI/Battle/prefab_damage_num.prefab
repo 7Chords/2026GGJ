@@ -112,7 +112,7 @@ MonoBehaviour:
   shakeStrength: 2
   shakeDuration: 0.1
   colorIsDamage: {r: 0.78113204, g: 0, b: 0, a: 1}
-  colorIsHeal: {r: 0, g: 1, b: 0, a: 1}
+  colorIsHeal: {r: 0, g: 0.5698112, b: 0, a: 1}
 --- !u!1 &6152919722129367015
 GameObject:
   m_ObjectHideFlags: 0
