@@ -98,11 +98,13 @@ namespace GameCore
             Vector2 screenPos = Vector2.zero;
 
             float itemScreenX = RectTransformUtility.WorldToScreenPoint(SCGame.instance.gameCamera, _worldPos).x;
+            float itemScreenY = RectTransformUtility.WorldToScreenPoint(SCGame.instance.gameCamera, _worldPos).y;
 
             bool showOnLeft = itemScreenX > Screen.width * GameConst.TOOLTIP_SHOW_ON_LEFT_THRESHOLD;
+            bool showOnUp = itemScreenY < Screen.height * GameConst.TOOLTIP_SHOW_ON_UP_THRESHOLD;
 
-            Vector2 offset = showOnLeft ? new Vector3(-GameConst.TOOLTIP_SHOW_X_OFFSET_SCREEN_RATIO * Screen.width, GameConst.TOOLTIP_SHOW_Y_OFFSET_SCREEN_RATIO * Screen.height) 
-                : new Vector3(GameConst.TOOLTIP_SHOW_X_OFFSET_SCREEN_RATIO * Screen.width, GameConst.TOOLTIP_SHOW_Y_OFFSET_SCREEN_RATIO * Screen.height);
+            Vector2 offset = new Vector3(GameConst.TOOLTIP_SHOW_X_OFFSET_SCREEN_RATIO * Screen.width * (showOnLeft?-1:1),
+                GameConst.TOOLTIP_SHOW_Y_OFFSET_SCREEN_RATIO * Screen.height * (showOnUp ? -1 : 1));
             screenPos = RectTransformUtility.WorldToScreenPoint(SCGame.instance.gameCamera, _worldPos) + offset;
 
             RectTransform toolTipRT = toolTipGo.GetRectTransform();
@@ -211,11 +213,13 @@ namespace GameCore
             Vector2 screenPos = Vector2.zero;
 
             float itemScreenX = RectTransformUtility.WorldToScreenPoint(SCGame.instance.gameCamera, _worldPos).x;
+            float itemScreenY = RectTransformUtility.WorldToScreenPoint(SCGame.instance.gameCamera, _worldPos).y;
 
             bool showOnLeft = itemScreenX > Screen.width * GameConst.TOOLTIP_SHOW_ON_LEFT_THRESHOLD;
+            bool showOnUp = itemScreenY < Screen.height * GameConst.TOOLTIP_SHOW_ON_UP_THRESHOLD;
 
-            Vector2 offset = showOnLeft ? new Vector3(-GameConst.TOOLTIP_SHOW_X_OFFSET_SCREEN_RATIO * Screen.width, GameConst.TOOLTIP_SHOW_Y_OFFSET_SCREEN_RATIO * Screen.height)
-                : new Vector3(GameConst.TOOLTIP_SHOW_X_OFFSET_SCREEN_RATIO * Screen.width, GameConst.TOOLTIP_SHOW_Y_OFFSET_SCREEN_RATIO * Screen.height);
+            Vector2 offset = new Vector3(GameConst.TOOLTIP_SHOW_X_OFFSET_SCREEN_RATIO * Screen.width * (showOnLeft ? -1 : 1),
+                GameConst.TOOLTIP_SHOW_Y_OFFSET_SCREEN_RATIO * Screen.height * (showOnUp ? -1 : 1));
             screenPos = RectTransformUtility.WorldToScreenPoint(SCGame.instance.gameCamera, _worldPos) + offset;
 
             RectTransform toolTipRT = toolTipGo.GetRectTransform();
