@@ -68,11 +68,13 @@ namespace GameCore.Logic
                             PartLogicHandler.DealTriggerMore(_info, _entryInfo);
                         };
                     }
-                case EAttributeType.ATTACK_MORE:
+                case EAttributeType.DAMAGE_MULTIPILER:
                     {
-
+                        return () =>
+                        {
+                            PartLogicHandler.DealAttackMultiplier(_info, _entryInfo);
+                        };
                     }
-                    break;
                 case EAttributeType.HIT_CHANCE_UP:
                     {
 
@@ -112,12 +114,13 @@ namespace GameCore.Logic
                             PartLogicHandler.DealRealAttack(_info, _entryInfo);
                         };
                     }
-                    break;
                 case EAttributeType.PART_LOSE_TURN:
                     {
-
+                        return () =>
+                        {
+                            PartLogicHandler.DealPartLoseTurn(_info, _entryInfo);
+                        };
                     }
-                    break;
             }
 
 

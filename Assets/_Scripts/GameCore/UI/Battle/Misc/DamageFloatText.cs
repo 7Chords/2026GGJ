@@ -5,6 +5,13 @@ using UnityEngine.UI;
 
 namespace GameCore.UI
 {
+    public enum EFloatNumType
+    {
+        DAMAGE,
+        HEAL,
+        COIN
+    }
+
     /// <summary>
     /// TBS伤害飘字
     /// </summary>
@@ -32,6 +39,8 @@ namespace GameCore.UI
         public Color colorIsDamage;
         [Header("是治疗文本的颜色")]
         public Color colorIsHeal;
+        [Header("是金钱文本的颜色")]
+        public Color colorIsCoin;
 
         private TweenContainer _m_tweenContainer;
         private Vector3 _originalPosition;

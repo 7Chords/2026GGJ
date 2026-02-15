@@ -61,7 +61,6 @@ namespace GameCore.Logic
                 GameModel.instance.PartTakeDamage(pair.Key, Mathf.RoundToInt(pair.Value * perGridDamage));
             }
         }
-
         public static void DealRealAttack(PartInfo _partInfo, EntryInfo _entryInfo)
         {
             float damage = _entryInfo.attributeValue;
@@ -83,7 +82,7 @@ namespace GameCore.Logic
         {
             float chance = _entryInfo.attributeChance;
             float triggerMoreTimes = _entryInfo.attributeValue;
-            float randomNum = RandomUtility.GetRandomGenerator(EModuleType.COMBAT).Next(0, 1);
+            float randomNum = RandomUtility.GetRandomGenerator(EModuleType.COMBAT).Next(0, 100)/100f;
             List<PartInfo> partInfoList = new List<PartInfo>();
 
             if(randomNum < chance)
@@ -119,9 +118,58 @@ namespace GameCore.Logic
                 }
             }
         }
-        public static void DealAttackMore(PartInfo _partInfo, EntryInfo _entryInfo)
+        public static void DealAttackMultiplier(PartInfo _partInfo, EntryInfo _entryInfo)
         {
+            float chance = _entryInfo.attributeChance;
+            float mulitiplier = _entryInfo.attributeValue;
+            float randomNum = RandomUtility.GetRandomGenerator(EModuleType.COMBAT).Next(0, 100) / 100f;
+            List<PartInfo> partInfoList = new List<PartInfo>();
 
+            if (randomNum < chance)
+            {
+                if (!_partInfo.isEnemyPart)
+                {
+                    for (int i = 0; i < _partInfo.curEffectFacePosList.Count; i++)
+                    {
+                        FaceGridInfo gridInfo = GameModel.instance.playerFaceGridInfoList.Find(x => x.pos == _partInfo.curEffectFacePosList[i]);
+                        if (gridInfo == null)
+                            continue;
+                        if (gridInfo.hasPart && gridInfo.ownerPart != null)
+                            partInfoList.Add(gridInfo.ownerPart);
+                    }
+                    for (int i = 0; i < partInfoList.Count; i++)
+                    {
+                        if (partInfoList[i].partRefObj.partType == EPartType.MOUTH)
+                        {
+                            EntryInfo info = partInfoList[i].entryInfoList.Find(x =>( x.attributeType == EAttributeType.ATTACK || x.attributeType == EAttributeType.REAL_ATTACK));
+                            if (info == null)
+                                continue;
+                            info.attributeValue *= mulitiplier;
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < _partInfo.curEffectFacePosList.Count; i++)
+                    {
+                        FaceGridInfo gridInfo = GameModel.instance.enemyFaceGridInfoList.Find(x => x.pos == _partInfo.curEffectFacePosList[i]);
+                        if (gridInfo == null)
+                            continue;
+                        if (gridInfo.hasPart && gridInfo.ownerPart != null)
+                            partInfoList.Add(gridInfo.ownerPart);
+                    }
+                    for (int i = 0; i < partInfoList.Count; i++)
+                    {
+                        if (partInfoList[i].partRefObj.partType == EPartType.MOUTH)
+                        {
+                            EntryInfo info = partInfoList[i].entryInfoList.Find(x => x.attributeType == EAttributeType.ATTACK);
+                            if (info == null)
+                                continue;
+                            info.attributeValue *= mulitiplier;
+                        }
+                    }
+                }
+            }
         }
         public static void DealHitChanceUp(PartInfo _partInfo, EntryInfo _entryInfo)
         {
@@ -165,6 +213,42 @@ namespace GameCore.Logic
                 }
                 for (int i = 0; i < partInfoList.Count; i++)
                     GameModel.instance.PartHeal(partInfoList[i], Mathf.RoundToInt(healAmount));
+            }
+        }
+        public static void DealPartLoseTurn(PartInfo _partInfo, EntryInfo _entryInfo)
+        {
+            float chance = _entryInfo.attributeChance;
+            float randomNum = RandomUtility.GetRandomGenerator(EModuleType.COMBAT).Next(0, 100)/100f;
+            List<PartInfo> partInfoList = new List<PartInfo>();
+
+            if (randomNum < chance)
+            {
+                if (!_partInfo.isEnemyPart)
+                {
+                    for (int i = 0; i < _partInfo.curEffectFacePosList.Count; i++)
+                    {
+                        FaceGridInfo gridInfo = GameModel.instance.enemyFaceGridInfoList.Find(x => x.pos == _partInfo.curEffectFacePosList[i]);
+                        if (gridInfo == null)
+                            continue;
+                        if (gridInfo.hasPart && gridInfo.ownerPart != null)
+                            partInfoList.Add(gridInfo.ownerPart);
+                    }
+                    for (int i = 0; i < partInfoList.Count; i++)
+                        BattleManager.instance.RemovePartFromList(false, partInfoList[i]);
+                }
+                else
+                {
+                    for (int i = 0; i < _partInfo.curEffectFacePosList.Count; i++)
+                    {
+                        FaceGridInfo gridInfo = GameModel.instance.playerFaceGridInfoList.Find(x => x.pos == _partInfo.curEffectFacePosList[i]);
+                        if (gridInfo == null)
+                            continue;
+                        if (gridInfo.hasPart && gridInfo.ownerPart != null)
+                            partInfoList.Add(gridInfo.ownerPart);
+                    }
+                    for (int i = 0; i < partInfoList.Count; i++)
+                        BattleManager.instance.RemovePartFromList(true, partInfoList[i]);
+                }
             }
         }
     }

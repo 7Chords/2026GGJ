@@ -53,6 +53,11 @@ namespace GameCore.UI
             SCMsgCenter.UnregisterMsg(SCMsgConst.ENEMY_FACE_PART_RANGE_HIGHLIGHT, onEnemyFacePartRangeHighlight);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.CLEAR_ENEMY_PREVIEW, onClearPreview);
 
+            //玩家的高亮相关
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PLAYER_FACE_PART_RANGE_HIGHLIGHT, onEnemyFacePartRangeHighlight);
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.CLEAR_PLAYER_PREVIEW, onClearPreview);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PLACE_PART_PREVIEW, onPlacePartPreview);
+
             if (_m_gridPanelList != null)
             {
                 foreach (var grid in _m_gridPanelList)
@@ -70,6 +75,12 @@ namespace GameCore.UI
             SCMsgCenter.RegisterMsgAct(SCMsgConst.NEW_GANE_START, onNewGameStart);
             SCMsgCenter.RegisterMsg(SCMsgConst.ENEMY_FACE_PART_RANGE_HIGHLIGHT, onEnemyFacePartRangeHighlight);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.CLEAR_ENEMY_PREVIEW, onClearPreview);
+
+            //玩家的高亮相关
+            SCMsgCenter.RegisterMsg(SCMsgConst.PLAYER_FACE_PART_RANGE_HIGHLIGHT, onEnemyFacePartRangeHighlight);
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.CLEAR_PLAYER_PREVIEW, onClearPreview);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PLACE_PART_PREVIEW, onPlacePartPreview);
+
 
             if (_m_gridPanelList != null)
             {
@@ -198,16 +209,47 @@ namespace GameCore.UI
             }
 
         }
-
         private void onClearPreview()
         {
             foreach (var gridPanel in _m_gridPanelList)
                 gridPanel.SetNoPreview();
         }
-
         private void onNewGameStart()
         {
             refreshShow();
+        }
+
+        private void onPlacePartPreview(object[] _objs)
+        {
+            if (_objs == null || _objs.Length < 2)
+                return;
+            List<Vector2Int> occupyPosList = _objs[0] as List<Vector2Int>;
+            List<Vector2Int> effectPosList = _objs[1] as List<Vector2Int>;
+            if (occupyPosList == null || effectPosList == null)
+                return;
+            foreach (var panel in _m_gridPanelList)
+                panel.SetNoPreview();
+
+            bool canPlace = GameModel.instance.CanPlacePart(occupyPosList);
+            UIPanelEnemyMaskGrid tmpGrid = null;
+            for (int i = 0; i < occupyPosList.Count; i++)
+            {
+                tmpGrid = _m_gridPanelList.Find(x => x.gridInfo.pos == occupyPosList[i]);
+                if (tmpGrid == null)
+                    continue;
+                tmpGrid.SetOccupyPreview(canPlace);
+            }
+            //可以放置再显示效果预览 以放置颜色优先
+            if (canPlace && !occupyPosList.Vector2IntListEquals(effectPosList))
+            {
+                for (int i = 0; i < effectPosList.Count; i++)
+                {
+                    tmpGrid = _m_gridPanelList.Find(x => x.gridInfo.pos == effectPosList[i]);
+                    if (tmpGrid == null)
+                        continue;
+                    tmpGrid.SetEffectPreview();
+                }
+            }
         }
     }
 }

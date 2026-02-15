@@ -3,10 +3,10 @@
 101002	里昂之眼	EYE	PRECIOUS	5	作用范围上的部位有100%概率触发两次效果	spr_icon_eye_1	spr_eye_1	ACTIVE:TRIGGER_MORE:1:2	0:0	0:1
 101003	尖嘴	MOUTH	RARE	15	直接对本体造成15点伤害	spr_icon_mouth_1	spr_mouth_1	ACTIVE:REAL_ATTACK:1:15	0:0;	0:0
 101004	希尔之鼻	NOSE	NORMAL	10	回复作用范围内部位10点生命值	spr_icon_nose_2	spr_nose_2	ACTIVE:HEAL_PART:1:10	0:0	-1:1;0:1;1:1;-1:0;1:0;-1:-1;0:-1;1:-1
-101005	美杜莎之眼	EYE	NORMAL	5	使命中范围内的目标无法移动	spr_icon_eye_2	spr_eye_2	ACTIVE:PART_LOSE_TURN:0.2:0	0:0;1:0;0:1;1:1	0:2;1:2;0:-1;1:-1
+101005	美杜莎之眼	EYE	NORMAL	5	使命中范围内的目标无法移动	spr_icon_eye_2	spr_eye_2	ACTIVE:PART_LOSE_TURN:1:0	0:0;1:0;0:1;1:1	0:2;1:2;0:-1;1:-1
 101006	大只嘴	MOUTH	NORMAL	15	对大范围内的目标造成10点伤害	spr_icon_mouth_4	spr_mouth_4	ACTIVE:ATTACK:1:10	0:0;0:1;1:0;1:1;2:0;2:1	0:0;0:1;1:0;1:1;2:0;2:1
 101007	伊莉米蕾之鼻	NOSE	NORMAL	10	去除作用范围内的负面部位	spr_icon_nose_3	spr_nose_3	ACTIVE:CLEAR_BAD_SKIN:1:0	0:0;0:1;0:2	-1:4;0:4;1:4;2:3;2:2;2:1;2:0;2:-1;1:-2;0:-2;-1:-2;-2:-1;-2:0;-2:1;-2:2;-2:3
-101008	虎之眼	EYE	RARE	5	作用范围上的嘴巴有20%概率造成双倍伤害	spr_icon_eye_3	spr_eye_3	ACTIVE:ATTACK_MORE:0.4:2	0:0;0:1;1:0;1:1	0:2;1:2;-1:1;2:1;-1:0;2:0;0:-1;1:-1
+101008	虎之眼	EYE	RARE	5	作用范围上的嘴巴有100%概率造成双倍伤害	spr_icon_eye_3	spr_eye_3	ACTIVE:DAMAGE_MULTIPILER:1:2	0:0;0:1;1:0;1:1	0:2;1:2;-1:1;2:1;-1:0;2:0;0:-1;1:-1
 
 
 

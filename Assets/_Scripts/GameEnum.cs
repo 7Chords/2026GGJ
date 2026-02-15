@@ -24,7 +24,7 @@ namespace GameCore
         REAL_ATTACK,//真实伤害
         REFLECT,//反射
         TRIGGER_MORE,//触发两次
-        ATTACK_MORE,//攻击两次
+        DAMAGE_MULTIPILER,//攻击多倍伤害
         HIT_CHANCE_UP,//命中率上升
         HIT_CHANCE_DOWN,//命中率下降
         TRIGGER_CHANCE_UP,//触发上升

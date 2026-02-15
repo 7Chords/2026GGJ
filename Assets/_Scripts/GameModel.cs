@@ -57,12 +57,16 @@ namespace GameCore
 
         public void PlayerHeal(int _amount)
         {
+            if (_amount <= 0)
+                return;
             playerInfo.currentHealth = Mathf.Clamp(playerInfo.currentHealth + _amount, 0, playerInfo.maxHealth);
             SCMsgCenter.SendMsg(SCMsgConst.PLAYER_HEAL);
         }
 
         public void PlayerTakeDamage(int _amount)
         {
+            if (_amount <= 0)
+                return;
             playerInfo.currentHealth = Mathf.Clamp(playerInfo.currentHealth - _amount, 0, playerInfo.maxHealth);
             SCMsgCenter.SendMsg(SCMsgConst.PLAYER_HURT);
 
@@ -70,6 +74,8 @@ namespace GameCore
 
         public void EnemyHeal(int _amount)
         {
+            if (_amount <= 0)
+                return;
             curEnemyInfo.currentHealth = Mathf.Clamp(curEnemyInfo.currentHealth + _amount, 0, curEnemyInfo.maxHealth);
             SCMsgCenter.SendMsg(SCMsgConst.ENEMY_HEAL);
 
@@ -77,6 +83,8 @@ namespace GameCore
 
         public void EnemyTakeDamage(int _amount)
         {
+            if (_amount <= 0)
+                return;
             curEnemyInfo.currentHealth = Mathf.Clamp(curEnemyInfo.currentHealth - _amount, 0, curEnemyInfo.maxHealth);
             SCMsgCenter.SendMsg(SCMsgConst.ENEMY_HURT);
 
@@ -84,12 +92,16 @@ namespace GameCore
 
         public void PartTakeDamage(PartInfo _partInfo,int _amount)
         {
+            if (_amount <= 0)
+                return;
             _partInfo.currentHealth = Mathf.Clamp(_partInfo.currentHealth - _amount, 0, _partInfo.maxHealth);
             SCMsgCenter.SendMsg(SCMsgConst.PART_HURT, _partInfo, _amount);
 
         }
         public void PartHeal(PartInfo _partInfo, int _amount)
         {
+            if (_amount <= 0)
+                return;
             _partInfo.currentHealth = Mathf.Clamp(_partInfo.currentHealth + _amount, 0, _partInfo.maxHealth);
             SCMsgCenter.SendMsg(SCMsgConst.PART_HEAL, _partInfo, _amount);
 

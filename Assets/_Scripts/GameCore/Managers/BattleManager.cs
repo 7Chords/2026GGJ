@@ -186,6 +186,34 @@ namespace GameCore
             part.TriggerActiveLogic(EAttributeTriggerPointType.ACTIVE);
             ExecuteNext(isPlayer);
         }
+
+        /// <summary>
+        /// 从队列中删除指定的部位（按引用删除）
+        /// </summary>
+        public bool RemovePartFromList(bool isPlayer, PartInfo part)
+        {
+            if (part == null) return false;
+
+            var queue = isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
+            bool removed = queue.Remove(part);
+
+            // 如果删除的是还没执行到的，队列索引不用动，自动跳过
+            return removed;
+        }
+
+        /// <summary>
+        /// 根据索引删除队列中的部位
+        /// </summary>
+        public bool RemovePartAt(bool isPlayer, int index)
+        {
+            var queue = isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
+            if (index < 0 || index >= queue.Count)
+                return false;
+
+            queue.RemoveAt(index);
+            return true;
+        }
+
         #endregion
 
 
@@ -204,29 +232,6 @@ namespace GameCore
                 UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCFrame.UI.SCUIShowType.FULL));
             });
         }
-
-        //public void InsertExcuteInfo2List(PartInfo _info, int _idx, bool _isPlayer)
-        //{
-        //    if (_info == null) return;
-        //    if (_isPlayer) playerExcuteInfoList.Insert(_idx, _info);
-        //    else enemyExcuteInfoList.Insert(_idx, _info);
-        //}
-
-        //public void RemoveInfoFromList(PartInfo _info, bool _isPlayer)
-        //{
-        //    if (_info == null) return;
-        //    if (_isPlayer)
-        //    {
-        //        if (playerExcuteInfoList.Contains(_info))
-        //            playerExcuteInfoList.Remove(_info);
-        //    }
-        //    else
-        //    {
-        //        if (enemyExcuteInfoList.Contains(_info))
-        //            enemyExcuteInfoList.Remove(_info);
-        //    }
-        //}
-
         public int GetIndexOfPartInfo(PartInfo _info, bool _isPlayer)
         {
             return _isPlayer ? playerExcuteInfoList.IndexOf(_info) : enemyExcuteInfoList.IndexOf(_info);

@@ -66,6 +66,14 @@ namespace GameCore
             {
                 localEffectPosList.Add(new Vector2Int(partRefObj.effectPosList[i].x, partRefObj.effectPosList[i].y));
             }
+
+            entryInfoList = new List<EntryInfo>();
+            EntryInfo entryInfo = null;
+            foreach (var entry in partRefObj.entryList)
+            {
+                entryInfo = new EntryInfo(entry);
+                entryInfoList.Add(entryInfo);
+            }
             ClearOnFaceState();
         }
         public void ResetToDeck()
@@ -101,8 +109,6 @@ namespace GameCore
             }
             return new Vector2Int(minX, minY);
         }
-
-
         public void TriggerActiveLogic(EAttributeTriggerPointType _pointType,object[] _objs = null)
         {
             logicObj = PartLogicFactory.CreateLogic(partRefObj.id, this);
