@@ -97,10 +97,21 @@ namespace GameCore.UI
                 return;
             AudioMgr.instance.PlaySfx("sfx_mouse_enter");
 
-            //todo
-            GameCommon.ShowTooltip(_m_goodsInfo.goodsRefObj.goodsName, 
-                _m_goodsInfo.goodsRefObj.goodsDesc,
-                GetGameObject().transform.position);
+            if (_m_goodsInfo.goodsRefObj.goodsType == EGoodsType.PART)
+            {
+                PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == _m_goodsInfo.goodsRefObj.partId);
+                if (partRefObj == null)
+                    return;
+                GameCommon.ShowTooltip(partRefObj,
+                    GetGameObject().transform.position);
+            }
+            else
+            {
+                GameCommon.ShowTooltip(_m_goodsInfo.goodsRefObj.goodsName,
+                    _m_goodsInfo.goodsRefObj.goodsDesc,
+                    GetGameObject().transform.position,EQualityType.NONE,false);
+            }
+            
 
             _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
 

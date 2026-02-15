@@ -1,4 +1,5 @@
 using DG.Tweening;
+using GameCore.RefData;
 using SCFrame;
 using System.Collections;
 using System.Collections.Generic;
@@ -174,7 +175,7 @@ namespace GameCore.UI
             canvasGroup.alpha = 0;
             SCCommon.SetGameObjectEnable(gameObject, true);
             SCCommon.SetGameObjectEnable(goGrid, _showGridInfo);
-            SCCommon.SetGameObjectEnable(txtQuality.gameObject, _quality!= EQualityType.NONE);
+            SCCommon.SetGameObjectEnable(txtQuality.transform.parent.gameObject, _quality!= EQualityType.NONE);
             _m_tweenContainer.RegDoTween(canvasGroup.DOFade(1, fadeInDuratin));
         }
 
@@ -193,6 +194,25 @@ namespace GameCore.UI
             SCCommon.SetGameObjectEnable(txtQuality.gameObject, _partInfo.partRefObj.qualityType != EQualityType.NONE);
             _m_tweenContainer.RegDoTween(canvasGroup.DOFade(1, fadeInDuratin));
         }
+
+        public void ShowTooltip(PartRefObj _partRefObj, Vector2 _targetLocalPos, bool _showGridInfo = true)
+        {
+            setBaseInfo(_partRefObj.partName, _partRefObj.partDesc, _partRefObj.qualityType);
+            Vector2 adaptivePos = calculateAdaptivePosition(_targetLocalPos);
+            setLocalPosition(adaptivePos);
+            canvasGroup.alpha = 0;
+            SCCommon.SetGameObjectEnable(gameObject, true);
+            SCCommon.SetGameObjectEnable(goGrid, _showGridInfo);
+            if (_showGridInfo)
+            {
+                setGridInfo(_partRefObj.GetOccupyPosList(), _partRefObj.GetEffectPosList());
+            }
+            SCCommon.SetGameObjectEnable(txtQuality.gameObject, _partRefObj.qualityType != EQualityType.NONE);
+            _m_tweenContainer.RegDoTween(canvasGroup.DOFade(1, fadeInDuratin));
+        }
+
+
+
 
         /// <summary>
         /// 生成单个格子并设置位置
