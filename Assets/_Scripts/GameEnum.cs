@@ -32,6 +32,9 @@ namespace GameCore
         CLEAR_DEFULL,//清除负面效果
         CLEAR_BAD_SKIN,//清楚坏的皮肤
         PART_LOSE_TURN,//部位无法行动
+        GET_COIN,
+        GET_DAMAGE_BY_ATTACK,
+        ATTACK_BY_COIN,
     }
 
     public enum EAttributeTriggerPointType

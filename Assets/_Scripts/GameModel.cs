@@ -96,7 +96,14 @@ namespace GameCore
                 return;
             _partInfo.currentHealth = Mathf.Clamp(_partInfo.currentHealth - _amount, 0, _partInfo.maxHealth);
             SCMsgCenter.SendMsg(SCMsgConst.PART_HURT, _partInfo, _amount);
-
+            if (_partInfo.currentHealth == 0)
+            {
+                SCMsgCenter.SendMsg(SCMsgConst.PART_DIE);
+                if (_partInfo.isEnemyPart)
+                    curEnemyInfo.battlePartInfoList.Remove(_partInfo);
+                else
+                    playerInfo.battlePartInfoList.Remove(_partInfo);
+            }
         }
         public void PartHeal(PartInfo _partInfo, int _amount)
         {
@@ -283,8 +290,6 @@ namespace GameCore
             PlayerDrawParts(GameConst.DRAW_CARD_COUNT_PER_TURN);
             GenerateRandomEnemy();
 
-            //todo：由于unity gridlayout的创建问题 要等一段时间格子坐标啥的才创建完成不能马上创建敌人部位
-            //否则位置出错 后续优化 采用一段动画表现显示页面给unity留出时间
             SCMsgCenter.SendMsg(SCMsgConst.NEW_GANE_START);
         }
 

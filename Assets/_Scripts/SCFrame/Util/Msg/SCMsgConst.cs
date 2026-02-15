@@ -27,8 +27,10 @@ public class SCMsgConst
     public const int PART_HEAL = 2020;
     public const int PLAYER_HEAL = 2021;
     public const int ENEMY_HEAL = 2022;
-    public const int PART_ACTIVE = 2023;
-
+    public const int PART_ACTIVE_START = 2023;
+    public const int PART_ACTIVE_EFFECT = 2024;
+    public const int PART_ACTIVE_END = 2025;
+    public const int PART_DIE = 2026;
     #endregion
 
     #region 系统相关 99

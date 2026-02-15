@@ -87,7 +87,19 @@ namespace GameCore
             damageGO.GetComponent<DamageFloatText>().Initialize(_healAmount, false);
         }
 
-
+        /// <summary>
+        /// 展示效果文本
+        /// </summary>
+        public static void ShowEffectText(string _content, Vector3 _worldPos)
+        {
+            GameObject damageGO = ResourcesHelper.LoadGameObject(
+                "prefab_effect_text",
+                SCGame.instance.topLayerRoot.transform);
+            damageGO.GetRectTransform().localPosition = SCUICommon.UIWorldToUIPoint(
+                SCGame.instance.topLayerRoot.GetRectTransform(),
+                _worldPos);
+            damageGO.GetComponent<PartEffectText>().Initialize(_content);
+        }
 
         public static CommonTooltip ShowTooltip(string _name, string _desc, Vector3 _worldPos, EQualityType _qualityType = EQualityType.NONE, bool _showGridInfo = true)
         {

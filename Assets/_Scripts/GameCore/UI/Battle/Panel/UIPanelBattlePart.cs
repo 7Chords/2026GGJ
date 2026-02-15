@@ -32,7 +32,9 @@ namespace GameCore.UI
         {
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_HURT, onPartHurt);
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_HEAL, onPartHeal);
-            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_ACTIVE, onPartActive);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_ACTIVE_START, onPartActiveStart);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_ACTIVE_EFFECT, onPartActiveEffect);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_ACTIVE_END, onPartActiveEnd);
 
             mono.imgGO.RemoveMouseEnter(onMouseEnter);
             mono.imgGO.RemoveMouseExit(onMouseExit);
@@ -42,11 +44,14 @@ namespace GameCore.UI
         {
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_HURT, onPartHurt);
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_HEAL, onPartHeal);
-            SCMsgCenter.RegisterMsg(SCMsgConst.PART_ACTIVE, onPartActive);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PART_ACTIVE_START, onPartActiveStart);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PART_ACTIVE_EFFECT, onPartActiveEffect);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PART_ACTIVE_END, onPartActiveEnd);
 
             mono.imgGO.AddMouseEnter(onMouseEnter);
             mono.imgGO.AddMouseExit(onMouseExit);
         }
+
 
         public void SetInfo(PartInfo _info)
         {
@@ -158,19 +163,41 @@ namespace GameCore.UI
                 GameCommon.ShowHealFloatText(amount, GetGameObject().transform.position);
             }
         }
-        private void onPartActive(object[] _objs)
+        private void onPartActiveStart(object[] _objs)
         {
             if (_objs == null || _objs.Length == 0)
                 return;
             PartInfo info = _objs[0] as PartInfo;
             if (_m_partInfo == info)
             {
-                Sequence seq = DOTween.Sequence();
-                seq.Append(GetGameObject().transform.DOScale(mono.activeScale, mono.scaleChgDuration));
-                seq.Append(GetGameObject().transform.DOScale(Vector3.one, mono.scaleChgDuration));
-                _m_tweenContainer?.RegDoTween(seq);
+                //todo
+                GameCommon.ShowEffectText("ÐÐ¶¯", GetGameObject().transform.position);
+                Tween tween = GetGameObject().transform.DOScale(mono.activeScale, mono.scaleChgDuration);
+                _m_tweenContainer?.RegDoTween(tween);
             }
 
+        }
+
+        private void onPartActiveEffect(object[] _objs)
+        {
+            //if (_objs == null || _objs.Length == 0)
+            //    return;
+            //PartInfo info = _objs[0] as PartInfo;
+            //if (_m_partInfo == info)
+            //{
+            //}
+        }
+        private void onPartActiveEnd(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            PartInfo info = _objs[0] as PartInfo;
+            if (_m_partInfo == info)
+            {
+                Tween tween = GetGameObject().transform.DOScale(Vector3.one, mono.scaleChgDuration);
+                _m_tweenContainer?.RegDoTween(tween);
+
+            }
         }
     }
 }

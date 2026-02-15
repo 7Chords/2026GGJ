@@ -103,6 +103,11 @@ namespace GameCore
         public void InsertPartAt(bool isPlayer, int index, PartInfo part)
         {
             if (part == null) return;
+            //之前执行过的不能再次执行
+            if (isPlayer && index < _playerCurrentIndex)
+                return;
+            if (!isPlayer && index < _enemyCurrentIndex)
+                return;
 
             var queue = isPlayer ? _m_playerExecQueue : _m_enemyExecQueue;
             index = Mathf.Clamp(index, 0, queue.Count);
@@ -182,8 +187,13 @@ namespace GameCore
         private IEnumerator ExecuteOneRoutine(bool isPlayer, PartInfo part)
         {
             yield return new WaitForSeconds(1f);
-            SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE, part);
+            SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_START, part);
+            yield return new WaitForSeconds(1f);
+            SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_EFFECT, part);
             part.TriggerActiveLogic(EAttributeTriggerPointType.ACTIVE);
+            yield return new WaitForSeconds(1.25f);
+            SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_END, part);
+
             ExecuteNext(isPlayer);
         }
 
@@ -234,7 +244,7 @@ namespace GameCore
         }
         public int GetIndexOfPartInfo(PartInfo _info, bool _isPlayer)
         {
-            return _isPlayer ? playerExcuteInfoList.IndexOf(_info) : enemyExcuteInfoList.IndexOf(_info);
+            return _isPlayer ? _m_playerExecQueue.IndexOf(_info) : _m_enemyExecQueue.IndexOf(_info);
         }
     }
 }
