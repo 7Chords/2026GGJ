@@ -422,8 +422,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiMask: {fileID: 0}
   canvasGroup: {fileID: 6192236285445351515}
-  fadeInDuration: 0
-  fadeOutDuration: 0
+  fadeInDuration: 0.2
+  fadeOutDuration: 0.5
   imgGO: {fileID: 2761328458269806129}
   imgPart: {fileID: 6783100560751295621}
   txtHealth: {fileID: 926267406453320684}

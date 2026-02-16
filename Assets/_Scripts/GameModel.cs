@@ -98,11 +98,21 @@ namespace GameCore
             SCMsgCenter.SendMsg(SCMsgConst.PART_HURT, _partInfo, _amount);
             if (_partInfo.currentHealth == 0)
             {
-                SCMsgCenter.SendMsg(SCMsgConst.PART_DIE);
+                SCMsgCenter.SendMsg(SCMsgConst.PART_DIE,_partInfo);
                 if (_partInfo.isEnemyPart)
+                {
                     curEnemyInfo.battlePartInfoList.Remove(_partInfo);
+                    BattleManager.instance.RemovePartFromList(false, _partInfo);
+                    SCMsgCenter.SendMsg(SCMsgConst.BATTLE_ENEMY_PART_ORDER_CHG);
+
+                }
                 else
+                {
                     playerInfo.battlePartInfoList.Remove(_partInfo);
+                    BattleManager.instance.RemovePartFromList(true, _partInfo);
+                    SCMsgCenter.SendMsg(SCMsgConst.BATTLE_PLAYER_PART_ORDER_CHG);
+
+                }
             }
         }
         public void PartHeal(PartInfo _partInfo, int _amount)
@@ -299,7 +309,15 @@ namespace GameCore
             //敌人和玩家都要做：把脸部五官回收到busy 原来busy回收到deck deck抽min(3,busyMax-curBusy) 格子全部设置为不占用
             //敌人还要重新生成一份布局
             playerInfo.deckPartInfoList.AddRange(playerInfo.busyPartInfoList);
+            for (int i = 0; i < playerInfo.busyPartInfoList.Count; i++)
+            {
+                playerInfo.busyPartInfoList[i].ResetToDeck();
+            }
             playerInfo.busyPartInfoList.Clear();
+            for(int i =0;i< playerInfo.battlePartInfoList.Count;i++)
+            {
+                playerInfo.battlePartInfoList[i].ResetToBusy();
+            }
             playerInfo.busyPartInfoList.AddRange(playerInfo.battlePartInfoList);
             playerInfo.battlePartInfoList.Clear();
             int playerDrawCnt = Mathf.Min(GameConst.DRAW_CARD_COUNT_PER_TURN, GameConst.BUSY_CARD_MAX_COUNT - playerInfo.battlePartInfoList.Count);
@@ -308,7 +326,15 @@ namespace GameCore
                 info.SetEmpty();
 
             curEnemyInfo.deckPartInfoList.AddRange(curEnemyInfo.busyPartInfoList);
+            for (int i = 0; i < curEnemyInfo.busyPartInfoList.Count; i++)
+            {
+                curEnemyInfo.busyPartInfoList[i].ResetToDeck();
+            }
             curEnemyInfo.busyPartInfoList.Clear();
+            for (int i = 0; i < curEnemyInfo.battlePartInfoList.Count; i++)
+            {
+                curEnemyInfo.battlePartInfoList[i].ResetToBusy();
+            }
             curEnemyInfo.busyPartInfoList.AddRange(curEnemyInfo.battlePartInfoList);
             curEnemyInfo.battlePartInfoList.Clear();
             int enemyDrawCnt = Mathf.Min(GameConst.DRAW_CARD_COUNT_PER_TURN, GameConst.BUSY_CARD_MAX_COUNT - curEnemyInfo.battlePartInfoList.Count);

@@ -31,6 +31,9 @@ public class SCMsgConst
     public const int PART_ACTIVE_EFFECT = 2024;
     public const int PART_ACTIVE_END = 2025;
     public const int PART_DIE = 2026;
+    public const int BATTLE_ENEMY_PART_ORDER_CHG = 2027;
+    public const int BATTLE_PLAYER_PART_ORDER_CHG = 2028;
+
     #endregion
 
     #region 系统相关 99
