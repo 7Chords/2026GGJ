@@ -58,7 +58,7 @@ namespace GameCore.Logic
             }
             foreach(var pair in partOccpuyGridNumDic)
             {
-                GameModel.instance.PartTakeDamage(pair.Key, Mathf.RoundToInt(pair.Value * perGridDamage));
+                GameModel.instance.PartTakeDamage(pair.Key, _partInfo,Mathf.RoundToInt(pair.Value * perGridDamage));
             }
         }
         public static void DealRealAttack(PartInfo _partInfo, EntryInfo _entryInfo)
@@ -73,10 +73,10 @@ namespace GameCore.Logic
                 GameModel.instance.PlayerTakeDamage(Mathf.RoundToInt(damage));
             }
         }
-        public static void DealReflect(PartInfo _receiverInfo, EntryInfo _entryInfo,PartInfo _senderInfo)
+        public static void DealReflect(PartInfo _receiverInfo, EntryInfo _entryInfo,PartInfo _senderInfo,int _damage)
         {
             float damage = _entryInfo.attributeValue;
-            GameModel.instance.PartTakeDamage(_senderInfo, Mathf.RoundToInt(damage));
+            GameModel.instance.PartTakeDamage(_senderInfo, _receiverInfo, Mathf.RoundToInt(damage));
         }
         public static void DealTriggerMore(PartInfo _partInfo, EntryInfo _entryInfo)
         {

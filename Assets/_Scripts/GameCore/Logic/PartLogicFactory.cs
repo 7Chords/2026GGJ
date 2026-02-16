@@ -43,7 +43,50 @@ namespace GameCore.Logic
             return logicObj;
         }
 
-        public static Action GetActionByAttributeType(PartInfo _info,EntryInfo _entryInfo)
+
+        public static void RecreateActiveLogic(PartLogic _partLogic, PartInfo _partInfo)
+        {
+            if (_partLogic == null || _partInfo == null)
+                return;
+            _partLogic.ClearOnPartActiveAction();
+            EntryInfo entryInfo = null;
+            for (int i = 0; i < _partInfo.entryInfoList.Count; i++)
+            {
+                entryInfo = _partInfo.entryInfoList[i];
+                if (entryInfo == null)
+                    continue;
+                switch (entryInfo.triggerPointType)
+                {
+                    case EAttributeTriggerPointType.ACTIVE:
+                        {
+                            _partLogic.RegisterPartActiveAction(GetActionByAttributeType(_partInfo, entryInfo));
+                        }
+                        break;
+                }
+            }
+        }
+        public static void RecreateGetHitLogic(PartLogic _partLogic, PartInfo _receiverPartInfo, PartInfo _senderPartInfo,int _damage)
+        {
+            if (_partLogic == null || _receiverPartInfo == null)
+                return;
+            _partLogic.ClearOnPartGetHitAction();
+            EntryInfo entryInfo = null;
+            for (int i = 0; i < _receiverPartInfo.entryInfoList.Count; i++)
+            {
+                entryInfo = _receiverPartInfo.entryInfoList[i];
+                if (entryInfo == null)
+                    continue;
+                switch (entryInfo.triggerPointType)
+                {
+                    case EAttributeTriggerPointType.GET_HIT:
+                        {
+                            _partLogic.RegisterPartGetHitAction(GetActionByAttributeType(_receiverPartInfo, entryInfo, _senderPartInfo,_damage));
+                        }
+                        break;
+                }
+            }
+        }
+        public static Action GetActionByAttributeType(PartInfo _info,EntryInfo _entryInfo, PartInfo _senderPartInfo = null,int _damage = 0)
         {
             if (_info == null)
                 return null;
@@ -58,8 +101,10 @@ namespace GameCore.Logic
                     }
                 case EAttributeType.REFLECT:
                     {
-
-                        return null;
+                        return () =>
+                        {
+                            PartLogicHandler.DealReflect(_info, _entryInfo, _senderPartInfo, _damage);
+                        };
                     }
                 case EAttributeType.TRIGGER_MORE:
                     {

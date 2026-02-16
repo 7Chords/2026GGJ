@@ -33,7 +33,7 @@ namespace GameCore.Logic
         {
             onPartDieAction += _action;
         }
-        public void OnPartGetHit(float damage) 
+        public void OnPartGetHit() 
         {
             onPartGetHitAction?.Invoke();
         }
@@ -44,6 +44,19 @@ namespace GameCore.Logic
         public void OnPartActive()
         {
             onPartActiveAction?.Invoke();
+        }
+
+        public void ClearOnPartActiveAction()
+        {
+            onPartActiveAction = null;
+        }
+        public void ClearOnPartGetHitAction()
+        {
+            onPartGetHitAction = null;
+        }
+        public void ClearOnPartDieAction()
+        {
+            onPartDieAction = null;
         }
     }
 }

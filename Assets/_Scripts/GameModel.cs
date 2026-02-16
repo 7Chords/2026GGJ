@@ -90,12 +90,13 @@ namespace GameCore
 
         }
 
-        public void PartTakeDamage(PartInfo _partInfo,int _amount)
+        public void PartTakeDamage(PartInfo _partInfo, PartInfo _senderInfo, int _amount)
         {
             if (_amount <= 0)
                 return;
             _partInfo.currentHealth = Mathf.Clamp(_partInfo.currentHealth - _amount, 0, _partInfo.maxHealth);
             SCMsgCenter.SendMsg(SCMsgConst.PART_HURT, _partInfo, _amount);
+            _partInfo.TriggerGetHitLogic(_senderInfo, _amount);
             if (_partInfo.currentHealth == 0)
             {
                 SCMsgCenter.SendMsg(SCMsgConst.PART_DIE,_partInfo);

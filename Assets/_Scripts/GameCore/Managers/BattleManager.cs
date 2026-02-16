@@ -190,7 +190,7 @@ namespace GameCore
             SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_START, part);
             yield return new WaitForSeconds(1f);
             SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_EFFECT, part);
-            part.TriggerActiveLogic(EAttributeTriggerPointType.ACTIVE);
+            part.TriggerActiveLogic();
             yield return new WaitForSeconds(1.25f);
             SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_END, part);
 

@@ -52,6 +52,8 @@ namespace GameCore
                 entryInfo = new EntryInfo(entry);
                 entryInfoList.Add(entryInfo);
             }
+
+            logicObj = PartLogicFactory.CreateLogic(partRefObj.id, this);
         }
         public void ResetToBusy()
         {
@@ -109,36 +111,16 @@ namespace GameCore
             }
             return new Vector2Int(minX, minY);
         }
-        public void TriggerActiveLogic(EAttributeTriggerPointType _pointType,object[] _objs = null)
+        public void TriggerActiveLogic()
         {
-            logicObj = PartLogicFactory.CreateLogic(partRefObj.id, this);
-            switch (_pointType)
-            {
-                case EAttributeTriggerPointType.ACTIVE:
-                    {
-                        logicObj?.OnPartActive();
-                    }
-                    break;
-                case EAttributeTriggerPointType.GET_HIT:
-                    {
-                        int damage = (int)_objs[0];
-                        logicObj?.OnPartGetHit(damage);
-                    }
-                    break;
-                case EAttributeTriggerPointType.DIE:
-                    {
-                        logicObj?.OnPartDie();
-                    }
-                    break;
-                case EAttributeTriggerPointType.GET_EFFECT:
-                    {
-                        //todo
-                    }
-                    break;
-            }
-
+            PartLogicFactory.RecreateActiveLogic(logicObj, this);
+            logicObj?.OnPartActive();
         }
 
-
+        public void TriggerGetHitLogic(PartInfo _senderInfo,int _damage)
+        {
+            PartLogicFactory.RecreateGetHitLogic(logicObj, this, _senderInfo,_damage);
+            logicObj?.OnPartGetHit();
+        }
     }
 }
