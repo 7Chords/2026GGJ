@@ -60,6 +60,7 @@ namespace GameCore.UI
         {
             mono.txtPlayerHealth.text = GameModel.instance.playerInfo.currentHealth + "/" + GameModel.instance.playerInfo.maxHealth;
             mono.txtEnemyHealth.text = GameModel.instance.curEnemyInfo.currentHealth + "/" + GameModel.instance.curEnemyInfo.maxHealth;
+
         }
 
         private void onPlayerHurt()

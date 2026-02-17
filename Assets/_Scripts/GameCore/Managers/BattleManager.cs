@@ -1,6 +1,7 @@
 using DG.Tweening;
 using GameCore.UI;
 using SCFrame;
+using SCFrame.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -49,14 +50,24 @@ namespace GameCore
 
             SCTimeCaller.instance.CallDealy(0.5f, () =>
             {
-                GameModel.instance.curTurnOwner = ETurnOwnerType.PLAYER;
-
-                // 玩家 → 换回合 → 敌人 → 结束
-                StartExecuteParts(true, playerExcuteInfoList, () =>
+                if(GameModel.instance.curTurnOwner == ETurnOwnerType.PLAYER)
                 {
-                    ChangeTurnOwner();
-                    StartExecuteParts(false, enemyExcuteInfoList, FinishBattle);
-                });
+                    // 玩家 → 换回合 → 敌人 → 结束
+                    StartExecuteParts(true, playerExcuteInfoList, () =>
+                    {
+                        ChangeTurnOwner();
+                        StartExecuteParts(false, enemyExcuteInfoList, FinishBattle);
+                    });
+                }
+                else
+                {
+                    //  敌人 → 换回合 → 玩家 → 结束
+                    StartExecuteParts(false, enemyExcuteInfoList, () =>
+                    {
+                        ChangeTurnOwner();
+                        StartExecuteParts(true, playerExcuteInfoList, FinishBattle);
+                    });
+                }
             });
         }
 
@@ -186,12 +197,12 @@ namespace GameCore
 
         private IEnumerator ExecuteOneRoutine(bool isPlayer, PartInfo part)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.75f);
             SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_START, part);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.75f);
             SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_EFFECT, part);
             part.TriggerActiveLogic();
-            yield return new WaitForSeconds(1.25f);
+            yield return new WaitForSeconds(1f);
             SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_END, part);
 
             ExecuteNext(isPlayer);
@@ -239,7 +250,9 @@ namespace GameCore
             SCTimeCaller.instance.CallDealy(1f, () =>
             {
                 GameModel.instance.DealNextTurn();
-                UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCFrame.UI.SCUIShowType.FULL));
+                UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
+                UICoreMgr.instance.AddNode(new UINodeBattleOrder(SCUIShowType.ADDITION));
+
             });
         }
         public int GetIndexOfPartInfo(PartInfo _info, bool _isPlayer)

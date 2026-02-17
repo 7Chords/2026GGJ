@@ -69,6 +69,7 @@ namespace GameCore.UI
         {
             mono.imgHealthBar.fillAmount = (float)GameModel.instance.playerInfo.currentHealth / GameModel.instance.playerInfo.maxHealth;
             mono.txtHealth.text = GameModel.instance.playerInfo.currentHealth +"/" + GameModel.instance.playerInfo.maxHealth;
+            mono.txtBattleOrder.text = GameModel.instance.curTurnOwner == ETurnOwnerType.PLAYER ? "我方先手" : "敌方先手";
         }
 
     }

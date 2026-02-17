@@ -5,7 +5,7 @@ using SCFrame.UI;
 namespace SCFrame
 {
     /// <summary>
-    /// UI������ ���п��� �������عر�...
+    /// 
     /// </summary>
     public class UICoreMgr : Singleton<UICoreMgr>
     {
@@ -33,7 +33,7 @@ namespace SCFrame
         #region ����
 
         /// <summary>
-        /// ����һ���ڵ�
+        /// 添加节点（已经存在就show）
         /// </summary>
         /// <param name="_node"></param>
         /// <param name="_needShow"></param>
@@ -93,14 +93,13 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// �رյ�ǰ�Ľڵ�
+        /// 关闭顶部节点
         /// </summary>
         public void CloseTopNode()
         {
             if (_m_nodeList == null || _m_nodeList.Count == 0)
                 return;
 
-            //�ҵ����Ŀ��ԹرյĽڵ�
             int nodeIdx = _m_nodeList.Count - 1;
             _ASCUINodeBase topNode = _m_nodeList[nodeIdx];
             while(topNode.ignoreOnUIList)
@@ -117,13 +116,11 @@ namespace SCFrame
 
                 if(topNode.needMoveToBottomWhenHide)
                 {
-                    //�Ѹýڵ��ƶ���ͷ��
                     _m_nodeList.Remove(topNode);
                     _m_nodeList.Insert(0, topNode);
                 }
             }
 
-            //��һ��ͬ���͵Ľڵ�
             _ASCUINodeBase lastSameTypeNode = null;
 
             for(int i = _m_nodeList.Count - 2;i>-1;i--)
@@ -144,18 +141,16 @@ namespace SCFrame
             }
 
             _ASCUINodeBase nextTopNode = GetTopNode(true);
-            //�㲥�ڵ��л���Ϣ
             SCMsgCenter.SendMsg(SCMsgConst.UI_NODE_CHG, topNode, nextTopNode);
         }
 
         /// <summary>
-        /// ͨ��ESC�رյ�ǰ�Ľڵ�
+        /// ͨ通过esc关闭节点
         /// </summary>
         public void CloseNodeByEsc()
         {
             if (_m_nodeList == null || _m_nodeList.Count == 0)
                 return;
-            //igonreOnUIList���͵Ľڵ㲻��ͨ��ESC�ر�
             _ASCUINodeBase topNode = GetTopNode(false);
             if (!topNode.canQuitByEsc)
                 return;
@@ -163,13 +158,12 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// ͨ������Ҽ��رյ�ǰ�Ľڵ�
+        /// ͨ通过右键关闭节点
         /// </summary>
         public void CloseNodeByMouseRight()
         {
             if (_m_nodeList == null || _m_nodeList.Count == 0)
                 return;
-            //igonreOnUIList���͵Ľڵ㲻��ͨ������Ҽ��ر�
             _ASCUINodeBase topNode = GetTopNode(false);
             if (!topNode.canQuitByMouseRight)
                 return;
@@ -219,8 +213,7 @@ namespace SCFrame
         }
 
         /// <summary>
-        /// ��ʾ�ڵ㵫�ǲ��ƶ������еĶ�����һ������igonreOnUIList���͵Ľڵ�
-        /// ������չʾ ���漰��˳��
+        /// 展示节点但不移动到顶部
         /// </summary>
         /// <param name="_nodeName"></param>
         public void ShowNodeButNotMove2Top(string _nodeName)

@@ -24,7 +24,13 @@ namespace GameCore.UI
         {
             mono.btnEnter.onClick.RemoveListener(OnClickEnter);
         }
+        public override void OnHidePanel()
+        {
+        }
 
+        public override void OnShowPanel()
+        {
+        }
         public void SetNodeInfo(MapNode mapNode)
         {
             _m_mapNode = mapNode;
@@ -130,15 +136,20 @@ namespace GameCore.UI
         private void EnterEnemyLevel()
         {
             AudioMgr.instance.PlaySfx("sfx_click");
+            GameModel.instance.RollBattleOrder();
             UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
             GameModel.instance.GenerateNewBattle();
+            UICoreMgr.instance.AddNode(new UINodeBattleOrder(SCUIShowType.ADDITION));
+
         }
 
         private void EnterBossLevel()
         {
             AudioMgr.instance.PlaySfx("sfx_click");
+            GameModel.instance.RollBattleOrder();
             UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
             GameModel.instance.GenerateNewBattle();
+            UICoreMgr.instance.AddNode(new UINodeBattleOrder(SCUIShowType.ADDITION));
         }
 
         private void EnterShop()
@@ -160,12 +171,5 @@ namespace GameCore.UI
 
         #endregion
 
-        public override void OnHidePanel()
-        {
-        }
-
-        public override void OnShowPanel()
-        {
-        }
     }
 }
