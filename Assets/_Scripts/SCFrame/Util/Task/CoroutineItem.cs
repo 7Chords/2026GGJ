@@ -32,28 +32,32 @@ namespace SCFrame
                 return;
 
             isRunning = true;
-            _m_unityCoroutine = SCTaskHelper.instance.StartCoroutine(RunCoroutine());
+            _m_unityCoroutine = SCTaskHelper.instance.StartCoroutine(RunWrapper());
         }
 
         /// <summary>
         /// 运行协程的迭代器
         /// </summary>
-        private IEnumerator RunCoroutine()
+        private IEnumerator RunWrapper()
         {
-            while (isRunning && enumerator != null)
-            {
-                if (enumerator.MoveNext())
-                {
-                    yield return enumerator.Current;
-                }
-                else
-                {
-                    // 协程自然结束
-                    isRunning = false;
-                    SCTaskHelper.instance?.KillCoroutine(coroutineId);
-                    break;
-                }
-            }
+            yield return enumerator;
+            isRunning = false;
+            SCTaskHelper.instance?.KillCoroutine(coroutineId);
+            //while (isRunning && enumerator != null)
+            //{
+            //    if (enumerator == null) break;
+            //    if (enumerator.MoveNext())
+            //    {
+            //        yield return enumerator.Current;
+            //    }
+            //    else
+            //    {
+            //        // 协程自然结束
+            //        isRunning = false;
+            //        SCTaskHelper.instance?.KillCoroutine(coroutineId);
+            //        break;
+            //    }
+            //}
         }
 
         /// <summary>
@@ -67,20 +71,6 @@ namespace SCFrame
                 SCTaskHelper.instance.StopCoroutine(_m_unityCoroutine);
             }
             enumerator = null;
-        }
-
-        /// <summary>
-        /// 重启协程
-        /// </summary>
-        public void Restart()
-        {
-            Stop();
-            if (enumerator != null)
-            {
-                // 重新创建迭代器，因为IEnumerator不能重置
-                // 注意：这需要调用方提供新的迭代器实例
-                Debug.LogWarning("CoroutineItem: To restart a coroutine, you need to provide a new enumerator instance.");
-            }
         }
     }
 }

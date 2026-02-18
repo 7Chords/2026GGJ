@@ -218,9 +218,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiMask: {fileID: 0}
-  canvasGroup: {fileID: 0}
-  fadeInDuration: 0
-  fadeOutDuration: 0
+  canvasGroup: {fileID: 2931751810240012559}
+  fadeInDuration: 0.1
+  fadeOutDuration: 0.1
   prefabItemObjName: prefab_battle_win_item
   layoutGroup: {fileID: 9215278916724833326}
 --- !u!114 &9215278916724833326

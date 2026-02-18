@@ -1,4 +1,5 @@
 using GameCore.RefData;
+using GameCore.UI;
 using SCFrame;
 using System.Collections;
 using System.Collections.Generic;
@@ -69,7 +70,8 @@ namespace GameCore
                 return;
             playerInfo.currentHealth = Mathf.Clamp(playerInfo.currentHealth - _amount, 0, playerInfo.maxHealth);
             SCMsgCenter.SendMsg(SCMsgConst.PLAYER_HURT);
-
+            if(playerInfo.currentHealth == 0)
+                BattleManager.instance.TerminateBattle(false);
         }
 
         public void EnemyHeal(int _amount)
@@ -87,7 +89,8 @@ namespace GameCore
                 return;
             curEnemyInfo.currentHealth = Mathf.Clamp(curEnemyInfo.currentHealth - _amount, 0, curEnemyInfo.maxHealth);
             SCMsgCenter.SendMsg(SCMsgConst.ENEMY_HURT);
-
+            if (curEnemyInfo.currentHealth == 0)
+                BattleManager.instance.TerminateBattle(true);
         }
 
         public void PartTakeDamage(PartInfo _partInfo, PartInfo _senderInfo, int _amount)

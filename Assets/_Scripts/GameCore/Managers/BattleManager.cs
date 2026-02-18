@@ -14,8 +14,6 @@ namespace GameCore
         public List<PartInfo> playerExcuteInfoList;
         public List<PartInfo> enemyExcuteInfoList;
 
-        private TweenContainer _m_tweenContainer;
-
         // 核心：真正支持任意插入的执行队列
         private List<PartInfo> _m_playerExecQueue;
         private List<PartInfo> _m_enemyExecQueue;
@@ -36,7 +34,6 @@ namespace GameCore
             enemyExcuteInfoList = new List<PartInfo>();
             _m_playerExecQueue = new List<PartInfo>();
             _m_enemyExecQueue = new List<PartInfo>();
-            _m_tweenContainer = new TweenContainer();
         }
         public override void OnDiscard()
         {
@@ -249,6 +246,7 @@ namespace GameCore
         {
             SCTimeCaller.instance.CallDealy(1f, () =>
             {
+                SCTaskHelper.instance.KillAllCoroutines(this);
                 GameModel.instance.DealNextTurn();
                 UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
                 UICoreMgr.instance.AddNode(new UINodeBattleOrder(SCUIShowType.ADDITION));
@@ -258,6 +256,23 @@ namespace GameCore
         public int GetIndexOfPartInfo(PartInfo _info, bool _isPlayer)
         {
             return _isPlayer ? _m_playerExecQueue.IndexOf(_info) : _m_enemyExecQueue.IndexOf(_info);
+        }
+
+        /// <summary>
+        /// 战斗中断（一般是分出胜负了）
+        /// </summary>
+        public void TerminateBattle(bool _isPlayerWin)
+        {
+            //先清除携程再置空
+            SCTaskHelper.instance.KillAllCoroutines(this);
+            _m_isPlayerExecuting = false;
+            _m_isEnemyExecuting = false;
+            _m_onPlayerFinish = null;
+            _m_onEnemyFinish = null;
+            if(_isPlayerWin)
+                UICoreMgr.instance.AddNode(new UINodeBattleWin(SCUIShowType.ADDITION));
+            else
+                UICoreMgr.instance.AddNode(new UINodeLose(SCUIShowType.FULL));
         }
     }
 }
