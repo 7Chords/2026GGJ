@@ -1,5 +1,6 @@
 using SCFrame;
 using SCFrame.UI;
+using System;
 
 namespace GameCore.UI
 {
@@ -32,6 +33,8 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.NEW_GANE_START, onNewBattleStart);
+
             mono.btnConfirm.onClick.RemoveAllListeners();
             mono.btnDeck.onClick.RemoveAllListeners();
             _m_partContainer?.HidePanel();
@@ -40,10 +43,9 @@ namespace GameCore.UI
 
         }
 
-
         public override void OnShowPanel()
         {
-
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.NEW_GANE_START, onNewBattleStart);
             _m_playerFace?.ShowPanel();
             _m_partContainer?.ShowPanel();
             _m_enemyMask?.ShowPanel();
@@ -70,6 +72,16 @@ namespace GameCore.UI
             mono.imgHealthBar.fillAmount = (float)GameModel.instance.playerInfo.currentHealth / GameModel.instance.playerInfo.maxHealth;
             mono.txtHealth.text = GameModel.instance.playerInfo.currentHealth +"/" + GameModel.instance.playerInfo.maxHealth;
             mono.txtBattleOrder.text = GameModel.instance.curTurnOwner == ETurnOwnerType.PLAYER ? "我方先手" : "敌方先手";
+            mono.txtCoin.text = GameModel.instance.playerInfo.playerMoney.ToString();
+            if(GameModel.instance.curEnemyInfo != null)
+            {
+                mono.imgEnemyHealthBar.fillAmount = (float)GameModel.instance.curEnemyInfo.currentHealth / GameModel.instance.curEnemyInfo.maxHealth;
+                mono.txtEnemyHealth.text = GameModel.instance.curEnemyInfo.currentHealth + "/" + GameModel.instance.curEnemyInfo.maxHealth;
+            }
+        }
+        private void onNewBattleStart()
+        {
+            refreshShow();
         }
 
     }

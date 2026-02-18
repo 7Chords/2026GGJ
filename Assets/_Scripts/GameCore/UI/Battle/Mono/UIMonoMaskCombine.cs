@@ -22,7 +22,13 @@ namespace GameCore.UI
         public Image imgHealthBar;
         [Header("血量文本")]
         public Text txtHealth;
+        [Header("玩家金币")]
+        public Text txtCoin;
         [Header("战斗先手文本")]
         public Text txtBattleOrder;
+        [Header("敌人血条bar")]
+        public Image imgEnemyHealthBar;
+        [Header("敌人血量文本")]
+        public Text txtEnemyHealth;
     }
 }
