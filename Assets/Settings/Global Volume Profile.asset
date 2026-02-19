@@ -35,7 +35,7 @@ MonoBehaviour:
     m_Value: 69.63
   ScanlinePower:
     m_OverrideState: 1
-    m_Value: -0.23
+    m_Value: -0.15
   CycleIndex:
     m_OverrideState: 1
     m_Value: 0.229

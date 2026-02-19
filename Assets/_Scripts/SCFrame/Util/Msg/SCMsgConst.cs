@@ -28,11 +28,14 @@ public class SCMsgConst
     public const int PLAYER_HEAL = 2021;
     public const int ENEMY_HEAL = 2022;
     public const int PART_ACTIVE_START = 2023;
-    public const int PART_ACTIVE_EFFECT = 2024;
-    public const int PART_ACTIVE_END = 2025;
-    public const int PART_DIE = 2026;
-    public const int BATTLE_ENEMY_PART_ORDER_CHG = 2027;
-    public const int BATTLE_PLAYER_PART_ORDER_CHG = 2028;
+    public const int PART_TRIGGER_SUCCESS = 2024;
+    public const int PART_TRIGGER_FAIL = 2025;
+    public const int PART_ACTIVE_END = 2026;
+    public const int PART_DIE = 2027;
+    public const int BATTLE_ENEMY_PART_ORDER_CHG = 2028;
+    public const int BATTLE_PLAYER_PART_ORDER_CHG = 2029;
+    public const int PART_TRIGGER_EFFECT = 2030;
+
 
     #endregion
 

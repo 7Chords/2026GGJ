@@ -17,6 +17,9 @@ namespace GameCore.RefData
         public List<EntryEffectObj> entryList;
         public List<PosEffectObj> occupyPosList;
         public List<PosEffectObj> effectPosList;
+        public string triggerSuccessTip;
+        public string triggerFailTip;
+        public string triggerEffectTip;
 
         public PartRefObj()
         {
@@ -39,6 +42,9 @@ namespace GameCore.RefData
             entryList = getList<EntryEffectObj>("entryList");
             occupyPosList = getList<PosEffectObj>("occupyPosList");
             effectPosList = getList<PosEffectObj>("effectPosList");
+            triggerSuccessTip = getString("triggerSuccessTip");
+            triggerFailTip = getString("triggerFailTip");
+            triggerEffectTip = getString("triggerEffectTip");
         }
 
         public List<Vector2Int> GetOccupyPosList()

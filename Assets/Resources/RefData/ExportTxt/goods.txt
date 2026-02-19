@@ -1,6 +1,6 @@
 ﻿id	goodsName	goodsDesc	goodsType	goodsPrice	partId	healthValue	goodsSpriteObjName
 101001	瑞卡瓦之鼻	消除作用范围上的部位上的负面效果	PART	75	101001	0	spr_icon_nose_1
-101002	里昂之眼	作用范围上的部位有10%概率触发两次效果	PART	50	101002	0	spr_icon_eye_1
+101002	里昂之眼	作用范围上的部位有10%概率触发两次效果	PART	150	101002	0	spr_icon_eye_1
 101003	尖嘴	直接对本体造成15点伤害	PART	50	101003	0	spr_icon_mouth_1
 101004	希尔之鼻	回复作用范围内部位10点生命值	PART	100	101004	0	spr_icon_nose_2
 101005	美杜莎之眼	使命中范围内的目标无法移动	PART	100	101005	0	spr_icon_eye_2

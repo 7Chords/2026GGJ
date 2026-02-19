@@ -156,7 +156,6 @@ namespace GameCore
                 SCTimeCaller.instance.CallDealy(delayEffect, () =>
                 {
                     if (_cancelToken != null && _cancelToken.IsCancelled) return;
-                    SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_EFFECT, part);
                     part.TriggerActiveLogic();
                     SCTimeCaller.instance.CallDealy(delayEnd, () =>
                     {

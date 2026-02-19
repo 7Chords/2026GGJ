@@ -36,7 +36,10 @@ namespace GameCore.UI
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_HURT, onPartHurt);
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_HEAL, onPartHeal);
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_ACTIVE_START, onPartActiveStart);
-            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_ACTIVE_EFFECT, onPartActiveEffect);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_TRIGGER_SUCCESS, onPartTriggerSuccess);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_TRIGGER_FAIL, onPartTriggerFail);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_TRIGGER_EFFECT, onPartTriggerEffect);
+
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_ACTIVE_END, onPartActiveEnd);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.BATTLE_ENEMY_PART_ORDER_CHG, onBattleEnemyPartOrderChg);
 
@@ -49,14 +52,16 @@ namespace GameCore.UI
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_HURT, onPartHurt);
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_HEAL, onPartHeal);
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_ACTIVE_START, onPartActiveStart);
-            SCMsgCenter.RegisterMsg(SCMsgConst.PART_ACTIVE_EFFECT, onPartActiveEffect);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PART_TRIGGER_SUCCESS, onPartTriggerSuccess);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PART_TRIGGER_FAIL, onPartTriggerFail);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PART_TRIGGER_EFFECT, onPartTriggerEffect);
+
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_ACTIVE_END, onPartActiveEnd);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.BATTLE_ENEMY_PART_ORDER_CHG, onBattleEnemyPartOrderChg);
 
             mono.imgGO.AddMouseEnter(onMouseEnter);
             mono.imgGO.AddMouseExit(onMouseExit);
         }
-
 
         public void SetInfo(PartInfo _info)
         {
@@ -175,7 +180,6 @@ namespace GameCore.UI
             PartInfo info = _objs[0] as PartInfo;
             if (_m_partInfo == info)
             {
-                //todo
                 GameCommon.ShowEffectText("ÐÐ¶¯", GetGameObject().transform.position);
                 Tween tween = GetGameObject().transform.DOScale(mono.activeScale, mono.scaleChgDuration);
                 _m_tweenContainer?.RegDoTween(tween);
@@ -183,14 +187,41 @@ namespace GameCore.UI
 
         }
 
-        private void onPartActiveEffect(object[] _objs)
+        private void onPartTriggerSuccess(object[] _objs)
         {
-            //if (_objs == null || _objs.Length == 0)
-            //    return;
-            //PartInfo info = _objs[0] as PartInfo;
-            //if (_m_partInfo == info)
-            //{
-            //}
+            if (_objs == null || _objs.Length == 0)
+                return;
+            PartInfo info = _objs[0] as PartInfo;
+            if (_m_partInfo == info)
+            {
+                GameCommon.ShowEffectText(_m_partInfo.partRefObj.triggerSuccessTip, GetGameObject().transform.position);
+            }
+        }
+
+
+        private void onPartTriggerFail(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            PartInfo info = _objs[0] as PartInfo;
+            if (_m_partInfo == info)
+            {
+                GameCommon.ShowEffectText(_m_partInfo.partRefObj.triggerFailTip, GetGameObject().transform.position);
+            }
+
+        }
+        private void onPartTriggerEffect(object[] _objs)
+        {
+            if (_objs == null || _objs.Length < 2)
+                return;
+            PartInfo info = _objs[0] as PartInfo;
+            PartInfo casterInfo = _objs[1] as PartInfo;
+
+            if (_m_partInfo == info)
+            {
+
+                GameCommon.ShowEffectText(casterInfo.partRefObj.triggerEffectTip, GetGameObject().transform.position);
+            }
         }
         private void onPartActiveEnd(object[] _objs)
         {
@@ -213,5 +244,6 @@ namespace GameCore.UI
                 mono.txtOrder.text = GameModel.instance.GetPlayerBattleOrderByPartInfo(_m_partInfo).ToString();
 
         }
+
     }
 }
