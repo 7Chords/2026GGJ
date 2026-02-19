@@ -9,6 +9,6 @@
 101008	虎之眼	EYE	RARE	5	作用范围上的友方嘴巴有100%概率造成双倍伤害	spr_icon_eye_3	spr_eye_3	ACTIVE:DAMAGE_MULTIPILER:1:2	0:0;0:1;1:0;1:1	0:2;1:2;-1:1;2:1;-1:0;2:0;0:-1;1:-1
 101009	测试皮肤1	SKIN	NORMAL	20	普通的皮肤，常用于抵挡外界的损失	spr_nose_2	spr_nose_2	*	0:0	0:0
 101010	反伤皮肤	SKIN	RARE	15	受到伤害时使伤害来源受到3点伤害	spr_nose_2	spr_nose_2	GET_HIT:REFLECT:1:1	0:0	0:0
-101011	大狗嘴	MOUTH	NORMAL	10	对范围内的敌方目标造成9点伤害	spr_icon_mouth_3	spr_mouth_3	ACTIVE:ATTACK:1:10	0:0;1:0;2:0	0:0;1:0;2:0
+101011	大狗嘴	MOUTH	NORMAL	10	对范围内的敌方目标造成9点伤害	spr_icon_mouth_3	spr_mouth_3	ACTIVE:ATTACK:1:9	0:0;1:0;2:0	0:0;1:0;2:0
 101012	小鸟嘴	MOUTH	NORMAL	8	对范围内的敌方目标造成4点伤害	spr_icon_mouth_2	spr_mouth_2	ACTIVE:ATTACK:1:4	0:0;1:0	0:0;1:0
 

@@ -53,6 +53,7 @@ namespace GameCore
         EVENT,
         BOSS,
         TRIAL,
+        STRENGTHEN
     }
 
     public enum EQualityType

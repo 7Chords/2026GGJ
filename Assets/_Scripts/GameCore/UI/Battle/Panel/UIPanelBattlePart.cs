@@ -13,6 +13,9 @@ namespace GameCore.UI
     {
         private PartInfo _m_partInfo;
         private TweenContainer _m_tweenContainer;
+
+        public PartInfo partInfo => _m_partInfo;
+
         public UIPanelBattlePart(UIMonoBattlePart _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -35,7 +38,6 @@ namespace GameCore.UI
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_ACTIVE_START, onPartActiveStart);
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_ACTIVE_EFFECT, onPartActiveEffect);
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_ACTIVE_END, onPartActiveEnd);
-            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_DIE, onPartDie);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.BATTLE_ENEMY_PART_ORDER_CHG, onBattleEnemyPartOrderChg);
 
             mono.imgGO.RemoveMouseEnter(onMouseEnter);
@@ -49,7 +51,6 @@ namespace GameCore.UI
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_ACTIVE_START, onPartActiveStart);
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_ACTIVE_EFFECT, onPartActiveEffect);
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_ACTIVE_END, onPartActiveEnd);
-            SCMsgCenter.RegisterMsg(SCMsgConst.PART_DIE, onPartDie);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.BATTLE_ENEMY_PART_ORDER_CHG, onBattleEnemyPartOrderChg);
 
             mono.imgGO.AddMouseEnter(onMouseEnter);
@@ -204,18 +205,6 @@ namespace GameCore.UI
             }
         }
 
-        private void onPartDie(object[] _objs)
-        {
-            if (_objs == null || _objs.Length == 0)
-                return;
-            PartInfo info = _objs[0] as PartInfo;
-            if (_m_partInfo == info)
-            {
-                Tween tween = mono.canvasGroup.DOFade(0, mono.fadeOutDuration);
-                _m_tweenContainer?.RegDoTween(tween);
-
-            }
-        }
         private void onBattleEnemyPartOrderChg()
         {
             if (_m_partInfo.isEnemyPart)

@@ -300,6 +300,11 @@ namespace SCFrame
                 effectObj = new TrialRewardEffectObj();
                 effectObj.Deserialize(_str);
             }
+            else if (_type == typeof(BootyEffectObj))
+            {
+                effectObj = new BootyEffectObj();
+                effectObj.Deserialize(_str);
+            }
             return effectObj;
 
         }

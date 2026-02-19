@@ -65,6 +65,11 @@ namespace GameCore.UI
                         mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>("spr_icon_node_boss");
                     }
                     break;
+                case ERoomType.STRENGTHEN:
+                    {
+                        mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>("spr_default");
+                    }
+                    break;
             }
         }
 

@@ -50,6 +50,7 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_DIE, onPartDie);
             if (_m_gridPanelList != null)
             {
                 foreach (var grid in _m_gridPanelList)
@@ -68,7 +69,7 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
-            
+            SCMsgCenter.RegisterMsg(SCMsgConst.PART_DIE, onPartDie);
             if (_m_gridPanelList != null)
             {
                 foreach (var grid in _m_gridPanelList)
@@ -182,6 +183,19 @@ namespace GameCore.UI
                 panel.SetInfo(partInfo);
                 panel.ShowPanel();
                 _m_partPanelList.Add(panel);
+            }
+        }
+
+        private void onPartDie(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            PartInfo info = _objs[0] as PartInfo;
+
+            UIPanelBattlePart part = _m_partPanelList.Find(x => x.partInfo == info);
+            if (part != null)
+            {
+                part.HidePanel();
             }
         }
     }
