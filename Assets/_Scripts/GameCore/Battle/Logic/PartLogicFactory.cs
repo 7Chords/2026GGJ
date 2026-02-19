@@ -1,13 +1,12 @@
+using GameCore.Battle;
 using GameCore.RefData;
 using System;
 using System.Collections.Generic;
 
-namespace GameCore.Logic
+namespace GameCore.Battle
 {
     public static class PartLogicFactory
     {
-
-
         public static PartLogic CreateLogic(long _id , PartInfo _partInfo)
         {
             if (_id < 0 || _partInfo == null)
@@ -86,10 +85,21 @@ namespace GameCore.Logic
                 }
             }
         }
-        public static Action GetActionByAttributeType(PartInfo _info,EntryInfo _entryInfo, PartInfo _senderPartInfo = null,int _damage = 0)
+        public static Action GetActionByAttributeType(PartInfo _info, EntryInfo _entryInfo, PartInfo _senderPartInfo = null, int _damage = 0)
         {
             if (_info == null)
                 return null;
+
+            // 优先使用注册表，便于扩展新效果
+            var handler = PartEffectHandlerRegistry.Get(_entryInfo.attributeType);
+            if (handler != null)
+            {
+                var ctx = _senderPartInfo != null ? PartEffectContext.GetHit(_senderPartInfo, _damage) : PartEffectContext.Active;
+                var info = _info;
+                var entry = _entryInfo;
+                return () => handler.Execute(info, entry, ctx);
+            }
+
             switch (_entryInfo.attributeType)
             {
                 case EAttributeType.ATTACK:

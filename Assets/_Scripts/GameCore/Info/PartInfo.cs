@@ -1,4 +1,4 @@
-using GameCore.Logic;
+using GameCore.Battle;
 using GameCore.RefData;
 using System.Collections.Generic;
 using UnityEngine;

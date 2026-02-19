@@ -1,9 +1,8 @@
-using DG.Tweening;
+using GameCore.Battle;
 using GameCore.UI;
 using SCFrame;
 using SCFrame.UI;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,147 +13,116 @@ namespace GameCore
         public List<PartInfo> playerExcuteInfoList;
         public List<PartInfo> enemyExcuteInfoList;
 
-        // 核心：真正支持任意插入的执行队列
-        private List<PartInfo> _m_playerExecQueue;
-        private List<PartInfo> _m_enemyExecQueue;
-
-        private bool _m_isPlayerExecuting;
-        private bool _m_isEnemyExecuting;
-
-        private Action _m_onPlayerFinish;
-        private Action _m_onEnemyFinish;
-
-        // 当前执行到第几个
-        private int _playerCurrentIndex = -1;
-        private int _enemyCurrentIndex = -1;
+        private readonly BattlePartExecutionQueue _playerQueue = new BattlePartExecutionQueue();
+        private readonly BattlePartExecutionQueue _enemyQueue = new BattlePartExecutionQueue();
+        private BattleCancelToken _cancelToken;
 
         public override void OnInitialize()
         {
             playerExcuteInfoList = new List<PartInfo>();
             enemyExcuteInfoList = new List<PartInfo>();
-            _m_playerExecQueue = new List<PartInfo>();
-            _m_enemyExecQueue = new List<PartInfo>();
         }
+
         public override void OnDiscard()
         {
-            SCTaskHelper.instance.KillAllCoroutines(this);
+            _cancelToken?.Cancel();
+            BattleContext.Current = null;
         }
 
         public void StartBattle()
         {
             playerExcuteInfoList = new List<PartInfo>(GameModel.instance.playerInfo.battlePartInfoList);
             enemyExcuteInfoList = new List<PartInfo>(GameModel.instance.curEnemyInfo.battlePartInfoList);
+            if (_cancelToken == null) _cancelToken = new BattleCancelToken();
+            _cancelToken.Reset();
 
             SCTimeCaller.instance.CallDealy(0.5f, () =>
             {
-                if(GameModel.instance.curTurnOwner == ETurnOwnerType.PLAYER)
+                if (_cancelToken.IsCancelled) return;
+                BattleContext.Current = new BattleContext();
+
+                if (GameModel.instance.curTurnOwner == ETurnOwnerType.PLAYER)
                 {
-                    // 玩家 → 换回合 → 敌人 → 结束
                     StartExecuteParts(true, playerExcuteInfoList, () =>
                     {
                         ChangeTurnOwner();
-                        StartExecuteParts(false, enemyExcuteInfoList, FinishBattle);
+                        StartExecuteParts(false, enemyExcuteInfoList, OnBattleRoundFinish);
                     });
                 }
                 else
                 {
-                    //  敌人 → 换回合 → 玩家 → 结束
                     StartExecuteParts(false, enemyExcuteInfoList, () =>
                     {
                         ChangeTurnOwner();
-                        StartExecuteParts(true, playerExcuteInfoList, FinishBattle);
+                        StartExecuteParts(true, playerExcuteInfoList, OnBattleRoundFinish);
                     });
                 }
+             });
+        }
+
+        private void OnBattleRoundFinish()
+        {
+            SCTimeCaller.instance.CallDealy(1f, () =>
+            {
+                if (_cancelToken != null && _cancelToken.IsCancelled) return;
+                BattleContext.Current = null;
+                GameModel.instance.DealNextTurn();
+                UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
+                UICoreMgr.instance.AddNode(new UINodeBattleOrder(SCUIShowType.ADDITION));
             });
         }
 
-        #region 核心：任意位置插入执行队列
-        /// <summary>
-        /// 开始执行一组部件
-        /// </summary>
-        public void StartExecuteParts(bool isPlayer, List<PartInfo> parts, System.Action onFinish = null)
+        #region ??????????????????????????
+
+        /// <summary> ???????????? </summary>
+        public void StartExecuteParts(bool isPlayer, List<PartInfo> parts, Action onFinish = null)
         {
-            var queue = isPlayer ? _m_playerExecQueue : _m_enemyExecQueue;
-            queue.Clear();
+            var list = isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
+            var queue = isPlayer ? _playerQueue : _enemyQueue;
 
-            if (parts != null)
-            {
-                foreach (var part in parts)
-                {
-                    if (part != null)
-                        queue.Add(part);
-                }
-            }
-
-            if (isPlayer)
-            {
-                _m_onPlayerFinish = onFinish;
-                _m_isPlayerExecuting = true;
-                _playerCurrentIndex = -1;
-            }
-            else
-            {
-                _m_onEnemyFinish = onFinish;
-                _m_isEnemyExecuting = true;
-                _enemyCurrentIndex = -1;
-            }
-
+            //list.Clear();
+            //if (parts != null)
+            //{
+            //    foreach (var part in parts)
+            //        if (part != null) list.Add(part);
+            //}
+            queue.Start(list, onFinish);
             ExecuteNext(isPlayer);
         }
 
-        /// <summary>
-        /// 【全能接口】插入到任意位置
-        /// index = 0 → 最前面
-        /// index = 2 → 插到第2个后面
-        /// index = queue.Count → 最后面（等于Add）
-        /// </summary>
+        /// <summary> ?????????????index = queue.Count ?????? </summary>
         public void InsertPartAt(bool isPlayer, int index, PartInfo part)
         {
             if (part == null) return;
-            //之前执行过的不能再次执行
-            if (isPlayer && index < _playerCurrentIndex)
-                return;
-            if (!isPlayer && index < _enemyCurrentIndex)
-                return;
+            var queue = isPlayer ? _playerQueue : _enemyQueue;
+            if (index < queue.CurrentIndex) return;
 
-            var queue = isPlayer ? _m_playerExecQueue : _m_enemyExecQueue;
-            index = Mathf.Clamp(index, 0, queue.Count);
-            queue.Insert(index, part);
+            queue.InsertAt(index, part);
+            var list = isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
+            index = Mathf.Clamp(index, 0, list.Count);
+            list.Insert(index, part);
 
-            // 如果没在执行，启动
-            if (!(isPlayer ? _m_isPlayerExecuting : _m_isEnemyExecuting))
-            {
-                if (isPlayer) _playerCurrentIndex = -1;
-                else _enemyCurrentIndex = -1;
+            if (!queue.IsExecuting)
                 ExecuteNext(isPlayer);
-            }
         }
 
-        /// <summary>
-        /// 插到最后（普通追加）
-        /// </summary>
         public void AddPartToLast(bool isPlayer, PartInfo part)
         {
-            var queue = isPlayer ? _m_playerExecQueue : _m_enemyExecQueue;
-            InsertPartAt(isPlayer, queue.Count, part);
+            var list = isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
+            InsertPartAt(isPlayer, list.Count, part);
         }
 
-        /// <summary>
-        /// 插到当前正在执行的后面（实现“再执行一遍”）
-        /// </summary>
         public void InsertPartAfterCurrent(bool isPlayer, PartInfo part)
         {
-            int curIndex = isPlayer ? _playerCurrentIndex : _enemyCurrentIndex;
-            InsertPartAt(isPlayer, curIndex + 1, part);
+            var queue = isPlayer ? _playerQueue : _enemyQueue;
+            InsertPartAt(isPlayer, queue.CurrentIndex + 1, part);
         }
 
-        /// <summary>
-        /// 插到某个目标部件的后面
-        /// </summary>
         public void InsertPartAfterTarget(bool isPlayer, PartInfo targetPart, PartInfo newPart)
         {
-            var queue = isPlayer ? _m_playerExecQueue : _m_enemyExecQueue;
+            var queue = isPlayer ? _playerQueue : _enemyQueue;
             int index = queue.IndexOf(targetPart);
+            var list = isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
             if (index < 0)
             {
                 AddPartToLast(isPlayer, newPart);
@@ -165,75 +133,71 @@ namespace GameCore
 
         private void ExecuteNext(bool isPlayer)
         {
-            var queue = isPlayer ? _m_playerExecQueue : _m_enemyExecQueue;
-            ref int curIndex = ref (isPlayer ? ref _playerCurrentIndex : ref _enemyCurrentIndex);
-
-            curIndex++;
-
-            // 全部执行完
-            if (curIndex >= queue.Count)
-            {
-                if (isPlayer)
-                {
-                    _m_isPlayerExecuting = false;
-                    _m_onPlayerFinish?.Invoke();
-                    _m_onPlayerFinish = null;
-                }
-                else
-                {
-                    _m_isEnemyExecuting = false;
-                    _m_onEnemyFinish?.Invoke();
-                    _m_onEnemyFinish = null;
-                }
+            var queue = isPlayer ? _playerQueue : _enemyQueue;
+            PartInfo part = queue.MoveNext();
+            if (part == null)
                 return;
-            }
-
-            PartInfo part = queue[curIndex];
-            SCTaskHelper.instance.CreateCoroutine(this,ExecuteOneRoutine(isPlayer, part));
-        }
-
-        private IEnumerator ExecuteOneRoutine(bool isPlayer, PartInfo part)
-        {
-            yield return new WaitForSeconds(0.75f);
-            SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_START, part);
-            yield return new WaitForSeconds(0.75f);
-            SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_EFFECT, part);
-            part.TriggerActiveLogic();
-            yield return new WaitForSeconds(1f);
-            SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_END, part);
-
-            ExecuteNext(isPlayer);
+            RunOnePartSequence(isPlayer, part);
         }
 
         /// <summary>
-        /// 从队列中删除指定的部位（按引用删除）
+        /// ????λ????????????????????Э???????????????????????? _cancelToken??
         /// </summary>
+        private void RunOnePartSequence(bool isPlayer, PartInfo part)
+        {
+            const float delayStart = 0.75f;
+            const float delayEffect = 0.75f;
+            const float delayEnd = 1f;
+
+            SCTimeCaller.instance.CallDealy(delayStart, () =>
+            {
+                if (_cancelToken != null && _cancelToken.IsCancelled) return;
+                SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_START, part);
+                SCTimeCaller.instance.CallDealy(delayEffect, () =>
+                {
+                    if (_cancelToken != null && _cancelToken.IsCancelled) return;
+                    SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_EFFECT, part);
+                    part.TriggerActiveLogic();
+                    SCTimeCaller.instance.CallDealy(delayEnd, () =>
+                    {
+                        if (_cancelToken != null && _cancelToken.IsCancelled) return;
+                        SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_END, part);
+                        ExecuteNext(isPlayer);
+                    });
+                });
+            });
+        }
+
+        /// <summary> ?????????????????????????????????@???????? </summary>
         public bool RemovePartFromList(bool isPlayer, PartInfo part)
         {
             if (part == null) return false;
-
-            var queue = isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
-            bool removed = queue.Remove(part);
-
-            // 如果删除的是还没执行到的，队列索引不用动，自动跳过
-            return removed;
+            var queue = isPlayer ? _playerQueue : _enemyQueue;
+            var list = isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
+            bool fromQueue = queue.Remove(part);
+            bool fromList = list.Remove(part);
+            return fromQueue || fromList;
         }
 
-        /// <summary>
-        /// 根据索引删除队列中的部位
-        /// </summary>
+        /// <summary> ?????????????????????? </summary>
         public bool RemovePartAt(bool isPlayer, int index)
         {
-            var queue = isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
-            if (index < 0 || index >= queue.Count)
-                return false;
-
-            queue.RemoveAt(index);
+            var list = isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
+            if (index < 0 || index >= list.Count) return false;
+            PartInfo part = list[index];
+            list.RemoveAt(index);
+            var queue = isPlayer ? _playerQueue : _enemyQueue;
+            queue.Remove(part);
             return true;
         }
 
-        #endregion
+        public int GetIndexOfPartInfo(PartInfo info, bool isPlayer)
+        {
+            var queue = isPlayer ? _playerQueue : _enemyQueue;
+            return queue.IndexOf(info);
+        }
 
+        #endregion
 
         public void ChangeTurnOwner()
         {
@@ -242,34 +206,22 @@ namespace GameCore
                 : ETurnOwnerType.PLAYER;
         }
 
+        /// <summary> ????????????????????????? </summary>
         public void FinishBattle()
         {
-            SCTimeCaller.instance.CallDealy(1f, () =>
-            {
-                SCTaskHelper.instance.KillAllCoroutines(this);
-                GameModel.instance.DealNextTurn();
-                UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
-                UICoreMgr.instance.AddNode(new UINodeBattleOrder(SCUIShowType.ADDITION));
-
-            });
-        }
-        public int GetIndexOfPartInfo(PartInfo _info, bool _isPlayer)
-        {
-            return _isPlayer ? _m_playerExecQueue.IndexOf(_info) : _m_enemyExecQueue.IndexOf(_info);
+            OnBattleRoundFinish();
         }
 
-        /// <summary>
-        /// 战斗中断（一般是分出胜负了）
-        /// </summary>
-        public void TerminateBattle(bool _isPlayerWin)
+        /// <summary> ??????????????????? </summary>
+        public void TerminateBattle(bool isPlayerWin)
         {
-            //先清除携程再置空
-            SCTaskHelper.instance.KillAllCoroutines(this);
-            _m_isPlayerExecuting = false;
-            _m_isEnemyExecuting = false;
-            _m_onPlayerFinish = null;
-            _m_onEnemyFinish = null;
-            if(_isPlayerWin)
+            _cancelToken?.Cancel();
+            BattleContext.Current = null;
+            _playerQueue.Start(null, null);
+            _enemyQueue.Start(null, null);
+            playerExcuteInfoList.Clear();
+            enemyExcuteInfoList.Clear();
+            if (isPlayerWin)
                 UICoreMgr.instance.AddNode(new UINodeBattleWin(SCUIShowType.ADDITION));
             else
                 UICoreMgr.instance.AddNode(new UINodeLose(SCUIShowType.FULL));
