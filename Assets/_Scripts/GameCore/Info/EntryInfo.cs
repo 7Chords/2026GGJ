@@ -12,7 +12,6 @@ namespace GameCore
         public EAttributeType attributeType;
         public float attributeChance;
         public float attributeValue;
-
         public EntryInfo(EntryEffectObj _refObj)
         {
             if (_refObj == null)

@@ -29,10 +29,13 @@ namespace GameCore.UI
         public GameObject goName;
         public GameObject goDesc;
         public GameObject goGrid;
+        public GameObject goBuff;
 
         [Header("格子信息父物体")]
         public GameObject tranParentGrid;
 
+        [Header("buff信息父物体")]
+        public GameObject tranParentBuff;
 
         private TweenContainer _m_tweenContainer;
         private RectTransform _m_tooltipRect;

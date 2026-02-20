@@ -11,15 +11,16 @@ namespace GameCore
         public int currentHealth;
         public int maxHealth;
         public bool isOnFace;
+        public bool isEnemyPart;
         public int rotateStep;
         public List<Vector2Int> localOccupyPosList;
         public List<Vector2Int> localEffectPosList;
         public List<Vector2Int> curOccupyFacePosList;
         public List<Vector2Int> curEffectFacePosList;
         public List<EntryInfo> entryInfoList;
+        public List<BuffInfo> buffInfoList;
 
         public PartLogic logicObj;//逻辑实例
-        public bool isEnemyPart;
 
 
         public PartInfo(PartRefObj _partRefObj,bool _isEnemyPart)
@@ -52,6 +53,8 @@ namespace GameCore
                 entryInfo = new EntryInfo(entry);
                 entryInfoList.Add(entryInfo);
             }
+            buffInfoList = new List<BuffInfo>();
+
 
             logicObj = PartLogicFactory.CreateLogic(this);
         }
@@ -86,6 +89,7 @@ namespace GameCore
         {
             ResetToBusy();
             currentHealth = maxHealth;
+            buffInfoList.Clear();
         }
         public void ClearOnFaceState()
         {

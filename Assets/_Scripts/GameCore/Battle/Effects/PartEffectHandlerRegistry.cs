@@ -22,7 +22,7 @@ namespace GameCore.Battle
             Register(EAttributeType.REFLECT, new Effects.ReflectEffectHandler());
             Register(EAttributeType.TRIGGER_MORE, new Effects.TriggerMoreEffectHandler());
             Register(EAttributeType.DAMAGE_MULTIPILER, new Effects.DamageMultiplierEffectHandler());
-            Register(EAttributeType.HEAL_PART, new Effects.HealPartEffectHandler());
+            Register(EAttributeType.HEAL_ALL_PART, new Effects.HealPartEffectHandler());
             Register(EAttributeType.PART_LOSE_TURN, new Effects.PartLoseTurnEffectHandler());
         }
 
