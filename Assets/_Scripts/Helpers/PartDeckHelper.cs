@@ -9,40 +9,40 @@ namespace GameCore.Helpers
     public static class PartDeckHelper
     {
         /// <summary> 从 deck 随机抽 count 张到 busy，不超过 maxBusy。直接修改两个列表。 </summary>
-        public static void DrawParts(List<PartInfo> deck, List<PartInfo> busy, int count, int maxBusy)
+        public static void DrawParts(List<PartInfo> _deck, List<PartInfo> _busy, int _count, int _maxBusy)
         {
-            if (deck == null || deck.Count == 0) return;
-            if (busy == null) return;
-            for (int i = 0; i < count; i++)
+            if (_deck == null || _deck.Count == 0) return;
+            if (_busy == null) return;
+            for (int i = 0; i < _count; i++)
             {
-                if (deck.Count == 0) break;
-                if (busy.Count >= maxBusy) break;
-                int idx = Random.Range(0, deck.Count);
-                PartInfo drawn = deck[idx];
-                deck.RemoveAt(idx);
-                busy.Add(drawn);
+                if (_deck.Count == 0) break;
+                if (_busy.Count >= _maxBusy) break;
+                int idx = Random.Range(0, _deck.Count);
+                PartInfo drawn = _deck[idx];
+                _deck.RemoveAt(idx);
+                _busy.Add(drawn);
             }
         }
 
         /// <summary> 将 busy 中所有部位 ResetToDeck 后全部移入 deck，并清空 busy。 </summary>
-        public static void RecycleBusyToDeck(List<PartInfo> deck, List<PartInfo> busy)
+        public static void RecycleBusyToDeck(List<PartInfo> _deck, List<PartInfo> _busy)
         {
-            if (busy == null) return;
-            if (deck == null) return;
-            for (int i = 0; i < busy.Count; i++)
-                busy[i].ResetToDeck();
-            deck.AddRange(busy);
-            busy.Clear();
+            if (_busy == null) return;
+            if (_deck == null) return;
+            for (int i = 0; i < _busy.Count; i++)
+                _busy[i].ResetToDeck();
+            _deck.AddRange(_busy);
+            _busy.Clear();
         }
 
         /// <summary> 将 battle 中所有部位 ResetToBusy 后全部移入 busy，并清空 battle。 </summary>
-        public static void RecycleBattleToBusy(List<PartInfo> battle, List<PartInfo> busy)
+        public static void RecycleBattleToBusy(List<PartInfo> _battle, List<PartInfo> _busy)
         {
-            if (battle == null || busy == null) return;
-            for (int i = 0; i < battle.Count; i++)
-                battle[i].ResetToBusy();
-            busy.AddRange(battle);
-            battle.Clear();
+            if (_battle == null || _busy == null) return;
+            for (int i = 0; i < _battle.Count; i++)
+                _battle[i].ResetToBusy();
+            _busy.AddRange(_battle);
+            _battle.Clear();
         }
     }
 }

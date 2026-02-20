@@ -26,7 +26,7 @@ namespace GameCore
         public override void OnDiscard()
         {
             _cancelToken?.Cancel();
-            BattleContext.Current = null;
+            BattleContext.current = null;
         }
 
         public void StartBattle()
@@ -38,8 +38,8 @@ namespace GameCore
 
             SCTimeCaller.instance.CallDealy(0.5f, () =>
             {
-                if (_cancelToken.IsCancelled) return;
-                BattleContext.Current = new BattleContext();
+                if (_cancelToken.isCancelled) return;
+                BattleContext.current = new BattleContext();
 
                 if (GameModel.instance.curTurnOwner == ETurnOwnerType.PLAYER)
                 {
@@ -64,86 +64,81 @@ namespace GameCore
         {
             SCTimeCaller.instance.CallDealy(1f, () =>
             {
-                if (_cancelToken != null && _cancelToken.IsCancelled) return;
-                BattleContext.Current = null;
+                if (_cancelToken != null && _cancelToken.isCancelled) return;
+                BattleContext.current = null;
                 GameModel.instance.DealNextTurn();
                 UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
                 UICoreMgr.instance.AddNode(new UINodeBattleOrder(SCUIShowType.ADDITION));
             });
         }
 
-        #region ??????????????????????????
+        #region é˜Ÿåˆ—ç›¸å…³æ–¹æ³•
 
-        /// <summary> ???????????? </summary>
-        public void StartExecuteParts(bool isPlayer, List<PartInfo> parts, Action onFinish = null)
+        public void StartExecuteParts(bool _isPlayer, List<PartInfo> _parts, Action _onFinish = null)
         {
-            var list = isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
-            var queue = isPlayer ? _playerQueue : _enemyQueue;
+            var list = _isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
+            var queue = _isPlayer ? _playerQueue : _enemyQueue;
 
             //list.Clear();
-            //if (parts != null)
+            //if (_parts != null)
             //{
-            //    foreach (var part in parts)
+            //    foreach (var part in _parts)
             //        if (part != null) list.Add(part);
             //}
-            queue.Start(list, onFinish);
-            ExecuteNext(isPlayer);
+            queue.Start(list, _onFinish);
+            ExecuteNext(_isPlayer);
         }
 
-        /// <summary> ?????????????index = queue.Count ?????? </summary>
-        public void InsertPartAt(bool isPlayer, int index, PartInfo part)
+        public void InsertPartAt(bool _isPlayer, int _index, PartInfo _part)
         {
-            if (part == null) return;
-            var queue = isPlayer ? _playerQueue : _enemyQueue;
-            if (index < queue.CurrentIndex) return;
+            if (_part == null) return;
+            var queue = _isPlayer ? _playerQueue : _enemyQueue;
+            if (_index < queue.currentIndex) return;
 
-            queue.InsertAt(index, part);
-            var list = isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
-            index = Mathf.Clamp(index, 0, list.Count);
-            list.Insert(index, part);
+            queue.InsertAt(_index, _part);
+            var list = _isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
+            int index = Mathf.Clamp(_index, 0, list.Count);
+            list.Insert(index, _part);
 
-            if (!queue.IsExecuting)
-                ExecuteNext(isPlayer);
+            if (!queue.isExecuting)
+                ExecuteNext(_isPlayer);
         }
 
-        public void AddPartToLast(bool isPlayer, PartInfo part)
+        public void AddPartToLast(bool _isPlayer, PartInfo _part)
         {
-            var list = isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
-            InsertPartAt(isPlayer, list.Count, part);
+            var list = _isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
+            InsertPartAt(_isPlayer, list.Count, _part);
         }
 
-        public void InsertPartAfterCurrent(bool isPlayer, PartInfo part)
+        public void InsertPartAfterCurrent(bool _isPlayer, PartInfo _part)
         {
-            var queue = isPlayer ? _playerQueue : _enemyQueue;
-            InsertPartAt(isPlayer, queue.CurrentIndex + 1, part);
+            var queue = _isPlayer ? _playerQueue : _enemyQueue;
+            InsertPartAt(_isPlayer, queue.currentIndex + 1, _part);
         }
 
-        public void InsertPartAfterTarget(bool isPlayer, PartInfo targetPart, PartInfo newPart)
+        public void InsertPartAfterTarget(bool _isPlayer, PartInfo _targetPart, PartInfo _newPart)
         {
-            var queue = isPlayer ? _playerQueue : _enemyQueue;
-            int index = queue.IndexOf(targetPart);
-            var list = isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
+            var queue = _isPlayer ? _playerQueue : _enemyQueue;
+            int index = queue.IndexOf(_targetPart);
+            var list = _isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
             if (index < 0)
             {
-                AddPartToLast(isPlayer, newPart);
+                AddPartToLast(_isPlayer, _newPart);
                 return;
             }
-            InsertPartAt(isPlayer, index + 1, newPart);
+            InsertPartAt(_isPlayer, index + 1, _newPart);
         }
 
-        private void ExecuteNext(bool isPlayer)
+        private void ExecuteNext(bool _isPlayer)
         {
-            var queue = isPlayer ? _playerQueue : _enemyQueue;
+            var queue = _isPlayer ? _playerQueue : _enemyQueue;
             PartInfo part = queue.MoveNext();
             if (part == null)
                 return;
-            RunOnePartSequence(isPlayer, part);
+            RunOnePartSequence(_isPlayer, part);
         }
 
-        /// <summary>
-        /// ????¦Ë????????????????????§¿???????????????????????? _cancelToken??
-        /// </summary>
-        private void RunOnePartSequence(bool isPlayer, PartInfo part)
+        private void RunOnePartSequence(bool _isPlayer, PartInfo _part)
         {
             const float delayStart = 0.75f;
             const float delayEffect = 0.75f;
@@ -151,49 +146,46 @@ namespace GameCore
 
             SCTimeCaller.instance.CallDealy(delayStart, () =>
             {
-                if (_cancelToken != null && _cancelToken.IsCancelled) return;
-                SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_START, part);
+                if (_cancelToken != null && _cancelToken.isCancelled) return;
+                SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_START, _part);
                 SCTimeCaller.instance.CallDealy(delayEffect, () =>
                 {
-                    if (_cancelToken != null && _cancelToken.IsCancelled) return;
-                    part.TriggerActiveLogic();
+                    if (_cancelToken != null && _cancelToken.isCancelled) return;
+                    _part.TriggerActiveLogic();
                     SCTimeCaller.instance.CallDealy(delayEnd, () =>
                     {
-                        if (_cancelToken != null && _cancelToken.IsCancelled) return;
-                        SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_END, part);
-                        ExecuteNext(isPlayer);
+                        if (_cancelToken != null && _cancelToken.isCancelled) return;
+                        SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_END, _part);
+                        ExecuteNext(_isPlayer);
                     });
                 });
             });
         }
 
-        /// <summary> ?????????????????????????????????@???????? </summary>
-        public bool RemovePartFromList(bool isPlayer, PartInfo part)
+        public bool RemovePartFromList(bool _isPlayer, PartInfo _part)
         {
-            if (part == null) return false;
-            var queue = isPlayer ? _playerQueue : _enemyQueue;
-            var list = isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
-            bool fromQueue = queue.Remove(part);
-            bool fromList = list.Remove(part);
+            if (_part == null) return false;
+            var queue = _isPlayer ? _playerQueue : _enemyQueue;
+            var list = _isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
+            bool fromQueue = queue.Remove(_part);
+            bool fromList = list.Remove(_part);
             return fromQueue || fromList;
         }
-
-        /// <summary> ?????????????????????? </summary>
-        public bool RemovePartAt(bool isPlayer, int index)
+        public bool RemovePartAt(bool _isPlayer, int _index)
         {
-            var list = isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
-            if (index < 0 || index >= list.Count) return false;
-            PartInfo part = list[index];
-            list.RemoveAt(index);
-            var queue = isPlayer ? _playerQueue : _enemyQueue;
+            var list = _isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
+            if (_index < 0 || _index >= list.Count) return false;
+            PartInfo part = list[_index];
+            list.RemoveAt(_index);
+            var queue = _isPlayer ? _playerQueue : _enemyQueue;
             queue.Remove(part);
             return true;
         }
 
-        public int GetIndexOfPartInfo(PartInfo info, bool isPlayer)
+        public int GetIndexOfPartInfo(PartInfo _info, bool _isPlayer)
         {
-            var queue = isPlayer ? _playerQueue : _enemyQueue;
-            return queue.IndexOf(info);
+            var queue = _isPlayer ? _playerQueue : _enemyQueue;
+            return queue.IndexOf(_info);
         }
 
         #endregion
@@ -205,22 +197,19 @@ namespace GameCore
                 : ETurnOwnerType.PLAYER;
         }
 
-        /// <summary> ????????????????????????? </summary>
         public void FinishBattle()
         {
             OnBattleRoundFinish();
         }
-
-        /// <summary> ??????????????????? </summary>
-        public void TerminateBattle(bool isPlayerWin)
+        public void TerminateBattle(bool _isPlayerWin)
         {
             _cancelToken?.Cancel();
-            BattleContext.Current = null;
+            BattleContext.current = null;
             _playerQueue.Start(null, null);
             _enemyQueue.Start(null, null);
             playerExcuteInfoList.Clear();
             enemyExcuteInfoList.Clear();
-            if (isPlayerWin)
+            if (_isPlayerWin)
                 UICoreMgr.instance.AddNode(new UINodeBattleWin(SCUIShowType.ADDITION));
             else
                 UICoreMgr.instance.AddNode(new UINodeLose(SCUIShowType.FULL));

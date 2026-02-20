@@ -9,10 +9,10 @@ namespace GameCore.Helpers
     public static class BattleOrderHelper
     {
         /// <summary> 按占格最小坐标 (y 优先，再 x) 排序 </summary>
-        public static void SortBattleOrder(List<PartInfo> battlePartList)
+        public static void SortBattleOrder(List<PartInfo> _battlePartList)
         {
-            if (battlePartList == null || battlePartList.Count == 0) return;
-            battlePartList.Sort((a, b) =>
+            if (_battlePartList == null || _battlePartList.Count == 0) return;
+            _battlePartList.Sort((a, b) =>
             {
                 Vector2Int aPos = a.GetMinGridPos();
                 Vector2Int bPos = b.GetMinGridPos();
@@ -22,12 +22,12 @@ namespace GameCore.Helpers
         }
 
         /// <summary> 获取部位在战斗列表中的显示序号（1-based）；不含则返回 -1。会先按位置排序再查。 </summary>
-        public static int GetBattleOrderByPartInfo(List<PartInfo> battlePartList, PartInfo info)
+        public static int GetBattleOrderByPartInfo(List<PartInfo> _battlePartList, PartInfo _info)
         {
-            if (info == null || battlePartList == null || !battlePartList.Contains(info))
+            if (_info == null || _battlePartList == null || !_battlePartList.Contains(_info))
                 return -1;
-            SortBattleOrder(battlePartList);
-            return battlePartList.IndexOf(info) + 1;
+            SortBattleOrder(_battlePartList);
+            return _battlePartList.IndexOf(_info) + 1;
         }
     }
 }

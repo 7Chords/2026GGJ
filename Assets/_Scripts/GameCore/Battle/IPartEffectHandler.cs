@@ -5,6 +5,6 @@ namespace GameCore.Battle
     /// </summary>
     public interface IPartEffectHandler
     {
-        void Execute(PartInfo caster, EntryInfo entry, PartEffectContext ctx);
+        void Execute(PartInfo _caster, EntryInfo _entry, PartEffectContext _ctx);
     }
 }

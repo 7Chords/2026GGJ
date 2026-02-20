@@ -6,16 +6,16 @@ namespace GameCore.Battle
     /// </summary>
     public class BattleCancelToken
     {
-        public bool IsCancelled { get; private set; }
+        public bool isCancelled { get; private set; }
 
         public void Cancel()
         {
-            IsCancelled = true;
+            isCancelled = true;
         }
 
         public void Reset()
         {
-            IsCancelled = false;
+            isCancelled = false;
         }
     }
 }

@@ -5,10 +5,10 @@ namespace GameCore.Battle
     /// </summary>
     public struct PartEffectContext
     {
-        public PartInfo SenderPart;
-        public int Damage;
+        public PartInfo senderPart;
+        public int damage;
 
-        public static PartEffectContext Active => new PartEffectContext { SenderPart = null, Damage = 0 };
-        public static PartEffectContext GetHit(PartInfo sender, int damage) => new PartEffectContext { SenderPart = sender, Damage = damage };
+        public static PartEffectContext Active => new PartEffectContext { senderPart = null, damage = 0 };
+        public static PartEffectContext GetHit(PartInfo _sender, int _damage) => new PartEffectContext { senderPart = _sender, damage = _damage };
     }
 }

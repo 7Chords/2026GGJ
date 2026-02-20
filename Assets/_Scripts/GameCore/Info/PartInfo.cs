@@ -53,7 +53,7 @@ namespace GameCore
                 entryInfoList.Add(entryInfo);
             }
 
-            logicObj = PartLogicFactory.CreateLogic(partRefObj.id, this);
+            logicObj = PartLogicFactory.CreateLogic(this);
         }
         public void ResetToBusy()
         {
@@ -113,14 +113,16 @@ namespace GameCore
         }
         public void TriggerActiveLogic()
         {
-            PartLogicFactory.RecreateActiveLogic(logicObj, this);
-            logicObj?.OnPartActive();
+            if (logicObj == null) return;
+            PartLogicFactory.RefreshTriggers(logicObj, this, EAttributeTriggerPointType.ACTIVE);
+            logicObj.OnPartActive();
         }
 
-        public void TriggerGetHitLogic(PartInfo _senderInfo,int _damage)
+        public void TriggerGetHitLogic(PartInfo senderInfo, int damage)
         {
-            PartLogicFactory.RecreateGetHitLogic(logicObj, this, _senderInfo,_damage);
-            logicObj?.OnPartGetHit();
+            if (logicObj == null) return;
+            PartLogicFactory.RefreshTriggers(logicObj, this, EAttributeTriggerPointType.GET_HIT);
+            logicObj.OnPartGetHit(senderInfo, damage);
         }
     }
 }

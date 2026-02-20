@@ -17,16 +17,16 @@ namespace GameCore.Helpers
         private const float EyeTopAreaRatio = 0.3f;
 
         /// <summary> 将敌人手牌区部位按优先级摆到脸上，并更新 battlePartInfoList 与 faceGrids。最后会排序战斗顺序。 </summary>
-        public static void GenerateLayout(EnemyInfo enemy, List<FaceGridInfo> faceGrids)
+        public static void GenerateLayout(EnemyInfo _enemy, List<FaceGridInfo> _faceGrids)
         {
-            if (enemy == null || faceGrids == null) return;
+            if (_enemy == null || _faceGrids == null) return;
 
             var readyToRemove = new List<PartInfo>();
             var orderedParts = new List<PartInfo>();
 
             foreach (EPartType partType in PartPlaceOrder)
             {
-                var targetPart = enemy.busyPartInfoList.FindAll(p => p.partRefObj.partType == partType);
+                var targetPart = _enemy.busyPartInfoList.FindAll(p => p.partRefObj.partType == partType);
                 if (targetPart != null) orderedParts.AddRange(targetPart);
             }
 
@@ -38,14 +38,14 @@ namespace GameCore.Helpers
                     curPart,
                     orderedParts.GetRange(0, i),
                     i + 1 < orderedParts.Count ? orderedParts.GetRange(i + 1, orderedParts.Count - i - 1) : new List<PartInfo>(),
-                    faceGrids,
+                    _faceGrids,
                     out Vector2Int pos,
                     out int rotStep);
 
                 if (success)
                 {
                     readyToRemove.Add(curPart);
-                    MarkOccupancy(curPart, pos, rotStep, enemy, faceGrids);
+                    MarkOccupancy(curPart, pos, rotStep, _enemy, _faceGrids);
                 }
                 else
                 {
@@ -54,26 +54,26 @@ namespace GameCore.Helpers
             }
 
             foreach (var p in readyToRemove)
-                enemy.busyPartInfoList.Remove(p);
+                _enemy.busyPartInfoList.Remove(p);
 
-            BattleOrderHelper.SortBattleOrder(enemy.battlePartInfoList);
+            BattleOrderHelper.SortBattleOrder(_enemy.battlePartInfoList);
         }
 
         private static bool TryFindGlobalOptimalPlacement(
-            PartInfo curPart,
-            List<PartInfo> placedParts,
-            List<PartInfo> remainingParts,
-            List<FaceGridInfo> faceGrids,
-            out Vector2Int resultPos,
-            out int resultRot)
+            PartInfo _curPart,
+            List<PartInfo> _placedParts,
+            List<PartInfo> _remainingParts,
+            List<FaceGridInfo> _faceGrids,
+            out Vector2Int _resultPos,
+            out int _resultRot)
         {
-            resultPos = Vector2Int.zero;
-            resultRot = 0;
+            _resultPos = Vector2Int.zero;
+            _resultRot = 0;
             int maxTotalScore = -1;
             var bestPosList = new List<Vector2Int>();
             var bestRotList = new List<int>();
-            PartRefObj partRef = curPart.partRefObj;
-            List<FaceGridInfo> filteredEmpty = GetFilteredEmptyGrids(curPart, faceGrids);
+            PartRefObj partRef = _curPart.partRefObj;
+            List<FaceGridInfo> filteredEmpty = GetFilteredEmptyGrids(_curPart, _faceGrids);
 
             for (int rot = 0; rot < 4; rot++)
             {
@@ -85,9 +85,9 @@ namespace GameCore.Helpers
                 foreach (FaceGridInfo grid in emptyGrids)
                 {
                     Vector2Int origin = grid.pos;
-                    if (!IsValidPlacement(partRef, origin, rot, faceGrids)) continue;
+                    if (!IsValidPlacement(partRef, origin, rot, _faceGrids)) continue;
 
-                    int score = CalculateGlobalEffectScore(rotatedOccupy, rotatedEffect, origin, placedParts, remainingParts, faceGrids);
+                    int score = CalculateGlobalEffectScore(rotatedOccupy, rotatedEffect, origin, _placedParts, _remainingParts, _faceGrids);
                     if (score > maxTotalScore)
                     {
                         maxTotalScore = score;
@@ -107,52 +107,52 @@ namespace GameCore.Helpers
             if (bestPosList.Count > 0)
             {
                 int rnd = Random.Range(0, bestPosList.Count);
-                resultPos = bestPosList[rnd];
-                resultRot = bestRotList[rnd];
+                _resultPos = bestPosList[rnd];
+                _resultRot = bestRotList[rnd];
                 return true;
             }
             return false;
         }
 
-        private static List<FaceGridInfo> GetFilteredEmptyGrids(PartInfo curPart, List<FaceGridInfo> allFaceGrids)
+        private static List<FaceGridInfo> GetFilteredEmptyGrids(PartInfo _curPart, List<FaceGridInfo> _allFaceGrids)
         {
-            var allEmpty = allFaceGrids.Where(g => !g.hasPart).ToList();
+            var allEmpty = _allFaceGrids.Where(g => !g.hasPart).ToList();
             if (allEmpty.Count == 0) return allEmpty;
-            if (curPart.partRefObj.partType != EPartType.EYE) return allEmpty;
+            if (_curPart.partRefObj.partType != EPartType.EYE) return allEmpty;
 
-            int maxFaceY = allFaceGrids.Max(g => g.pos.y);
+            int maxFaceY = _allFaceGrids.Max(g => g.pos.y);
             int eyeAreaMaxY = Mathf.FloorToInt(maxFaceY * EyeTopAreaRatio);
             var eyeTop = allEmpty.Where(g => g.pos.y <= eyeAreaMaxY).ToList();
             return eyeTop.Count > 0 ? eyeTop : allEmpty;
         }
 
         private static int CalculateGlobalEffectScore(
-            List<Vector2Int> currentRotatedOccupy,
-            List<Vector2Int> currentRotatedEffect,
-            Vector2Int origin,
-            List<PartInfo> placedParts,
-            List<PartInfo> remainingParts,
-            List<FaceGridInfo> faceGrids)
+            List<Vector2Int> _currentRotatedOccupy,
+            List<Vector2Int> _currentRotatedEffect,
+            Vector2Int _origin,
+            List<PartInfo> _placedParts,
+            List<PartInfo> _remainingParts,
+            List<FaceGridInfo> _faceGrids)
         {
             int totalScore = 0;
-            var currentOccupyWorld = currentRotatedOccupy.Select(o => origin + o).ToList();
-            var currentEffectWorld = currentRotatedEffect.Select(e => origin + e).ToList();
+            var currentOccupyWorld = _currentRotatedOccupy.Select(o => _origin + o).ToList();
+            var currentEffectWorld = _currentRotatedEffect.Select(e => _origin + e).ToList();
 
-            foreach (PartInfo placed in placedParts)
+            foreach (PartInfo placed in _placedParts)
             {
                 foreach (Vector2Int pos in currentOccupyWorld)
                 {
                     if (placed.curEffectFacePosList.Contains(pos)) { totalScore += 4; break; }
                 }
             }
-            foreach (PartInfo placed in placedParts)
+            foreach (PartInfo placed in _placedParts)
             {
                 foreach (Vector2Int pos in placed.curOccupyFacePosList)
                 {
                     if (currentEffectWorld.Contains(pos)) { totalScore += 5; break; }
                 }
             }
-            foreach (PartInfo remaining in remainingParts)
+            foreach (PartInfo remaining in _remainingParts)
             {
                 List<Vector2Int> remainingOccupy = remaining.partRefObj.GetOccupyPosList();
                 for (int r = 0; r < 4; r++)
@@ -160,55 +160,55 @@ namespace GameCore.Helpers
                     List<Vector2Int> remRotOccupy = GameCommon.RotateShapeAndMove2Zero(remainingOccupy, r);
                     foreach (Vector2Int effectPos in currentEffectWorld)
                     {
-                        if (remRotOccupy.Contains(effectPos - origin)) { totalScore += 2; break; }
+                        if (remRotOccupy.Contains(effectPos - _origin)) { totalScore += 2; break; }
                     }
                 }
             }
             foreach (Vector2Int effectPos in currentEffectWorld)
             {
-                if (faceGrids.Exists(g => g.pos == effectPos)) { totalScore += 1; break; }
+                if (_faceGrids.Exists(g => g.pos == effectPos)) { totalScore += 1; break; }
             }
             return totalScore;
         }
 
-        private static void ShuffleGridList(List<FaceGridInfo> gridList)
+        private static void ShuffleGridList(List<FaceGridInfo> _gridList)
         {
-            for (int i = gridList.Count - 1; i > 0; i--)
+            for (int i = _gridList.Count - 1; i > 0; i--)
             {
                 int r = Random.Range(0, i + 1);
-                (gridList[i], gridList[r]) = (gridList[r], gridList[i]);
+                (_gridList[i], _gridList[r]) = (_gridList[r], _gridList[i]);
             }
         }
 
-        private static bool IsValidPlacement(PartRefObj part, Vector2Int originFacePos, int rotStep, List<FaceGridInfo> faceGrids)
+        private static bool IsValidPlacement(PartRefObj _part, Vector2Int _originFacePos, int _rotStep, List<FaceGridInfo> _faceGrids)
         {
-            List<Vector2Int> shape = GameCommon.RotateShapeAndMove2Zero(part.GetOccupyPosList(), rotStep);
+            List<Vector2Int> shape = GameCommon.RotateShapeAndMove2Zero(_part.GetOccupyPosList(), _rotStep);
             foreach (var offset in shape)
             {
-                Vector2Int p = originFacePos + offset;
-                FaceGridInfo gridInfo = faceGrids.Find(x => x.pos == p);
+                Vector2Int p = _originFacePos + offset;
+                FaceGridInfo gridInfo = _faceGrids.Find(x => x.pos == p);
                 if (gridInfo == null || gridInfo.hasPart) return false;
             }
             return true;
         }
 
-        private static void MarkOccupancy(PartInfo part, Vector2Int origin, int rot, EnemyInfo enemy, List<FaceGridInfo> faceGrids)
+        private static void MarkOccupancy(PartInfo _part, Vector2Int _origin, int _rot, EnemyInfo _enemy, List<FaceGridInfo> _faceGrids)
         {
-            for (int i = 0; i < rot; i++) part.RotateOnce();
-            foreach (var offset in part.localOccupyPosList)
+            for (int i = 0; i < _rot; i++) _part.RotateOnce();
+            foreach (var offset in _part.localOccupyPosList)
             {
-                Vector2Int p = origin + offset;
-                FaceGridInfo gridInfo = faceGrids.Find(x => x.pos == p);
+                Vector2Int p = _origin + offset;
+                FaceGridInfo gridInfo = _faceGrids.Find(x => x.pos == p);
                 if (gridInfo == null) continue;
-                gridInfo.SetOwnerPart(part);
-                part.curOccupyFacePosList.Add(p);
+                gridInfo.SetOwnerPart(_part);
+                _part.curOccupyFacePosList.Add(p);
             }
-            foreach (var offset in part.localEffectPosList)
+            foreach (var offset in _part.localEffectPosList)
             {
-                part.curEffectFacePosList.Add(origin + offset);
+                _part.curEffectFacePosList.Add(_origin + offset);
             }
-            part.isOnFace = true;
-            enemy.battlePartInfoList.Add(part);
+            _part.isOnFace = true;
+            _enemy.battlePartInfoList.Add(_part);
         }
     }
 }

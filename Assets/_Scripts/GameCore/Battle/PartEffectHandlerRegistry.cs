@@ -26,23 +26,23 @@ namespace GameCore.Battle
             Register(EAttributeType.PART_LOSE_TURN, new Effects.PartLoseTurnEffectHandler());
         }
 
-        public static void Register(EAttributeType type, IPartEffectHandler handler)
+        public static void Register(EAttributeType _type, IPartEffectHandler _handler)
         {
-            if (handler == null) return;
-            _handlers[type] = handler;
+            if (_handler == null) return;
+            _handlers[_type] = _handler;
         }
 
-        public static IPartEffectHandler Get(EAttributeType type)
+        public static IPartEffectHandler Get(EAttributeType _type)
         {
-            return _handlers.TryGetValue(type, out var h) ? h : null;
+            return _handlers.TryGetValue(_type, out var h) ? h : null;
         }
 
         /// <summary> 用注册的处理器执行效果；若未注册则返回 false，调用方可走旧逻辑 </summary>
-        public static bool TryExecute(EAttributeType type, PartInfo caster, EntryInfo entry, PartEffectContext ctx)
+        public static bool TryExecute(EAttributeType _type, PartInfo _caster, EntryInfo _entry, PartEffectContext _ctx)
         {
-            var handler = Get(type);
+            var handler = Get(_type);
             if (handler == null) return false;
-            handler.Execute(caster, entry, ctx);
+            handler.Execute(_caster, _entry, _ctx);
             return true;
         }
     }

@@ -128,27 +128,27 @@ namespace GameCore
 
         }
 
-        public List<Vector2Int> GetPlaceFaceOccupyPosList(GameObject hitGridGO, Vector3 mousePos, List<Vector2Int> localGridList)
+        public List<Vector2Int> GetPlaceFaceOccupyPosList(GameObject _hitGridGO, Vector3 _mousePos, List<Vector2Int> _localGridList)
         {
             return FacePlacementHelper.GetPlaceFaceOccupyPosList(
-                hitGridGO, mousePos, localGridList,
+                _hitGridGO, _mousePos, _localGridList,
                 playerFaceGridInfoList, playerFaceGridGOList,
                 SCGame.instance.gameCamera);
         }
 
-        public List<Vector2Int> GetPlaceFaceEffectPosList(List<Vector2Int> localEffectPosList, List<Vector2Int> faceOccupyPosList, List<Vector2Int> localOccupyPosList)
+        public List<Vector2Int> GetPlaceFaceEffectPosList(List<Vector2Int> _localEffectPosList, List<Vector2Int> _faceOccupyPosList, List<Vector2Int> _localOccupyPosList)
         {
-            return FacePlacementHelper.GetPlaceFaceEffectPosList(localEffectPosList, faceOccupyPosList, localOccupyPosList);
+            return FacePlacementHelper.GetPlaceFaceEffectPosList(_localEffectPosList, _faceOccupyPosList, _localOccupyPosList);
         }
 
-        public bool CanPlacePart(GameObject hitGridGO, Vector3 mousePos, List<Vector2Int> localGridList)
+        public bool CanPlacePart(GameObject _hitGridGO, Vector3 _mousePos, List<Vector2Int> _localGridList)
         {
-            return FacePlacementHelper.CanPlacePart(hitGridGO, mousePos, localGridList, playerFaceGridInfoList, playerFaceGridGOList, SCGame.instance.gameCamera);
+            return FacePlacementHelper.CanPlacePart(_hitGridGO, _mousePos, _localGridList, playerFaceGridInfoList, playerFaceGridGOList, SCGame.instance.gameCamera);
         }
 
-        public bool CanPlacePart(List<Vector2Int> faceOccupyPosList)
+        public bool CanPlacePart(List<Vector2Int> _faceOccupyPosList)
         {
-            return FacePlacementHelper.CanPlacePart(faceOccupyPosList, playerFaceGridInfoList);
+            return FacePlacementHelper.CanPlacePart(_faceOccupyPosList, playerFaceGridInfoList);
         }
 
         public void SetGridsEmpty(List<Vector2Int> _posList)
@@ -164,15 +164,15 @@ namespace GameCore
             }
         }
 
-        public int GetPlayerBattleOrderByPartInfo(PartInfo info)
+        public int GetPlayerBattleOrderByPartInfo(PartInfo _info)
         {
-            return BattleOrderHelper.GetBattleOrderByPartInfo(playerInfo.battlePartInfoList, info);
+            return BattleOrderHelper.GetBattleOrderByPartInfo(playerInfo.battlePartInfoList, _info);
         }
 
-        public int GetEnemyBattleOrderByPartInfo(PartInfo info)
+        public int GetEnemyBattleOrderByPartInfo(PartInfo _info)
         {
             if (curEnemyInfo == null) return -1;
-            return BattleOrderHelper.GetBattleOrderByPartInfo(curEnemyInfo.battlePartInfoList, info);
+            return BattleOrderHelper.GetBattleOrderByPartInfo(curEnemyInfo.battlePartInfoList, _info);
         }
 
         public void SortEnemyBattleOrder()
@@ -230,16 +230,16 @@ namespace GameCore
             RollBattleOrder();
         }
 
-        public void PlayerDrawParts(int count)
+        public void PlayerDrawParts(int _count)
         {
             if (playerInfo == null) return;
-            PartDeckHelper.DrawParts(playerInfo.deckPartInfoList, playerInfo.busyPartInfoList, count, GameConst.BUSY_CARD_MAX_COUNT);
+            PartDeckHelper.DrawParts(playerInfo.deckPartInfoList, playerInfo.busyPartInfoList, _count, GameConst.BUSY_CARD_MAX_COUNT);
         }
 
-        public void EnemyDrawParts(int count)
+        public void EnemyDrawParts(int _count)
         {
             if (curEnemyInfo == null) return;
-            PartDeckHelper.DrawParts(curEnemyInfo.deckPartInfoList, curEnemyInfo.busyPartInfoList, count, GameConst.BUSY_CARD_MAX_COUNT);
+            PartDeckHelper.DrawParts(curEnemyInfo.deckPartInfoList, curEnemyInfo.busyPartInfoList, _count, GameConst.BUSY_CARD_MAX_COUNT);
         }
 
     }
