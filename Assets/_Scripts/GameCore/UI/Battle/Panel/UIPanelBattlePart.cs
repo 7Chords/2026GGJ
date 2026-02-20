@@ -139,10 +139,8 @@ namespace GameCore.UI
         {
             //放到最下面 显示在最前面
             GetGameObject().transform.SetAsLastSibling();
-            GameCommon.ShowTooltip(_m_partInfo.partRefObj.partName,
-                _m_partInfo.partRefObj.partDesc,
+            GameCommon.ShowTooltip(_m_partInfo,
                 new Vector2(GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_BATTLE, GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_BATTLE),
-                _m_partInfo.partRefObj.qualityType,
                 false);
         }
 

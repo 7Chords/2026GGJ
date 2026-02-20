@@ -101,7 +101,7 @@ namespace GameCore
             damageGO.GetComponent<PartEffectText>().Initialize(_content);
         }
 
-        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector3 _worldPos, EQualityType _qualityType = EQualityType.NONE, bool _showGridInfo = true)
+        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector3 _worldPos, EQualityType _qualityType = EQualityType.NONE)
         {
             DiscardToolTip();
             GameObject toolTipGo = ResourcesHelper.LoadGameObject(
@@ -133,11 +133,11 @@ namespace GameCore
             toolTipRT.localPosition = localPoint;
             
             var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
-            tooltipComp.ShowTooltip(_name, _desc, localPoint, _qualityType,_showGridInfo);
+            tooltipComp.ShowTooltip(_name, _desc, localPoint, _qualityType);
             _m_toolTipCache = toolTipGo;
             return tooltipComp;
         }
-        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector3 _worldPos, Vector2 _showScreenRatioOffset, EQualityType _qualityType = EQualityType.NONE,bool _showGridInfo = true)
+        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector3 _worldPos, Vector2 _showScreenRatioOffset, EQualityType _qualityType = EQualityType.NONE)
         {
             DiscardToolTip();
             GameObject toolTipGo = ResourcesHelper.LoadGameObject(
@@ -160,11 +160,11 @@ namespace GameCore
             toolTipRT.localPosition = localPoint;
 
             var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
-            tooltipComp.ShowTooltip(_name, _desc, localPoint, _qualityType, _showGridInfo);
+            tooltipComp.ShowTooltip(_name, _desc, localPoint, _qualityType);
             _m_toolTipCache = toolTipGo;
             return tooltipComp;
         }
-        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector2 _screenRatio, EQualityType _qualityType = EQualityType.NONE, bool _showGridInfo = true)
+        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector2 _screenRatio, EQualityType _qualityType = EQualityType.NONE)
         {
             DiscardToolTip();
             GameObject toolTipGo = ResourcesHelper.LoadGameObject(
@@ -186,7 +186,7 @@ namespace GameCore
             toolTipRT.localPosition = localPoint;
 
             var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
-            tooltipComp.ShowTooltip(_name, _desc, localPoint, _qualityType,_showGridInfo);
+            tooltipComp.ShowTooltip(_name, _desc, localPoint, _qualityType);
             _m_toolTipCache = toolTipGo;
             return tooltipComp;
         }

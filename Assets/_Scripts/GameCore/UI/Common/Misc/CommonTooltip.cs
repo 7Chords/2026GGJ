@@ -53,7 +53,13 @@ namespace GameCore.UI
             }
         }
 
-        public void setBaseInfo(string _name,string _desc, EQualityType _quality = EQualityType.NONE)
+        private void OnDestroy()
+        {
+            _m_tweenContainer?.KillAllDoTween();
+            _m_tweenContainer = null;
+        }
+
+        private void setBaseInfo(string _name,string _desc, EQualityType _quality = EQualityType.NONE)
         {
             if (txtName != null)
                 txtName.text = string.IsNullOrEmpty(_name) ? "默认部位" : _name;
@@ -80,22 +86,132 @@ namespace GameCore.UI
                 }
             }
         }
-
-        public void setGridInfo(List<Vector2Int> _occupyPosList,List<Vector2Int> _effectPosList)
+        private void setGridInfo(List<Vector2Int> _occupyPosList,List<Vector2Int> _effectPosList)
         {
             for(int i = 0; i < _occupyPosList.Count; i++)
             {
-                CreateOneGrid(_occupyPosList[i],EGridPosType.OCCUPY);
+                createOneGrid(_occupyPosList[i],EGridPosType.OCCUPY);
             }
             if(!_occupyPosList.Vector2IntListEquals(_effectPosList))
             {
                 for (int i = 0; i < _effectPosList.Count; i++)
                 {
-                    CreateOneGrid(_effectPosList[i], EGridPosType.EFFECT);
+                    createOneGrid(_effectPosList[i], EGridPosType.EFFECT);
+                }
+            }
+            else
+            {
+                //todo:现在设计的有重叠都是完全重叠的暂时这样写
+                for (int i = 0; i < _effectPosList.Count; i++)
+                {
+                    createOneGrid(_effectPosList[i], EGridPosType.BOTH);
                 }
             }
         }
+        private void setBuffInfo(List<BuffInfo> _buffInfoList)
+        {
+            if (_buffInfoList == null)
+                return;
+            if (tranParentBuff == null)
+                return;
+            GameObject itemGO = null;
+            TooltipBuffItem item = null;
+            for (int i =0;i< _buffInfoList.Count;i++)
+            {
+                itemGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_TOOLTIP_BUFF_ITEM, tranParentBuff.transform);
+                item = itemGO.GetComponent<TooltipBuffItem>();
+                if (item != null)
+                    item.SetBuffInfo(_buffInfoList[i]);
+            }
 
+        }
+        public void setLocalPosition(Vector2 _localPos)
+        {
+            if (_m_tooltipRect != null)
+            {
+                _m_tooltipRect.localPosition = _localPos;
+            }
+        }
+
+        public void Discard()
+        {
+            _m_tweenContainer.RegDoTween(canvasGroup.DOFade(0, fadeOutDuratin)
+                .OnComplete(() =>
+                {
+                    SCCommon.DestoryGameObject(gameObject);
+                }));
+        }
+
+        #region ShowTip
+
+        public void ShowTooltip(string _name,string _desc, Vector2 _targetLocalPos, EQualityType _quality = EQualityType.NONE)
+        {
+
+            setBaseInfo(_name,_desc,_quality);
+            Vector2 adaptivePos = calculateAdaptivePosition(_targetLocalPos);
+            setLocalPosition(adaptivePos);
+            canvasGroup.alpha = 0;
+            SCCommon.SetGameObjectEnable(gameObject, true);
+            SCCommon.SetGameObjectEnable(goGrid, false);
+            SCCommon.SetGameObjectEnable(goBuff, false);
+            SCCommon.SetGameObjectEnable(txtQuality.transform.parent.gameObject, _quality!= EQualityType.NONE);
+            _m_tweenContainer.RegDoTween(canvasGroup.DOFade(1, fadeInDuratin));
+        }
+
+        public void ShowTooltip(PartInfo _partInfo, Vector2 _targetLocalPos, bool _showGridInfo = true)
+        {
+
+            Vector2 adaptivePos = calculateAdaptivePosition(_targetLocalPos);
+            setLocalPosition(adaptivePos);
+            canvasGroup.alpha = 0;
+            SCCommon.SetGameObjectEnable(gameObject, true);
+            SCCommon.SetGameObjectEnable(goGrid, _showGridInfo);
+            SCCommon.SetGameObjectEnable(goBuff, _partInfo.HasBuff());
+            SCCommon.SetGameObjectEnable(txtQuality.gameObject, _partInfo.partRefObj.qualityType != EQualityType.NONE);
+
+            setBaseInfo(_partInfo.partRefObj.partName, _partInfo.partRefObj.partDesc, _partInfo.partRefObj.qualityType);
+            if (_showGridInfo)
+                setGridInfo(_partInfo.partRefObj.GetOccupyPosList(), _partInfo.partRefObj.GetEffectPosList());
+            if (_partInfo.HasBuff())
+                setBuffInfo(_partInfo.buffInfoList);
+            _m_tweenContainer.RegDoTween(canvasGroup.DOFade(1, fadeInDuratin));
+        }
+
+        public void ShowTooltip(PartRefObj _partRefObj, Vector2 _targetLocalPos, bool _showGridInfo = true)
+        {
+            Vector2 adaptivePos = calculateAdaptivePosition(_targetLocalPos);
+            setLocalPosition(adaptivePos);
+            canvasGroup.alpha = 0;
+            SCCommon.SetGameObjectEnable(gameObject, true);
+            SCCommon.SetGameObjectEnable(goGrid, _showGridInfo);
+            SCCommon.SetGameObjectEnable(goBuff, false);
+            SCCommon.SetGameObjectEnable(txtQuality.gameObject, _partRefObj.qualityType != EQualityType.NONE);
+
+            setBaseInfo(_partRefObj.partName, _partRefObj.partDesc, _partRefObj.qualityType);
+            if (_showGridInfo)
+                setGridInfo(_partRefObj.GetOccupyPosList(), _partRefObj.GetEffectPosList());
+
+            _m_tweenContainer.RegDoTween(canvasGroup.DOFade(1, fadeInDuratin));
+        }
+        #endregion
+
+        #region Util
+
+        /// <summary>
+        /// 生成单个格子并设置位置
+        /// </summary>
+        private void createOneGrid(Vector2Int gridPos,EGridPosType posType)
+        {
+            if (tranParentGrid == null) 
+                return;
+            GameObject grid = ResourcesHelper.LoadGameObject(GameConst.PREFAB_TOOLTIP_GIRD, tranParentGrid.transform);
+            RectTransform rt = grid.GetComponent<RectTransform>();
+            float x = gridPos.x * rt.rect.width;
+            float y = -gridPos.y * rt.rect.height;
+            if (rt != null)
+                rt.anchoredPosition = new Vector2(x, y);
+            rt.GetComponent<TooltipGrid>().SetGridTShow(posType);
+        }
         private Vector2 calculateAdaptivePosition(Vector2 _targetLocalPos)
         {
             if (_m_tooltipRect == null || _m_canvasRect == null)
@@ -143,100 +259,7 @@ namespace GameCore.UI
 
             return adaptivePos;
         }
+        #endregion
 
-
-        public void setLocalPosition(Vector2 _localPos)
-        {
-            if (_m_tooltipRect != null)
-            {
-                _m_tooltipRect.localPosition = _localPos;
-            }
-        }
-
-        public void Discard()
-        {
-            _m_tweenContainer.RegDoTween(canvasGroup.DOFade(0, fadeOutDuratin)
-                .OnComplete(() =>
-                {
-                    SCCommon.DestoryGameObject(gameObject);
-                }));
-        }
-
-        private void OnDestroy()
-        {
-            _m_tweenContainer?.KillAllDoTween();
-            _m_tweenContainer = null;
-        }
-
-
-        public void ShowTooltip(string _name,string _desc, Vector2 _targetLocalPos, EQualityType _quality = EQualityType.NONE,bool _showGridInfo = true)
-        {
-
-            setBaseInfo(_name,_desc,_quality);
-            Vector2 adaptivePos = calculateAdaptivePosition(_targetLocalPos);
-            setLocalPosition(adaptivePos);
-            canvasGroup.alpha = 0;
-            SCCommon.SetGameObjectEnable(gameObject, true);
-            SCCommon.SetGameObjectEnable(goGrid, _showGridInfo);
-            SCCommon.SetGameObjectEnable(txtQuality.transform.parent.gameObject, _quality!= EQualityType.NONE);
-            _m_tweenContainer.RegDoTween(canvasGroup.DOFade(1, fadeInDuratin));
-        }
-
-        public void ShowTooltip(PartInfo _partInfo, Vector2 _targetLocalPos, bool _showGridInfo = true)
-        {
-            setBaseInfo(_partInfo.partRefObj.partName, _partInfo.partRefObj.partDesc, _partInfo.partRefObj.qualityType);
-            Vector2 adaptivePos = calculateAdaptivePosition(_targetLocalPos);
-            setLocalPosition(adaptivePos);
-            canvasGroup.alpha = 0;
-            SCCommon.SetGameObjectEnable(gameObject, true);
-            SCCommon.SetGameObjectEnable(goGrid, _showGridInfo);
-            if(_showGridInfo)
-            {
-                setGridInfo(_partInfo.partRefObj.GetOccupyPosList(), _partInfo.partRefObj.GetEffectPosList());
-            }
-            SCCommon.SetGameObjectEnable(txtQuality.gameObject, _partInfo.partRefObj.qualityType != EQualityType.NONE);
-            _m_tweenContainer.RegDoTween(canvasGroup.DOFade(1, fadeInDuratin));
-        }
-
-        public void ShowTooltip(PartRefObj _partRefObj, Vector2 _targetLocalPos, bool _showGridInfo = true)
-        {
-            setBaseInfo(_partRefObj.partName, _partRefObj.partDesc, _partRefObj.qualityType);
-            Vector2 adaptivePos = calculateAdaptivePosition(_targetLocalPos);
-            setLocalPosition(adaptivePos);
-            canvasGroup.alpha = 0;
-            SCCommon.SetGameObjectEnable(gameObject, true);
-            SCCommon.SetGameObjectEnable(goGrid, _showGridInfo);
-            if (_showGridInfo)
-            {
-                setGridInfo(_partRefObj.GetOccupyPosList(), _partRefObj.GetEffectPosList());
-            }
-            SCCommon.SetGameObjectEnable(txtQuality.gameObject, _partRefObj.qualityType != EQualityType.NONE);
-            _m_tweenContainer.RegDoTween(canvasGroup.DOFade(1, fadeInDuratin));
-        }
-
-
-
-
-        /// <summary>
-        /// 生成单个格子并设置位置
-        /// </summary>
-        private void CreateOneGrid(Vector2Int gridPos,EGridPosType posType)
-        {
-            if (tranParentGrid == null) return;
-
-            GameObject grid = ResourcesHelper.LoadGameObject(GameConst.PREFAB_TOOLTIP_GIRD, tranParentGrid.transform);
-            grid.transform.localScale = Vector3.one;
-            grid.transform.localRotation = Quaternion.identity;
-
-
-            RectTransform rt = grid.GetComponent<RectTransform>();
-            float x = gridPos.x * rt.rect.width;
-            float y = -gridPos.y * rt.rect.height;
-            if (rt != null)
-            {
-                rt.anchoredPosition = new Vector2(x, y);
-            }
-            rt.GetComponent<TooltipGrid>().SetGridTShow(posType);
-        }
     }
 }

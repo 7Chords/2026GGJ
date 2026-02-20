@@ -115,13 +115,17 @@ namespace GameCore
             }
             return new Vector2Int(minX, minY);
         }
+
+        public bool HasBuff()
+        {
+            return buffInfoList != null && buffInfoList.Count > 0;
+        }
         public void TriggerActiveLogic()
         {
             if (logicObj == null) return;
             PartLogicFactory.RefreshTriggers(logicObj, this, EAttributeTriggerPointType.ACTIVE);
             logicObj.OnPartActive();
         }
-
         public void TriggerGetHitLogic(PartInfo senderInfo, int damage)
         {
             if (logicObj == null) return;

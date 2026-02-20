@@ -87,10 +87,8 @@ namespace GameCore.UI
             //放到最下面 显示在最前面
             GetGameObject().transform.SetAsLastSibling();
             _m_tweenContainer.RegDoTween(mono.imgGO.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
-            GameCommon.ShowTooltip(_m_partInfo.partRefObj.partName,
-                _m_partInfo.partRefObj.partDesc,
+            GameCommon.ShowTooltip(_m_partInfo,
                 new Vector2(GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_COMBINE, GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_COMBINE),
-                _m_partInfo.partRefObj.qualityType,
                 false);
             SCMsgCenter.SendMsg(SCMsgConst.ENEMY_FACE_PART_RANGE_HIGHLIGHT, _m_partInfo);
 

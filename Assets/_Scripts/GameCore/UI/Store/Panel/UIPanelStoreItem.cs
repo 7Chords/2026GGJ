@@ -109,7 +109,7 @@ namespace GameCore.UI
             {
                 GameCommon.ShowTooltip(_m_goodsInfo.goodsRefObj.goodsName,
                     _m_goodsInfo.goodsRefObj.goodsDesc,
-                    GetGameObject().transform.position,EQualityType.NONE,false);
+                    GetGameObject().transform.position,EQualityType.NONE);
             }
             
 

@@ -166,4 +166,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorIsOccupyGrid: {r: 0.3107511, g: 0.8113208, b: 0.3107511, a: 0.5019608}
   colorIsEffectGrid: {r: 0, g: 0.53247404, b: 1, a: 0.5019608}
+  colorIsBothGrid: {r: 1, g: 0.71624714, b: 0, a: 0.5019608}
   imgGrid: {fileID: 7504241042703454402}

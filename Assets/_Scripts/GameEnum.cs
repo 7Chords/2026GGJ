@@ -77,6 +77,7 @@ namespace GameCore
     {
         OCCUPY,
         EFFECT,
+        BOTH,
     }
 
     public enum ETurnOwnerType

@@ -10,6 +10,8 @@ namespace GameCore.UI
         public Color colorIsOccupyGrid;
         [Header("是效果格子的颜色")]
         public Color colorIsEffectGrid;
+        [Header("是二者重叠的颜色")]
+        public Color colorIsBothGrid;
         [Header("格子img")]
         public Image imgGrid;
         public void SetGridTShow(EGridPosType _gridPosType)
@@ -18,6 +20,8 @@ namespace GameCore.UI
                 imgGrid.color = colorIsOccupyGrid;
             else if (_gridPosType == EGridPosType.EFFECT)
                 imgGrid.color = colorIsEffectGrid;
+            else if(_gridPosType == EGridPosType.BOTH)
+                imgGrid.color = colorIsBothGrid;
         }
     }
 }
