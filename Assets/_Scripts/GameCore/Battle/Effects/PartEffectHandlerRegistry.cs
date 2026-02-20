@@ -8,7 +8,7 @@ namespace GameCore.Battle
     /// </summary>
     public static class PartEffectHandlerRegistry
     {
-        private static readonly Dictionary<EAttributeType, IPartEffectHandler> _handlers = new Dictionary<EAttributeType, IPartEffectHandler>();
+        private static readonly Dictionary<EAttributeType, IPartEffectHandler> _m_handlerDict = new Dictionary<EAttributeType, IPartEffectHandler>();
 
         static PartEffectHandlerRegistry()
         {
@@ -29,12 +29,12 @@ namespace GameCore.Battle
         public static void Register(EAttributeType _type, IPartEffectHandler _handler)
         {
             if (_handler == null) return;
-            _handlers[_type] = _handler;
+            _m_handlerDict[_type] = _handler;
         }
 
         public static IPartEffectHandler Get(EAttributeType _type)
         {
-            return _handlers.TryGetValue(_type, out var h) ? h : null;
+            return _m_handlerDict.TryGetValue(_type, out var h) ? h : null;
         }
 
         /// <summary> 用注册的处理器执行效果；若未注册则返回 false，调用方可走旧逻辑 </summary>

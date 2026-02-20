@@ -10,9 +10,9 @@ namespace GameCore.Battle
     public class PartLogic
     {
         private readonly PartInfo _m_partInfo;
-        private readonly List<PartEffectTrigger> _activeTriggers = new List<PartEffectTrigger>();
-        private readonly List<PartEffectTrigger> _getHitTriggers = new List<PartEffectTrigger>();
-        private readonly List<PartEffectTrigger> _dieTriggers = new List<PartEffectTrigger>();
+        private readonly List<PartEffectTrigger> _m_activeTriggers = new List<PartEffectTrigger>();
+        private readonly List<PartEffectTrigger> _m_getHitTriggers = new List<PartEffectTrigger>();
+        private readonly List<PartEffectTrigger> _m_dieTriggers = new List<PartEffectTrigger>();
 
         public PartLogic(PartInfo _partInfo)
         {
@@ -25,13 +25,13 @@ namespace GameCore.Battle
             switch (_trigger.triggerPoint)
             {
                 case EAttributeTriggerPointType.ACTIVE:
-                    _activeTriggers.Add(_trigger);
+                    _m_activeTriggers.Add(_trigger);
                     break;
                 case EAttributeTriggerPointType.GET_HIT:
-                    _getHitTriggers.Add(_trigger);
+                    _m_getHitTriggers.Add(_trigger);
                     break;
                 case EAttributeTriggerPointType.DIE:
-                    _dieTriggers.Add(_trigger);
+                    _m_dieTriggers.Add(_trigger);
                     break;
             }
         }
@@ -39,23 +39,23 @@ namespace GameCore.Battle
         public void ClearTriggers(EAttributeTriggerPointType? _triggerPoint = null)
         {
             if (_triggerPoint == null || _triggerPoint == EAttributeTriggerPointType.ACTIVE)
-                _activeTriggers.Clear();
+                _m_activeTriggers.Clear();
             if (_triggerPoint == null || _triggerPoint == EAttributeTriggerPointType.GET_HIT)
-                _getHitTriggers.Clear();
+                _m_getHitTriggers.Clear();
             if (_triggerPoint == null || _triggerPoint == EAttributeTriggerPointType.DIE)
-                _dieTriggers.Clear();
+                _m_dieTriggers.Clear();
         }
 
         public void OnPartActive()
         {
-            foreach (var trigger in _activeTriggers)
+            foreach (var trigger in _m_activeTriggers)
                 trigger.Execute(_m_partInfo);
         }
 
         public void OnPartGetHit(PartInfo _sender, int _damage)
         {
             var ctx = PartEffectContext.GetHit(_sender, _damage);
-            foreach (var trigger in _getHitTriggers)
+            foreach (var trigger in _m_getHitTriggers)
             {
                 var originalFactory = trigger.contextFactory;
                 trigger.contextFactory = () => ctx;
@@ -67,7 +67,7 @@ namespace GameCore.Battle
 
         public void OnPartDie()
         {
-            foreach (var trigger in _dieTriggers)
+            foreach (var trigger in _m_dieTriggers)
                 trigger.Execute(_m_partInfo);
         }
     }
