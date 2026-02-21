@@ -27,7 +27,7 @@ namespace GameCore
         public const float TOOLTIP_SHOW_ON_UP_THRESHOLD = 0.4f;
         public const float TOOLTIP_SHOW_Y_OFFSET_SCREEN_RATIO = -0.25f;
         public const float TOOLTIP_SHOW_X_OFFSET_SCREEN_RATIO = 0.15f;
-        public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_COMBINE = 0.3f;
+        public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_COMBINE = 0.27f;
         public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_COMBINE = 0.2f;
 
         public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_BATTLE = 0.5f;

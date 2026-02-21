@@ -8,6 +8,7 @@ namespace GameCore
     public class PartInfo
     {
         public PartRefObj partRefObj;
+        public int partLevel;
         public int currentHealth;
         public int maxHealth;
         public bool isOnFace;
@@ -28,6 +29,7 @@ namespace GameCore
             if (_partRefObj == null)
                 return;
             partRefObj = _partRefObj;
+            partLevel = 1;//初始为1级
             isEnemyPart = _isEnemyPart;
             maxHealth = partRefObj.partHealth;
             currentHealth = maxHealth;
@@ -54,7 +56,9 @@ namespace GameCore
                 entryInfoList.Add(entryInfo);
             }
             buffInfoList = new List<BuffInfo>();
-
+            //test
+            //BuffRefObj buffRefObj = SCRefDataMgr.instance.buffRefList.refDataList.Find(x => x.id == 100001);
+            //buffInfoList.Add(new BuffInfo(buffRefObj, 2));
 
             logicObj = PartLogicFactory.CreateLogic(this);
         }
@@ -115,10 +119,13 @@ namespace GameCore
             }
             return new Vector2Int(minX, minY);
         }
-
         public bool HasBuff()
         {
             return buffInfoList != null && buffInfoList.Count > 0;
+        }
+        public int GetStrengthenCount()
+        {
+            return partLevel - 1;
         }
         public void TriggerActiveLogic()
         {
