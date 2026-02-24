@@ -91,17 +91,17 @@ namespace GameCore.Battle
         public void RemovePlayerPartFromBattle(PartInfo _part)
         {
             if (_part == null) return;
-            GameModel.instance.playerInfo.battlePartInfoList?.Remove(_part);
+            //GameModel.instance.playerInfo.battlePartInfoList?.Remove(_part);
             BattleManager.instance.RemovePartFromList(true, _part);
-            SCMsgCenter.SendMsg(SCMsgConst.BATTLE_PLAYER_PART_ORDER_CHG);
+            //SCMsgCenter.SendMsg(SCMsgConst.BATTLE_PLAYER_PART_ORDER_CHG);
         }
 
         public void RemoveEnemyPartFromBattle(PartInfo _part)
         {
             if (_part == null) return;
-            GameModel.instance.curEnemyInfo?.battlePartInfoList?.Remove(_part);
+            //GameModel.instance.curEnemyInfo?.battlePartInfoList?.Remove(_part);
             BattleManager.instance.RemovePartFromList(false, _part);
-            SCMsgCenter.SendMsg(SCMsgConst.BATTLE_ENEMY_PART_ORDER_CHG);
+            //SCMsgCenter.SendMsg(SCMsgConst.BATTLE_ENEMY_PART_ORDER_CHG);
         }
 
         public void InsertPartAfterInQueue(bool _isPlayer, PartInfo _afterPart, PartInfo _part)

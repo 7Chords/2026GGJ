@@ -24,7 +24,7 @@ namespace GameCore.Battle.Effects
             foreach (var part in partInfoList)
             {
                 SCMsgCenter.SendMsg(SCMsgConst.PART_TRIGGER_EFFECT, part, _caster);
-                if (part.isEnemyPart)
+                if (_caster.isEnemyPart)
                     battleCtx.RemovePlayerPartFromBattle(part);
                 else
                     battleCtx.RemoveEnemyPartFromBattle(part);

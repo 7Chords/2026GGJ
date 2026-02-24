@@ -16,6 +16,8 @@ namespace GameCore.UI
         public Text txtDesc;
         [Header("品质文本")]
         public Text txtQuality;
+        [Header("等级文本")]
+        public Text txtLevel;
 
         [Header("画布")]
         public CanvasGroup canvasGroup;
@@ -59,7 +61,7 @@ namespace GameCore.UI
             _m_tweenContainer = null;
         }
 
-        private void setBaseInfo(string _name,string _desc, EQualityType _quality = EQualityType.NONE)
+        private void setBaseInfo(string _name,string _desc, int _level,EQualityType _quality = EQualityType.NONE)
         {
             if (txtName != null)
                 txtName.text = string.IsNullOrEmpty(_name) ? "默认部位" : _name;
@@ -84,6 +86,12 @@ namespace GameCore.UI
                         txtQuality.text = "史诗";
                         break;
                 }
+            }
+
+            if (txtLevel != null)
+            {
+                SCCommon.SetGameObjectEnable(txtLevel.gameObject, _level > 1);
+                txtLevel.text = "+" + ( _level - 1);
             }
         }
         private void setGridInfo(List<Vector2Int> _occupyPosList,List<Vector2Int> _effectPosList)
@@ -144,10 +152,10 @@ namespace GameCore.UI
 
         #region ShowTip
 
-        public void ShowTooltip(string _name,string _desc, Vector2 _targetLocalPos, EQualityType _quality = EQualityType.NONE)
+        public void ShowTooltip(string _name,string _desc, Vector2 _targetLocalPos,EQualityType _quality = EQualityType.NONE)
         {
 
-            setBaseInfo(_name,_desc,_quality);
+            setBaseInfo(_name,_desc, 1,_quality);
             Vector2 adaptivePos = calculateAdaptivePosition(_targetLocalPos);
             setLocalPosition(adaptivePos);
             canvasGroup.alpha = 0;
@@ -169,7 +177,7 @@ namespace GameCore.UI
             SCCommon.SetGameObjectEnable(goBuff, _partInfo.HasBuff());
             SCCommon.SetGameObjectEnable(txtQuality.gameObject, _partInfo.partRefObj.qualityType != EQualityType.NONE);
 
-            setBaseInfo(_partInfo.partRefObj.partName, _partInfo.levelRefObj.partDesc, _partInfo.partRefObj.qualityType);
+            setBaseInfo(_partInfo.partRefObj.partName, _partInfo.levelRefObj.partDesc, _partInfo.partLevel,_partInfo.partRefObj.qualityType);
             if (_showGridInfo)
                 setGridInfo(_partInfo.partRefObj.GetOccupyPosList(), _partInfo.partRefObj.GetEffectPosList());
             if (_partInfo.HasBuff())
@@ -187,7 +195,7 @@ namespace GameCore.UI
             SCCommon.SetGameObjectEnable(goBuff, false);
             SCCommon.SetGameObjectEnable(txtQuality.gameObject, _partRefObj.qualityType != EQualityType.NONE);
 
-            setBaseInfo(_partRefObj.partName, _partRefObj.partDesc, _partRefObj.qualityType);
+            setBaseInfo(_partRefObj.partName, _partRefObj.partDesc, 1,_partRefObj.qualityType);
             if (_showGridInfo)
                 setGridInfo(_partRefObj.GetOccupyPosList(), _partRefObj.GetEffectPosList());
 

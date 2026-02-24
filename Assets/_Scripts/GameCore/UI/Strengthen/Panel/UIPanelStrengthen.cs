@@ -51,6 +51,8 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            _m_curSelectPart = null;
+
             SCMsgCenter.RegisterMsg(SCMsgConst.SELECT_STRENGTHEN_PART, onSelectStrengthenPart);
             mono.btnExit.AddMouseLeftClickDown(onBtnExitClickDown);
             mono.btnConfirm.AddMouseLeftClickDown(onBtnConfirmClickDown);

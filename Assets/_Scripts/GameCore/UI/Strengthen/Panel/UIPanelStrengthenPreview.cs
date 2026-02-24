@@ -89,6 +89,10 @@ namespace GameCore.UI
         }
         private void setGridInfo(List<Vector2Int> _occupyPosList, List<Vector2Int> _effectPosList)
         {
+            for(int i = mono.tranParentGrid.transform.childCount - 1; i>=0 ; i--)
+            {
+                SCCommon.DestoryGameObject(mono.tranParentGrid.transform.GetChild(i).gameObject);
+            }
             for (int i = 0; i < _occupyPosList.Count; i++)
             {
                 createOneGrid(_occupyPosList[i], EGridPosType.OCCUPY);

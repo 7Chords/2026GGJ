@@ -9,19 +9,19 @@ namespace GameCore.Battle
     /// </summary>
     public class BattlePartExecutionQueue
     {
-        private readonly List<PartInfo> _m_queue = new List<PartInfo>();
+        private List<PartInfo> _m_queue = new List<PartInfo>();
         private int _m_currentIndex = -1;
         private bool _m_isExecuting;
         private Action _m_onFinish;
 
         /// <summary> 当前队列（只读），用于 UI 或查询 </summary>
-        public IReadOnlyList<PartInfo> queue => _m_queue;
+        public List<PartInfo> queue => _m_queue;
 
         public bool isExecuting => _m_isExecuting;
         public int currentIndex => _m_currentIndex;
 
         /// <summary> 开始执行一组部位；onFinish 在全部执行完后回调。parts 为 null 时仅清空队列 </summary>
-        public void Start(IReadOnlyList<PartInfo> _parts, Action _onFinish = null)
+        public void Start(List<PartInfo> _parts, Action _onFinish = null)
         {
             _m_queue.Clear();
             if (_parts != null)
@@ -29,6 +29,7 @@ namespace GameCore.Battle
                 foreach (var p in _parts)
                     if (p != null) _m_queue.Add(p);
             }
+            //_m_queue = _parts;
             _m_onFinish = _onFinish;
             _m_isExecuting = _parts != null && _m_queue.Count > 0;
             _m_currentIndex = -1;
