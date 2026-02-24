@@ -179,7 +179,7 @@ namespace GameCore.UI
 
             setBaseInfo(_partInfo.partRefObj.partName, _partInfo.levelRefObj.partDesc, _partInfo.partLevel,_partInfo.partRefObj.qualityType);
             if (_showGridInfo)
-                setGridInfo(_partInfo.partRefObj.GetOccupyPosList(), _partInfo.partRefObj.GetEffectPosList());
+                setGridInfo(_partInfo.partRefObj.GetOccupyPosList(), _partInfo.localEffectPosList);
             if (_partInfo.HasBuff())
                 setBuffInfo(_partInfo.buffLogic.buffList);
             _m_tweenContainer.RegDoTween(canvasGroup.DOFade(1, fadeInDuratin));
