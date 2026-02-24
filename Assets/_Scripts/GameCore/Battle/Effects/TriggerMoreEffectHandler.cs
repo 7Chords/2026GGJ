@@ -9,7 +9,7 @@ namespace GameCore.Battle.Effects
             var battleCtx = BattleContext.current;
             if (battleCtx == null) return;
 
-            int triggerMoreTimes = (int)_entry.attributeValue;
+            int triggerMoreTimes = (int)_entry.attributeValueList[0];
             var gridInfoList = _caster.isEnemyPart 
                 ? GameModel.instance.enemyFaceGridInfoList 
                 : GameModel.instance.playerFaceGridInfoList;

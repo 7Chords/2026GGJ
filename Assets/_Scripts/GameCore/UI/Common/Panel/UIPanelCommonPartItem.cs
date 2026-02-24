@@ -60,7 +60,7 @@ namespace GameCore.UI
             if(!mono.isTxtHealthIsRunningInfo)
                 mono.txtHealth.text =_m_partInfo.partRefObj.partHealth.ToString();
             else
-                mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.partRefObj.partHealth;
+                mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.maxHealth;
 
         }
 

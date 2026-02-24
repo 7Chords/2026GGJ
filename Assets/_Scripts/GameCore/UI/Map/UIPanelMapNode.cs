@@ -1,6 +1,7 @@
 using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -67,7 +68,7 @@ namespace GameCore.UI
                     break;
                 case ERoomType.STRENGTHEN:
                     {
-                        mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>("spr_default");
+                        mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>("spr_icon_node_strengthen");
                     }
                     break;
             }
@@ -131,6 +132,9 @@ namespace GameCore.UI
                 case ERoomType.EVENT:
                     EnterEvent();
                     break;
+                case ERoomType.STRENGTHEN:
+                    EnterStrengthen();
+                    break;
                 default:
                     break;
             }
@@ -172,6 +176,11 @@ namespace GameCore.UI
         private void EnterEvent()
         {
             // TODO: Enter Event Logic
+        }
+        private void EnterStrengthen()
+        {
+            UICoreMgr.instance.AddNode(new UINodeStrengthen(SCUIShowType.FULL));
+
         }
 
         #endregion

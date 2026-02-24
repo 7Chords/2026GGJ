@@ -35,8 +35,10 @@ public class SCMsgConst
     public const int BATTLE_ENEMY_PART_ORDER_CHG = 2028;
     public const int BATTLE_PLAYER_PART_ORDER_CHG = 2029;
     public const int PART_TRIGGER_EFFECT = 2030;
-
-
+    public const int PART_BUFF_ADD = 2031;
+    public const int PART_BUFF_REMOVE = 2032;
+    public const int PART_BUFF_UPDATE = 2033;
+    public const int SELECT_STRENGTHEN_PART = 2034;
     #endregion
 
     #region 系统相关 99

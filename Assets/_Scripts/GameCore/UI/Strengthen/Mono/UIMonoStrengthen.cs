@@ -18,5 +18,11 @@ namespace GameCore.UI
         public Button btnConfirm;
         [Header("强化消耗金钱文本")]
         public Text txtStrengthenCoin;
+        [Header("玩家金钱文本")]
+        public Text txtPlayerCoin;
+        [Header("离开按钮")]
+        public Button btnExit;
+        [Header("选择了强化器官要显示的物体")]
+        public List<GameObject> goHasSelectPart;
     }
 }

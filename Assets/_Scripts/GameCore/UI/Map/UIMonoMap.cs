@@ -8,5 +8,13 @@ namespace GameCore.UI
     {
         [Header("滚动视图")]
         public ScrollRect scrollView;
+        [Header("金钱文本")]
+        public Text txtCoin;
+        [Header("背包按钮")]
+        public Button btnBag;
+        [Header("血量文本")]
+        public Text txtHealth;
+        [Header("血量条")]
+        public Image imgHealthBar;
     }
 }

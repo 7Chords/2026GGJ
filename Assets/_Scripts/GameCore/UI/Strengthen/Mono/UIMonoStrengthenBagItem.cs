@@ -8,6 +8,8 @@ namespace GameCore.UI
 {
     public class UIMonoStrengthenBagItem : _ASCUIMonoBase
     {
+        [Header("按钮")]
+        public Button btnItem;
         [Header("部位icon")]
         public Image imgIcon;
         [Header("生命值文本")]

@@ -25,6 +25,7 @@ namespace SCFrame.UI
         STORE,
         MAP,
         COMMON,
+        STRENGTHEN,
     }
 
 

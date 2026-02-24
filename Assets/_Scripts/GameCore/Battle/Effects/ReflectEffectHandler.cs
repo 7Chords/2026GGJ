@@ -9,7 +9,7 @@ namespace GameCore.Battle.Effects
             var battleCtx = BattleContext.current;
             if (battleCtx == null || _ctx.senderPart == null) return;
 
-            int damage = Mathf.RoundToInt(_entry.attributeValue);
+            int damage = Mathf.RoundToInt(_entry.attributeValueList[0]);
             battleCtx.ApplyDamageToPart(_ctx.senderPart, _caster, damage);
         }
     }

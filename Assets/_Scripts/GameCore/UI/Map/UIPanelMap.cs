@@ -1,6 +1,8 @@
 using SCFrame;
 using SCFrame.UI;
+using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace GameCore.UI
 {
@@ -10,24 +12,33 @@ namespace GameCore.UI
         {
         }
 
-        private GameObject _playerIconGO;
-
-        public override void OnShowPanel()
-        {
-             UpdatePlayerIcon();
-        }
+        private GameObject _m_playerIconGO;
 
         public override void AfterInitialize()
         {
             
         }
+        public override void BeforeDiscard()
+        {
 
+        }
         public override void OnHidePanel()
         {
-            
+            mono.btnBag.RemoveClickDown(onBtnBagClicked);
+
         }
 
-        private void UpdatePlayerIcon()
+        public override void OnShowPanel()
+        {
+            mono.btnBag.AddMouseLeftClickDown(onBtnBagClicked);
+            refreshShow();
+        }
+        private void refreshShow()
+        {
+            updatePlayerIcon();
+            setPlayerInfo();
+        }
+        private void updatePlayerIcon()
         {
             var pos = GameModel.instance.playerInfo.playerMapPosition;
             if (pos.x == -1 || MapManager.instance.currentMapNodes == null) return; // Not started or invalid
@@ -35,16 +46,16 @@ namespace GameCore.UI
             var targetNode = MapManager.instance.GetNode(pos.x, pos.y);
             if (targetNode != null)
             {
-                if (_playerIconGO == null)
+                if (_m_playerIconGO == null)
                 {
                     // Created simple icon or load prefab
                     // Using "PlayerIcon" resource if exists, else create default image
                     //_playerIconGO = ResourcesHelper.LoadGameObject("PlayerIcon", targetNode.transform);
-                    if (_playerIconGO == null)
+                    if (_m_playerIconGO == null)
                     {
                         // Fallback: Create simple Red Circle
-                        _playerIconGO = new GameObject("PlayerIcon");
-                        var img = _playerIconGO.AddComponent<UnityEngine.UI.Image>();
+                        _m_playerIconGO = new GameObject("PlayerIcon");
+                        var img = _m_playerIconGO.AddComponent<UnityEngine.UI.Image>();
 
                         //TODO:WJW
                         img.color = Color.green;
@@ -53,24 +64,26 @@ namespace GameCore.UI
                 }
                 
                 // Parent to the Node so it moves with it
-                _playerIconGO.transform.SetParent(targetNode.transform);
-                _playerIconGO.transform.localPosition = Vector3.zero;
-                _playerIconGO.transform.localScale = Vector3.one * 0.5f; // Small icon
-                _playerIconGO.SetActive(true);
+                _m_playerIconGO.transform.SetParent(targetNode.transform);
+                _m_playerIconGO.transform.localPosition = Vector3.zero;
+                _m_playerIconGO.transform.localScale = Vector3.one * 0.5f; // Small icon
+                _m_playerIconGO.SetActive(true);
                 
                 // Ensure it draws on top
-                _playerIconGO.transform.SetAsLastSibling();
+                _m_playerIconGO.transform.SetAsLastSibling();
             }
         }
         
-        public override void BeforeDiscard()
+        private void setPlayerInfo()
         {
-            
+            mono.txtCoin.text = GameModel.instance.playerInfo.playerMoney.ToString();
+            mono.txtHealth.text = GameModel.instance.playerInfo.currentHealth + "/" + GameModel.instance.playerInfo.maxHealth;
+            mono.imgHealthBar.fillAmount = GameModel.instance.playerInfo.currentHealth / (float)GameModel.instance.playerInfo.maxHealth;
         }
 
-        public override void AfterDiscard()
+        private void onBtnBagClicked(PointerEventData _data, object[] _objs)
         {
-            base.AfterDiscard();
+            UICoreMgr.instance.AddNode(new UINodeStoreBag(SCUIShowType.ADDITION));
         }
     }
 }

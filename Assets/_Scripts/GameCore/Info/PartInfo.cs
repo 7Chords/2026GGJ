@@ -19,10 +19,11 @@ namespace GameCore
         public List<Vector2Int> curOccupyFacePosList;
         public List<Vector2Int> curEffectFacePosList;
         public List<EntryInfo> entryInfoList;
-        public List<BuffInfo> buffInfoList;
 
-        public PartLogic logicObj;//逻辑实例
+        public PartLogic partLogic;//逻辑实例
+        public BuffLogic buffLogic;
 
+        public PartLevelRefObj levelRefObj;
 
         public PartInfo(PartRefObj _partRefObj,bool _isEnemyPart)
         {
@@ -30,8 +31,11 @@ namespace GameCore
                 return;
             partRefObj = _partRefObj;
             partLevel = 1;//初始为1级
+            levelRefObj = GetLevelRefObj();
+            if (levelRefObj == null)
+                return;
             isEnemyPart = _isEnemyPart;
-            maxHealth = partRefObj.partHealth;
+            maxHealth = levelRefObj.partHealth;
             currentHealth = maxHealth;
             isOnFace = false;
             localOccupyPosList = new List<Vector2Int>();
@@ -40,9 +44,9 @@ namespace GameCore
                 localOccupyPosList.Add(new Vector2Int(partRefObj.occupyPosList[i].x, partRefObj.occupyPosList[i].y));
             }
             localEffectPosList = new List<Vector2Int>();
-            for (int i = 0; i < partRefObj.effectPosList.Count; i++)
+            for (int i = 0; i < levelRefObj.effectPosList.Count; i++)
             {
-                localEffectPosList.Add(new Vector2Int(partRefObj.effectPosList[i].x, partRefObj.effectPosList[i].y));
+                localEffectPosList.Add(new Vector2Int(levelRefObj.effectPosList[i].x, levelRefObj.effectPosList[i].y));
             }
 
             curOccupyFacePosList = new List<Vector2Int>();
@@ -50,17 +54,14 @@ namespace GameCore
 
             entryInfoList = new List<EntryInfo>();
             EntryInfo entryInfo = null;
-            foreach(var entry in partRefObj.entryList)
+            foreach(var entry in levelRefObj.entryList)
             {
                 entryInfo = new EntryInfo(entry);
                 entryInfoList.Add(entryInfo);
             }
-            buffInfoList = new List<BuffInfo>();
-            //test
-            //BuffRefObj buffRefObj = SCRefDataMgr.instance.buffRefList.refDataList.Find(x => x.id == 100001);
-            //buffInfoList.Add(new BuffInfo(buffRefObj, 2));
+            partLogic = PartLogicFactory.CreateLogic(this);
+            buffLogic = new BuffLogic();
 
-            logicObj = PartLogicFactory.CreateLogic(this);
         }
         public void ResetToBusy()
         {
@@ -71,14 +72,14 @@ namespace GameCore
                 localOccupyPosList.Add(new Vector2Int(partRefObj.occupyPosList[i].x, partRefObj.occupyPosList[i].y));
             }
             localEffectPosList = new List<Vector2Int>();
-            for (int i = 0; i < partRefObj.effectPosList.Count; i++)
+            for (int i = 0; i < levelRefObj.effectPosList.Count; i++)
             {
-                localEffectPosList.Add(new Vector2Int(partRefObj.effectPosList[i].x, partRefObj.effectPosList[i].y));
+                localEffectPosList.Add(new Vector2Int(levelRefObj.effectPosList[i].x, levelRefObj.effectPosList[i].y));
             }
 
             entryInfoList = new List<EntryInfo>();
             EntryInfo entryInfo = null;
-            foreach (var entry in partRefObj.entryList)
+            foreach (var entry in levelRefObj.entryList)
             {
                 entryInfo = new EntryInfo(entry);
                 entryInfoList.Add(entryInfo);
@@ -93,7 +94,7 @@ namespace GameCore
         {
             ResetToBusy();
             currentHealth = maxHealth;
-            buffInfoList.Clear();
+            buffLogic.ClearAllBuffs();
         }
         public void ClearOnFaceState()
         {
@@ -121,7 +122,7 @@ namespace GameCore
         }
         public bool HasBuff()
         {
-            return buffInfoList != null && buffInfoList.Count > 0;
+            return buffLogic != null && buffLogic.buffList.Count > 0;
         }
         public int GetStrengthenCount()
         {
@@ -129,15 +130,54 @@ namespace GameCore
         }
         public void TriggerActiveLogic()
         {
-            if (logicObj == null) return;
-            PartLogicFactory.RefreshTriggers(logicObj, this, EAttributeTriggerPointType.ACTIVE);
-            logicObj.OnPartActive();
+            if (partLogic == null) return;
+            PartLogicFactory.RefreshTriggers(partLogic, this, EAttributeTriggerPointType.ACTIVE);
+            partLogic.OnPartActive();
         }
         public void TriggerGetHitLogic(PartInfo senderInfo, int damage)
         {
-            if (logicObj == null) return;
-            PartLogicFactory.RefreshTriggers(logicObj, this, EAttributeTriggerPointType.GET_HIT);
-            logicObj.OnPartGetHit(senderInfo, damage);
+            if (partLogic == null) return;
+            PartLogicFactory.RefreshTriggers(partLogic, this, EAttributeTriggerPointType.GET_HIT);
+            partLogic.OnPartGetHit(senderInfo, damage);
+        }
+
+        public void GetBuff(BuffInfo _buffInfo)
+        {
+            if (_buffInfo == null)
+                return;
+            buffLogic.AddBuff(_buffInfo);
+        }
+
+        public void RemoveBuff(BuffInfo _buffInfo)
+        {
+            if (_buffInfo == null)
+                return;
+            buffLogic.RemoveBuff(_buffInfo);
+        }
+        public void LevelUp()
+        {
+            partLevel++;
+            levelRefObj = GetLevelRefObj();
+            if (levelRefObj == null)
+                return;
+            maxHealth = levelRefObj.partHealth;
+            currentHealth = maxHealth;
+            localEffectPosList = levelRefObj.GetEffectPosList();
+
+            entryInfoList = new List<EntryInfo>();
+            EntryInfo entryInfo = null;
+            foreach (var entry in levelRefObj.entryList)
+            {
+                entryInfo = new EntryInfo(entry);
+                entryInfoList.Add(entryInfo);
+            }
+        }
+
+        public PartLevelRefObj GetLevelRefObj()
+        {
+            PartLevelRefObj levelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.partId == partRefObj.id
+    && x.partLevel == partLevel);
+            return levelRefObj;
         }
     }
 }

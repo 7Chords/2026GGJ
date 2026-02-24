@@ -18,6 +18,8 @@ namespace GameCore.UI
         public GameObject goHealthInfo;
         [Header("序号信息物体")]
         public GameObject goOrder;
+        [Header("buff信息物体")]
+        public GameObject goBuff;
         [Header("生命信息物体所处位置比例")]
         public Vector2 goHealthPosPivot;
         [Header("序号信息物体所处位置比例")]

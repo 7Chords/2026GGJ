@@ -169,11 +169,11 @@ namespace GameCore.UI
             SCCommon.SetGameObjectEnable(goBuff, _partInfo.HasBuff());
             SCCommon.SetGameObjectEnable(txtQuality.gameObject, _partInfo.partRefObj.qualityType != EQualityType.NONE);
 
-            setBaseInfo(_partInfo.partRefObj.partName, _partInfo.partRefObj.partDesc, _partInfo.partRefObj.qualityType);
+            setBaseInfo(_partInfo.partRefObj.partName, _partInfo.levelRefObj.partDesc, _partInfo.partRefObj.qualityType);
             if (_showGridInfo)
                 setGridInfo(_partInfo.partRefObj.GetOccupyPosList(), _partInfo.partRefObj.GetEffectPosList());
             if (_partInfo.HasBuff())
-                setBuffInfo(_partInfo.buffInfoList);
+                setBuffInfo(_partInfo.buffLogic.buffList);
             _m_tweenContainer.RegDoTween(canvasGroup.DOFade(1, fadeInDuratin));
         }
 

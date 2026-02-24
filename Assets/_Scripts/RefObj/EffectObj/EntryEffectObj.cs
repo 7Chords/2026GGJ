@@ -10,7 +10,7 @@ namespace GameCore.RefData
         public EAttributeTriggerPointType triggerPointType;
         public EAttributeType attributeType;
         public float attributeChance;
-        public float attributeValue;
+        public List<float> attributeValueList;
         protected override void OnDeserialize(string _str)
         {
             string[] strArr = _str.Split(':');
@@ -19,13 +19,16 @@ namespace GameCore.RefData
             triggerPointType = (EAttributeTriggerPointType)SCCommon.ParseEnum(strArr[0], typeof(EAttributeTriggerPointType));
             attributeType = (EAttributeType)SCCommon.ParseEnum(strArr[1],typeof(EAttributeType));
             attributeChance = SCCommon.ParseFloat(strArr[2]);
-            attributeValue = SCCommon.ParseFloat(strArr[3]);
+            attributeValueList = new List<float>();
+            for (int i =0;i<strArr.Length - 3;i++)
+            {
+                attributeValueList.Add(SCCommon.ParseFloat(strArr[3 + i]));
+            }
         }
 
         protected override string OnSerialise()
         {
-            string str = attributeType + ":" + attributeValue;
-            return str;
+            return "entry";
         }
     }
 }

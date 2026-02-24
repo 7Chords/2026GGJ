@@ -9,7 +9,7 @@ namespace GameCore.Battle.Effects
             var battleCtx = BattleContext.current;
             if (battleCtx == null) return;
 
-            float multiplier = _entry.attributeValue;
+            float multiplier = _entry.attributeValueList[0];
             var gridInfoList = _caster.isEnemyPart 
                 ? GameModel.instance.enemyFaceGridInfoList 
                 : GameModel.instance.playerFaceGridInfoList;
@@ -31,7 +31,7 @@ namespace GameCore.Battle.Effects
                     if (attackEntry != null)
                     {
                         SCMsgCenter.SendMsg(SCMsgConst.PART_TRIGGER_EFFECT, part, _caster);
-                        attackEntry.attributeValue *= multiplier;
+                        attackEntry.attributeValueList[0] *= multiplier;
                     }
                 }
             }

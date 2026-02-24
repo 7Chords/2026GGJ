@@ -54,5 +54,7 @@ namespace GameCore.Battle
 
         /// <summary> 请求结束战斗（胜负已分） </summary>
         void RequestTerminateBattle(bool _isPlayerWin);
+
+        void ApplyBuffToPart(PartInfo _part, PartInfo _sender, long _buffId,int _buffLayer);
     }
 }

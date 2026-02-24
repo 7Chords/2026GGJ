@@ -1,6 +1,7 @@
 using SCFrame;
 using System.Collections.Generic;
 using GameCore.UI;
+using GameCore.RefData;
 
 namespace GameCore.Battle
 {
@@ -114,5 +115,14 @@ namespace GameCore.Battle
 
         public void RequestTerminateBattle(bool _isPlayerWin)
             => BattleManager.instance.TerminateBattle(_isPlayerWin);
+
+        public void ApplyBuffToPart(PartInfo _part, PartInfo _sender, long _buffId, int _buffLayer)
+        {
+            BuffRefObj buffRefObj = SCRefDataMgr.instance.buffRefList.refDataList.Find(x => x.id == _buffId);
+            if (buffRefObj == null)
+                return;
+            BuffInfo buffInfo = new BuffInfo(buffRefObj, _buffLayer, _sender,_part);
+            _part.GetBuff(buffInfo);
+        }
     }
 }

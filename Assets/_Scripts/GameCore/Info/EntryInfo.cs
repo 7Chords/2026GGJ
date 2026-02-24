@@ -11,7 +11,7 @@ namespace GameCore
         public EAttributeTriggerPointType triggerPointType;
         public EAttributeType attributeType;
         public float attributeChance;
-        public float attributeValue;
+        public List<float> attributeValueList;
         public EntryInfo(EntryEffectObj _refObj)
         {
             if (_refObj == null)
@@ -20,7 +20,7 @@ namespace GameCore
             triggerPointType = _refObj.triggerPointType;
             attributeType = _refObj.attributeType;
             attributeChance = _refObj.attributeChance;
-            attributeValue = _refObj.attributeValue;
+            attributeValueList = _refObj.attributeValueList;
         }
     }
 }

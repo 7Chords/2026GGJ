@@ -9,7 +9,7 @@ namespace GameCore.Battle.Effects
             var battleCtx = BattleContext.current;
             if (battleCtx == null) return;
 
-            float totalDamage = _entry.attributeValue;
+            float totalDamage = _entry.attributeValueList[0];
             if (_caster.curEffectFacePosList == null || _caster.curEffectFacePosList.Count == 0) return;
 
             float perGridDamage = totalDamage / _caster.curEffectFacePosList.Count;
