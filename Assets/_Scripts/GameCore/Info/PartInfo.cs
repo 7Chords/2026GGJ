@@ -184,7 +184,7 @@ namespace GameCore
         {
             PartLevelRefObj levelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.partId == partRefObj.id
 && x.partLevel == partLevel + 1);
-            return levelRefObj == null;
+            return levelRefObj != null;
         }
     }
 }
