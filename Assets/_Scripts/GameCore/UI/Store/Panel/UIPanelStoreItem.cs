@@ -102,7 +102,8 @@ namespace GameCore.UI
                 PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == _m_goodsInfo.goodsRefObj.partId);
                 if (partRefObj == null)
                     return;
-                GameCommon.ShowTooltip(partRefObj,
+                PartInfo info = new PartInfo(partRefObj, false);
+                GameCommon.ShowTooltip(info,
                     GetGameObject().transform.position);
             }
             else

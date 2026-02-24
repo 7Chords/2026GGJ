@@ -31,7 +31,6 @@ namespace GameCore
             }
         }
 
-
         public void SetMapNodeIndex(int x, int y)
         {
             GridPosition = new Vector2Int(x, y);

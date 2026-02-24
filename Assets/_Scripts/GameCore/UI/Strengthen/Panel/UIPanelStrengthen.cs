@@ -119,6 +119,9 @@ namespace GameCore.UI
             PartLevelRefObj levelRefObj = _m_curSelectPart.GetLevelRefObj();
             if (GameModel.instance.playerInfo.playerMoney < levelRefObj.levelUpCost)
                 return;
+
+            if (!_m_curSelectPart.HasNextLevel())
+                return;
             
             GameModel.instance.playerInfo.playerMoney = Mathf.Max(GameModel.instance.playerInfo.playerMoney - _m_curSelectPart.GetLevelRefObj().levelUpCost, 0);
             _m_curSelectPart.LevelUp();

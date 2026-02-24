@@ -179,5 +179,12 @@ namespace GameCore
     && x.partLevel == partLevel);
             return levelRefObj;
         }
+
+        public bool HasNextLevel()
+        {
+            PartLevelRefObj levelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.partId == partRefObj.id
+&& x.partLevel == partLevel + 1);
+            return levelRefObj == null;
+        }
     }
 }
