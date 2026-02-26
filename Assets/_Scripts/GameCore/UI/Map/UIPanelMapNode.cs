@@ -39,9 +39,19 @@ namespace GameCore.UI
             RefreshShow();
             SCTaskHelper.instance.AddUpdateListener(() =>
             {
+                bool canMove = true;
                 var playerPos = GameModel.instance.playerInfo.playerMapPosition;
                 var targetPos = _m_mapNode.GridPosition;
-                SCCommon.SetGameObjectEnable(mono.goCanWalk, targetPos.x == playerPos.x + 1);
+                if (targetPos.x != playerPos.x + 1)
+                    canMove = false;
+                var prevNode = MapManager.instance.GetNode(playerPos.x, playerPos.y);
+                if (prevNode != null)
+                {
+                    if (!prevNode.nextLayerConnectedNodes.Contains(targetPos.y))
+                        canMove = false;
+                }
+
+                SCCommon.SetGameObjectEnable(mono.goCanWalk, canMove);
             });
         }
 
@@ -169,7 +179,7 @@ namespace GameCore.UI
             AudioMgr.instance.PlaySfx("sfx_click");
             GameModel.instance.RollBattleOrder();
             UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
-            GameModel.instance.GenerateNewBattle();
+            GameModel.instance.GenerateNewBattle(true,999991);
             UICoreMgr.instance.AddNode(new UINodeBattleOrder(SCUIShowType.ADDITION));
         }
 

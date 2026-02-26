@@ -163,6 +163,18 @@ namespace GameCore
                 info.SetEmpty();
             }
         }
+        public void SetAllPlayerPart2Bag()
+        {
+            for (int i = 0; i < playerInfo.battlePartInfoList.Count; i++)
+            {
+                playerInfo.battlePartInfoList[i].ResetToBag();
+            }
+        }
+
+        public void SetEnemyEmpty()
+        {
+            curEnemyInfo = null;
+        }
 
         public int GetPlayerBattleOrderByPartInfo(PartInfo _info)
         {
@@ -193,7 +205,7 @@ namespace GameCore
             curTurnOwner = randomNum < 0.5f ? ETurnOwnerType.PLAYER : ETurnOwnerType.ENEMY;
         }
 
-        public void GenerateNewBattle()
+        public void GenerateNewBattle(bool _isBoss = false,long _id = -1)
         {
             playerInfo.ClearListForNewBattle();
 
@@ -208,7 +220,11 @@ namespace GameCore
                 }
             }
             PlayerDrawParts(GameConst.DRAW_CARD_COUNT_PER_TURN);
-            GenerateRandomEnemy();
+            if(_isBoss)
+                GenerateRandomEnemy(_id);
+            else
+                GenerateRandomEnemy();
+
             SCMsgCenter.SendMsg(SCMsgConst.NEW_GANE_START);
         }
 

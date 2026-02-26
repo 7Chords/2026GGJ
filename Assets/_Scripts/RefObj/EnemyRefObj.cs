@@ -10,6 +10,7 @@ namespace GameCore.RefData
         public long id;
         public int floor;
         public string enemyName;
+        public bool isBoss;
         public int enemyHealth;
         public List<PartEffectObj> initPartList;
         public List<BootyEffectObj> bootyList;
@@ -20,6 +21,7 @@ namespace GameCore.RefData
             id = getLong("id");
             floor = getInt("floor");
             enemyName = getString("enemyName");
+            isBoss = getBool("isBoss");
             enemyHealth = getInt("enemyHealth");
             initPartList = getList<PartEffectObj>("initPartList");
             bootyList = getList<BootyEffectObj>("bootyList");

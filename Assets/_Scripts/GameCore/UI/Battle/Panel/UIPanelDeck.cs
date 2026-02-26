@@ -38,13 +38,15 @@ namespace GameCore.UI
         {
             mono.btnClose.AddMouseLeftClickDown(onBtnCloseClickDown);
             _m_deckContainer?.ShowPanel();
-            refreshShow();
         }
-
-        private void refreshShow()
+        public void SetInfo(List<PartInfo> _partInfo)
         {
-            _m_deckContainer.SetListInfo(GameModel.instance.playerInfo.deckPartInfoList);
+            _m_deckContainer.SetListInfo(_partInfo);
         }
+        //private void refreshShow()
+        //{
+        //    _m_deckContainer.SetListInfo(GameModel.instance.playerInfo.deckPartInfoList);
+        //}
 
 
         private void onBtnCloseClickDown(PointerEventData _arg, object[] _objs)

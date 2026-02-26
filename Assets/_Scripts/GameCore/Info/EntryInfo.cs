@@ -20,7 +20,11 @@ namespace GameCore
             triggerPointType = _refObj.triggerPointType;
             attributeType = _refObj.attributeType;
             attributeChance = _refObj.attributeChance;
-            attributeValueList = _refObj.attributeValueList;
+            attributeValueList = new List<float>();
+            for(int i =0;i< _refObj.attributeValueList.Count;i++)
+            {
+                attributeValueList.Add(_refObj.attributeValueList[i]);
+            }
         }
     }
 }

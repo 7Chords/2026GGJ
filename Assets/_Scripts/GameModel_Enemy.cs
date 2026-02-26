@@ -8,12 +8,25 @@ namespace GameCore
 {
     public partial class GameModel
     {
-        public void GenerateRandomEnemy()
+        public void GenerateRandomEnemy(long _id = -1)
         {
-            List<EnemyRefObj> enemies = SCRefDataMgr.instance.enemyRefList.refDataList
-                .Where(refObj => refObj.floor == playerInfo.playerFloor).ToList();
-            if (enemies == null || enemies.Count == 0) return;
-            EnemyRefObj enemyRef = enemies[Random.Range(0, enemies.Count)];
+            EnemyRefObj enemyRef = null;
+            if (_id != -1)
+            {
+                List<EnemyRefObj> enemies = SCRefDataMgr.instance.enemyRefList.refDataList
+                    .Where(refObj => refObj.floor == playerInfo.playerFloor).ToList();
+                if (enemies == null || enemies.Count == 0) return;
+                enemyRef = enemies.Find(x => x.id == _id);
+            }
+            else
+            {
+                List<EnemyRefObj> enemies = SCRefDataMgr.instance.enemyRefList.refDataList
+                    .Where(refObj => refObj.floor == playerInfo.playerFloor && !refObj.isBoss).ToList();
+                if (enemies == null || enemies.Count == 0) return;
+                enemyRef = enemies[Random.Range(0, enemies.Count)];
+            }
+            if (enemyRef == null)
+                return;
             curEnemyInfo = new EnemyInfo(enemyRef);
 
             if (enemyRef.initPartList != null && enemyRef.initPartList.Count > 0)

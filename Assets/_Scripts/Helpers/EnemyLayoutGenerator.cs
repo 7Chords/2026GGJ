@@ -14,7 +14,7 @@ namespace GameCore.Helpers
     {
         private static readonly List<EPartType> PartPlaceOrder = new List<EPartType>
             { EPartType.EYE, EPartType.MOUTH, EPartType.NOSE, EPartType.SKIN };
-        private const float EyeTopAreaRatio = 0.3f;
+        private const float EyeTopAreaRatio = 0.5f;
 
         /// <summary> 将敌人手牌区部位按优先级摆到脸上，并更新 battlePartInfoList 与 faceGrids。最后会排序战斗顺序。 </summary>
         public static void GenerateLayout(EnemyInfo _enemy, List<FaceGridInfo> _faceGrids)

@@ -54,7 +54,7 @@ namespace GameCore.UI
             mono.btnDeck.onClick.AddListener(() =>
             {
                 AudioMgr.instance.PlaySfx("sfx_click");
-                UICoreMgr.instance.AddNode(new UINodeDeck(SCFrame.UI.SCUIShowType.ADDITION));
+                UICoreMgr.instance.AddNode(new UINodeDeck(SCUIShowType.ADDITION,GameModel.instance.playerInfo.deckPartInfoList));
             });
             
             refreshShow();

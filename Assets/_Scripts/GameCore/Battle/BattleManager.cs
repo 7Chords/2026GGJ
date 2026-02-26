@@ -210,9 +210,17 @@ namespace GameCore
             playerExcuteInfoList.Clear();
             enemyExcuteInfoList.Clear();
             if (_isPlayerWin)
+            {
                 UICoreMgr.instance.AddNode(new UINodeBattleWin(SCUIShowType.ADDITION));
+                GameModel.instance.SetAllPlayerPart2Bag();
+                GameModel.instance.SetEnemyEmpty();
+            }
             else
+            {
                 UICoreMgr.instance.AddNode(new UINodeLose(SCUIShowType.FULL));
+                GameModel.instance.SetAllPlayerPart2Bag();
+                GameModel.instance.SetEnemyEmpty();
+            }
         }
     }
 }

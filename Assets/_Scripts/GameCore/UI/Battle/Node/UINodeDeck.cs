@@ -8,8 +8,9 @@ namespace GameCore.UI
 {
     public class UINodeDeck : _ASCUINodeBase
     {
-        public UINodeDeck(SCUIShowType _showType) : base(_showType)
+        public UINodeDeck(SCUIShowType _showType,List<PartInfo> _partInfoList) : base(_showType)
         {
+            _m_partInfoList = _partInfoList;
         }
 
         public override bool needHideWhenEnterNewSameTypeNode => false;
@@ -30,6 +31,7 @@ namespace GameCore.UI
         private UIPanelDeck _m_deckPanel;
         private UIMonoDeck _m_deckMono;
 
+        private List<PartInfo> _m_partInfoList;
         public override string GetNodeName()
         {
             return nameof(UINodeDeck);
@@ -72,6 +74,12 @@ namespace GameCore.UI
         public override void OnShowNode()
         {
             _m_deckPanel?.ShowPanel();
+            _m_deckPanel?.SetInfo(_m_partInfoList);
+        }
+
+        public override void CopyData(_ASCUINodeBase _anotherNode)
+        {
+            _m_partInfoList = (_anotherNode as UINodeDeck)._m_partInfoList;
         }
     }
 }

@@ -83,7 +83,7 @@ namespace GameCore.UI
 
         private void onBtnBagClicked(PointerEventData _data, object[] _objs)
         {
-            UICoreMgr.instance.AddNode(new UINodeStoreBag(SCUIShowType.ADDITION));
+            UICoreMgr.instance.AddNode(new UINodeDeck(SCUIShowType.ADDITION, GameModel.instance.playerInfo.bagPartInfoList));
         }
     }
 }
