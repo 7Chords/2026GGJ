@@ -13,7 +13,7 @@ namespace GameCore
         public const string PREFAB_ENEMY_FACE_PART = "prefab_enemy_face_part";
         public const string PREFAB_BATTLE_PART = "prefab_battle_part";
         public const string PREFAB_TOOLTIP_BUFF_ITEM = "prefab_tooltip_buff_item";
-
+        public const string PREFAB_PART_BUFF_ITEM = "prefab_part_buff_item";
         #endregion
 
 

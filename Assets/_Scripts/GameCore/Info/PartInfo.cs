@@ -141,7 +141,7 @@ namespace GameCore
             partLogic.OnPartGetHit(senderInfo, damage);
         }
 
-        public void GetBuff(BuffInfo _buffInfo)
+        public void AddBuff(BuffInfo _buffInfo)
         {
             if (_buffInfo == null)
                 return;
@@ -153,6 +153,11 @@ namespace GameCore
             if (_buffInfo == null)
                 return;
             buffLogic.RemoveBuff(_buffInfo);
+        }
+
+        public BuffInfo GetBuff(long _id)
+        {
+            return buffLogic.FindBuff(_id);
         }
         public void LevelUp()
         {

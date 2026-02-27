@@ -56,5 +56,7 @@ namespace GameCore.Battle
         void RequestTerminateBattle(bool _isPlayerWin);
 
         void ApplyBuffToPart(PartInfo _part, PartInfo _sender, long _buffId,int _buffLayer);
+
+        void ApplyBuffMultiplierToPart(PartInfo _part, PartInfo _sender, long _buffId,int _buffLayer);
     }
 }

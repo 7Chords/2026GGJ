@@ -91,17 +91,13 @@ namespace GameCore.Battle
         public void RemovePlayerPartFromBattle(PartInfo _part)
         {
             if (_part == null) return;
-            //GameModel.instance.playerInfo.battlePartInfoList?.Remove(_part);
             BattleManager.instance.RemovePartFromList(true, _part);
-            //SCMsgCenter.SendMsg(SCMsgConst.BATTLE_PLAYER_PART_ORDER_CHG);
         }
 
         public void RemoveEnemyPartFromBattle(PartInfo _part)
         {
             if (_part == null) return;
-            //GameModel.instance.curEnemyInfo?.battlePartInfoList?.Remove(_part);
             BattleManager.instance.RemovePartFromList(false, _part);
-            //SCMsgCenter.SendMsg(SCMsgConst.BATTLE_ENEMY_PART_ORDER_CHG);
         }
 
         public void InsertPartAfterInQueue(bool _isPlayer, PartInfo _afterPart, PartInfo _part)
@@ -122,7 +118,22 @@ namespace GameCore.Battle
             if (buffRefObj == null)
                 return;
             BuffInfo buffInfo = new BuffInfo(buffRefObj, _buffLayer, _sender,_part);
-            _part.GetBuff(buffInfo);
+            _part.AddBuff(buffInfo);
+            SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_ADD, buffInfo);
+        }
+
+        public void ApplyBuffMultiplierToPart(PartInfo _part, PartInfo _sender, long _buffId, int _multiplier)
+        {
+            BuffRefObj buffRefObj = SCRefDataMgr.instance.buffRefList.refDataList.Find(x => x.id == _buffId);
+            if (buffRefObj == null)
+                return;
+            BuffInfo findBuffInfo = _part.GetBuff(_buffId);
+            if (findBuffInfo == null)
+                return;
+            int buffLayer = findBuffInfo.buffLayer * (_multiplier - 1);
+            BuffInfo buffInfo = new BuffInfo(buffRefObj, buffLayer, _sender, _part);
+            _part.AddBuff(buffInfo);
+            SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, buffInfo);
         }
     }
 }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7677542877183037928}
   - component: {fileID: 5234015421985528867}
   m_Layer: 5
-  m_Name: prefab_part_buff
+  m_Name: prefab_part_buff_item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

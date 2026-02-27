@@ -549,6 +549,7 @@ MonoBehaviour:
   goBuff: {fileID: 5219274544197658620}
   goHealthPosPivot: {x: 0, y: -0.8}
   goOrderPosPivot: {x: -0.7, y: 0.7}
+  goBuffPosPivot: {x: 0.6, y: 0.7}
   scaleMouseEnter: 0.65
   scaleChgDuration: 0.1
   scaleGO: 0.6

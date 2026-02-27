@@ -24,6 +24,8 @@ namespace GameCore.UI
         public Vector2 goHealthPosPivot;
         [Header("序号信息物体所处位置比例")]
         public Vector2 goOrderPosPivot;
+        [Header("buff信息物体所处位置比例")]
+        public Vector2 goBuffPosPivot;
         [Header("鼠标移入缩放")]
         public float scaleMouseEnter;
         [Header("缩放时间")]

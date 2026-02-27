@@ -40,7 +40,7 @@ namespace GameCore.Battle
         public void AddBuff(BuffInfo _buffInfo)
         {
             if (_buffInfo == null) return;
-            BuffInfo findBuffInfo = findBuff(_buffInfo.buffRefObj.id);
+            BuffInfo findBuffInfo = FindBuff(_buffInfo.buffRefObj.id);
 
             if (findBuffInfo != null)
             {
@@ -90,7 +90,7 @@ namespace GameCore.Battle
         /// </summary>
         /// <param name="_buffDataID"></param>
         /// <returns></returns>
-        private BuffInfo findBuff(long _buffDataID)
+        public BuffInfo FindBuff(long _buffDataID)
         {
             foreach (var buffInfo in buffList)
             {

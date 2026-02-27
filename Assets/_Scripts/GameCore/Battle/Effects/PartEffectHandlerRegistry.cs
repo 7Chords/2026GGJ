@@ -24,6 +24,9 @@ namespace GameCore.Battle
             Register(EAttributeType.DAMAGE_MULTIPILER, new Effects.DamageMultiplierEffectHandler());
             Register(EAttributeType.HEAL_ALL_PART, new Effects.HealPartEffectHandler());
             Register(EAttributeType.PART_LOSE_TURN, new Effects.PartLoseTurnEffectHandler());
+            Register(EAttributeType.SELF_GET_BUFF, new Effects.SelfGetBuffEffectHandler());
+            Register(EAttributeType.ENEMY_GET_BUFF, new Effects.EnemyGetBuffEffectHandler());
+
         }
 
         public static void Register(EAttributeType _type, IPartEffectHandler _handler)

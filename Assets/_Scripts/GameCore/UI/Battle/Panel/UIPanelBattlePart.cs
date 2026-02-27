@@ -15,6 +15,7 @@ namespace GameCore.UI
         private TweenContainer _m_tweenContainer;
 
         public PartInfo partInfo => _m_partInfo;
+        private List<UIPanelPartBuff> _m_partBuffItemList;
 
         public UIPanelBattlePart(UIMonoBattlePart _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
@@ -23,12 +24,19 @@ namespace GameCore.UI
         public override void AfterInitialize()
         {
             _m_tweenContainer = new TweenContainer();
+            _m_partBuffItemList = new List<UIPanelPartBuff>();
         }
 
         public override void BeforeDiscard()
         {
             _m_tweenContainer?.KillAllDoTween();
             _m_tweenContainer = null;
+            if (_m_partBuffItemList != null)
+            {
+                foreach (var item in _m_partBuffItemList)
+                    item?.Discard();
+                _m_partBuffItemList.Clear();
+            }
         }
 
         public override void OnHidePanel()
@@ -42,9 +50,15 @@ namespace GameCore.UI
 
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_ACTIVE_END, onPartActiveEnd);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.BATTLE_ENEMY_PART_ORDER_CHG, onBattleEnemyPartOrderChg);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_BUFF_ADD, onPartBuffAdd);
 
             mono.imgGO.RemoveMouseEnter(onMouseEnter);
             mono.imgGO.RemoveMouseExit(onMouseExit);
+            if (_m_partBuffItemList != null)
+            {
+                foreach (var item in _m_partBuffItemList)
+                    item?.HidePanel();
+            }
         }
 
         public override void OnShowPanel()
@@ -58,9 +72,15 @@ namespace GameCore.UI
 
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_ACTIVE_END, onPartActiveEnd);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.BATTLE_ENEMY_PART_ORDER_CHG, onBattleEnemyPartOrderChg);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PART_BUFF_ADD, onPartBuffAdd);
 
             mono.imgGO.AddMouseEnter(onMouseEnter);
             mono.imgGO.AddMouseExit(onMouseExit);
+            if (_m_partBuffItemList != null)
+            {
+                foreach (var item in _m_partBuffItemList)
+                    item?.ShowPanel();
+            }
         }
 
         public void SetInfo(PartInfo _info)
@@ -87,10 +107,39 @@ namespace GameCore.UI
             else
                 mono.txtOrder.text = GameModel.instance.GetPlayerBattleOrderByPartInfo(_m_partInfo).ToString();
 
+            refreshBuffShow();
+
             mono.imgGO.transform.rotation = Quaternion.Euler(0, 0, _m_partInfo.rotateStep * 90);
             //信息子物体自动适配旋转和rect大小
             autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goHealthInfo, mono.goHealthPosPivot);
             autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goOrder, mono.goOrderPosPivot);
+            autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goBuff, mono.goBuffPosPivot);
+
+        }
+
+        private void refreshBuffShow()
+        {
+            if (_m_partBuffItemList != null)
+            {
+                foreach (var item in _m_partBuffItemList)
+                    item?.Discard();
+
+                _m_partBuffItemList.Clear();
+            }
+
+            GameObject buffInfoGO = null;
+            UIMonoPartBuff monoPartBuff = null;
+            UIPanelPartBuff panelPartBuff = null;
+            for (int i = 0; i < _m_partInfo.buffLogic.buffList.Count; i++)
+            {
+                buffInfoGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_PART_BUFF_ITEM, mono.goBuff.transform);
+                monoPartBuff = buffInfoGO.GetComponent<UIMonoPartBuff>();
+                if (monoPartBuff != null)
+                    panelPartBuff = new UIPanelPartBuff(monoPartBuff, SCUIShowType.INTERNAL);
+                panelPartBuff?.SetInfo(_m_partInfo.buffLogic.buffList[i]);
+                panelPartBuff?.ShowPanel();
+                _m_partBuffItemList.Add(panelPartBuff);
+            }
         }
         private void autoAdjustPosAndRotate(GameObject _parent, GameObject _child, Vector2 _pivotPos)
         {
@@ -243,5 +292,15 @@ namespace GameCore.UI
 
         }
 
+        private void onPartBuffAdd(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            BuffInfo info = _objs[0] as BuffInfo;
+            if(info.owner == _m_partInfo)
+            {
+                refreshBuffShow();
+            }
+        }
     }
 }

@@ -23,6 +23,8 @@ namespace GameCore.UI
 
         private TweenContainer _m_tweenContainer;
 
+        private List<UIPanelPartBuff> _m_partBuffItemList;
+
         public UIPanelPlayerFacePart(UIMonoPlayerFacePart _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -30,6 +32,7 @@ namespace GameCore.UI
         public override void AfterInitialize()
         {
             _m_tweenContainer = new TweenContainer();
+            _m_partBuffItemList = new List<UIPanelPartBuff>();
         }
 
         public override void BeforeDiscard()
@@ -37,6 +40,13 @@ namespace GameCore.UI
             GameCommon.DiscardToolTip();
             _m_tweenContainer?.KillAllDoTween();
             _m_tweenContainer = null;
+            if (_m_partBuffItemList != null)
+            {
+                foreach (var item in _m_partBuffItemList)
+                    item?.Discard();
+                _m_partBuffItemList.Clear();
+
+            }
         }
 
         public override void OnHidePanel()
@@ -51,6 +61,12 @@ namespace GameCore.UI
             mono.imgGO.RemoveBeginDrag(onBeginDrag);
             mono.imgGO.RemoveDrag(onDrag);
             mono.imgGO.RemoveEndDrag(onEndDrag);
+
+            if (_m_partBuffItemList != null)
+            {
+                foreach (var item in _m_partBuffItemList)
+                    item?.HidePanel();
+            }
         }
 
 
@@ -68,6 +84,11 @@ namespace GameCore.UI
             mono.imgGO.AddDrag(onDrag);
             mono.imgGO.AddEndDrag(onEndDrag);
 
+            if (_m_partBuffItemList != null)
+            {
+                foreach (var item in _m_partBuffItemList)
+                    item?.ShowPanel();
+            }
         }
 
         public void SetInfo(PartInfo _info)
@@ -94,12 +115,29 @@ namespace GameCore.UI
             mono.imgPart.SetNativeSize();
             mono.txtHealth.text = _m_partInfo.currentHealth +"/" + _m_partInfo.maxHealth;
             mono.txtOrder.text = GameModel.instance.GetPlayerBattleOrderByPartInfo(_m_partInfo).ToString();
-            
+
+            GameObject buffInfoGO = null;
+            UIMonoPartBuff monoPartBuff = null;
+            UIPanelPartBuff panelPartBuff = null;
+            for (int i = 0; i < _m_partInfo.buffLogic.buffList.Count; i++)
+            {
+                buffInfoGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_PART_BUFF_ITEM, mono.goBuff.transform);
+                monoPartBuff = buffInfoGO.GetComponent<UIMonoPartBuff>();
+                if (monoPartBuff != null)
+                    panelPartBuff = new UIPanelPartBuff(monoPartBuff, SCUIShowType.INTERNAL);
+                panelPartBuff?.SetInfo(_m_partInfo.buffLogic.buffList[i]);
+                panelPartBuff?.ShowPanel();
+                _m_partBuffItemList.Add(panelPartBuff);
+            }
+
+
             mono.imgGO.transform.rotation = Quaternion.Euler(0, 0, _m_partInfo.rotateStep * 90);
 
             //信息子物体自动适配旋转和rect大小
             autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goHealthInfo,mono.goHealthPosPivot);
             autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goOrder, mono.goOrderPosPivot);
+            autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goBuff, mono.goBuffPosPivot);
+
         }
 
         private IEnumerator dragLoop()
