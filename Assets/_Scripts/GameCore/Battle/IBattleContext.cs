@@ -55,8 +55,10 @@ namespace GameCore.Battle
         /// <summary> 请求结束战斗（胜负已分） </summary>
         void RequestTerminateBattle(bool _isPlayerWin);
 
+        /// <summary> 添加buff到部位 </summary>
         void ApplyBuffToPart(PartInfo _part, PartInfo _sender, long _buffId,int _buffLayer);
 
+        /// <summary> 部位buff层数翻倍 </summary>
         void ApplyBuffMultiplierToPart(PartInfo _part, PartInfo _sender, long _buffId,int _buffLayer);
     }
 }

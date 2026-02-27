@@ -116,6 +116,26 @@ namespace GameCore.UI
             mono.txtHealth.text = _m_partInfo.currentHealth +"/" + _m_partInfo.maxHealth;
             mono.txtOrder.text = GameModel.instance.GetPlayerBattleOrderByPartInfo(_m_partInfo).ToString();
 
+            refreshBuffShow();
+
+            mono.imgGO.transform.rotation = Quaternion.Euler(0, 0, _m_partInfo.rotateStep * 90);
+
+            //信息子物体自动适配旋转和rect大小
+            autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goHealthInfo,mono.goHealthPosPivot);
+            autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goOrder, mono.goOrderPosPivot);
+            autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goBuff, mono.goBuffPosPivot);
+
+        }
+
+        private void refreshBuffShow()
+        {
+            if (_m_partBuffItemList != null)
+            {
+                foreach (var item in _m_partBuffItemList)
+                    item?.Discard();
+                _m_partBuffItemList.Clear();
+
+            }
             GameObject buffInfoGO = null;
             UIMonoPartBuff monoPartBuff = null;
             UIPanelPartBuff panelPartBuff = null;
@@ -129,17 +149,7 @@ namespace GameCore.UI
                 panelPartBuff?.ShowPanel();
                 _m_partBuffItemList.Add(panelPartBuff);
             }
-
-
-            mono.imgGO.transform.rotation = Quaternion.Euler(0, 0, _m_partInfo.rotateStep * 90);
-
-            //信息子物体自动适配旋转和rect大小
-            autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goHealthInfo,mono.goHealthPosPivot);
-            autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goOrder, mono.goOrderPosPivot);
-            autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goBuff, mono.goBuffPosPivot);
-
         }
-
         private IEnumerator dragLoop()
         {
             while (_m_isDraging)

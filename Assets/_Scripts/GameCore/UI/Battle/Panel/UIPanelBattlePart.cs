@@ -51,6 +51,7 @@ namespace GameCore.UI
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_ACTIVE_END, onPartActiveEnd);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.BATTLE_ENEMY_PART_ORDER_CHG, onBattleEnemyPartOrderChg);
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_BUFF_ADD, onPartBuffAdd);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_BUFF_UPDATE, onPartUpdate);
 
             mono.imgGO.RemoveMouseEnter(onMouseEnter);
             mono.imgGO.RemoveMouseExit(onMouseExit);
@@ -73,6 +74,7 @@ namespace GameCore.UI
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_ACTIVE_END, onPartActiveEnd);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.BATTLE_ENEMY_PART_ORDER_CHG, onBattleEnemyPartOrderChg);
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_BUFF_ADD, onPartBuffAdd);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_BUFF_UPDATE, onPartUpdate);
 
             mono.imgGO.AddMouseEnter(onMouseEnter);
             mono.imgGO.AddMouseExit(onMouseExit);
@@ -298,6 +300,17 @@ namespace GameCore.UI
                 return;
             BuffInfo info = _objs[0] as BuffInfo;
             if(info.owner == _m_partInfo)
+            {
+                refreshBuffShow();
+            }
+        }
+
+        private void onPartUpdate(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            BuffInfo info = _objs[0] as BuffInfo;
+            if (info.owner == _m_partInfo)
             {
                 refreshBuffShow();
             }
