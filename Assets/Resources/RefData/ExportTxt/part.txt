@@ -12,7 +12,7 @@
 101011	杰克之嘴	MOUTH	NORMAL	10	对范围内的敌方目标造成9点伤害	spr_icon_mouth_3	spr_mouth_3	ACTIVE:ATTACK:1:9	0:0;1:0;2:0	0:0;1:0;2:0	攻击	触发失败	*
 101012	珍妮之嘴	MOUTH	NORMAL	8	对范围内的敌方目标造成4点伤害	spr_icon_mouth_2	spr_mouth_2	ACTIVE:ATTACK:1:4	0:0;1:0	0:0;1:0	攻击	触发失败	*
 101013	放血之眼	EYE	NORMAL	5	对效果范围内的敌方部位施加2层流血	spr_icon_eye_1	spr_eye_1	ACTIVE:ENEMY_GET_BUFF:1:100001:2	0:0	0:1;0:2	触发	触发失败	流血+2
-101014	扩血之眼	EYE	RARE	5	使得效果范围内的敌方部位流血层数翻倍	spr_icon_eye_1	spr_eye_1	ACTIVE:ENEMY_BUFF_MULTIPLIER:1:0	0:0	0:0	触发	触发失败	流血×2
+101014	扩血之眼	EYE	RARE	5	使得效果范围内的敌方部位流血层数翻倍	spr_icon_eye_1	spr_eye_1	ACTIVE:ENEMY_BUFF_MULTIPLIER:1:100001:2	0:0	0:0	触发	触发失败	流血×2
 101015	充血之鼻	NOSE	PRECIOUS	10	消耗效果范围内的友方部位的所有流血层数，每消耗1层流血本体回复2点血量	spr_icon_nose_1	spr_nose_1	ACTIVE:CLEAR_SELF_BLEED_AND_HEAL_SELF:1:1:2	0:0;0:1	-1:1;0:2;1:1	触发	触发失败	*
 101016	嗜血之嘴	MOUTH	NORMAL	15	消耗效果范围内所有敌方部位至多2层流血层数（每个部位分开计算），每消耗1层流血，该部位回复2点血量	spr_icon_mouth_3	spr_mouth_3	ACTIVE:CLEAR_ENEMY_BLEED_AND_HEAL_PART:1:2:1:2	0:0;1:0;2:0	0:0;1:0;2:0	攻击	触发失败	*
 101017	穿血之嘴	MOUTH	RARE	15	默认攻击力为0，触发范围内敌方部位每有1层流血，该部位攻击力+2	spr_icon_mouth_1	spr_mouth_1	ACTIVE:ATTACK_BY_ENEMY_BLEED:1:1:2	0:0	0:0	攻击	触发失败	*
