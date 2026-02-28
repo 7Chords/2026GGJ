@@ -16,7 +16,6 @@ namespace GameCore
         public const string PREFAB_PART_BUFF_ITEM = "prefab_part_buff_item";
         #endregion
 
-
         #region TAG & LAYER
         public const string FACE_GRID_TAG = "FaceGrid";
         #endregion
@@ -41,6 +40,11 @@ namespace GameCore
         public const int BUSY_CARD_MAX_COUNT = 6;
 
         public const int BUFF_LAYER_MAX = 99;
+
+        public const float DELAY_START_TIME = 0.75f;
+        public const float DELAY_EFFECT_TIME = 0.75f;
+        public const float DELAY_END_TIME = 1f;
+        public const float DELAY_ACTIVE_BUFF_TIME = 0.75f;
         #endregion
     }
 }

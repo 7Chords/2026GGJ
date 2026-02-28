@@ -25,8 +25,6 @@ namespace GameCore
         REFLECT,//反射
         TRIGGER_MORE,//触发两次
         DAMAGE_MULTIPILER,//攻击多倍伤害
-        //HIT_CHANCE_UP,//命中率上升
-        //HIT_CHANCE_DOWN,//命中率下降
         TRIGGER_CHANCE_UP,//触发上升
         HEAL_ALL_PART,//给范围内所有部位回血
         HEAL_WEAK_PART,//给范围内血量最低的部位回血
@@ -52,6 +50,8 @@ namespace GameCore
         GET_HIT,
         DIE,
         GET_EFFECT,
+        TURN_OVER,
+        ACTION_OVER,
     }
 
     public enum ERoomType
@@ -88,7 +88,9 @@ namespace GameCore
 
     public enum EBuffType
     {
-        BLEED,
+        BLEED,//点燃
+        FAT,//油脂
+        BURN//燃烧
     }
 
 }

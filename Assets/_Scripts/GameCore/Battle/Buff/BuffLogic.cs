@@ -103,18 +103,87 @@ namespace GameCore.Battle
             return default;
         }
 
-
-
-        public void TriggerPartAwakeBuff()
+        public bool HasFindByTriggerPointType(EAttributeTriggerPointType _triggerPointType)
         {
-            foreach (var buffInfo in buffList)
+            return buffList.Find(x=>x.buffRefObj.triggerPointType == _triggerPointType) != null;
+        }
+        public void TriggerPartBuff(EAttributeTriggerPointType _triggerPointType)
+        {
+            List<BuffInfo> removeBuffList = new List<BuffInfo>();
+            switch(_triggerPointType)
             {
-                if (buffInfo == null)
-                    continue;
-                buffInfo.onPartAwake?.Invoke();
+                case EAttributeTriggerPointType.ACTIVE:
+                    {
+                        
+                        foreach (var buffInfo in buffList)
+                        {
+                            if (buffInfo == null)
+                                continue;
+                            if (buffInfo.buffRefObj.triggerPointType != EAttributeTriggerPointType.ACTIVE)
+                                return;
+                            buffInfo.onPartActive?.Invoke();
+                            buffInfo.ReduceBuffLayer();
+                            if(buffInfo.buffLayer == 0)
+                            {
+                                removeBuffList.Add(buffInfo);
+                            }
+                            else
+                                SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, buffInfo);
+                        }
+                    }
+                    break;
+                case EAttributeTriggerPointType.GET_HIT:
+                    {
+                        foreach (var buffInfo in buffList)
+                        {
+                            if (buffInfo == null)
+                                continue;
+                            buffInfo.onPartGetHit?.Invoke();
+                        }
+                    }
+                    break;
+                case EAttributeTriggerPointType.DIE:
+                    {
+                        foreach (var buffInfo in buffList)
+                        {
+                            if (buffInfo == null)
+                                continue;
+                            buffInfo.onPartDie?.Invoke();
+                        }
+                    }
+                    break;
+                case EAttributeTriggerPointType.GET_EFFECT:
+                    {
+                        foreach (var buffInfo in buffList)
+                        {
+                            if (buffInfo == null)
+                                continue;
+                            buffInfo.onPartGetEffect?.Invoke();
+                        }
+                    }
+                    break;
+                case EAttributeTriggerPointType.TURN_OVER:
+                    {
+                        foreach (var buffInfo in buffList)
+                        {
+                            if (buffInfo == null)
+                                continue;
+                            buffInfo.onTurnOver?.Invoke();
+                        }
+                    }
+                    break;
+                case EAttributeTriggerPointType.ACTION_OVER:
+                    {
+
+                    }
+                    break;
+                default:
+                    break;
+            }
+            for(int i =0;i<removeBuffList.Count;i++)
+            {
+                RemoveBuff(removeBuffList[i]);
             }
         }
-
-
     }
 }

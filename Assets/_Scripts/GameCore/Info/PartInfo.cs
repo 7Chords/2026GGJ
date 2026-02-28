@@ -130,7 +130,11 @@ namespace GameCore
         }
         public void TriggerActiveLogic()
         {
-            if (partLogic == null) return;
+            if (buffLogic == null || partLogic == null)
+                return;
+            buffLogic.TriggerPartBuff(EAttributeTriggerPointType.ACTIVE);
+            if (currentHealth == 0)
+                return;
             PartLogicFactory.RefreshTriggers(partLogic, this, EAttributeTriggerPointType.ACTIVE);
             partLogic.OnPartActive();
         }
@@ -141,6 +145,15 @@ namespace GameCore
             partLogic.OnPartGetHit(senderInfo, damage);
         }
 
+        public void TriggerBuff(EAttributeTriggerPointType _triggerPointType)
+        {
+            buffLogic.TriggerPartBuff(_triggerPointType);
+        }
+
+        public bool HasBuff(EAttributeTriggerPointType _triggerPointType)
+        {
+            return buffLogic.HasFindByTriggerPointType(_triggerPointType);
+        }
         public void AddBuff(BuffInfo _buffInfo)
         {
             if (_buffInfo == null)

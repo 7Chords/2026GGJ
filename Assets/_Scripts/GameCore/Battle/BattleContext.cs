@@ -117,7 +117,7 @@ namespace GameCore.Battle
             BuffRefObj buffRefObj = SCRefDataMgr.instance.buffRefList.refDataList.Find(x => x.id == _buffId);
             if (buffRefObj == null)
                 return;
-            BuffInfo buffInfo = new BuffInfo(buffRefObj, _buffLayer, _sender,_part);
+            BuffInfo buffInfo = BuffFactory.CreateBuffInfo(buffRefObj, _buffLayer, _sender,_part);
             _part.AddBuff(buffInfo);
             SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_ADD, buffInfo);
         }
@@ -131,7 +131,7 @@ namespace GameCore.Battle
             if (findBuffInfo == null)
                 return;
             int buffLayer = findBuffInfo.buffLayer * (_multiplier - 1);
-            BuffInfo buffInfo = new BuffInfo(buffRefObj, buffLayer, _sender, _part);
+            BuffInfo buffInfo = BuffFactory.CreateBuffInfo(buffRefObj, buffLayer, _sender, _part);
             _part.AddBuff(buffInfo);
             SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, buffInfo);
         }

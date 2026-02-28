@@ -11,7 +11,7 @@ namespace GameCore
         public List<PartInfo> deckPartInfoList;
         public int maxHealth;
         public int currentHealth;
-
+        
         public EnemyInfo(EnemyRefObj _enemyRefObj)
         {
             if (_enemyRefObj == null)

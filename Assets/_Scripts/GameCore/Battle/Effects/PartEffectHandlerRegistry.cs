@@ -12,10 +12,10 @@ namespace GameCore.Battle
 
         static PartEffectHandlerRegistry()
         {
-            RegisterDefaults();
+            RegisterHandlers();
         }
 
-        private static void RegisterDefaults()
+        private static void RegisterHandlers()
         {
             Register(EAttributeType.ATTACK, new Effects.AttackEffectHandler());
             Register(EAttributeType.REAL_ATTACK, new Effects.RealAttackEffectHandler());

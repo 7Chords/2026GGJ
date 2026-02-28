@@ -1,3 +1,4 @@
+using DG.Tweening;
 using GameCore.Battle;
 using GameCore.UI;
 using SCFrame;
@@ -16,17 +17,19 @@ namespace GameCore
         private readonly BattlePartExecutionQueue _playerQueue = new BattlePartExecutionQueue();
         private readonly BattlePartExecutionQueue _enemyQueue = new BattlePartExecutionQueue();
         private BattleCancelToken _cancelToken;
-
+        private SequenceRunner _m_runner;
         public override void OnInitialize()
         {
             playerExcuteInfoList = new List<PartInfo>();
             enemyExcuteInfoList = new List<PartInfo>();
+            _m_runner = new SequenceRunner();
         }
 
         public override void OnDiscard()
         {
             _cancelToken?.Cancel();
             BattleContext.current = null;
+            _m_runner?.Kill();
         }
 
         public void StartBattle()
@@ -79,12 +82,6 @@ namespace GameCore
             var list = _isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
             var queue = _isPlayer ? _playerQueue : _enemyQueue;
 
-            //list.Clear();
-            //if (_parts != null)
-            //{
-            //    foreach (var part in _parts)
-            //        if (part != null) list.Add(part);
-            //}
             queue.Start(list, _onFinish);
             ExecuteNext(_isPlayer);
         }
@@ -140,25 +137,32 @@ namespace GameCore
 
         private void RunOnePartSequence(bool _isPlayer, PartInfo _part)
         {
-            const float delayStart = 0.75f;
-            const float delayEffect = 0.75f;
-            const float delayEnd = 1f;
-
-            SCTimeCaller.instance.CallDealy(delayStart, () =>
+ 
+            _m_runner?.Kill();
+            _m_runner = new SequenceRunner();
+            _m_runner.AddTask(GameConst.DELAY_START_TIME, () =>
             {
                 if (_cancelToken != null && _cancelToken.isCancelled) return;
                 SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_START, _part);
-                SCTimeCaller.instance.CallDealy(delayEffect, () =>
+            });
+            if (_part.HasBuff(EAttributeTriggerPointType.ACTIVE))
+            {
+                _m_runner.AddTask(GameConst.DELAY_ACTIVE_BUFF_TIME, () =>
                 {
                     if (_cancelToken != null && _cancelToken.isCancelled) return;
-                    _part.TriggerActiveLogic();
-                    SCTimeCaller.instance.CallDealy(delayEnd, () =>
-                    {
-                        if (_cancelToken != null && _cancelToken.isCancelled) return;
-                        SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_END, _part);
-                        ExecuteNext(_isPlayer);
-                    });
+                    _part.TriggerBuff(EAttributeTriggerPointType.ACTIVE);
                 });
+            }
+            _m_runner.AddTask(GameConst.DELAY_EFFECT_TIME, () =>
+            {
+                if (_cancelToken != null && _cancelToken.isCancelled) return;
+                _part.TriggerActiveLogic();
+            });
+            _m_runner.AddTask(GameConst.DELAY_END_TIME, () =>
+            {
+                if (_cancelToken != null && _cancelToken.isCancelled) return;
+                SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_END, _part);
+                ExecuteNext(_isPlayer);
             });
         }
 
@@ -197,10 +201,6 @@ namespace GameCore
                 : ETurnOwnerType.PLAYER;
         }
 
-        public void FinishBattle()
-        {
-            OnBattleRoundFinish();
-        }
         public void TerminateBattle(bool _isPlayerWin)
         {
             _cancelToken?.Cancel();

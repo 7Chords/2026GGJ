@@ -13,8 +13,13 @@ namespace GameCore
         public float buffValue;
         public bool isPositive;
         public int buffLayer;
-        public Action onPartAwake;
-
+        public Action onPartActive;
+        public Action onPartTrigger;
+        public Action onPartActionOver;
+        public Action onPartDie;
+        public Action onTurnOver;
+        public Action onPartGetHit;
+        public Action onPartGetEffect;
         public BuffInfo(BuffRefObj _buffRefObj,int _layer, PartInfo _creator,PartInfo _owner)
         { 
             buffRefObj = _buffRefObj;

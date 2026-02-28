@@ -8,6 +8,7 @@ namespace GameCore.RefData
         public string buffName;
         public string buffDesc;
         public EBuffType buffType;
+        public EAttributeTriggerPointType triggerPointType;
         public string buffIconResName;
         public float buffValue;
         public bool isPositive;
@@ -17,6 +18,7 @@ namespace GameCore.RefData
             buffName = getString("buffName");
             buffDesc = getString("buffDesc");
             buffType = (EBuffType)getEnum("buffType",typeof(EBuffType));
+            triggerPointType = (EAttributeTriggerPointType)getEnum("triggerPointType", typeof(EAttributeTriggerPointType));
             buffIconResName = getString("buffIconResName");
             buffValue = getFloat("buffValue");
             isPositive = getBool("isPositive");
