@@ -9,6 +9,7 @@ namespace GameCore.RefData
     {
         public long id;
         public int floor;
+        public int column;
         public string enemyName;
         public bool isBoss;
         public int enemyHealth;
@@ -20,6 +21,7 @@ namespace GameCore.RefData
         {
             id = getLong("id");
             floor = getInt("floor");
+            column = getInt("column");
             enemyName = getString("enemyName");
             isBoss = getBool("isBoss");
             enemyHealth = getInt("enemyHealth");

@@ -35,7 +35,7 @@ namespace GameCore
             if (levelRefObj == null)
                 return;
             isEnemyPart = _isEnemyPart;
-            maxHealth = levelRefObj.partHealth;
+            maxHealth = levelRefObj.partHealth; 
             currentHealth = maxHealth;
             isOnFace = false;
             localOccupyPosList = new List<Vector2Int>();

@@ -13,8 +13,6 @@ namespace GameCore
     /// </summary>
     public partial class GameModel : Singleton<GameModel>
     {
-
-
         public long rollStoreId; //进入商店节点后roll到的商店id
 
         public PlayerInfo playerInfo;
