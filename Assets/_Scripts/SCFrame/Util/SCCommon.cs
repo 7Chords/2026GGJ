@@ -305,6 +305,11 @@ namespace SCFrame
                 effectObj = new BootyEffectObj();
                 effectObj.Deserialize(_str);
             }
+            else if (_type == typeof(PartLevelEffectObj))
+            {
+                effectObj = new PartLevelEffectObj();
+                effectObj.Deserialize(_str);
+            }
             return effectObj;
 
         }

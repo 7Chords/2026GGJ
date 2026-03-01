@@ -93,4 +93,14 @@ namespace GameCore
         BURN//»º…’
     }
 
+    public enum EEventType
+    {
+        BLOOD_2_PART,
+        PART_2_PART,
+        TREASURE_COIN,
+        TREASURE_PART,
+        TRAP_BATTLE,
+    }
+
+
 }

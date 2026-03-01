@@ -55,7 +55,7 @@ namespace GameCore.UI
                 return;
             }
 
-            List<PartEffectObj> sourceList = _m_enemyRefObj.initPartList;
+            List<PartLevelEffectObj> sourceList = _m_enemyRefObj.initPartList;
             int targetCount = _m_enemyRefObj.winCount;
             List<PartInfo> randomSelectedList = RandomSelectUniqueItems(sourceList, targetCount);
 
@@ -73,12 +73,12 @@ namespace GameCore.UI
         /// <param name="sourceList">源列表</param>
         /// <param name="count">抽取数量</param>
         /// <returns>抽取后的列表</returns>
-        private List<PartInfo> RandomSelectUniqueItems(List<PartEffectObj> sourceList, int count)
+        private List<PartInfo> RandomSelectUniqueItems(List<PartLevelEffectObj> sourceList, int count)
         {
             List<PartInfo> resultList = new List<PartInfo>();
 
             // 复制源列表（避免修改原数据）
-            List<PartEffectObj> tempList = new List<PartEffectObj>(sourceList);
+            List<PartLevelEffectObj> tempList = new List<PartLevelEffectObj>(sourceList);
             // 洗牌算法（Fisher-Yates）：随机打乱后取前count个，保证随机性且不重复
             for (int i = tempList.Count - 1; i > 0; i--)
             {
@@ -90,8 +90,9 @@ namespace GameCore.UI
             // 取前count个元素作为结果
             for (int i = 0; i < count; i++)
             {
-                PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == tempList[i].partId);
-                resultList.Add(new PartInfo(partRefObj,false));
+                PartLevelRefObj partLevelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.id == tempList[i].partLevelId);
+                PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == partLevelRefObj.partId);
+                resultList.Add(new PartInfo(partRefObj, false, partLevelRefObj.partLevel));
             }
 
             return resultList;

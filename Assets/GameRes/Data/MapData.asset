@@ -21,3 +21,5 @@ MonoBehaviour:
     weight: 20
   - type: 6
     weight: 20
+  - type: 3
+    weight: 20

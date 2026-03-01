@@ -5,24 +5,22 @@ using UnityEngine;
 
 namespace GameCore.RefData
 {
-    public class PartEffectObj : _AEffectObjBase
+    public class PartLevelEffectObj : _AEffectObjBase
     {
-        public long partId;
+        public long partLevelId;
         public int partAmount;
         protected override void OnDeserialize(string _str)
         {
             string[] strArr = _str.Split(':');
             if (strArr == null || strArr.Length < 2)
                 return;
-            partId = SCCommon.ParseLong(strArr[0]);
+            partLevelId = SCCommon.ParseLong(strArr[0]);
             partAmount = SCCommon.ParseInt(strArr[1]);
-
         }
 
         protected override string OnSerialise()
         {
-            string str = partId + ":" + partAmount;
-            return str;
+            return partLevelId + ":" + partAmount;
         }
     }
 }

@@ -25,12 +25,12 @@ namespace GameCore
 
         public PartLevelRefObj levelRefObj;
 
-        public PartInfo(PartRefObj _partRefObj,bool _isEnemyPart)
+        public PartInfo(PartRefObj _partRefObj,bool _isEnemyPart,int _level = 1)
         {
             if (_partRefObj == null)
                 return;
             partRefObj = _partRefObj;
-            partLevel = 1;//初始为1级
+            partLevel = _level;//初始为1级
             levelRefObj = GetLevelRefObj();
             if (levelRefObj == null)
                 return;

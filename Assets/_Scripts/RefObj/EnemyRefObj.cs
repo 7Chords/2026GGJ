@@ -12,7 +12,7 @@ namespace GameCore.RefData
         public string enemyName;
         public bool isBoss;
         public int enemyHealth;
-        public List<PartEffectObj> initPartList;
+        public List<PartLevelEffectObj> initPartList;
         public List<BootyEffectObj> bootyList;
         public int winMoney;
         public int winCount;
@@ -23,7 +23,7 @@ namespace GameCore.RefData
             enemyName = getString("enemyName");
             isBoss = getBool("isBoss");
             enemyHealth = getInt("enemyHealth");
-            initPartList = getList<PartEffectObj>("initPartList");
+            initPartList = getList<PartLevelEffectObj>("initPartList");
             bootyList = getList<BootyEffectObj>("bootyList");
             winMoney = getInt("winMoney");
             winCount = getInt("winCount");
