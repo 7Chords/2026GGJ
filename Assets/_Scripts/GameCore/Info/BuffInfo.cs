@@ -30,13 +30,13 @@ namespace GameCore
             creator = _creator;
             owner = _owner;
         }
-        public void AddBuffLayer()
+        public void AddBuffLayer(int _layer = 1)
         {
-            buffLayer = Mathf.Min(buffLayer + 1, GameConst.BUFF_LAYER_MAX);
+            buffLayer = Mathf.Min(buffLayer + _layer, GameConst.BUFF_LAYER_MAX);
         }
-        public void ReduceBuffLayer()
+        public void ReduceBuffLayer(int _layer = 1)
         {
-            buffLayer = Mathf.Max(buffLayer - 1, 0);
+            buffLayer = Mathf.Max(buffLayer - _layer, 0);
         }
     }
 }

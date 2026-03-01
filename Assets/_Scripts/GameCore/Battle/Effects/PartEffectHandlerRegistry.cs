@@ -29,6 +29,9 @@ namespace GameCore.Battle
             Register(EAttributeType.SELF_BUFF_MULTIPLIER, new Effects.SelfBuffMulitiplierEffectHandler());
             Register(EAttributeType.ENEMY_BUFF_MULTIPLIER, new Effects.EnemyBuffMultiplierEffectHandler());
             Register(EAttributeType.SEND_BLEED_BY_GET_HIT, new Effects.SendBleedByGetHitEffectHandler());
+            Register(EAttributeType.CLEAR_SELF_BLEED_AND_HEAL_SELF, new Effects.ClearSelfBleedAndHealSelfEffectHandler());
+            Register(EAttributeType.CLEAR_ENEMY_BLEED_AND_HEAL_PART, new Effects.ClearEnemyBleedAndHealPartEffectHandler());
+            Register(EAttributeType.ATTACK_BY_ENEMY_BLEED, new Effects.AttackByBleedEffectHandler());
         }
 
         public static void Register(EAttributeType _type, IPartEffectHandler _handler)

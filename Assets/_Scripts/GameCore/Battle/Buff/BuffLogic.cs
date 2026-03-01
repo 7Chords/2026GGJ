@@ -85,6 +85,15 @@ namespace GameCore.Battle
             }
         }
 
+        public void ClearBuff(EBuffType _buffType)
+        {
+            BuffInfo info = buffList.Find(x => x.buffType == _buffType);
+            if (info == null)
+                return;
+            buffList.Remove(info);
+            SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_REMOVE, info);
+        }
+
         /// <summary>
         /// 查找列表中的buff
         /// </summary>
@@ -95,6 +104,19 @@ namespace GameCore.Battle
             foreach (var buffInfo in buffList)
             {
                 if (buffInfo.buffRefObj.id == _buffDataID)
+                {
+                    return buffInfo;
+                }
+            }
+
+            return default;
+        }
+
+        public BuffInfo FindBuff(EBuffType _buffType)
+        {
+            foreach (var buffInfo in buffList)
+            {
+                if (buffInfo.buffType == _buffType)
                 {
                     return buffInfo;
                 }

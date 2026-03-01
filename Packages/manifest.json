@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.boxqkrtm.ide.cursor": "file:D:/Game Development Resources/Package/com.unity.ide.cursor-master/com.unity.ide.cursor-master",
     "com.unity.addressables": "1.21.21",
     "com.unity.collab-proxy": "2.11.3",
     "com.unity.feature.2d": "2.0.0",
