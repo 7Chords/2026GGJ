@@ -170,6 +170,21 @@ namespace GameCore
             buffLogic.RemoveBuff(_buffInfo);
         }
 
+        public void ReduceBuffLayer(long _buffId,int _reduceLayer)
+        {
+            if (_buffId < 0 || _reduceLayer <= 0)
+                return;
+            buffLogic.ReduceBuffLayer(_buffId, _reduceLayer);
+        }
+
+        public void ReduceAllBuffLayer(int _reduceLayer)
+        {
+            if (_reduceLayer <= 0)
+                return;
+            buffLogic.ReduceAllBuffLayer(_reduceLayer);
+
+        }
+
         public BuffInfo GetBuff(long _id)
         {
             return buffLogic.FindBuff(_id);

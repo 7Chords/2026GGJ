@@ -17,6 +17,7 @@ namespace GameCore.Battle
 
         private static void RegisterHandlers()
         {
+            Register(EAttributeType.CLEAR_DEFULL, new Effects.ClearDebuffEffectHandler());
             Register(EAttributeType.ATTACK, new Effects.AttackEffectHandler());
             Register(EAttributeType.REAL_ATTACK, new Effects.RealAttackEffectHandler());
             Register(EAttributeType.REFLECT, new Effects.ReflectEffectHandler());

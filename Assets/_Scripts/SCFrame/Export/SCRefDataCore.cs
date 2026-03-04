@@ -10,7 +10,7 @@ using UnityEngine;
 namespace SCFrame
 {
     /// <summary>
-    /// ��������� ����ֻ��key��valueһһ��Ӧ������
+    /// 配表基类
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class SCRefDataCore
@@ -40,7 +40,7 @@ namespace SCFrame
         {
             if (string.IsNullOrEmpty(_m_assetPath) || string.IsNullOrEmpty(_m_sheetName))
             {
-                Debug.LogError(_m_assetPath + "��" + _m_sheetName + "û����Ϣ������ʧ�ܣ�");
+                Debug.LogError(_m_assetPath + "或" + _m_sheetName + "为空");
                 return;
             }
 #if UNITY_EDITOR

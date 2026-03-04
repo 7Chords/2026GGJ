@@ -1,5 +1,6 @@
 using SCFrame;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace GameCore.Battle
 {
@@ -66,6 +67,45 @@ namespace GameCore.Battle
             buffList.Remove(_buffInfo);
 
             SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_REMOVE, _buffInfo);
+
+        }
+
+        public void ReduceBuffLayer(long _id,int _reduceLayer)
+        {
+            if (_id < 0 || _reduceLayer <= 0)
+                return;
+            BuffInfo buffInfo = buffList.Find(x => x.buffRefObj.id == _id);
+            if (buffInfo == null)
+                return;
+            buffInfo.buffLayer = Mathf.Max(0, buffInfo.buffLayer - _reduceLayer);
+            if(buffInfo.buffLayer == 0)
+            {
+                RemoveBuff(buffInfo);
+            }
+            else
+            {
+                SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, buffInfo);
+            }
+
+        }
+
+        public void ReduceAllBuffLayer(int _reduceLayer)
+        {
+            if (_reduceLayer <= 0)
+                return;
+
+            for(int i =0;i<buffList.Count;i++)
+            {
+                buffList[i].buffLayer = Mathf.Max(0, buffList[i].buffLayer - _reduceLayer);
+                if (buffList[i].buffLayer == 0)
+                {
+                    RemoveBuff(buffList[i]);
+                }
+                else
+                {
+                    SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, buffList[i]);
+                }
+            }
 
         }
 

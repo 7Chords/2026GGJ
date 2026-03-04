@@ -119,7 +119,6 @@ namespace GameCore.Battle
                 return;
             BuffInfo buffInfo = BuffFactory.CreateBuffInfo(buffRefObj, _buffLayer, _sender,_part);
             _part.AddBuff(buffInfo);
-            SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_ADD, buffInfo);
         }
 
         public void ApplyBuffMultiplierToPart(PartInfo _part, PartInfo _sender, long _buffId, int _multiplier)
@@ -133,7 +132,19 @@ namespace GameCore.Battle
             int buffLayer = findBuffInfo.buffLayer * (_multiplier - 1);
             BuffInfo buffInfo = BuffFactory.CreateBuffInfo(buffRefObj, buffLayer, _sender, _part);
             _part.AddBuff(buffInfo);
-            SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, buffInfo);
+        }
+
+        public void ApplyReduceBuffLayerToPart(PartInfo _part, long _buffId, int _reduceLayer)
+        {
+            BuffRefObj buffRefObj = SCRefDataMgr.instance.buffRefList.refDataList.Find(x => x.id == _buffId);
+            if (buffRefObj == null)
+                return;
+            _part.ReduceBuffLayer(_buffId, _reduceLayer);
+        }
+
+        public void ApplyReduceAllBuffLayerToPart(PartInfo _part, int _reduceLayer)
+        {
+            _part.ReduceAllBuffLayer(_reduceLayer);
         }
     }
 }

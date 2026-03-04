@@ -17,6 +17,8 @@ namespace GameCore
         public SCRefDataList<TrialRefObj> trialRefList = new SCRefDataList<TrialRefObj>(TrialRefObj.assetPath, TrialRefObj.sheetName);
         public SCRefDataList<TrialRewardRefObj> trialRewardRefList = new SCRefDataList<TrialRewardRefObj>(TrialRewardRefObj.assetPath, TrialRewardRefObj.sheetName);
         public SCRefDataList<BuffRefObj> buffRefList = new SCRefDataList<BuffRefObj>(BuffRefObj.assetPath, BuffRefObj.sheetName);
+        public SCRefDataList<EventRefObj> eventRefList = new SCRefDataList<EventRefObj>(EventRefObj.assetPath, EventRefObj.sheetName);
+        public SCRefDataList<EventDialogueRefObj> eventDialogueRefList = new SCRefDataList<EventDialogueRefObj>(EventDialogueRefObj.assetPath, EventDialogueRefObj.sheetName);
 
         public override void OnInitialize()
         {
@@ -29,6 +31,8 @@ namespace GameCore
             trialRefList.readFromTxt();
             trialRewardRefList.readFromTxt();
             buffRefList.readFromTxt();
+            eventRefList.readFromTxt();
+            eventDialogueRefList.readFromTxt();
         }
     }
 }

@@ -60,5 +60,11 @@ namespace GameCore.Battle
 
         /// <summary> 部位buff层数翻倍 </summary>
         void ApplyBuffMultiplierToPart(PartInfo _part, PartInfo _sender, long _buffId,int _buffLayer);
+
+        /// <summary> 部位buff层数减少 </summary>
+        void ApplyReduceBuffLayerToPart(PartInfo _part, long _buffId,int _reduceLayer);
+
+        /// <summary> 部位所有buff层数减少 </summary>
+        void ApplyReduceAllBuffLayerToPart(PartInfo _part, int _reduceLayer);
     }
 }

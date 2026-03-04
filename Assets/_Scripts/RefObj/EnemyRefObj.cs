@@ -22,7 +22,7 @@ namespace GameCore.RefData
             id = getLong("id");
             floor = getInt("floor");
             column = getInt("column");
-            enemyName = getString("enemyName");
+             enemyName = getString("enemyName");
             isBoss = getBool("isBoss");
             enemyHealth = getInt("enemyHealth");
             initPartList = getList<PartLevelEffectObj>("initPartList");
