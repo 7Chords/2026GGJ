@@ -36,7 +36,10 @@ namespace GameCore.Battle.Effects
                 part.buffLogic.ClearBuff(EBuffType.BLEED);
             }
             layer /= healthBleedUnit;
-            battleCtx.ApplyHealToPlayer(layer * healthAmount);
+            if(!_caster.isEnemyPart)
+                battleCtx.ApplyHealToPlayer(layer * healthAmount);
+            else
+                battleCtx.ApplyHealToEnemy(layer * healthAmount);
 
         }
     }

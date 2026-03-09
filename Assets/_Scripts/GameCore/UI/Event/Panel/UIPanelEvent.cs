@@ -5,8 +5,7 @@ using UnityEngine;
 
 namespace GameCore.UI
 {
-    public class UIPanelEvent : _ASCUIPanelBase<UIMonoEvent
-        >
+    public class UIPanelEvent : _ASCUIPanelBase<UIMonoEvent>
     {
         public UIPanelEvent(UIMonoEvent _mono, SCUIShowType _showType) : base(_mono, _showType)
         {

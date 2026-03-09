@@ -26,6 +26,7 @@ namespace SCFrame.UI
         MAP,
         COMMON,
         STRENGTHEN,
+        EVENT
     }
 
 

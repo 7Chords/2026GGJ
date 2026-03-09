@@ -29,13 +29,13 @@ MonoBehaviour:
   active: 1
   intensity:
     m_OverrideState: 1
-    m_Value: 4.45
+    m_Value: 6.33
   vignetteWidth:
     m_OverrideState: 1
     m_Value: 69.63
   ScanlinePower:
     m_OverrideState: 1
-    m_Value: -0.15
+    m_Value: -0.08
   CycleIndex:
     m_OverrideState: 1
     m_Value: 0.229
