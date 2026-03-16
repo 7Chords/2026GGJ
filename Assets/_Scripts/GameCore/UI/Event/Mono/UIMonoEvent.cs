@@ -13,7 +13,9 @@ namespace GameCore.UI
         [Header("内容文本")]
         public Text txtContent;
         [Header("选择项容器")]
-        public Transform tranSelectContent;
+        public UIMonoCommonContainer monoSelectContainer;
+        [Header("对话点击区域")]
+        public Image imgClickArea;
 
     }
 }

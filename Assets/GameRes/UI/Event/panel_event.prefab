@@ -187,7 +187,8 @@ MonoBehaviour:
   fadeOutDuration: 0.1
   txtName: {fileID: 909171628188547228}
   txtContent: {fileID: 1471481170829746649}
-  tranSelectContent: {fileID: 3849167880980192163}
+  monoSelectContainer: {fileID: 3305939092363307566}
+  imgClickArea: {fileID: 4119648899044899912}
 --- !u!1 &1087676965119621720
 GameObject:
   m_ObjectHideFlags: 0
@@ -355,6 +356,8 @@ GameObject:
   - component: {fileID: 2826284323540569833}
   - component: {fileID: 5765216494709479355}
   - component: {fileID: 2660916696745552017}
+  - component: {fileID: 7173854332221160332}
+  - component: {fileID: 3305939092363307566}
   m_Layer: 5
   m_Name: content_select
   m_TagString: Untagged
@@ -445,6 +448,36 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!225 &7173854332221160332
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5910673479186800953}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &3305939092363307566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5910673479186800953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ab44f543e725d142affac630bb91f30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiMask: {fileID: 0}
+  canvasGroup: {fileID: 7173854332221160332}
+  fadeInDuration: 0.1
+  fadeOutDuration: 0.1
+  prefabItemObjName: prefab_event_select_item
+  layoutGroup: {fileID: 2660916696745552017}
 --- !u!1 &7875767378623324400
 GameObject:
   m_ObjectHideFlags: 0

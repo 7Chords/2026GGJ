@@ -14,6 +14,7 @@ namespace GameCore
     public partial class GameModel : Singleton<GameModel>
     {
         public long rollStoreId; //进入商店节点后roll到的商店id
+        public long rollEventId;//进入事件节点后roll到的事件id
 
         public PlayerInfo playerInfo;
         public List<FaceGridInfo> playerFaceGridInfoList;//玩家当前脸部格子信息列表
@@ -199,6 +200,13 @@ namespace GameCore
             List<StoreRefObj> storeRefList = SCRefDataMgr.instance.storeRefList.refDataList.Where(refObj => refObj.floor == playerInfo.playerFloor).ToList();
             long id = storeRefList[Random.Range(0, storeRefList.Count)].id;
             rollStoreId = id;
+        }
+
+        public void RollEventId()
+        {
+            EventRefObj eventRefObj = SCRefDataMgr.instance.eventRefList.refDataList.Find(refObj => refObj.floor == playerInfo.playerFloor);
+            long id = eventRefObj.eventList[Random.Range(0, eventRefObj.eventList.Count)];
+            rollEventId = id;
         }
 
         public void RollBattleOrder()

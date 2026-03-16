@@ -56,7 +56,7 @@ namespace SCFrame
             }
             catch(Exception ex)
             {
-                Debug.LogError("ResourcesHelper ������Ϸ�������������" + ex);
+                Debug.LogError("ResourcesHelper 加载游戏物体失败" + ex);
                 return null;
             }
         }
@@ -84,7 +84,7 @@ namespace SCFrame
             }
             catch(Exception ex)
             {
-                Debug.LogError("ResourcesHelper������Ϸ�������������" + ex);
+                Debug.LogError("ResourcesHelper加载游戏物体失败" + ex);
                 return null;
             }
         }

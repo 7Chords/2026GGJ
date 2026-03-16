@@ -8,6 +8,7 @@ namespace GameCore.RefData
     public class EventDialogueRefObj : SCRefDataCore
     {
         public long id;
+        public string name;
         public string content;
         public EEventDialogueType dialogueType;
         public EEventDialogueFlagType flagType;
@@ -17,10 +18,12 @@ namespace GameCore.RefData
         protected override void _parseFromString()
         {
             id = getLong("id");
+            name = getString("name");
             content = getString("content");
             dialogueType = (EEventDialogueType)getEnum("dialogueType", typeof(EEventDialogueType));
             flagType = (EEventDialogueFlagType)getEnum("flagType", typeof(EEventDialogueFlagType));
             nextList = getList<long>("nextList");
+            eventType = (EEventType)getEnum("eventType", typeof(EEventType));
         }
 
         public static string assetPath => "RefData/ExportTxt";

@@ -39,6 +39,8 @@ public class SCMsgConst
     public const int PART_BUFF_REMOVE = 2032;
     public const int PART_BUFF_UPDATE = 2033;
     public const int SELECT_STRENGTHEN_PART = 2034;
+    public const int EVENT_START_SELECT = 2035;
+    public const int EVENT_END_SELECT = 2036;
     #endregion
 
     #region 系统相关 99

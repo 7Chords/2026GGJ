@@ -205,10 +205,6 @@ namespace GameCore
         {
             _cancelToken?.Cancel();
             BattleContext.current = null;
-            _playerQueue.Start(null, null);
-            _enemyQueue.Start(null, null);
-            playerExcuteInfoList.Clear();
-            enemyExcuteInfoList.Clear();
             if (_isPlayerWin)
             {
                 UICoreMgr.instance.AddNode(new UINodeBattleWin(SCUIShowType.ADDITION));
@@ -221,6 +217,10 @@ namespace GameCore
                 GameModel.instance.SetAllPlayerPart2Bag();
                 GameModel.instance.SetEnemyEmpty();
             }
+            _playerQueue.Start(null, null);
+            _enemyQueue.Start(null, null);
+            playerExcuteInfoList.Clear();
+            enemyExcuteInfoList.Clear();
         }
     }
 }

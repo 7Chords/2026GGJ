@@ -87,15 +87,6 @@ namespace GameCore.UI
                 foreach (var grid in _m_gridPanelList)
                     grid?.ShowPanel();
             }
-            if (_m_facePartPanelList != null)
-            {
-                foreach (var panel in _m_facePartPanelList)
-                {
-                    panel?.HidePanel();
-                    panel?.Discard();
-                }
-                _m_facePartPanelList.Clear();
-            }
             refreshShow();
         }
         private void createGrids()
@@ -142,6 +133,16 @@ namespace GameCore.UI
 
         private void refreshShow()
         {
+            if (_m_facePartPanelList != null)
+            {
+                foreach (var panel in _m_facePartPanelList)
+                {
+                    panel?.HidePanel();
+                    panel?.Discard();
+                }
+                _m_facePartPanelList.Clear();
+            }
+
             _m_curEnemyInfo = GameModel.instance.curEnemyInfo;
 
             if (_m_curEnemyInfo == null)
