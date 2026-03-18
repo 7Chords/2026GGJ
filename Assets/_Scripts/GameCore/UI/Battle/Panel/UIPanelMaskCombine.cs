@@ -95,7 +95,7 @@ namespace GameCore.UI
         }
         private void onBtnSettingClickDown(PointerEventData _data, object[] _objs)
         {
-
+            UICoreMgr.instance.AddNode(new UINodeSetting(SCUIShowType.ADDITION));
         }
 
         private void onBtnGuideClickDown(PointerEventData _data, object[] _objs)

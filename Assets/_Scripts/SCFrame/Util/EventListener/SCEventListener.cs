@@ -31,8 +31,7 @@ namespace SCFrame
         ON_TRIGGER_STAY_2D = -10019,
         ON_TRIGGER_EXIT_2D = -10020,
         ON_RELEASE_ADDRESSABLE_ASSET = -10021,
-        //ON_HOVER_ENTER = -10022,
-        //ON_HOVER_EXIT = -10023,
+
     }
 
     public interface ISCMouseEvent : 
@@ -187,7 +186,7 @@ namespace SCFrame
 
         #endregion
 
-        #region ��ײ
+        #region Collision
         private void OnCollisionEnter(Collision collision)
         {
             TriggerAction(ESCEventType.ON_COLLISION_ENTER, collision);
@@ -216,7 +215,7 @@ namespace SCFrame
         }
         #endregion
 
-        #region ����
+        #region Trigger
         private void OnTriggerEnter(Collider other)
         {
             TriggerAction(ESCEventType.ON_TRIGGER_ENTER, other);
@@ -243,7 +242,7 @@ namespace SCFrame
         }
         #endregion
 
-        #region ����
+        #region 资源
         private void OnDestroy()
         {
             TriggerAction(ESCEventType.ON_RELEASE_ADDRESSABLE_ASSET, gameObject);
