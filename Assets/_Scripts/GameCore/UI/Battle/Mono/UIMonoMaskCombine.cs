@@ -30,5 +30,9 @@ namespace GameCore.UI
         public Image imgEnemyHealthBar;
         [Header("敌人血量文本")]
         public Text txtEnemyHealth;
+        [Header("设置按钮")]
+        public Button btnSetting;
+        [Header("教程按钮")]
+        public Button btnGuide;
     }
 }

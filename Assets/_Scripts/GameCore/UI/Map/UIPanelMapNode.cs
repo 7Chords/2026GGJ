@@ -170,8 +170,8 @@ namespace GameCore.UI
             GameModel.instance.RollBattleOrder();
             UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
             GameModel.instance.GenerateNewBattle();
-            UICoreMgr.instance.AddNode(new UINodeBattleOrder(SCUIShowType.ADDITION));
-
+            //UICoreMgr.instance.AddNode(new UINodeBattleOrder(SCUIShowType.ADDITION));
+            UICoreMgr.instance.AddNode(new UINodeGuideBattle(SCUIShowType.ADDITION));
         }
 
         private void EnterBossLevel()

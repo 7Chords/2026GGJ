@@ -1,6 +1,7 @@
 using SCFrame;
 using SCFrame.UI;
 using System;
+using UnityEngine.EventSystems;
 
 namespace GameCore.UI
 {
@@ -35,8 +36,11 @@ namespace GameCore.UI
         {
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.NEW_GANE_START, onNewBattleStart);
 
-            mono.btnConfirm.onClick.RemoveAllListeners();
-            mono.btnDeck.onClick.RemoveAllListeners();
+            mono.btnConfirm.RemoveClickDown(OnBtnConfirmClick);
+            mono.btnDeck.RemoveClickDown(onBtnDeckClickDown);
+            mono.btnGuide.RemoveClickDown(onBtnGuideClickDown);
+            mono.btnSetting.RemoveClickDown(onBtnSettingClickDown);
+
             _m_partContainer?.HidePanel();
             _m_playerFace?.HidePanel();
             _m_enemyMask?.HidePanel();
@@ -46,26 +50,32 @@ namespace GameCore.UI
         public override void OnShowPanel()
         {
             SCMsgCenter.RegisterMsgAct(SCMsgConst.NEW_GANE_START, onNewBattleStart);
+
+            mono.btnConfirm.AddMouseLeftClickDown(OnBtnConfirmClick);
+            mono.btnDeck.AddMouseLeftClickDown(onBtnDeckClickDown);
+            mono.btnGuide.AddMouseLeftClickDown(onBtnGuideClickDown);
+            mono.btnSetting.AddMouseLeftClickDown(onBtnSettingClickDown);
+
             _m_playerFace?.ShowPanel();
             _m_partContainer?.ShowPanel();
             _m_enemyMask?.ShowPanel();
 
-            mono.btnConfirm.onClick.AddListener(OnConfirmClick);
-            mono.btnDeck.onClick.AddListener(() =>
-            {
-                AudioMgr.instance.PlaySfx("sfx_click");
-                UICoreMgr.instance.AddNode(new UINodeDeck(SCUIShowType.ADDITION,GameModel.instance.playerInfo.deckPartInfoList));
-            });
-            
             refreshShow();
         }
 
-        private void OnConfirmClick()
+        private void onBtnDeckClickDown(PointerEventData arg1, object[] arg2)
         {
-            AudioMgr.instance.PlaySfx("sfx_click");            
+            AudioMgr.instance.PlaySfx("sfx_click");
+            UICoreMgr.instance.AddNode(new UINodeDeck(SCUIShowType.ADDITION, GameModel.instance.playerInfo.deckPartInfoList));
+        }
+
+        private void OnBtnConfirmClick(PointerEventData arg1, object[] arg2)
+        {
+            AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.AddNode(new UINodeBattle(SCUIShowType.FULL));
             BattleManager.instance.StartBattle();
         }
+
         
         private void refreshShow()
         {
@@ -83,6 +93,14 @@ namespace GameCore.UI
         {
             refreshShow();
         }
+        private void onBtnSettingClickDown(PointerEventData _data, object[] _objs)
+        {
 
+        }
+
+        private void onBtnGuideClickDown(PointerEventData _data, object[] _objs)
+        {
+            UICoreMgr.instance.AddNode(new UINodeGuideBattle(SCUIShowType.ADDITION));
+        }
     }
 }
