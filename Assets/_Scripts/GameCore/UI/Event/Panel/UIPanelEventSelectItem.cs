@@ -49,7 +49,7 @@ namespace GameCore.UI
 
         private void onBtnSelectClickDown(PointerEventData _data, object[] _objs)
         {
-
+            SCMsgCenter.SendMsg(SCMsgConst.EVENT_SELECT_CONFIRM, _m_dialogueRefObj);
         }
     }
 }

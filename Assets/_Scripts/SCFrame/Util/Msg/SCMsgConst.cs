@@ -41,6 +41,7 @@ public class SCMsgConst
     public const int SELECT_STRENGTHEN_PART = 2034;
     public const int EVENT_START_SELECT = 2035;
     public const int EVENT_END_SELECT = 2036;
+    public const int EVENT_SELECT_CONFIRM = 2037;
     #endregion
 
     #region 系统相关 99

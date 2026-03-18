@@ -32,6 +32,7 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
+            SCMsgCenter.RegisterMsg(SCMsgConst.EVENT_SELECT_CONFIRM, onEventSelectConfirm);
             mono.imgClickArea.RemoveClickDown(onMouseClickDialogue);
             _m_selectContainer?.HidePanel();
 
@@ -39,6 +40,7 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            SCMsgCenter.RegisterMsg(SCMsgConst.EVENT_SELECT_CONFIRM, onEventSelectConfirm);
             mono.imgClickArea.AddMouseLeftClickDown(onMouseClickDialogue);
             _m_eventDialogueId = GameModel.instance.rollEventId;
             _m_eventDialogueRefObj = SCRefDataMgr.instance.eventDialogueRefList.refDataList.Find(x => x.id == _m_eventDialogueId);
@@ -46,7 +48,6 @@ namespace GameCore.UI
             _m_selectContainer?.ShowPanel();
             refreshShow();
         }
-
 
         private void refreshShow()
         {
@@ -66,7 +67,9 @@ namespace GameCore.UI
                 return;
             if(_m_eventDialogueRefObj.flagType == EEventDialogueFlagType.END)
             {
+                AudioMgr.instance.PlaySfx("sfx_click");
                 UICoreMgr.instance.CloseTopNode();
+                UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
             }
             else
             {
@@ -82,6 +85,19 @@ namespace GameCore.UI
                     refreshShow();
                 }
             }
+        }
+        private void onEventSelectConfirm(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            EventDialogueRefObj selectDialogueRefObj = _objs[0] as EventDialogueRefObj;
+            if (selectDialogueRefObj == null || selectDialogueRefObj.nextList.Count == 0)
+                return;
+            _m_isSelecting = false;
+            _m_eventDialogueId = selectDialogueRefObj.nextList[0];
+            _m_eventDialogueRefObj = SCRefDataMgr.instance.eventDialogueRefList.refDataList.Find(x => x.id == _m_eventDialogueId);
+            refreshShow();
+            SCMsgCenter.SendMsg(SCMsgConst.EVENT_END_SELECT);
         }
     }
 }

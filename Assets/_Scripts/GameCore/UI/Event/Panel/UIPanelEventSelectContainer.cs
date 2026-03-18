@@ -42,14 +42,14 @@ namespace GameCore.UI
         public override void OnHidePanel()
         {
             SCMsgCenter.UnregisterMsg(SCMsgConst.EVENT_START_SELECT, onEventStartSelect);
-            SCMsgCenter.UnregisterMsg(SCMsgConst.EVENT_END_SELECT, onEventEndSelect);
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.EVENT_END_SELECT, onEventEndSelect);
 
         }
 
         public override void OnShowPanel()
         {
             SCMsgCenter.RegisterMsg(SCMsgConst.EVENT_START_SELECT, onEventStartSelect);
-            SCMsgCenter.RegisterMsg(SCMsgConst.EVENT_END_SELECT, onEventEndSelect);
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.EVENT_END_SELECT, onEventEndSelect);
 
         }
 
@@ -67,7 +67,7 @@ namespace GameCore.UI
 
         }
 
-        private void onEventEndSelect(object[] _objs)
+        private void onEventEndSelect()
         {
             if(_m_selectItemList != null)
             {
