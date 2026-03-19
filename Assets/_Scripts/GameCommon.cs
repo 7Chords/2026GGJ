@@ -101,11 +101,11 @@ namespace GameCore
             damageGO.GetComponent<PartEffectText>().Initialize(_content);
         }
 
-        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector3 _worldPos, EQualityType _qualityType = EQualityType.NONE)
+        public static void ShowTooltip(string _name, string _desc, Vector3 _worldPos, EQualityType _qualityType = EQualityType.NONE)
         {
             DiscardToolTip();
             GameObject toolTipGo = ResourcesHelper.LoadGameObject(
-                "prefab_tooltip",
+                GameConst.PREFAB_TOOLTIP,
                 SCGame.instance.topLayerRoot.transform);
 
             Vector2 screenPos = Vector2.zero;
@@ -135,13 +135,12 @@ namespace GameCore
             var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
             tooltipComp.ShowTooltip(_name, _desc, localPoint, _qualityType);
             _m_toolTipCache = toolTipGo;
-            return tooltipComp;
         }
-        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector3 _worldPos, Vector2 _showScreenRatioOffset, EQualityType _qualityType = EQualityType.NONE)
+        public static void ShowTooltip(string _name, string _desc, Vector3 _worldPos, Vector2 _showScreenRatioOffset, EQualityType _qualityType = EQualityType.NONE)
         {
             DiscardToolTip();
             GameObject toolTipGo = ResourcesHelper.LoadGameObject(
-                "prefab_tooltip",
+                GameConst.PREFAB_TOOLTIP,
                 SCGame.instance.topLayerRoot.transform);
 
             Vector2 offset = new Vector3(_showScreenRatioOffset.x * Screen.width, _showScreenRatioOffset.y * Screen.height);
@@ -162,13 +161,12 @@ namespace GameCore
             var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
             tooltipComp.ShowTooltip(_name, _desc, localPoint, _qualityType);
             _m_toolTipCache = toolTipGo;
-            return tooltipComp;
         }
-        public static CommonTooltip ShowTooltip(string _name, string _desc, Vector2 _screenRatio, EQualityType _qualityType = EQualityType.NONE)
+        public static void ShowTooltip(string _name, string _desc, Vector2 _screenRatio, EQualityType _qualityType = EQualityType.NONE)
         {
             DiscardToolTip();
             GameObject toolTipGo = ResourcesHelper.LoadGameObject(
-                "prefab_tooltip",
+                GameConst.PREFAB_TOOLTIP,
                 SCGame.instance.topLayerRoot.transform);
 
             Vector2 screenPos = new Vector2(Screen.width * _screenRatio.x, Screen.height * _screenRatio.y);
@@ -188,13 +186,12 @@ namespace GameCore
             var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
             tooltipComp.ShowTooltip(_name, _desc, localPoint, _qualityType);
             _m_toolTipCache = toolTipGo;
-            return tooltipComp;
         }
-        public static CommonTooltip ShowTooltip(PartInfo _partInfo, Vector2 _screenRatio, bool _showGridInfo = true)
+        public static void ShowTooltip(PartInfo _partInfo, Vector2 _screenRatio, bool _showGridInfo = true)
         {
             DiscardToolTip();
             GameObject toolTipGo = ResourcesHelper.LoadGameObject(
-                "prefab_tooltip",
+                GameConst.PREFAB_TOOLTIP,
                 SCGame.instance.topLayerRoot.transform);
 
             Vector2 screenPos = new Vector2(Screen.width * _screenRatio.x, Screen.height * _screenRatio.y);
@@ -214,13 +211,12 @@ namespace GameCore
             var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
             tooltipComp.ShowTooltip(_partInfo, localPoint, _showGridInfo);
             _m_toolTipCache = toolTipGo;
-            return tooltipComp;
         }
-        public static CommonTooltip ShowTooltip(PartInfo _partInfo, Vector3 _worldPos, bool _showGridInfo = true)
+        public static void ShowTooltip(PartInfo _partInfo, Vector3 _worldPos, bool _showGridInfo = true)
         {
             DiscardToolTip();
             GameObject toolTipGo = ResourcesHelper.LoadGameObject(
-                "prefab_tooltip",
+                GameConst.PREFAB_TOOLTIP,
                 SCGame.instance.topLayerRoot.transform);
 
             Vector2 screenPos = Vector2.zero;
@@ -250,14 +246,13 @@ namespace GameCore
             var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
             tooltipComp.ShowTooltip(_partInfo, localPoint, _showGridInfo);
             _m_toolTipCache = toolTipGo;
-            return tooltipComp;
         }
 
-        public static CommonTooltip ShowTooltip(PartRefObj _partRefObj, Vector2 _screenRatio, bool _showGridInfo = true)
+        public static void ShowTooltip(PartRefObj _partRefObj, Vector2 _screenRatio, bool _showGridInfo = true)
         {
             DiscardToolTip();
             GameObject toolTipGo = ResourcesHelper.LoadGameObject(
-                "prefab_tooltip",
+                GameConst.PREFAB_TOOLTIP,
                 SCGame.instance.topLayerRoot.transform);
 
             Vector2 screenPos = new Vector2(Screen.width * _screenRatio.x, Screen.height * _screenRatio.y);
@@ -277,14 +272,13 @@ namespace GameCore
             var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
             tooltipComp.ShowTooltip(_partRefObj, localPoint, _showGridInfo);
             _m_toolTipCache = toolTipGo;
-            return tooltipComp;
         }
 
-        public static CommonTooltip ShowTooltip(PartRefObj _partRefObj, Vector3 _worldPos, bool _showGridInfo = true)
+        public static void ShowTooltip(PartRefObj _partRefObj, Vector3 _worldPos, bool _showGridInfo = true)
         {
             DiscardToolTip();
             GameObject toolTipGo = ResourcesHelper.LoadGameObject(
-                "prefab_tooltip",
+                GameConst.PREFAB_TOOLTIP,
                 SCGame.instance.topLayerRoot.transform);
 
             Vector2 screenPos = Vector2.zero;
@@ -314,7 +308,6 @@ namespace GameCore
             var tooltipComp = toolTipGo.GetComponent<CommonTooltip>();
             tooltipComp.ShowTooltip(_partRefObj, localPoint, _showGridInfo);
             _m_toolTipCache = toolTipGo;
-            return tooltipComp;
         }
         public static void DiscardToolTip()
         {
@@ -324,7 +317,31 @@ namespace GameCore
             _m_toolTipCache = null;
         }
 
+        public static void ShowPopTip(string _content, Vector3 _worldPos)
+        {
+            GameObject popTipGo = ResourcesHelper.LoadGameObject(
+                GameConst.PREFAB_POP_TIP,
+                SCGame.instance.topLayerRoot.transform);
 
+            Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(SCGame.instance.gameCamera, _worldPos);
+            RectTransform rt = popTipGo.GetRectTransform();
+            Vector2 localPoint = SCUICommon.ScreenPointToUIPoint(rt, screenPos);
+            rt.localPosition = localPoint;
+            var popTipComp = popTipGo.GetComponent<CommonPopTip>();
+            popTipComp.Initialize(_content);
+        }
+
+        public static void ShowPopTip(string _content,Vector2 _uiLocalPos)
+        {
+            GameObject popTipGo = ResourcesHelper.LoadGameObject(
+                GameConst.PREFAB_POP_TIP,
+                SCGame.instance.topLayerRoot.transform);
+
+            RectTransform rt = popTipGo.GetRectTransform();
+            rt.localPosition = _uiLocalPos;
+            var popTipComp = popTipGo.GetComponent<CommonPopTip>();
+            popTipComp.Initialize(_content);
+        }
 
         /// <summary>
         /// 绕着中心点旋转

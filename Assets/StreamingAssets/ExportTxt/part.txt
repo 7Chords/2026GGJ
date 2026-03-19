@@ -1,5 +1,5 @@
 ﻿id	partName	partType	qualityType	partHealth	partDesc	partSpriteObjName	partGameObjectName	entryList	occupyPosList	effectPosList	triggerSuccessTip	triggerFailTip	triggerEffectTip
-101001	瑞卡瓦之鼻	NOSE	NORMAL	10	消除效果范围上的友方部位上的负面效果	spr_icon_nose_1	spr_nose_1	ACTIVE:CLEAR_DEFULL:1:0	0:0;0:1	0:-1;-1:0;1:0;-1:1;1:1;-1:2;1:2	触发	触发失败	祛除
+101001	瑞卡瓦之鼻	NOSE	NORMAL	10	消除效果范围上的友方部位上的一层负面效果	spr_icon_nose_1	spr_nose_1	ACTIVE:CLEAR_DEFULL:1:1	0:0;0:1	0:-1;-1:0;1:0;-1:1;1:1;-1:2;1:2	触发	触发失败	祛除
 101002	里昂之眼	EYE	PRECIOUS	5	效果范围上的友方部位有50%多触发一次	spr_icon_eye_1	spr_eye_1	ACTIVE:TRIGGER_MORE:0.5:2	0:0	0:1	触发	触发失败	触发+1
 101003	鹰嘴	MOUTH	NORMAL	5	直接对敌方本体造成7点伤害	spr_icon_mouth_1	spr_mouth_1	ACTIVE:REAL_ATTACK:1:7	0:0	0:0	攻击	触发失败	*
 101004	希尔之鼻	NOSE	NORMAL	10	回复效果范围内友方部位3点生命值	spr_icon_nose_2	spr_nose_2	ACTIVE:HEAL_ALL_PART:1:3	0:0	-1:1;0:1;1:1;-1:0;1:0;-1:-1;0:-1;1:-1	触发	触发失败	*
@@ -7,14 +7,14 @@
 101006	大只嘴	MOUTH	NORMAL	15	对大范围内的敌方目标造成12点伤害	spr_icon_mouth_4	spr_mouth_4	ACTIVE:ATTACK:1:12	0:0;0:1;1:0;1:1;2:0;2:1	0:0;0:1;1:0;1:1;2:0;2:1	攻击	触发失败	*
 101007	伊莉米蕾之鼻	NOSE	NORMAL	10	去除效果范围内的友方的负面部位	spr_icon_nose_3	spr_nose_3	ACTIVE:CLEAR_BAD_SKIN:1:0	0:0;0:1;0:2	-1:4;0:4;1:4;2:3;2:2;2:1;2:0;2:-1;1:-2;0:-2;-1:-2;-2:-1;-2:0;-2:1;-2:2;-2:3	触发	触发失败	祛除
 101008	虎之眼	EYE	RARE	5	效果范围上的友方嘴巴有50%概率造成双倍伤害	spr_icon_eye_3	spr_eye_3	ACTIVE:DAMAGE_MULTIPILER:0.5:2	0:0;0:1;1:0;1:1	0:2;1:2;-1:1;2:1;-1:0;2:0;0:-1;1:-1	触发	触发失败	伤害×2
-101009	普通皮肤	SKIN	NORMAL	20	普通的皮肤	spr_nose_2	spr_nose_2	*	0:0	0:0	防御	触发失败	*
-101010	反伤皮肤	SKIN	RARE	15	受到伤害时使伤害来源受到3点伤害	spr_nose_2	spr_nose_2	GET_HIT:REFLECT:1:3	0:0	0:0	反弹	触发失败	*
+101009	普通皮肤	SKIN	NORMAL	20	普通的皮肤	spr_icon_skin_tmp	spr_skin_tmp	*	0:0	0:0	防御	触发失败	*
+101010	反伤皮肤	SKIN	RARE	15	受到伤害时使伤害来源受到3点伤害	spr_icon_skin_tmp	spr_skin_tmp	GET_HIT:REFLECT:1:3	0:0	0:0	反弹	触发失败	*
 101011	杰克之嘴	MOUTH	NORMAL	10	对范围内的敌方目标造成9点伤害	spr_icon_mouth_3	spr_mouth_3	ACTIVE:ATTACK:1:9	0:0;1:0;2:0	0:0;1:0;2:0	攻击	触发失败	*
 101012	珍妮之嘴	MOUTH	NORMAL	8	对范围内的敌方目标造成4点伤害	spr_icon_mouth_2	spr_mouth_2	ACTIVE:ATTACK:1:4	0:0;1:0	0:0;1:0	攻击	触发失败	*
 101013	放血之眼	EYE	NORMAL	5	对效果范围内的敌方部位施加2层流血	spr_icon_eye_1	spr_eye_1	ACTIVE:ENEMY_GET_BUFF:1:100001:2	0:0	0:1;0:2	触发	触发失败	流血+2
-101014	扩血之眼	EYE	RARE	5	使得效果范围内的敌方部位流血层数翻倍	spr_icon_eye_1	spr_eye_1	ACTIVE:ENEMY_BUFF_MULTIPLIER:1:0	0:0	0:0	触发	触发失败	流血×2
-101015	充血之鼻	NOSE	PRECIOUS	10	消耗效果范围内的友方部位的所有流血层数，每消耗1层流血本体回复2点血量	spr_icon_nose_1	spr_nose_1	ACTIVE:CLEAR_SELF_BLEED_AND_HEAL_SELF:1:2:1	0:0;0:1	-1:1;0:2;1:1	触发	触发失败	*
+101014	扩血之眼	EYE	RARE	5	使得效果范围内的敌方部位流血层数翻倍	spr_icon_eye_1	spr_eye_1	ACTIVE:ENEMY_BUFF_MULTIPLIER:1:100001:2	0:0	0:0	触发	触发失败	流血×2
+101015	充血之鼻	NOSE	PRECIOUS	10	消耗效果范围内的友方部位的所有流血层数，每消耗1层流血本体回复2点血量	spr_icon_nose_1	spr_nose_1	ACTIVE:CLEAR_SELF_BLEED_AND_HEAL_SELF:1:1:2	0:0;0:1	-1:1;0:2;1:1	触发	触发失败	*
 101016	嗜血之嘴	MOUTH	NORMAL	15	消耗效果范围内所有敌方部位至多2层流血层数（每个部位分开计算），每消耗1层流血，该部位回复2点血量	spr_icon_mouth_3	spr_mouth_3	ACTIVE:CLEAR_ENEMY_BLEED_AND_HEAL_PART:1:2:1:2	0:0;1:0;2:0	0:0;1:0;2:0	攻击	触发失败	*
 101017	穿血之嘴	MOUTH	RARE	15	默认攻击力为0，触发范围内敌方部位每有1层流血，该部位攻击力+2	spr_icon_mouth_1	spr_mouth_1	ACTIVE:ATTACK_BY_ENEMY_BLEED:1:1:2	0:0	0:0	攻击	触发失败	*
-101018	汗血肌肤	SKIN	NORMAL	20	触发时自身获得1层流血	spr_icon_eye_3	spr_icon_eye_3	ACTIVE:SELF_GET_BUFF:1:100001:1	0:0;0:1;1:0;1:1;2:0;2:1	0:0;0:1;1:0;1:1;2:0;2:1	触发	触发失败	流血+1
-101019	血棘之肤	SKIN	NORMAL	20	受到攻击时，使伤害来源获得2层流血	spr_nose_2	spr_nose_2	GET_HIT:SEND_BLEED_BY_GET_HIT:1:2	0:0	0:0	触发	触发失败	流血+2
+101018	汗血肌肤	SKIN	NORMAL	20	触发时自身获得1层流血	spr_icon_skin_tmp	spr_skin_tmp	ACTIVE:SELF_GET_BUFF:1:100001:1	0:0	0:0	触发	触发失败	流血+1
+101019	血棘之肤	SKIN	NORMAL	20	受到攻击时，使伤害来源获得2层流血	spr_icon_skin_tmp	spr_skin_tmp	GET_HIT:SEND_BLEED_BY_GET_HIT:1:2	0:0	0:0	触发	触发失败	流血+2

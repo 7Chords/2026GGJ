@@ -65,6 +65,7 @@ namespace GameCore.UI
                 return;
             if (_m_isSelecting)
                 return;
+            EventHandler.DealEvent(_m_eventDialogueRefObj.eventType);
             if(_m_eventDialogueRefObj.flagType == EEventDialogueFlagType.END)
             {
                 AudioMgr.instance.PlaySfx("sfx_click");
