@@ -31,21 +31,25 @@ namespace GameCore
         CLEAR_DEFULL,//清除负面效果
         CLEAR_BAD_SKIN,//清楚坏的皮肤
         PART_LOSE_TURN,//部位无法行动
-        GET_COIN,
-        GET_COIN_BY_ATTACK,
-        ATTACK_BY_COIN,
-        SELF_GET_BUFF,
-        ENEMY_GET_BUFF,
+        GET_COIN,//获得金币
+        GET_COIN_BY_ATTACK,//攻击成功获得金币
+        ATTACK_BY_COIN,//根据金币数获得攻击力
+        SELF_GET_BUFF,//玩家获得buff
+        ENEMY_GET_BUFF,//敌人获得buff
         SELF_BUFF_MULTIPLIER,//玩家BUFF层数翻倍数
         ENEMY_BUFF_MULTIPLIER,// 敌人BUFF层数翻倍数
         CLEAR_SELF_BLEED_AND_HEAL_SELF,// 清除自身流血状态并治疗本体
         CLEAR_ENEMY_BLEED_AND_HEAL_PART,// 清除敌方流血状态并治疗自己（部位）
         ATTACK_BY_ENEMY_BLEED,// 通过敌方流血状态获得攻击力
         SEND_BLEED_BY_GET_HIT,// 被击中时施加敌方流血效果
+        CHANGE_FAT_2_BURN,//转化油脂为燃烧
+        AVERAGE_ALL_BURN,//平分效果范围内的所有燃烧层数
+        SEND_ALL_FAT_BY_GET_HIT//被击中时施加对方所有油脂
     }
 
     public enum EAttributeTriggerPointType
     {
+        NONE,
         ACTIVE,
         GET_HIT,
         DIE,

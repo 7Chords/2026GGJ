@@ -48,6 +48,7 @@ namespace GameCore
                 {
                     StartExecuteParts(true, playerExcuteInfoList, () =>
                     {
+                        TriggerTurnOverForSide(true);
                         ChangeTurnOwner();
                         StartExecuteParts(false, enemyExcuteInfoList, OnBattleRoundFinish);
                     });
@@ -56,11 +57,26 @@ namespace GameCore
                 {
                     StartExecuteParts(false, enemyExcuteInfoList, () =>
                     {
+                        TriggerTurnOverForSide(false);
                         ChangeTurnOwner();
                         StartExecuteParts(true, playerExcuteInfoList, OnBattleRoundFinish);
                     });
                 }
              });
+        }
+
+        private void TriggerTurnOverForSide(bool _isPlayer)
+        {
+            // 回合结束触发：玩家回合结束触发玩家部位，敌人回合结束触发敌人部位
+            var list = _isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
+            if (list == null) return;
+            for (int i = 0; i < list.Count; i++)
+            {
+                var part = list[i];
+                if (part == null) continue;
+                if (!part.HasBuff(EAttributeTriggerPointType.TURN_OVER)) continue;
+                part.TriggerBuff(EAttributeTriggerPointType.TURN_OVER);
+            }
         }
 
         private void OnBattleRoundFinish()

@@ -45,14 +45,47 @@ namespace GameCore.Battle
 
             if (findBuffInfo != null)
             {
-                findBuffInfo.buffLayer += findBuffInfo.buffLayer;
-                SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, _buffInfo);
+                findBuffInfo.AddBuffLayer(_buffInfo.buffLayer);
+                SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, findBuffInfo);
             }
             else
             {
                 buffList.Add(_buffInfo);
                 SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_ADD, _buffInfo);
             }
+
+            // 添加后做一次 buff 之间的交互处理（如油脂->燃烧）
+            PostProcessAfterBuffAdded(_buffInfo);
+        }
+
+        private void PostProcessAfterBuffAdded(BuffInfo _addedBuff)
+        {
+            if (_addedBuff == null) return;
+
+            // 规则：部位存在燃烧时，添加油脂会自动转化：每 2 层油脂 => 1 层燃烧
+            // 这里按“总油脂层数”计算，保证多次添加也能连续转化。
+            if (_addedBuff.buffType != EBuffType.FAT) return;
+            if (_addedBuff.owner == null) return;
+
+            var burn = FindBuff(EBuffType.BURN);
+            if (burn == null || burn.buffLayer <= 0) return;
+
+            var fat = FindBuff(EBuffType.FAT);
+            if (fat == null || fat.buffLayer <= 0) return;
+
+            int convert = fat.buffLayer / 2;
+            if (convert <= 0) return;
+
+            // 先扣油脂
+            fat.ReduceBuffLayer(convert * 2);
+            if (fat.buffLayer <= 0)
+                RemoveBuff(fat);
+            else
+                SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, fat);
+
+            // 再加燃烧（燃烧来源/创建者沿用“加油脂的人/部位”更合理；这里用 _addedBuff.creator）
+            burn.AddBuffLayer(convert);
+            SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, burn);
         }
 
         /// <summary>
@@ -172,75 +205,56 @@ namespace GameCore.Battle
         public void TriggerPartBuff(EAttributeTriggerPointType _triggerPointType)
         {
             List<BuffInfo> removeBuffList = new List<BuffInfo>();
-            switch(_triggerPointType)
+            foreach (var buffInfo in buffList)
             {
-                case EAttributeTriggerPointType.ACTIVE:
-                    {
-                        
-                        foreach (var buffInfo in buffList)
-                        {
-                            if (buffInfo == null)
-                                continue;
-                            if (buffInfo.buffRefObj.triggerPointType != EAttributeTriggerPointType.ACTIVE)
-                                return;
-                            buffInfo.onPartActive?.Invoke();
-                            buffInfo.ReduceBuffLayer();
-                            if(buffInfo.buffLayer == 0)
-                            {
-                                removeBuffList.Add(buffInfo);
-                            }
-                            else
-                                SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, buffInfo);
-                        }
-                    }
-                    break;
-                case EAttributeTriggerPointType.GET_HIT:
-                    {
-                        foreach (var buffInfo in buffList)
-                        {
-                            if (buffInfo == null)
-                                continue;
-                            buffInfo.onPartGetHit?.Invoke();
-                        }
-                    }
-                    break;
-                case EAttributeTriggerPointType.DIE:
-                    {
-                        foreach (var buffInfo in buffList)
-                        {
-                            if (buffInfo == null)
-                                continue;
-                            buffInfo.onPartDie?.Invoke();
-                        }
-                    }
-                    break;
-                case EAttributeTriggerPointType.GET_EFFECT:
-                    {
-                        foreach (var buffInfo in buffList)
-                        {
-                            if (buffInfo == null)
-                                continue;
-                            buffInfo.onPartGetEffect?.Invoke();
-                        }
-                    }
-                    break;
-                case EAttributeTriggerPointType.TURN_OVER:
-                    {
-                        foreach (var buffInfo in buffList)
-                        {
-                            if (buffInfo == null)
-                                continue;
-                            buffInfo.onTurnOver?.Invoke();
-                        }
-                    }
-                    break;
-                case EAttributeTriggerPointType.ACTION_OVER:
-                    {
+                if (buffInfo == null || buffInfo.buffRefObj == null)
+                    continue;
+                if (buffInfo.buffRefObj.triggerPointType != _triggerPointType)
+                    continue;
 
-                    }
-                    break;
-                default:
-                    break;
+                switch (_triggerPointType)
+                {
+                    case EAttributeTriggerPointType.ACTIVE:
+                        buffInfo.onPartActive?.Invoke();
+                        break;
+                    case EAttributeTriggerPointType.GET_HIT:
+                        buffInfo.onPartGetHit?.Invoke();
+                        break;
+                    case EAttributeTriggerPointType.DIE:
+                        buffInfo.onPartDie?.Invoke();
+                        break;
+                    case EAttributeTriggerPointType.GET_EFFECT:
+                        buffInfo.onPartGetEffect?.Invoke();
+                        break;
+                    case EAttributeTriggerPointType.TURN_OVER:
+                        buffInfo.onTurnOver?.Invoke();
+                        break;
+                    case EAttributeTriggerPointType.ACTION_OVER:
+                        buffInfo.onPartActionOver?.Invoke();
+                        break;
+                }
+
+                bool canConsume = buffInfo.owner != null && buffInfo.owner.isOnFace;
+                if (!canConsume)
+                    continue;
+
+                //触发层数
+                int triggerLayer = 1;
+                switch(buffInfo.buffType)
+                {
+                    case EBuffType.BURN:
+                        {
+                            triggerLayer = buffInfo.buffLayer;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                buffInfo.ReduceBuffLayer(triggerLayer);
+                if (buffInfo.buffLayer == 0)
+                    removeBuffList.Add(buffInfo);
+                else
+                    SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, buffInfo);
             }
             for(int i =0;i<removeBuffList.Count;i++)
             {
