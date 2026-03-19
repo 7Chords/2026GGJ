@@ -1,7 +1,6 @@
 using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

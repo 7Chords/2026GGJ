@@ -170,7 +170,7 @@ namespace GameCore
             }
             for (int i = 0; i < playerInfo.deckPartInfoList.Count; i++)
             {
-                playerInfo.battlePartInfoList[i].ResetToBag();
+                playerInfo.deckPartInfoList[i].ResetToBag();
             }
         }
 

@@ -14,5 +14,7 @@ namespace GameCore.UI
         public Slider sldSound;
         [Header("关闭按钮")]
         public Button btnClose;
+        [Header("返回主页面按钮")]
+        public Button btnReturnMain;
     }
 }

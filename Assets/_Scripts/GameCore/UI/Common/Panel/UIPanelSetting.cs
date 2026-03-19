@@ -27,6 +27,7 @@ namespace GameCore.UI
             mono.sldMusic.onValueChanged.RemoveAllListeners();
             mono.sldSound.onValueChanged.RemoveAllListeners();
             mono.btnClose.RemoveClickDown(onBtnCloseClickDown);
+            mono.btnReturnMain.RemoveClickDown(onBtnReturnMainClickDonw);
         }
 
         public override void OnShowPanel()
@@ -40,11 +41,24 @@ namespace GameCore.UI
                 AudioMgr.instance.ChangeSfxVolume(value);
             });
             mono.btnClose.AddMouseLeftClickDown(onBtnCloseClickDown);
+            mono.btnReturnMain.AddMouseLeftClickDown(onBtnReturnMainClickDonw);
             mono.sldMusic.value = AudioMgr.instance.bgmVolumeFactor;
             mono.sldSound.value = AudioMgr.instance.sfxVolumeFactor;
         }
-        private void onBtnCloseClickDown(PointerEventData arg1, object[] arg2)
+
+        private void onBtnReturnMainClickDonw(PointerEventData _data, object[] _objs)
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
+            GameModel.instance.SetAllPlayerPart2Bag();
+            GameModel.instance.SetEnemyEmpty();
+            UICoreMgr.instance.CloseTopNode();
+            UICoreMgr.instance.RemoveAllNodes(SCUINodeFuncType.BATTLE);
+            UICoreMgr.instance.AddNode(new UINodeStart(SCUIShowType.FULL));
+        }
+
+        private void onBtnCloseClickDown(PointerEventData _data, object[] _objs)
+        {
+            AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.CloseTopNode();
         }
     }
