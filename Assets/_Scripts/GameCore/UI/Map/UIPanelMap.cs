@@ -24,15 +24,20 @@ namespace GameCore.UI
         }
         public override void OnHidePanel()
         {
-            mono.btnBag.RemoveClickDown(onBtnBagClicked);
-
+            mono.btnBag.RemoveClickDown(onBtnBagClickDown);
+            mono.btnSetting.RemoveClickDown(onBtnSettingClickDown);
+            mono.btnGuide.RemoveClickDown(onBtnGuideClickDown);
         }
 
         public override void OnShowPanel()
         {
-            mono.btnBag.AddMouseLeftClickDown(onBtnBagClicked);
+            mono.btnBag.AddMouseLeftClickDown(onBtnBagClickDown);
+            mono.btnSetting.AddMouseLeftClickDown(onBtnSettingClickDown);
+            mono.btnGuide.AddMouseLeftClickDown(onBtnGuideClickDown);
+
             refreshShow();
         }
+
         private void refreshShow()
         {
             updatePlayerIcon();
@@ -48,18 +53,12 @@ namespace GameCore.UI
             {
                 if (_m_playerIconGO == null)
                 {
-                    // Created simple icon or load prefab
-                    // Using "PlayerIcon" resource if exists, else create default image
-                    //_playerIconGO = ResourcesHelper.LoadGameObject("PlayerIcon", targetNode.transform);
                     if (_m_playerIconGO == null)
                     {
-                        // Fallback: Create simple Red Circle
+                        //todo:Ìæ»»Íæ¼Òicon
                         _m_playerIconGO = new GameObject("PlayerIcon");
                         var img = _m_playerIconGO.AddComponent<UnityEngine.UI.Image>();
-
-                        //TODO:WJW
                         img.color = Color.green;
-                        // Assuming standard sprite exists or just color block
                     }
                 }
                 
@@ -81,9 +80,17 @@ namespace GameCore.UI
             mono.imgHealthBar.fillAmount = GameModel.instance.playerInfo.currentHealth / (float)GameModel.instance.playerInfo.maxHealth;
         }
 
-        private void onBtnBagClicked(PointerEventData _data, object[] _objs)
+        private void onBtnBagClickDown(PointerEventData _data, object[] _objs)
         {
             UICoreMgr.instance.AddNode(new UINodeDeck(SCUIShowType.ADDITION, GameModel.instance.playerInfo.bagPartInfoList));
+        }
+        private void onBtnSettingClickDown(PointerEventData _data, object[] _objs)
+        {
+            UICoreMgr.instance.AddNode(new UINodeSetting(SCUIShowType.ADDITION));
+        }
+        private void onBtnGuideClickDown(PointerEventData _data, object[] _objs)
+        {
+            UICoreMgr.instance.AddNode(new UINodeGuideMap(SCUIShowType.ADDITION));
         }
     }
 }

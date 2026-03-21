@@ -33,6 +33,10 @@ namespace GameCore.Battle
             Register(EAttributeType.CLEAR_SELF_BLEED_AND_HEAL_SELF, new Effects.ClearSelfBleedAndHealSelfEffectHandler());
             Register(EAttributeType.CLEAR_ENEMY_BLEED_AND_HEAL_PART, new Effects.ClearEnemyBleedAndHealPartEffectHandler());
             Register(EAttributeType.ATTACK_BY_ENEMY_BLEED, new Effects.AttackByBleedEffectHandler());
+            Register(EAttributeType.CHANGE_FAT_2_BURN, new Effects.ChangeFat2BurnEffectHandler());
+            Register(EAttributeType.INCREASE_ADD_BURN, new Effects.IncreaseAddBurnEffectHandler());
+            Register(EAttributeType.SPREAD_BURN, new Effects.SpreadBurnEffectHandler());
+
         }
 
         public static void Register(EAttributeType _type, IPartEffectHandler _handler)

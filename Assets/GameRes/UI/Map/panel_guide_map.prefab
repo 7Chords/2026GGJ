@@ -1187,7 +1187,7 @@ GameObject:
   - component: {fileID: 5870919361563398238}
   - component: {fileID: 3726184532370248606}
   m_Layer: 5
-  m_Name: panel_guide_battle
+  m_Name: panel_guide_map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -43,8 +43,9 @@ namespace GameCore
         ATTACK_BY_ENEMY_BLEED,// 通过敌方流血状态获得攻击力
         SEND_BLEED_BY_GET_HIT,// 被击中时施加敌方流血效果
         CHANGE_FAT_2_BURN,//转化油脂为燃烧
-        AVERAGE_ALL_BURN,//平分效果范围内的所有燃烧层数
-        SEND_ALL_FAT_BY_GET_HIT//被击中时施加对方所有油脂
+        SPREAD_BURN,//传播范围内最大的燃烧层数（-2且最少1层）
+        SEND_ALL_FAT_BY_GET_HIT,//被击中时施加对方自身所有油脂
+        INCREASE_ADD_BURN,//增加己方部位提供燃烧效果时的层数
     }
 
     public enum EAttributeTriggerPointType

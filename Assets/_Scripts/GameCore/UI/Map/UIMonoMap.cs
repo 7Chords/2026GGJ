@@ -12,6 +12,10 @@ namespace GameCore.UI
         public Text txtCoin;
         [Header("背包按钮")]
         public Button btnBag;
+        [Header("教程按钮")]
+        public Button btnGuide;
+        [Header("设置按钮")]
+        public Button btnSetting;
         [Header("血量文本")]
         public Text txtHealth;
         [Header("血量条")]
