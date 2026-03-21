@@ -50,7 +50,12 @@ namespace GameCore
                     {
                         TriggerTurnOverForSide(true);
                         ChangeTurnOwner();
-                        StartExecuteParts(false, enemyExcuteInfoList, OnBattleRoundFinish);
+                        StartExecuteParts(false, enemyExcuteInfoList,
+                            ()=> 
+                            {
+                                TriggerTurnOverForSide(false);
+                                OnBattleRoundFinish();
+                            });
                     });
                 }
                 else
@@ -59,7 +64,11 @@ namespace GameCore
                     {
                         TriggerTurnOverForSide(false);
                         ChangeTurnOwner();
-                        StartExecuteParts(true, playerExcuteInfoList, OnBattleRoundFinish);
+                        StartExecuteParts(true, playerExcuteInfoList, ()=> 
+                        {
+                            TriggerTurnOverForSide(true);
+                            OnBattleRoundFinish();
+                        });
                     });
                 }
              });

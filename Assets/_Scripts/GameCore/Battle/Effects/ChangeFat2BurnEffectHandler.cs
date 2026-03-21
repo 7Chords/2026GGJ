@@ -26,10 +26,11 @@ namespace GameCore.Battle.Effects
 
             foreach (var part in partInfoList)
             {
+                if(part.GetBuff(EBuffType.FAT) == null) continue;
                 //todo£∫”≤±‡¬Î¡À”Õ÷¨∫Õ»º…’id
                 int changeAmount = part.GetBuff(EBuffType.FAT).buffLayer / changeUnit;
                 battleCtx.ApplyReduceBuffLayerToPart(part, 100002, changeAmount * changeUnit);
-                battleCtx.ApplyReduceBuffLayerToPart(part, 100003, changeAmount* targetUnit);
+                battleCtx.ApplyBuffToPart(part, _caster, 100003, changeAmount* targetUnit);
 
             }
         }

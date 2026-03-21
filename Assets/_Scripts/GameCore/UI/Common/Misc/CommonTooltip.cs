@@ -39,6 +39,9 @@ namespace GameCore.UI
         [Header("buff信息父物体")]
         public GameObject tranParentBuff;
 
+        [Header("buff侧边栏信息父物体")]
+        public GameObject tranParentBuffSideInfo;
+
         private TweenContainer _m_tweenContainer;
         private RectTransform _m_tooltipRect;
         private RectTransform _m_canvasRect;
@@ -124,12 +127,18 @@ namespace GameCore.UI
                 return;
             GameObject itemGO = null;
             TooltipBuffItem item = null;
+            GameObject sideGO = null;
+            CommonBuffSideItem sideItem = null;
             for (int i =0;i< _buffInfoList.Count;i++)
             {
                 itemGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_TOOLTIP_BUFF_ITEM, tranParentBuff.transform);
                 item = itemGO.GetComponent<TooltipBuffItem>();
                 if (item != null)
                     item.SetBuffInfo(_buffInfoList[i]);
+                sideGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_BUFF_SIDE_ITEM, tranParentBuffSideInfo.transform);
+                sideItem = sideGO.GetComponent<CommonBuffSideItem>();
+                if (sideItem != null)
+                    sideItem.Initialize(_buffInfoList[i].buffType);
             }
 
         }
