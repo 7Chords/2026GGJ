@@ -36,6 +36,8 @@ namespace GameCore.Battle
             Register(EAttributeType.CHANGE_FAT_2_BURN, new Effects.ChangeFat2BurnEffectHandler());
             Register(EAttributeType.INCREASE_ADD_BURN, new Effects.IncreaseAddBurnEffectHandler());
             Register(EAttributeType.SPREAD_BURN, new Effects.SpreadBurnEffectHandler());
+            Register(EAttributeType.SEND_ALL_FAT_BY_GET_HIT, new Effects.SendAllFatByGetHitEffectHandler());
+
 
         }
 

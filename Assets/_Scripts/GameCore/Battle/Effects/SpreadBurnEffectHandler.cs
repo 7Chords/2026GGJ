@@ -28,9 +28,12 @@ namespace GameCore.Battle.Effects
             int maxBurnLayer = 0;
             foreach (var part in partInfoList)
             {
-                if(part.GetBuff(EBuffType.BURN).buffLayer > maxBurnLayer)
+                BuffInfo buffInfo = part.GetBuff(EBuffType.BURN);
+                if (buffInfo == null)
+                    continue;
+                if (buffInfo.buffLayer > maxBurnLayer)
                 {
-                    maxBurnLayer = part.GetBuff(EBuffType.BURN).buffLayer;
+                    maxBurnLayer = buffInfo.buffLayer;
                     maxBurnPart = part;
                 }
             }
