@@ -18,7 +18,7 @@ namespace GameCore.UI
             if (buffRefObj == null)
                 return;
             imgBuffIcon.sprite = ResourcesHelper.LoadAsset<Sprite>(buffRefObj.buffIconResName);
-            txtBuffDesc.text = buffRefObj.buffDesc;
+            txtBuffDesc.text = buffRefObj.buffName + ":" + buffRefObj.buffDesc;
         }
     }
 }
