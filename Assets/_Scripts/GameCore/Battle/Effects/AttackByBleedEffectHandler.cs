@@ -14,17 +14,9 @@ namespace GameCore.Battle.Effects
             int bleedUnit = (int)_entry.attributeValueList[0];
             int attackUnit = (int)_entry.attributeValueList[1];
 
-            var gridInfoList = _caster.isEnemyPart
-                ? GameModel.instance.playerFaceGridInfoList
-                : GameModel.instance.enemyFaceGridInfoList;
-            var partInfoList = new List<PartInfo>();
-
-            foreach (var pos in _caster.curEffectFacePosList)
-            {
-                var gridInfo = gridInfoList?.Find(x => x.pos == pos);
-                if (gridInfo?.hasPart == true && gridInfo.ownerPart != null && !partInfoList.Contains(gridInfo.ownerPart))
-                    partInfoList.Add(gridInfo.ownerPart);
-            }
+            var partInfoList = GameModel.instance.GetEntryAttributeTargetPartList(_caster, _entry, _ctx);
+            if (partInfoList == null)
+                return;
 
             int layer = 0;
             foreach (var part in partInfoList)
@@ -44,7 +36,9 @@ namespace GameCore.Battle.Effects
             int emptyGridNum = 0;
             var partOccupyGridNumDic = new Dictionary<PartInfo, int>();
 
-            var targetGrids = _caster.isEnemyPart ? battleCtx.playerBattleParts : battleCtx.enemyBattleParts;
+            var gridInfoList = _caster.isEnemyPart
+                ? GameModel.instance.playerFaceGridInfoList
+                : GameModel.instance.enemyFaceGridInfoList;
 
             foreach (var pos in _caster.curEffectFacePosList)
             {

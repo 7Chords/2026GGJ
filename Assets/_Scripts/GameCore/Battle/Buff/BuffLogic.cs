@@ -8,9 +8,6 @@ namespace GameCore.Battle
     {
         public List<BuffInfo> buffList = new List<BuffInfo>();
 
-        /// <summary>
-        /// buff的效果周期和生命周期计时(回合制）
-        /// </summary>
         public void BuffTurnTick()
         {
             List<BuffInfo> deleteBuffList = new List<BuffInfo>();
@@ -33,11 +30,6 @@ namespace GameCore.Battle
                 RemoveBuff(buffInfo);
             }
         }
-
-        /// <summary>
-        /// 添加buff
-        /// </summary>
-        /// <param name="_buffInfo"></param>
         public void AddBuff(BuffInfo _buffInfo)
         {
             if (_buffInfo == null) return;
@@ -54,7 +46,6 @@ namespace GameCore.Battle
                 SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_ADD, _buffInfo);
             }
 
-            // 添加后做一次 buff 之间的交互处理（如油脂->燃烧）
             PostProcessAfterBuffAdded(_buffInfo);
         }
 
@@ -62,8 +53,6 @@ namespace GameCore.Battle
         {
             if (_addedBuff == null) return;
 
-            // 规则：部位存在燃烧时，添加油脂会自动转化：每 2 层油脂 => 1 层燃烧
-            // 这里按“总油脂层数”计算，保证多次添加也能连续转化。
             if (_addedBuff.buffType != EBuffType.FAT) return;
             if (_addedBuff.owner == null) return;
 
@@ -76,22 +65,16 @@ namespace GameCore.Battle
             int convert = fat.buffLayer / 2;
             if (convert <= 0) return;
 
-            // 先扣油脂
             fat.ReduceBuffLayer(convert * 2);
             if (fat.buffLayer <= 0)
                 RemoveBuff(fat);
             else
                 SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, fat);
-
-            // 再加燃烧（燃烧来源/创建者沿用“加油脂的人/部位”更合理；这里用 _addedBuff.creator）
+            
             burn.AddBuffLayer(convert);
             SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, burn);
         }
 
-        /// <summary>
-        /// 移除buff
-        /// </summary>
-        /// <param name="_buffInfo"></param>
         public void RemoveBuff(BuffInfo _buffInfo)
         {
             if (!buffList.Contains(_buffInfo))
@@ -167,11 +150,6 @@ namespace GameCore.Battle
             SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_REMOVE, info);
         }
 
-        /// <summary>
-        /// 查找列表中的buff
-        /// </summary>
-        /// <param name="_buffDataID"></param>
-        /// <returns></returns>
         public BuffInfo FindBuff(long _buffDataID)
         {
             foreach (var buffInfo in buffList)
@@ -238,7 +216,6 @@ namespace GameCore.Battle
                 if (!canConsume)
                     continue;
 
-                //触发层数
                 int triggerLayer = 1;
                 switch(buffInfo.buffType)
                 {

@@ -12,6 +12,7 @@ namespace GameCore.Battle.Effects
             float totalDamage = _entry.attributeValueList[0];
             if (_caster.curEffectFacePosList == null || _caster.curEffectFacePosList.Count == 0) return;
 
+            // ATTACK 需按「每格」分摊伤害（含空格打本体），不能仅用部位去重列表，故不调用 GetEntryAttributeTargetPartList。
             float perGridDamage = totalDamage / _caster.curEffectFacePosList.Count;
             int emptyGridNum = 0;
             var partOccupyGridNumDic = new System.Collections.Generic.Dictionary<PartInfo, int>();

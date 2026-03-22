@@ -1,3 +1,4 @@
+using GameCore.Battle;
 using GameCore.Helpers;
 using GameCore.RefData;
 using GameCore.UI;
@@ -272,6 +273,116 @@ namespace GameCore
             PartDeckHelper.DrawParts(curEnemyInfo.deckPartInfoList, curEnemyInfo.busyPartInfoList, _count, GameConst.BUSY_CARD_MAX_COUNT);
         }
 
+        /// <summary>
+        /// 部位「效果范围」覆盖到的所有脸部部位（同时检查己方脸图与敌方脸图上的格子，去重）。
+        /// 用于预览或不限定敌我词条时的范围展示。
+        /// </summary>
+        public List<PartInfo> GetPartAttributeTargetPartList(PartInfo _partInfo)
+        {
+            if (_partInfo == null || !_partInfo.isOnFace)
+                return null;
+            if (_partInfo.curEffectFacePosList == null || _partInfo.curEffectFacePosList.Count == 0)
+                return new List<PartInfo>();
+
+            var result = new List<PartInfo>();
+            MergePartsFromGrid(playerFaceGridInfoList, _partInfo.curEffectFacePosList, result);
+            MergePartsFromGrid(enemyFaceGridInfoList, _partInfo.curEffectFacePosList, result);
+            return result;
+        }
+
+        /// <summary>
+        /// 根据词条类型返回该次效果会作用到的部位列表（与现有 EffectHandler 中遍历脸图格子的逻辑一致）。
+        /// </summary>
+        /// <param name="_caster">施放该词条的部位</param>
+        /// <param name="_entryInfo">词条</param>
+        /// <param name="_ctx">受击等上下文；反射/传递类词条需要 senderPart</param>
+        public List<PartInfo> GetEntryAttributeTargetPartList(PartInfo _caster, EntryInfo _entryInfo, PartEffectContext _ctx = default)
+        {
+            if (_entryInfo == null || _caster == null || !_caster.isOnFace)
+                return null;
+            if (_caster.curEffectFacePosList == null || _caster.curEffectFacePosList.Count == 0)
+                return new List<PartInfo>();
+
+            bool sameSide = _caster.isEnemyPart;
+            var allyGrid = sameSide ? enemyFaceGridInfoList : playerFaceGridInfoList;
+            var enemyGrid = sameSide ? playerFaceGridInfoList : enemyFaceGridInfoList;
+
+            switch (_entryInfo.attributeType)
+            {
+                // 作用己方脸上的部位（效果格与己方脸重叠）
+                case EAttributeType.CLEAR_DEFULL:
+                case EAttributeType.TRIGGER_MORE:
+                case EAttributeType.DAMAGE_MULTIPILER:
+                case EAttributeType.HEAL_ALL_PART:
+                case EAttributeType.HEAL_WEAK_PART:
+                case EAttributeType.TRIGGER_CHANCE_UP:
+                case EAttributeType.CLEAR_BAD_SKIN:
+                case EAttributeType.SELF_GET_BUFF:
+                case EAttributeType.SELF_BUFF_MULTIPLIER:
+                case EAttributeType.CLEAR_SELF_BLEED_AND_HEAL_SELF:
+                case EAttributeType.INCREASE_ADD_BURN:
+                    return CollectPartsInEffectArea(_caster, allyGrid);
+
+                // 作用敌方脸上的部位（效果格与敌方脸重叠）
+                case EAttributeType.ATTACK:
+                case EAttributeType.ENEMY_GET_BUFF:
+                case EAttributeType.ENEMY_BUFF_MULTIPLIER:
+                case EAttributeType.PART_LOSE_TURN:
+                case EAttributeType.CLEAR_ENEMY_BLEED_AND_HEAL_PART:
+                case EAttributeType.ATTACK_BY_ENEMY_BLEED:
+                case EAttributeType.CHANGE_FAT_2_BURN:
+                case EAttributeType.SPREAD_BURN:
+                    return CollectPartsInEffectArea(_caster, enemyGrid);
+
+                // 仅针对攻击来源部位
+                case EAttributeType.REFLECT:
+                case EAttributeType.SEND_BLEED_BY_GET_HIT:
+                case EAttributeType.SEND_ALL_FAT_BY_GET_HIT:
+                    if (_ctx.senderPart == null)
+                        return new List<PartInfo>();
+                    return new List<PartInfo> { _ctx.senderPart };
+
+                // 对本体生命造成伤害，无部位列表
+                case EAttributeType.REAL_ATTACK:
+                case EAttributeType.GET_COIN:
+                case EAttributeType.GET_COIN_BY_ATTACK:
+                case EAttributeType.ATTACK_BY_COIN:
+                    return new List<PartInfo>();
+
+                default:
+                    return new List<PartInfo>();
+            }
+        }
+
+        /// <summary>
+        /// 遍历施法部位当前效果格，收集指定脸图上占据格子的部位（去重）。
+        /// </summary>
+        private static List<PartInfo> CollectPartsInEffectArea(PartInfo _caster, List<FaceGridInfo> _gridInfoList)
+        {
+            var result = new List<PartInfo>();
+            if (_caster?.curEffectFacePosList == null || _gridInfoList == null)
+                return result;
+
+            foreach (var pos in _caster.curEffectFacePosList)
+            {
+                var gridInfo = _gridInfoList.Find(x => x.pos == pos);
+                if (gridInfo?.hasPart == true && gridInfo.ownerPart != null && !result.Contains(gridInfo.ownerPart))
+                    result.Add(gridInfo.ownerPart);
+            }
+            return result;
+        }
+
+        private static void MergePartsFromGrid(List<FaceGridInfo> _gridInfoList, List<Vector2Int> _effectPosList, List<PartInfo> _out)
+        {
+            if (_gridInfoList == null || _effectPosList == null)
+                return;
+            foreach (var pos in _effectPosList)
+            {
+                var gridInfo = _gridInfoList.Find(x => x.pos == pos);
+                if (gridInfo?.hasPart == true && gridInfo.ownerPart != null && !_out.Contains(gridInfo.ownerPart))
+                    _out.Add(gridInfo.ownerPart);
+            }
+        }
     }
 
 }

@@ -9,17 +9,9 @@ namespace GameCore.Battle.Effects
             var battleCtx = BattleContext.current;
             if (battleCtx == null) return;
 
-            var gridInfoList = _caster.isEnemyPart 
-                ? GameModel.instance.playerFaceGridInfoList
-                : GameModel.instance.enemyFaceGridInfoList;
-            var partInfoList = new System.Collections.Generic.List<PartInfo>();
-
-            foreach (var pos in _caster.curEffectFacePosList)
-            {
-                var gridInfo = gridInfoList?.Find(x => x.pos == pos);
-                if (gridInfo?.hasPart == true && gridInfo.ownerPart != null && !partInfoList.Contains(gridInfo.ownerPart))
-                    partInfoList.Add(gridInfo.ownerPart);
-            }
+            var partInfoList = GameModel.instance.GetEntryAttributeTargetPartList(_caster, _entry, _ctx);
+            if (partInfoList == null)
+                return;
 
             foreach (var part in partInfoList)
             {
