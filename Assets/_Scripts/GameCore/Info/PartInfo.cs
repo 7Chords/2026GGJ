@@ -219,6 +219,12 @@ namespace GameCore
             return levelRefObj;
         }
 
+        /// <summary> 对应 part_level 表主键，用于敌人预设布局匹配部位实例 </summary>
+        public long GetPartLevelRefId()
+        {
+            return levelRefObj != null ? levelRefObj.id : -1;
+        }
+
         public bool HasNextLevel()
         {
             PartLevelRefObj levelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.partId == partRefObj.id

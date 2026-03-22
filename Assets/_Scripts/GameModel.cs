@@ -1,4 +1,5 @@
 using GameCore.Battle;
+using GameCore.Data;
 using GameCore.Helpers;
 using GameCore.RefData;
 using GameCore.UI;
@@ -26,6 +27,9 @@ namespace GameCore
 
         public ETurnOwnerType curTurnOwner;//当前行动方
         public int curActivePartIndex;//当前行动的部位索引
+
+        /// <summary> 敌人脸部预设布局回合（每场战斗从 0 开始，每 DealNextTurn +1；超出预设条数时由数据库逻辑钳制） </summary>
+        public int enemyFaceLayoutTurnIndex;
 
         public override void OnInitialize()
         {
@@ -253,11 +257,41 @@ namespace GameCore
 
             PartDeckHelper.RecycleBusyToDeck(curEnemyInfo.deckPartInfoList, curEnemyInfo.busyPartInfoList);
             PartDeckHelper.RecycleBattleToBusy(curEnemyInfo.battlePartInfoList, curEnemyInfo.busyPartInfoList);
-            int enemyDrawCnt = Mathf.Min(GameConst.DRAW_CARD_COUNT_PER_TURN, GameConst.BUSY_CARD_MAX_COUNT - curEnemyInfo.busyPartInfoList.Count);
-            EnemyDrawParts(enemyDrawCnt);
-            foreach (var info in enemyFaceGridInfoList) info.SetEmpty();
+            // 合并手牌+脸上全部回牌堆，便于预设按回合从牌堆精确取牌
+            EnemyLayoutPresetApplicator.MergeAllEnemyPartsIntoDeck(curEnemyInfo);
+            if (enemyFaceGridInfoList != null)
+            {
+                foreach (var info in enemyFaceGridInfoList) info.SetEmpty();
+            }
 
-            EnemyLayoutGenerator.GenerateLayout(curEnemyInfo, enemyFaceGridInfoList);
+            var layoutDb = EnemyLayoutPresetDatabase.LoadOrNull();
+            var encounterPreset = layoutDb != null && curEnemyInfo != null && curEnemyInfo.enemyRefObj != null
+                ? layoutDb.GetPreset(curEnemyInfo.enemyRefObj.id)
+                : null;
+
+            bool appliedPreset = false;
+            if (encounterPreset != null && encounterPreset.turnLayouts != null && encounterPreset.turnLayouts.Count > 0)
+            {
+                enemyFaceLayoutTurnIndex++;
+                int turnIdx = EnemyLayoutPresetApplicator.GetClampedTurnIndex(enemyFaceLayoutTurnIndex, encounterPreset.turnLayouts.Count);
+                var turnLayout = encounterPreset.turnLayouts[turnIdx];
+                if (turnLayout != null && turnLayout.slots != null && turnLayout.slots.Count > 0)
+                {
+                    if (EnemyLayoutPresetApplicator.TryPrepareBusyFromTurnLayout(curEnemyInfo, turnLayout))
+                    {
+                        EnemyLayoutPresetApplicator.ApplyTurnLayoutToFace(curEnemyInfo, enemyFaceGridInfoList, turnLayout);
+                        appliedPreset = true;
+                    }
+                }
+            }
+
+            if (!appliedPreset)
+            {
+                int enemyDrawCnt = Mathf.Min(GameConst.DRAW_CARD_COUNT_PER_TURN, GameConst.BUSY_CARD_MAX_COUNT - curEnemyInfo.busyPartInfoList.Count);
+                EnemyDrawParts(enemyDrawCnt);
+                EnemyLayoutGenerator.GenerateLayout(curEnemyInfo, enemyFaceGridInfoList);
+            }
+
             RollBattleOrder();
         }
 
