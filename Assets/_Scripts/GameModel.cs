@@ -38,6 +38,7 @@ namespace GameCore
             PartEffectObj partEffectObj = null;
             PartInfo info = null;
             PartRefObj partRefObj = null;
+            PartLevelRefObj levelRefObj = null;
             for (int i = 0; i < playerRefObj.initPartList.Count; i++)
             {
                 partEffectObj = playerRefObj.initPartList[i];
@@ -45,10 +46,13 @@ namespace GameCore
                     continue;
                 for(int j =0;j< partEffectObj.partAmount;j++)
                 {
-                    partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == partEffectObj.partId);
+                    levelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.id == partEffectObj.partId);
+                    if (levelRefObj == null)
+                        continue;
+                    partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
                     if (partRefObj == null)
                         continue;
-                    info = new PartInfo(partRefObj,false);
+                    info = new PartInfo(partRefObj,false, levelRefObj.partLevel);
                     playerInfo.bagPartInfoList.Add(info);
                 }
             }
