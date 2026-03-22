@@ -9,7 +9,7 @@ namespace GameCore.Battle.Effects
             var battleCtx = BattleContext.current;
             if (battleCtx == null) return;
 
-            var partInfoList = GameModel.instance.GetEntryAttributeTargetPartList(_caster, _entry, _ctx);
+            var partInfoList = GameModel.instance.GetEntryRealTargetPartList(_caster, _entry, _ctx);
             if (partInfoList == null)
                 return;
 

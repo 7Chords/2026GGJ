@@ -16,7 +16,7 @@ namespace GameCore.Battle.Effects
             int healUnit = (int)_entry.attributeValueList[1];
             int healAmount = (int)_entry.attributeValueList[2];
 
-            var partInfoList = GameModel.instance.GetEntryAttributeTargetPartList(_caster, _entry, _ctx);
+            var partInfoList = GameModel.instance.GetEntryRealTargetPartList(_caster, _entry, _ctx);
             if (partInfoList == null)
                 return;
 

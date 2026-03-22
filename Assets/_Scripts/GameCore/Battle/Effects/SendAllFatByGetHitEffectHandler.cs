@@ -14,7 +14,7 @@ namespace GameCore.Battle.Effects
             if (info == null)
                 return;
             int buffLayer = info.buffLayer;
-            var targetList = GameModel.instance.GetEntryAttributeTargetPartList(_caster, _entry, _ctx);
+            var targetList = GameModel.instance.GetEntryRealTargetPartList(_caster, _entry, _ctx);
             if (targetList == null || targetList.Count == 0)
                 return;
             battleCtx.ApplyBuffToPart(targetList[0], _caster, 100002, buffLayer);

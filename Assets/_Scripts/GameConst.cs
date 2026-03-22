@@ -23,6 +23,10 @@ namespace GameCore
         public const string FACE_GRID_TAG = "FaceGrid";
         #endregion
 
+        #region Mat
+        public const string MAT_UI_OUTLINE = "mat_ui_outline";
+        #endregion
+
         #region TIP
 
         public const float TOOLTIP_SHOW_ON_LEFT_THRESHOLD = 0.7f;

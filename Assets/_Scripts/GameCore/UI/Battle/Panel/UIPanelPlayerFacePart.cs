@@ -54,6 +54,9 @@ namespace GameCore.UI
             SCMsgCenter.UnregisterMsg(SCMsgConst.BEGIN_DRAG_PART, onBeginDragPart);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.FINISH_DRAG_PART, onFinishDragPart);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.FACE_PART_ORDER_CHG, refreshShow);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.ENEMY_FACE_PART_TARGET_PREVIEW_HIGHLIGHT, onFacePartTargetPreviewHightlight);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PLAYER_FACE_PART_TARGET_PREVIEW_HIGHLIGHT, onFacePartTargetPreviewHightlight);
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.FACE_PART_TARTGET_PREVIEW_CANCEL, onFacePartTargetPreviewCancel);
 
             mono.imgGO.RemoveMouseEnter(onMouseEnter);
             mono.imgGO.RemoveMouseExit(onMouseExit);
@@ -75,6 +78,9 @@ namespace GameCore.UI
             SCMsgCenter.RegisterMsg(SCMsgConst.BEGIN_DRAG_PART, onBeginDragPart);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.FINISH_DRAG_PART, onFinishDragPart);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.FACE_PART_ORDER_CHG, refreshShow);
+            SCMsgCenter.RegisterMsg(SCMsgConst.ENEMY_FACE_PART_TARGET_PREVIEW_HIGHLIGHT, onFacePartTargetPreviewHightlight);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PLAYER_FACE_PART_TARGET_PREVIEW_HIGHLIGHT, onFacePartTargetPreviewHightlight);
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.FACE_PART_TARTGET_PREVIEW_CANCEL, onFacePartTargetPreviewCancel);
 
             mono.imgGO.AddMouseEnter(onMouseEnter);
             mono.imgGO.AddMouseExit(onMouseExit);
@@ -233,6 +239,7 @@ namespace GameCore.UI
             {
                 SCMsgCenter.SendMsg(SCMsgConst.REPLACE_PART_POS_FAIL,_m_partInfo);
                 SCMsgCenter.SendMsg(SCMsgConst.CLEAR_PLAYER_PREVIEW);
+                SCMsgCenter.SendMsg(SCMsgConst.FACE_PART_TARTGET_PREVIEW_CANCEL);
                 HidePanel();
                 Discard();
             }
@@ -257,6 +264,15 @@ namespace GameCore.UI
                 List<Vector2Int> faceOccupyPosList = GameModel.instance.GetPlaceFaceOccupyPosList(_m_curHitGridGO, _data.position, _m_partInfo.localOccupyPosList);
                 List<Vector2Int> faceEffectPosList = GameModel.instance.GetPlaceFaceEffectPosList(_m_partInfo.localEffectPosList, faceOccupyPosList, _m_partInfo.localOccupyPosList);
                 SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_PREVIEW, faceOccupyPosList, faceEffectPosList);
+                _m_partInfo.curOccupyFacePosList = faceOccupyPosList;
+                _m_partInfo.curEffectFacePosList = faceEffectPosList;
+                //List<PartInfo> infoList = GameModel.instance.GetPartPreviewTargetPartList(_m_partInfo);
+                //for(int i =0;i<infoList.Count;i++)
+                //{
+                //    Debug.Log(infoList[i].partRefObj.partName);
+                //}
+                SCMsgCenter.SendMsg(SCMsgConst.PLAYER_FACE_PART_TARGET_PREVIEW_HIGHLIGHT, GameModel.instance.GetPartPreviewTargetPartList(_m_partInfo));
+
             }
 
         }
@@ -268,6 +284,8 @@ namespace GameCore.UI
             _m_tweenContainer.RegDoTween(mono.imgGO.transform.DOScale(Vector3.one, mono.scaleChgDuration));
             GameCommon.DiscardToolTip();
             SCMsgCenter.SendMsg(SCMsgConst.CLEAR_PLAYER_PREVIEW);
+            SCMsgCenter.SendMsg(SCMsgConst.FACE_PART_TARTGET_PREVIEW_CANCEL);
+
         }
 
         private void onMouseEnter(PointerEventData _data, object[] _objs)
@@ -283,6 +301,7 @@ namespace GameCore.UI
                 new Vector2(GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_COMBINE, GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_COMBINE),
                 false);
             SCMsgCenter.SendMsg(SCMsgConst.PLAYER_FACE_PART_RANGE_HIGHLIGHT,_m_partInfo);
+            SCMsgCenter.SendMsg(SCMsgConst.PLAYER_FACE_PART_TARGET_PREVIEW_HIGHLIGHT, GameModel.instance.GetPartPreviewTargetPartList(_m_partInfo));
 
         }
         #endregion
@@ -344,6 +363,24 @@ namespace GameCore.UI
             _child.transform.position = targetPos;
             // ÓÀÔ¶²»Ðý×ª
             _child.transform.rotation = Quaternion.identity;
+        }
+
+        private void onFacePartTargetPreviewHightlight(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            List<PartInfo> infoList = _objs[0] as List<PartInfo>;
+            if (infoList == null)
+                return;
+            setPreviewHighlight(infoList.Contains(partInfo));
+        }
+        private void onFacePartTargetPreviewCancel()
+        {
+            setPreviewHighlight(false);
+        }
+        private void setPreviewHighlight(bool _isHighlight)
+        {
+            mono.imgPart.material = _isHighlight ? ResourcesHelper.LoadAsset<Material>(GameConst.MAT_UI_OUTLINE) : null;
         }
     }
 }

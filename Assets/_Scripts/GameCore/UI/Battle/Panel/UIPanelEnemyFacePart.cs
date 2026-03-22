@@ -1,6 +1,7 @@
 using DG.Tweening;
 using SCFrame;
 using SCFrame.UI;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -42,9 +43,11 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
-
             mono.imgGO.RemoveMouseEnter(onMouseEnter);
             mono.imgGO.RemoveMouseExit(onMouseExit);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.ENEMY_FACE_PART_TARGET_PREVIEW_HIGHLIGHT, onFacePartTargetPreviewHightlight);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PLAYER_FACE_PART_TARGET_PREVIEW_HIGHLIGHT, onFacePartTargetPreviewHightlight);
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.FACE_PART_TARTGET_PREVIEW_CANCEL, onFacePartTargetPreviewCancel);
 
             if (_m_partBuffItemList != null)
             {
@@ -58,6 +61,9 @@ namespace GameCore.UI
         {
             mono.imgGO.AddMouseEnter(onMouseEnter);
             mono.imgGO.AddMouseExit(onMouseExit);
+            SCMsgCenter.RegisterMsg(SCMsgConst.ENEMY_FACE_PART_TARGET_PREVIEW_HIGHLIGHT, onFacePartTargetPreviewHightlight);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PLAYER_FACE_PART_TARGET_PREVIEW_HIGHLIGHT, onFacePartTargetPreviewHightlight);
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.FACE_PART_TARTGET_PREVIEW_CANCEL, onFacePartTargetPreviewCancel);
 
             if (_m_partBuffItemList != null)
             {
@@ -115,6 +121,7 @@ namespace GameCore.UI
             _m_tweenContainer.RegDoTween(mono.imgGO.transform.DOScale(mono.scaleGO, mono.scaleChgDuration));
             GameCommon.DiscardToolTip();
             SCMsgCenter.SendMsg(SCMsgConst.CLEAR_ENEMY_PREVIEW);
+            SCMsgCenter.SendMsg(SCMsgConst.FACE_PART_TARTGET_PREVIEW_CANCEL);
         }
 
         private void onMouseEnter(PointerEventData _data, object[] _objs)
@@ -128,11 +135,9 @@ namespace GameCore.UI
                 new Vector2(GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_COMBINE, GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_COMBINE),
                 false);
             SCMsgCenter.SendMsg(SCMsgConst.ENEMY_FACE_PART_RANGE_HIGHLIGHT, _m_partInfo);
+            SCMsgCenter.SendMsg(SCMsgConst.ENEMY_FACE_PART_TARGET_PREVIEW_HIGHLIGHT, GameModel.instance.GetPartPreviewTargetPartList(_m_partInfo));
 
         }
-
-
-
         private void autoAdjustPosAndRotate(GameObject _parent, GameObject _child, Vector2 _pivotPos)
         {
             RectTransform parentRT = _parent.GetComponent<RectTransform>();
@@ -169,5 +174,24 @@ namespace GameCore.UI
             // ÓÀÔ¶²»Ðý×ª
             _child.transform.rotation = Quaternion.identity;
         }
+
+        private void onFacePartTargetPreviewHightlight(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            List<PartInfo> infoList  = _objs[0] as List<PartInfo>;
+            if (infoList == null)
+                return;
+            setPreviewHighlight(infoList.Contains(partInfo));
+        }
+        private void onFacePartTargetPreviewCancel()
+        {
+            setPreviewHighlight(false);
+        }
+        private void setPreviewHighlight(bool _isHighlight)
+        {
+            mono.imgPart.material = _isHighlight? ResourcesHelper.LoadAsset<Material>(GameConst.MAT_UI_OUTLINE) : null;
+        }
+
     }
 }

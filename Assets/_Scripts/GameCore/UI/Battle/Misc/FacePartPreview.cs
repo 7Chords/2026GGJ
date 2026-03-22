@@ -70,6 +70,14 @@ namespace GameCore.UI
                 List<Vector2Int> faceOccupyPosList = GameModel.instance.GetPlaceFaceOccupyPosList(_m_curHitGridGO, _data.position, _m_partInfo.localOccupyPosList);
                 List<Vector2Int> faceEffectPosList = GameModel.instance.GetPlaceFaceEffectPosList(_m_partInfo.localEffectPosList, faceOccupyPosList, _m_partInfo.localOccupyPosList);
                 SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_PREVIEW, faceOccupyPosList, faceEffectPosList);
+                _m_partInfo.curOccupyFacePosList = faceOccupyPosList;
+                _m_partInfo.curEffectFacePosList = faceEffectPosList;
+                //List<PartInfo> infoList = GameModel.instance.GetPartPreviewTargetPartList(_m_partInfo);
+                //for(int i =0;i<infoList.Count;i++)
+                //{
+                //    Debug.Log(infoList[i].partRefObj.partName);
+                //}
+                SCMsgCenter.SendMsg(SCMsgConst.PLAYER_FACE_PART_TARGET_PREVIEW_HIGHLIGHT, GameModel.instance.GetPartPreviewTargetPartList(_m_partInfo));
             }
 
         }
@@ -103,6 +111,8 @@ namespace GameCore.UI
                         _m_partInfo,
                         faceOccupyPosList,
                         faceEffectPosList);
+                    //SCMsgCenter.SendMsg(SCMsgConst.FACE_PART_TARTGET_PREVIEW_CANCEL);
+
                     SCCommon.DestoryGameObject(gameObject);
 
                 }
@@ -113,6 +123,8 @@ namespace GameCore.UI
                 _m_partInfo.ResetToBusy();
                 SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_FAIL,_m_partInfo);
                 SCMsgCenter.SendMsg(SCMsgConst.CLEAR_PLAYER_PREVIEW);
+                SCMsgCenter.SendMsg(SCMsgConst.FACE_PART_TARTGET_PREVIEW_CANCEL);
+
                 SCCommon.DestoryGameObject(gameObject);
             }
 

@@ -10,7 +10,7 @@ namespace GameCore.Battle.Effects
             if (battleCtx == null || _ctx.senderPart == null) return;
 
             int damage = Mathf.RoundToInt(_entry.attributeValueList[0]);
-            var targetList = GameModel.instance.GetEntryAttributeTargetPartList(_caster, _entry, _ctx);
+            var targetList = GameModel.instance.GetEntryRealTargetPartList(_caster, _entry, _ctx);
             if (targetList == null || targetList.Count == 0)
                 return;
             battleCtx.ApplyDamageToPart(targetList[0], _caster, damage);

@@ -12,7 +12,7 @@ namespace GameCore.Battle.Effects
             if (battleCtx == null) return;
             int reduceLayer = (int)_entry.attributeValueList[0];
             int minLayer = (int)_entry.attributeValueList[1];
-            var partInfoList = GameModel.instance.GetEntryAttributeTargetPartList(_caster, _entry, _ctx);
+            var partInfoList = GameModel.instance.GetEntryRealTargetPartList(_caster, _entry, _ctx);
             if (partInfoList == null)
                 return;
 

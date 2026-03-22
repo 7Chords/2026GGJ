@@ -42,6 +42,9 @@ public class SCMsgConst
     public const int EVENT_START_SELECT = 2035;
     public const int EVENT_END_SELECT = 2036;
     public const int EVENT_SELECT_CONFIRM = 2037;
+    public const int PLAYER_FACE_PART_TARGET_PREVIEW_HIGHLIGHT = 2038;
+    public const int ENEMY_FACE_PART_TARGET_PREVIEW_HIGHLIGHT = 2039;
+    public const int FACE_PART_TARTGET_PREVIEW_CANCEL = 2040;
     #endregion
 
     #region 系统相关 99
