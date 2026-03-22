@@ -72,11 +72,6 @@ namespace GameCore.UI
                 SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_PREVIEW, faceOccupyPosList, faceEffectPosList);
                 _m_partInfo.curOccupyFacePosList = faceOccupyPosList;
                 _m_partInfo.curEffectFacePosList = faceEffectPosList;
-                //List<PartInfo> infoList = GameModel.instance.GetPartPreviewTargetPartList(_m_partInfo);
-                //for(int i =0;i<infoList.Count;i++)
-                //{
-                //    Debug.Log(infoList[i].partRefObj.partName);
-                //}
                 SCMsgCenter.SendMsg(SCMsgConst.PLAYER_FACE_PART_TARGET_PREVIEW_HIGHLIGHT, GameModel.instance.GetPartPreviewTargetPartList(_m_partInfo));
             }
 
@@ -111,7 +106,6 @@ namespace GameCore.UI
                         _m_partInfo,
                         faceOccupyPosList,
                         faceEffectPosList);
-                    //SCMsgCenter.SendMsg(SCMsgConst.FACE_PART_TARTGET_PREVIEW_CANCEL);
 
                     SCCommon.DestoryGameObject(gameObject);
 

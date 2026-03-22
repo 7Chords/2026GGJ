@@ -192,7 +192,7 @@ namespace GameCore.UI
 
         private void EnterTrial()
         {
-            // TODO: Enter Treasure Logic
+            // todo: Enter Trial Logic
         }
 
         private void EnterEvent()

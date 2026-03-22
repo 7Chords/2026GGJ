@@ -378,7 +378,6 @@ namespace GameCore
                 // 作用己方脸上的部位（效果格与己方脸重叠）
                 case EAttributeType.CLEAR_DEFULL:
                 case EAttributeType.TRIGGER_MORE:
-                case EAttributeType.DAMAGE_MULTIPILER:
                 case EAttributeType.HEAL_ALL_PART:
                 case EAttributeType.HEAL_WEAK_PART:
                 case EAttributeType.TRIGGER_CHANCE_UP:
@@ -386,6 +385,7 @@ namespace GameCore
                 case EAttributeType.SELF_GET_BUFF:
                 case EAttributeType.SELF_BUFF_MULTIPLIER:
                 case EAttributeType.CLEAR_SELF_BLEED_AND_HEAL_SELF:
+                case EAttributeType.DAMAGE_MULTIPILER:
                 case EAttributeType.INCREASE_ADD_BURN:
                     return CollectPartsInEffectArea(_caster, allyGrid);
 

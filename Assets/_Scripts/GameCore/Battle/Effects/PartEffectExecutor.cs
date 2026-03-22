@@ -47,6 +47,7 @@ namespace GameCore.Battle
             if (_entry.attributeChance <= 0) return false;
             if (_entry.attributeChance >= 1) return true;
             float random = RandomUtility.GetRandomGenerator(EModuleType.COMBAT).Next(0, 100) / 100f;
+            SCDebugHelper.Log("Random：" + random);
             return random < _entry.attributeChance;
         }
     }
