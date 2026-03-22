@@ -19,7 +19,7 @@ namespace GameCore.Battle.Effects
             {
                 for(int i=0;i<part.entryInfoList.Count;i++)
                 {
-                    //×¢Òâ¼Óµ½ÄÄ¸ö²ÎÊýÉÏ
+                    //×¢ï¿½ï¿½Óµï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     if(part.entryInfoList[i].attributeType==EAttributeType.CHANGE_FAT_2_BURN)
                     {
                         part.entryInfoList[i].attributeValueList[1] += addLayer;
