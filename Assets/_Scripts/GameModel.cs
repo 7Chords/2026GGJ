@@ -268,23 +268,20 @@ namespace GameCore
                 ? ResourcesHelper.LoadAsset<EnemyLayoutPreset>(curEnemyInfo.enemyRefObj.layoutPresetName)
                 : null;
 
-            bool appliedPreset = false;
-            if (encounterPreset != null && encounterPreset.turnLayouts != null && encounterPreset.turnLayouts.Count > 0)
+            bool usePreset = encounterPreset != null;
+            if (usePreset)
             {
                 enemyFaceLayoutTurnIndex++;
-                int turnIdx = EnemyLayoutPresetApplicator.GetClampedTurnIndex(enemyFaceLayoutTurnIndex, encounterPreset.turnLayouts.Count);
-                var turnLayout = encounterPreset.turnLayouts[turnIdx];
-                if (turnLayout != null && turnLayout.slots != null && turnLayout.slots.Count > 0)
+                EnemyTurnFaceLayout turnLayout = null;
+                if (encounterPreset.turnLayouts != null && encounterPreset.turnLayouts.Count > 0)
                 {
-                    if (EnemyLayoutPresetApplicator.TryPrepareBusyFromTurnLayout(curEnemyInfo, turnLayout))
-                    {
-                        EnemyLayoutPresetApplicator.ApplyTurnLayoutToFace(curEnemyInfo, enemyFaceGridInfoList, turnLayout);
-                        appliedPreset = true;
-                    }
+                    int turnIdx = EnemyLayoutPresetApplicator.GetClampedTurnIndex(enemyFaceLayoutTurnIndex, encounterPreset.turnLayouts.Count);
+                    turnLayout = encounterPreset.turnLayouts[turnIdx];
                 }
+                EnemyLayoutPresetApplicator.PrepareBusyFromTurnLayoutBestEffort(curEnemyInfo, turnLayout, out var resolvedSlots);
+                EnemyLayoutPresetApplicator.ApplyTurnLayoutToFace(curEnemyInfo, enemyFaceGridInfoList, resolvedSlots);
             }
-
-            if (!appliedPreset)
+            else
             {
                 int enemyDrawCnt = Mathf.Min(GameConst.DRAW_CARD_COUNT_PER_TURN, GameConst.BUSY_CARD_MAX_COUNT - curEnemyInfo.busyPartInfoList.Count);
                 EnemyDrawParts(enemyDrawCnt);

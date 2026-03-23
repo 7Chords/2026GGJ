@@ -11,7 +11,7 @@ namespace GameCore
     public partial class GameModel
     {
         /// <summary>
-        /// 生成当前敌人：优先使用 ScriptableObject 预设脸部布局；若无配置或应用失败则回退为随机手牌 + 算法摆脸。
+        /// 生成当前敌人：若 enemy 表配置了 layoutPresetName 则仅用预设摆脸（缺牌时跳过槽位，不回退随机）；否则随机手牌 + 算法摆脸。
         /// </summary>
         public void GenerateRandomEnemy(long _id = -1)
         {
@@ -59,19 +59,17 @@ namespace GameCore
 
             var encounterPreset = ResourcesHelper.LoadAsset<EnemyLayoutPreset>(enemyRef.layoutPresetName);
 
-            if (encounterPreset != null && encounterPreset.turnLayouts != null && encounterPreset.turnLayouts.Count > 0)
+            if (encounterPreset != null)
             {
-                int turnIdx = EnemyLayoutPresetApplicator.GetClampedTurnIndex(0, encounterPreset.turnLayouts.Count);
-                var turnLayout = encounterPreset.turnLayouts[turnIdx];
-                if (turnLayout != null && turnLayout.slots != null && turnLayout.slots.Count > 0)
+                EnemyTurnFaceLayout turnLayout = null;
+                if (encounterPreset.turnLayouts != null && encounterPreset.turnLayouts.Count > 0)
                 {
-                    if (EnemyLayoutPresetApplicator.TryPrepareBusyFromTurnLayout(curEnemyInfo, turnLayout))
-                    {
-                        EnemyLayoutPresetApplicator.ApplyTurnLayoutToFace(curEnemyInfo, enemyFaceGridInfoList, turnLayout);
-                        return;
-                    }
+                    int turnIdx = EnemyLayoutPresetApplicator.GetClampedTurnIndex(0, encounterPreset.turnLayouts.Count);
+                    turnLayout = encounterPreset.turnLayouts[turnIdx];
                 }
-                SCDebugHelper.LogWarning($"[EnemyLayoutPreset] 敌人 id={enemyRef.id} 预设布局未成功应用，回退随机摆脸");
+                EnemyLayoutPresetApplicator.PrepareBusyFromTurnLayoutBestEffort(curEnemyInfo, turnLayout, out var resolvedSlots);
+                EnemyLayoutPresetApplicator.ApplyTurnLayoutToFace(curEnemyInfo, enemyFaceGridInfoList, resolvedSlots);
+                return;
             }
 
             int pickCount = Mathf.Min(GameConst.INIT_ENEMY_PART_COUNT, curEnemyInfo.deckPartInfoList.Count);
