@@ -13,6 +13,7 @@ namespace GameCore.RefData
         public string enemyName;
         public bool isBoss;
         public int enemyHealth;
+        public string layoutPresetName;
         public List<PartLevelEffectObj> initPartList;
         public List<BootyEffectObj> bootyList;
         public int winMoney;
@@ -22,9 +23,10 @@ namespace GameCore.RefData
             id = getLong("id");
             floor = getInt("floor");
             column = getInt("column");
-             enemyName = getString("enemyName");
+            enemyName = getString("enemyName");
             isBoss = getBool("isBoss");
             enemyHealth = getInt("enemyHealth");
+            layoutPresetName = getString("layoutPresetName");
             initPartList = getList<PartLevelEffectObj>("initPartList");
             bootyList = getList<BootyEffectObj>("bootyList");
             winMoney = getInt("winMoney");

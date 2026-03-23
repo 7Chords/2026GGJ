@@ -57,8 +57,7 @@ namespace GameCore
                 }
             }
 
-            var layoutDb = EnemyLayoutPresetDatabase.LoadOrNull();
-            var encounterPreset = layoutDb != null ? layoutDb.GetPreset(enemyRef.id) : null;
+            var encounterPreset = ResourcesHelper.LoadAsset<EnemyLayoutPreset>(enemyRef.layoutPresetName);
 
             if (encounterPreset != null && encounterPreset.turnLayouts != null && encounterPreset.turnLayouts.Count > 0)
             {

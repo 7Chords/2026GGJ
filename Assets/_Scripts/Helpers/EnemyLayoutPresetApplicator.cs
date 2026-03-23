@@ -6,7 +6,7 @@ using UnityEngine;
 namespace GameCore.Helpers
 {
     /// <summary>
-    /// 根据策划配置的 <see cref="EnemyEncounterLayoutPreset"/> 从牌堆取牌并摆放敌人脸部。
+    /// 根据策划配置的 <see cref="EnemyLayoutPreset"/> 从牌堆取牌并摆放敌人脸部。
     /// </summary>
     public static class EnemyLayoutPresetApplicator
     {

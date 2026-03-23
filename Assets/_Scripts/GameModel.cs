@@ -264,9 +264,8 @@ namespace GameCore
                 foreach (var info in enemyFaceGridInfoList) info.SetEmpty();
             }
 
-            var layoutDb = EnemyLayoutPresetDatabase.LoadOrNull();
-            var encounterPreset = layoutDb != null && curEnemyInfo != null && curEnemyInfo.enemyRefObj != null
-                ? layoutDb.GetPreset(curEnemyInfo.enemyRefObj.id)
+            var encounterPreset = curEnemyInfo != null && curEnemyInfo.enemyRefObj != null
+                ? ResourcesHelper.LoadAsset<EnemyLayoutPreset>(curEnemyInfo.enemyRefObj.layoutPresetName)
                 : null;
 
             bool appliedPreset = false;
