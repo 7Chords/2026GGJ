@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd2670ee06269954583094cf7029c217, type: 3}
   m_Name: cfg_eNormal_1_1
   m_EditorClassIdentifier: 
-  enemyRefId: 100001
+  gridSize: {x: 4, y: 7}
+  disabledGridPositions:
+  - {x: 0, y: 6}
+  - {x: 3, y: 0}
+  - {x: 0, y: 0}
   turnLayouts:
   - slots:
     - partLevelRefId: 10004
@@ -20,5 +24,14 @@ MonoBehaviour:
       rotationSteps: 0
   - slots:
     - partLevelRefId: 10004
-      originFacePosition: {x: 0, y: 1}
-      rotationSteps: 1
+      originFacePosition: {x: 2, y: 4}
+      rotationSteps: 0
+    - partLevelRefId: 10016
+      originFacePosition: {x: 1, y: 2}
+      rotationSteps: 0
+    - partLevelRefId: 10025
+      originFacePosition: {x: 1, y: 5}
+      rotationSteps: 0
+    - partLevelRefId: 10010
+      originFacePosition: {x: 1, y: 4}
+      rotationSteps: 0
