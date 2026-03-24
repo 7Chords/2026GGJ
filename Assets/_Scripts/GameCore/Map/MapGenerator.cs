@@ -116,7 +116,7 @@ namespace GameCore
 
             MapManager.instance?.SetLastMapLayoutSeed(usedSeed);
 
-            Initialize();
+            InitializeData();
             if (_mapData == null || _layoutData == null)
                 return;
 
@@ -146,7 +146,7 @@ namespace GameCore
             mapContentParent.sizeDelta = MapManager.instance.PendingContentSize;
 
             for (int c = mapContentParent.childCount - 1; c >= 0; c--)
-                UnityEngine.Object.Destroy(mapContentParent.GetChild(c).gameObject);
+                SCCommon.DestoryGameObject(mapContentParent.GetChild(c).gameObject);
 
             int w = pending.GetLength(0);
             int h = pending.GetLength(1);
@@ -238,7 +238,7 @@ namespace GameCore
             return data;
         }
 
-        private void Initialize()
+        private void InitializeData()
         {
             //从种子管理器获取随机数生成器
             _mapRandom = RandomUtility.GetRandomGenerator(EModuleType.MAP);
