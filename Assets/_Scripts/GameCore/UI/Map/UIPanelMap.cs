@@ -94,28 +94,31 @@ namespace GameCore.UI
             if (pos.x == -1 || MapManager.instance.currentMapNodes == null) return; // Not started or invalid
 
             var targetNode = MapManager.instance.GetNode(pos.x, pos.y);
-            if (targetNode != null)
+            if (targetNode == null)
             {
-                if (_m_playerIconGO == null)
-                {
-                    if (_m_playerIconGO == null)
-                    {
-                        //todo:?ùùùicon
-                        _m_playerIconGO = new GameObject("PlayerIcon");
-                        var img = _m_playerIconGO.AddComponent<UnityEngine.UI.Image>();
-                        img.color = Color.green;
-                    }
-                }
-                
-                // Parent to the Node so it moves with it
-                _m_playerIconGO.transform.SetParent(targetNode.transform);
-                _m_playerIconGO.transform.localPosition = Vector3.zero;
-                _m_playerIconGO.transform.localScale = Vector3.one * 0.5f; // Small icon
-                _m_playerIconGO.SetActive(true);
-                
-                // Ensure it draws on top
-                _m_playerIconGO.transform.SetAsLastSibling();
+                Debug.LogWarning(
+                    $"[UIPanelMap] ?????? ({pos.x},{pos.y}) ???????????????????????????? MapData ???????????????");
+                if (_m_playerIconGO != null)
+                    _m_playerIconGO.SetActive(false);
+                return;
             }
+
+            if (_m_playerIconGO == null)
+            {
+                //todo:???? icon
+                _m_playerIconGO = new GameObject("PlayerIcon");
+                var img = _m_playerIconGO.AddComponent<UnityEngine.UI.Image>();
+                img.color = Color.green;
+            }
+
+            // Parent to the Node so it moves with it
+            _m_playerIconGO.transform.SetParent(targetNode.transform);
+            _m_playerIconGO.transform.localPosition = Vector3.zero;
+            _m_playerIconGO.transform.localScale = Vector3.one * 0.5f; // Small icon
+            _m_playerIconGO.SetActive(true);
+
+            // Ensure it draws on top
+            _m_playerIconGO.transform.SetAsLastSibling();
         }
         
         private void setPlayerInfo()

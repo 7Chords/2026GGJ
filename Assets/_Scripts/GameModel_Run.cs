@@ -84,7 +84,20 @@ namespace GameCore
             curEnemyInfo = null;
             enemyFaceLayoutTurnIndex = 0;
 
-            PendingRunMapLayoutSeed = data.mapLayoutFromSave ? data.mapLayoutSeed : (int?)null;
+            if (data.mapLayoutFromSave)
+            {
+                PendingRunMapLayoutSeed = data.mapLayoutSeed;
+                // 与 MapManager 同步，避免读档后、生成地图前逻辑误判；继续游戏时用同一种子复现布局
+                if (MapManager.instance != null)
+                    MapManager.instance.SetLastMapLayoutSeed(data.mapLayoutSeed);
+            }
+            else
+            {
+                PendingRunMapLayoutSeed = null;
+                // 旧存档无布局种子：清掉上一轮残留，避免与本次「将重随机地图」不一致
+                if (MapManager.instance != null)
+                    MapManager.instance.SetLastMapLayoutSeed(-1);
+            }
         }
 
         static List<PartInfo> DeserializeSavedParts(GameRunSave.PartSaveEntry[] arr)

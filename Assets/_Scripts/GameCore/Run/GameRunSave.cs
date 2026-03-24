@@ -100,20 +100,37 @@ namespace GameCore
             }
         }
 
-        /// <summary> 先查 StreamingAssets/Saves，再查 persistentDataPath/Saves（兼容平台回退）。 </summary>
+        /// <summary>
+        /// 优先读「当前写入路径」GetSaveFilePath()，再查 persistent、最后 StreamingAssets。
+        /// 若先读 StreamingAssets，可能读到仓库里旧版/无 mapLayoutSeed 的示例档，而真实进度写在 persistent，导致继续游戏地图重随机、坐标与格子不匹配。
+        /// </summary>
         static bool TryReadSaveJson(out string json)
         {
             json = null;
-            string streamingPath = Path.Combine(Application.streamingAssetsPath, SavesSubFolder, SaveFileName);
-            if (File.Exists(streamingPath))
+            try
             {
-                json = File.ReadAllText(streamingPath, Encoding.UTF8);
-                return true;
+                string primary = GetSaveFilePath();
+                if (File.Exists(primary))
+                {
+                    json = File.ReadAllText(primary, Encoding.UTF8);
+                    return true;
+                }
             }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[GameRunSave] 读取主存档路径失败: {e.Message}");
+            }
+
             string persistentPath = Path.Combine(Application.persistentDataPath, SavesSubFolder, SaveFileName);
             if (File.Exists(persistentPath))
             {
                 json = File.ReadAllText(persistentPath, Encoding.UTF8);
+                return true;
+            }
+            string streamingPath = Path.Combine(Application.streamingAssetsPath, SavesSubFolder, SaveFileName);
+            if (File.Exists(streamingPath))
+            {
+                json = File.ReadAllText(streamingPath, Encoding.UTF8);
                 return true;
             }
             return false;
