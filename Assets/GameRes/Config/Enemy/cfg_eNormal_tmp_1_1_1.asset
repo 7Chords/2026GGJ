@@ -10,28 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd2670ee06269954583094cf7029c217, type: 3}
-  m_Name: cfg_eNormal_1_1
+  m_Name: cfg_eNormal_tmp_1_1_1
   m_EditorClassIdentifier: 
   gridSize: {x: 4, y: 7}
   disabledGridPositions:
-  - {x: 0, y: 6}
   - {x: 3, y: 0}
-  - {x: 0, y: 0}
+  - {x: 0, y: 6}
+  - {x: 3, y: 6}
   turnLayouts:
   - slots:
-    - partLevelRefId: 10004
-      originFacePosition: {x: 0, y: 4}
-      rotationSteps: 0
-  - slots:
-    - partLevelRefId: 10004
-      originFacePosition: {x: 2, y: 4}
-      rotationSteps: 0
-    - partLevelRefId: 10016
+    - partLevelRefId: 10010
       originFacePosition: {x: 1, y: 2}
       rotationSteps: 0
-    - partLevelRefId: 10025
-      originFacePosition: {x: 1, y: 5}
+    - partLevelRefId: 10034
+      originFacePosition: {x: 1, y: 3}
       rotationSteps: 0
+  - slots:
     - partLevelRefId: 10010
-      originFacePosition: {x: 1, y: 4}
+      originFacePosition: {x: 1, y: 2}
+      rotationSteps: 0
+    - partLevelRefId: 10034
+      originFacePosition: {x: 1, y: 3}
       rotationSteps: 0

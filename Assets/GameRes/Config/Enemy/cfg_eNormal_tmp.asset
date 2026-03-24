@@ -14,8 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridSize: {x: 4, y: 7}
   disabledGridPositions: []
-  turnLayouts:
-  - slots:
-    - partLevelRefId: 10008
-      originFacePosition: {x: 0, y: 1}
-      rotationSteps: 1
+  turnLayouts: []
