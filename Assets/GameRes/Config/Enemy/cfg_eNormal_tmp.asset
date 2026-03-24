@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd2670ee06269954583094cf7029c217, type: 3}
   m_Name: cfg_eNormal_tmp
   m_EditorClassIdentifier: 
+  gridSize: {x: 4, y: 7}
+  disabledGridPositions: []
   turnLayouts:
   - slots:
     - partLevelRefId: 10008

@@ -637,8 +637,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodePrefab: {fileID: 4988794329175121149, guid: 3b90e40e8f1e9624895150f9c6ad45a7, type: 3}
   linePrefab: {fileID: 4653072183398419852, guid: 66155fc8676566e47bbf9bc33ef810ff, type: 3}
-  mapNodeParentRect: {fileID: 0}
-  nodeSpacing: {x: 200, y: 200}
+  nodeSpacing: {x: 200, y: 150}
   nodeOffset: {x: 0, y: 0}
   nodeAnglesOffset: 0
   padding: {x: 0, y: 0}
