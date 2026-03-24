@@ -56,6 +56,11 @@ namespace GameCore.UI
             mono.imgGrid.color = mono.colorIsEffective;
         }
 
+        public void SetOverlapPreview()
+        {
+            mono.imgGrid.color = mono.colorOverlap;
+        }
+
         public void SetNoPreview()
         {
             mono.imgGrid.color = mono.colorDefault;

@@ -1,4 +1,5 @@
 using DG.Tweening;
+using GameCore;
 using GameCore.RefData;
 using SCFrame;
 using System.Collections;
@@ -99,24 +100,14 @@ namespace GameCore.UI
         }
         private void setGridInfo(List<Vector2Int> _occupyPosList,List<Vector2Int> _effectPosList)
         {
-            for(int i = 0; i < _occupyPosList.Count; i++)
+            var occSet = GameCommon.ToPositionSet(_occupyPosList);
+            var effSet = GameCommon.ToPositionSet(_effectPosList);
+            var union = GameCommon.UnionSortedGridPositions(_occupyPosList, _effectPosList);
+            for (int i = 0; i < union.Count; i++)
             {
-                createOneGrid(_occupyPosList[i],EGridPosType.OCCUPY);
-            }
-            if(!_occupyPosList.Vector2IntListEquals(_effectPosList))
-            {
-                for (int i = 0; i < _effectPosList.Count; i++)
-                {
-                    createOneGrid(_effectPosList[i], EGridPosType.EFFECT);
-                }
-            }
-            else
-            {
-                //todo:现在设计的有重叠都是完全重叠的暂时这样写
-                for (int i = 0; i < _effectPosList.Count; i++)
-                {
-                    createOneGrid(_effectPosList[i], EGridPosType.BOTH);
-                }
+                Vector2Int p = union[i];
+                EGridPosType t = GameCommon.GetOccupyEffectCellType(p, occSet, effSet);
+                createOneGrid(p, t);
             }
         }
         private void setBuffInfo(List<BuffInfo> _buffInfoList)

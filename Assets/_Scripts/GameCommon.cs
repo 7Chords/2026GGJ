@@ -536,5 +536,50 @@ namespace GameCore
             }
             return null;
         }
+
+        #region Occupy / effect grid (per-cell overlap)
+
+        public static HashSet<Vector2Int> ToPositionSet(List<Vector2Int> list)
+        {
+            if (list == null || list.Count == 0)
+                return new HashSet<Vector2Int>();
+            return new HashSet<Vector2Int>(list);
+        }
+
+        public static List<Vector2Int> UnionSortedGridPositions(List<Vector2Int> occupy, List<Vector2Int> effect)
+        {
+            var hs = new HashSet<Vector2Int>();
+            if (occupy != null)
+            {
+                for (int i = 0; i < occupy.Count; i++)
+                    hs.Add(occupy[i]);
+            }
+            if (effect != null)
+            {
+                for (int i = 0; i < effect.Count; i++)
+                    hs.Add(effect[i]);
+            }
+            var result = new List<Vector2Int>(hs);
+            result.Sort(CompareGridPosYThenX);
+            return result;
+        }
+
+        static int CompareGridPosYThenX(Vector2Int a, Vector2Int b)
+        {
+            int c = a.y.CompareTo(b.y);
+            if (c != 0) return c;
+            return a.x.CompareTo(b.x);
+        }
+
+        public static EGridPosType GetOccupyEffectCellType(Vector2Int p, HashSet<Vector2Int> occupySet, HashSet<Vector2Int> effectSet)
+        {
+            bool o = occupySet != null && occupySet.Contains(p);
+            bool e = effectSet != null && effectSet.Contains(p);
+            if (o && e) return EGridPosType.BOTH;
+            if (o) return EGridPosType.OCCUPY;
+            return EGridPosType.EFFECT;
+        }
+
+        #endregion
     }
 }

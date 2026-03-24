@@ -1,3 +1,4 @@
+using GameCore;
 using SCFrame.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -53,7 +54,7 @@ namespace GameCore.UI
             SCMsgCenter.UnregisterMsg(SCMsgConst.ENEMY_FACE_PART_RANGE_HIGHLIGHT, onEnemyFacePartRangeHighlight);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.CLEAR_ENEMY_PREVIEW, onClearPreview);
 
-            //玩家的高亮相关
+            //??????????
             SCMsgCenter.UnregisterMsg(SCMsgConst.PLAYER_FACE_PART_RANGE_HIGHLIGHT, onEnemyFacePartRangeHighlight);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.CLEAR_PLAYER_PREVIEW, onClearPreview);
             SCMsgCenter.UnregisterMsg(SCMsgConst.PLACE_PART_PREVIEW, onPlacePartPreview);
@@ -76,7 +77,7 @@ namespace GameCore.UI
             SCMsgCenter.RegisterMsg(SCMsgConst.ENEMY_FACE_PART_RANGE_HIGHLIGHT, onEnemyFacePartRangeHighlight);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.CLEAR_ENEMY_PREVIEW, onClearPreview);
 
-            //玩家的高亮相关
+            //??????????
             SCMsgCenter.RegisterMsg(SCMsgConst.PLAYER_FACE_PART_RANGE_HIGHLIGHT, onEnemyFacePartRangeHighlight);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.CLEAR_PLAYER_PREVIEW, onClearPreview);
             SCMsgCenter.RegisterMsg(SCMsgConst.PLACE_PART_PREVIEW, onPlacePartPreview);
@@ -173,7 +174,7 @@ namespace GameCore.UI
                         -cellHeight * partInfo.curOccupyFacePosList[j].y - cellHeight/2 + parentHeight/2,
                         0));
                 }
-                //计算生成的位置
+                //?????????????
                 Vector2 placeWorldPos = GameCommon.CalculateStandardCenterPos(tmpGOList);
                 GameObject partGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_ENEMY_FACE_PART, mono.tranParentPart);
                 UIMonoEnemyFacePart monoFacePart = partGO.GetComponent<UIMonoEnemyFacePart>();
@@ -192,20 +193,27 @@ namespace GameCore.UI
             PartInfo partInfo = _objs[0] as PartInfo;
             if (partInfo == null)
                 return;
+            var occSet = GameCommon.ToPositionSet(partInfo.curOccupyFacePosList);
+            var effSet = GameCommon.ToPositionSet(partInfo.curEffectFacePosList);
+            var union = GameCommon.UnionSortedGridPositions(partInfo.curOccupyFacePosList, partInfo.curEffectFacePosList);
             UIPanelEnemyMaskGrid grid = null;
-            for (int i = 0; i < partInfo.curOccupyFacePosList.Count; i++)
+            for (int i = 0; i < union.Count; i++)
             {
-                grid = _m_gridPanelList.Find(x => x.gridInfo.pos == partInfo.curOccupyFacePosList[i]);
-                if (grid != null)
-                    grid.SetOccupyPreview(true);
-            }
-            if (!partInfo.curOccupyFacePosList.Vector2IntListEquals(partInfo.curEffectFacePosList))
-            {
-                for (int i = 0; i < partInfo.curEffectFacePosList.Count; i++)
+                Vector2Int p = union[i];
+                grid = _m_gridPanelList.Find(x => x.gridInfo.pos == p);
+                if (grid == null)
+                    continue;
+                switch (GameCommon.GetOccupyEffectCellType(p, occSet, effSet))
                 {
-                    grid = _m_gridPanelList.Find(x => x.gridInfo.pos == partInfo.curEffectFacePosList[i]);
-                    if (grid != null)
+                    case EGridPosType.OCCUPY:
+                        grid.SetOccupyPreview(true);
+                        break;
+                    case EGridPosType.EFFECT:
                         grid.SetEffectPreview();
+                        break;
+                    case EGridPosType.BOTH:
+                        grid.SetOverlapPreview();
+                        break;
                 }
             }
 
@@ -232,23 +240,31 @@ namespace GameCore.UI
                 panel.SetNoPreview();
 
             bool canPlace = GameModel.instance.CanPlacePart(occupyPosList);
+            var occSet = GameCommon.ToPositionSet(occupyPosList);
+            var effSet = GameCommon.ToPositionSet(effectPosList);
+            var union = GameCommon.UnionSortedGridPositions(occupyPosList, effectPosList);
             UIPanelEnemyMaskGrid tmpGrid = null;
-            for (int i = 0; i < occupyPosList.Count; i++)
+            for (int i = 0; i < union.Count; i++)
             {
-                tmpGrid = _m_gridPanelList.Find(x => x.gridInfo.pos == occupyPosList[i]);
+                Vector2Int p = union[i];
+                tmpGrid = _m_gridPanelList.Find(x => x.gridInfo.pos == p);
                 if (tmpGrid == null)
                     continue;
-                tmpGrid.SetOccupyPreview(canPlace);
-            }
-            //可以放置再显示效果预览 以放置颜色优先
-            if (canPlace && !occupyPosList.Vector2IntListEquals(effectPosList))
-            {
-                for (int i = 0; i < effectPosList.Count; i++)
+                switch (GameCommon.GetOccupyEffectCellType(p, occSet, effSet))
                 {
-                    tmpGrid = _m_gridPanelList.Find(x => x.gridInfo.pos == effectPosList[i]);
-                    if (tmpGrid == null)
-                        continue;
-                    tmpGrid.SetEffectPreview();
+                    case EGridPosType.OCCUPY:
+                        tmpGrid.SetOccupyPreview(canPlace);
+                        break;
+                    case EGridPosType.EFFECT:
+                        if (canPlace)
+                            tmpGrid.SetEffectPreview();
+                        break;
+                    case EGridPosType.BOTH:
+                        if (canPlace)
+                            tmpGrid.SetOverlapPreview();
+                        else
+                            tmpGrid.SetOccupyPreview(false);
+                        break;
                 }
             }
         }

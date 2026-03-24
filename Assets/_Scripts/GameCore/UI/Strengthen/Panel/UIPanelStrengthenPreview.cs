@@ -1,3 +1,4 @@
+using GameCore;
 using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
@@ -34,8 +35,8 @@ namespace GameCore.UI
         {
         }
 
-        /// <param name="_partLevelRefObj">????????????¦Ë?????????????????????????????? null??</param>
-        /// <param name="_isAtMaxStrengthenLevel">?????¦Ë???????????????????????????</param>
+        /// <param name="_partLevelRefObj">???????????????????????????????????????????? null??</param>
+        /// <param name="_isAtMaxStrengthenLevel">??????????????????????????????????</param>
         public void SetInfo(PartLevelRefObj _partLevelRefObj, bool _isAtMaxStrengthenLevel = false)
         {
             _m_levelRefObj = _partLevelRefObj;
@@ -116,24 +117,14 @@ namespace GameCore.UI
         private void setGridInfo(List<Vector2Int> _occupyPosList, List<Vector2Int> _effectPosList)
         {
             clearGridParent();
-            for (int i = 0; i < _occupyPosList.Count; i++)
+            var occSet = GameCommon.ToPositionSet(_occupyPosList);
+            var effSet = GameCommon.ToPositionSet(_effectPosList);
+            var union = GameCommon.UnionSortedGridPositions(_occupyPosList, _effectPosList);
+            for (int i = 0; i < union.Count; i++)
             {
-                createOneGrid(_occupyPosList[i], EGridPosType.OCCUPY);
-            }
-            if (!_occupyPosList.Vector2IntListEquals(_effectPosList))
-            {
-                for (int i = 0; i < _effectPosList.Count; i++)
-                {
-                    createOneGrid(_effectPosList[i], EGridPosType.EFFECT);
-                }
-            }
-            else
-            {
-                //todo
-                for (int i = 0; i < _effectPosList.Count; i++)
-                {
-                    createOneGrid(_effectPosList[i], EGridPosType.BOTH);
-                }
+                Vector2Int p = union[i];
+                EGridPosType t = GameCommon.GetOccupyEffectCellType(p, occSet, effSet);
+                createOneGrid(p, t);
             }
         }
         private void createOneGrid(Vector2Int gridPos, EGridPosType posType)

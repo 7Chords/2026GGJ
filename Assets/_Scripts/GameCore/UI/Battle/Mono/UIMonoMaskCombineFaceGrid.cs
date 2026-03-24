@@ -16,6 +16,8 @@ namespace GameCore.UI
         public Color colorCanNotPlace;
         [Header("作用范围的颜色")]
         public Color colorIsEffective;
+        [Header("占据与效果重叠（同一格）")]
+        public Color colorOverlap;
         [Header("背景图片")]
         public Image imgGrid;
     }
