@@ -86,16 +86,16 @@ namespace GameCore.UI
                 switch (_quality)
                 {
                     case EQualityType.NONE:
-                        mono.txtQuality.text = "???????";
+                        mono.txtQuality.text = "Œﬁ";
                         break;
                     case EQualityType.NORMAL:
-                        mono.txtQuality.text = "???";
+                        mono.txtQuality.text = "∆’Õ®";
                         break;
                     case EQualityType.RARE:
-                        mono.txtQuality.text = "???";
+                        mono.txtQuality.text = "œ°”–";
                         break;
                     case EQualityType.PRECIOUS:
-                        mono.txtQuality.text = "??";
+                        mono.txtQuality.text = "’‰πÛ";
                         break;
                 }
             }
