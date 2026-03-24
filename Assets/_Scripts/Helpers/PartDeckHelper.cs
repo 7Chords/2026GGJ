@@ -24,14 +24,18 @@ namespace GameCore.Helpers
             }
         }
 
-        /// <summary> 将 busy 中所有部位 ResetToDeck 后全部移入 deck，并清空 busy。 </summary>
+        /// <summary>
+        /// 将 busy 中所有部位 ResetToDeck 后移入 deck 的<strong>顶部</strong>（index 0 一侧），并清空 busy。
+        /// 同名多张时，与 <c>FindIndex</c> 从前往后匹配的逻辑配合，会优先抽到上一回合在手牌/脸上用过的实例。
+        /// </summary>
         public static void RecycleBusyToDeck(List<PartInfo> _deck, List<PartInfo> _busy)
         {
             if (_busy == null) return;
             if (_deck == null) return;
+            if (_busy.Count == 0) return;
             for (int i = 0; i < _busy.Count; i++)
                 _busy[i].ResetToDeck();
-            _deck.AddRange(_busy);
+            _deck.InsertRange(0, _busy);
             _busy.Clear();
         }
 
