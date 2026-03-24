@@ -11,6 +11,8 @@ namespace GameCore.UI
     {
         private PartLevelRefObj _m_levelRefObj;
         private bool _m_isAfter;
+        private bool _m_isAtMaxStrengthenLevel;
+
         public UIPanelStrengthenPreview(UIMonoStrengthenPreview _mono, SCUIShowType _showType,bool _isAfter) : base(_mono, _showType)
         {
             _m_isAfter = _isAfter;
@@ -32,16 +34,32 @@ namespace GameCore.UI
         {
         }
 
-        public void SetInfo(PartLevelRefObj _partLevelRefObj)
+        /// <param name="_partLevelRefObj">????????????λ?????????????????????????????? null??</param>
+        /// <param name="_isAtMaxStrengthenLevel">?????λ???????????????????????????</param>
+        public void SetInfo(PartLevelRefObj _partLevelRefObj, bool _isAtMaxStrengthenLevel = false)
         {
             _m_levelRefObj = _partLevelRefObj;
+            _m_isAtMaxStrengthenLevel = _isAtMaxStrengthenLevel;
             refreshShow();
         }
 
         private void refreshShow()
         {
-            SCCommon.SetGameObjectEnable(mono.goHasSelectPartShowList, _m_levelRefObj != null);
-            SCCommon.SetGameObjectEnable(mono.goNoSelectPartShowList, _m_levelRefObj == null);
+            if (_m_isAfter && _m_isAtMaxStrengthenLevel)
+            {
+                SCCommon.SetGameObjectEnable(mono.goHasSelectPartShowList, false);
+                SCCommon.SetGameObjectEnable(mono.goNoSelectPartShowList, false);
+                SCCommon.SetGameObjectEnable(mono.goMaxLevelShowList, true);
+                clearGridParent();
+                return;
+            }
+
+            SCCommon.SetGameObjectEnable(mono.goMaxLevelShowList, false);
+
+            bool hasRef = _m_levelRefObj != null;
+            SCCommon.SetGameObjectEnable(mono.goHasSelectPartShowList, hasRef);
+            SCCommon.SetGameObjectEnable(mono.goNoSelectPartShowList, !hasRef);
+
             if (_m_levelRefObj == null)
                 return;
 
@@ -57,26 +75,26 @@ namespace GameCore.UI
             SCCommon.SetGameObjectEnable(mono.txtLevel.gameObject, _level > 1);
 
             if (mono.txtName != null)
-                mono.txtName.text = string.IsNullOrEmpty(_name) ? "默认部位" : _name;
+                mono.txtName.text = string.IsNullOrEmpty(_name) ? "??????" : _name;
 
             if (mono.txtDesc != null)
-                mono.txtDesc.text = string.IsNullOrEmpty(_desc) ? "默认部位描述" : _desc;
+                mono.txtDesc.text = string.IsNullOrEmpty(_desc) ? "??????????" : _desc;
 
             if (mono.txtQuality != null)
             {
                 switch (_quality)
                 {
                     case EQualityType.NONE:
-                        mono.txtQuality.text = "无效品质";
+                        mono.txtQuality.text = "???????";
                         break;
                     case EQualityType.NORMAL:
-                        mono.txtQuality.text = "普通";
+                        mono.txtQuality.text = "???";
                         break;
                     case EQualityType.RARE:
-                        mono.txtQuality.text = "稀有";
+                        mono.txtQuality.text = "???";
                         break;
                     case EQualityType.PRECIOUS:
-                        mono.txtQuality.text = "史诗";
+                        mono.txtQuality.text = "??";
                         break;
                 }
             }
@@ -87,12 +105,17 @@ namespace GameCore.UI
             if(mono.txtLevel!=null)
                 mono.txtLevel.text = "+" + (_level - 1).ToString();
         }
+        private void clearGridParent()
+        {
+            if (mono.tranParentGrid == null)
+                return;
+            for (int i = mono.tranParentGrid.transform.childCount - 1; i >= 0; i--)
+                SCCommon.DestoryGameObject(mono.tranParentGrid.transform.GetChild(i).gameObject);
+        }
+
         private void setGridInfo(List<Vector2Int> _occupyPosList, List<Vector2Int> _effectPosList)
         {
-            for(int i = mono.tranParentGrid.transform.childCount - 1; i>=0 ; i--)
-            {
-                SCCommon.DestoryGameObject(mono.tranParentGrid.transform.GetChild(i).gameObject);
-            }
+            clearGridParent();
             for (int i = 0; i < _occupyPosList.Count; i++)
             {
                 createOneGrid(_occupyPosList[i], EGridPosType.OCCUPY);
@@ -106,17 +129,13 @@ namespace GameCore.UI
             }
             else
             {
-                //todo:现在设计的有重叠都是完全重叠的暂时这样写
+                //todo
                 for (int i = 0; i < _effectPosList.Count; i++)
                 {
                     createOneGrid(_effectPosList[i], EGridPosType.BOTH);
                 }
             }
         }
-
-        /// <summary>
-        /// 生成单个格子并设置位置
-        /// </summary>
         private void createOneGrid(Vector2Int gridPos, EGridPosType posType)
         {
             if (mono.tranParentGrid == null)

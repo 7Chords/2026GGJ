@@ -84,15 +84,16 @@ namespace GameCore.UI
                 PartLevelRefObj levelUpAfterRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.partId == _m_curSelectPart.partRefObj.id
                     && x.partLevel == _m_curSelectPart.partLevel + 1);
 
-                _m_strengthenBeforePreview.SetInfo(levelUpBeforeRefObj);
-                _m_strengthenAfterPreview.SetInfo(levelUpAfterRefObj);
+                bool atMaxStrengthen = levelUpBeforeRefObj != null && levelUpAfterRefObj == null;
+                _m_strengthenBeforePreview.SetInfo(levelUpBeforeRefObj, atMaxStrengthen);
+                _m_strengthenAfterPreview.SetInfo(levelUpAfterRefObj, atMaxStrengthen);
 
                 SCCommon.SetGameObjectEnable(mono.goHasSelectPart, levelUpBeforeRefObj != null && levelUpAfterRefObj != null);
             }
             else
             {
-                _m_strengthenBeforePreview.SetInfo(null);
-                _m_strengthenAfterPreview.SetInfo(null);
+                _m_strengthenBeforePreview.SetInfo(null, false);
+                _m_strengthenAfterPreview.SetInfo(null, false);
                 SCCommon.SetGameObjectEnable(mono.goHasSelectPart, false);
 
             }

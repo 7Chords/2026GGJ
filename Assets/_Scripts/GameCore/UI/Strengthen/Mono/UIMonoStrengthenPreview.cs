@@ -1,4 +1,4 @@
-using SCFrame.UI;
+ï»¿using SCFrame.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,21 +8,23 @@ namespace GameCore.UI
 {
     public class UIMonoStrengthenPreview : _ASCUIMonoBase
     {
-        [Header("±êÌâÎÄ±¾")]
+        [Header("æ ‡é¢˜æ–‡æœ¬")]
         public Text txtName;
-        [Header("ÃèÊöÎÄ±¾")]
+        [Header("æè¿°æ–‡æœ¬")]
         public Text txtDesc;
-        [Header("Æ·ÖÊÎÄ±¾")]
+        [Header("å“è´¨æ–‡æœ¬")]
         public Text txtQuality;
-        [Header("¸ñ×ÓĞÅÏ¢¸¸ÎïÌå")]
+        [Header("æ ¼å­ä¿¡æ¯çˆ¶ç‰©ä½“")]
         public GameObject tranParentGrid;
-        [Header("Ñ¡ÔñÁËÆ÷¹ÙÏÔÊ¾µÄÎïÌåÁĞ±í")]
+        [Header("é€‰æ‹©äº†å™¨å®˜æ˜¾ç¤ºçš„ç‰©ä½“åˆ—è¡¨")]
         public List<GameObject> goHasSelectPartShowList;
-        [Header("Ã»ÓĞÑ¡ÔñÆ÷¹ÙÏÔÊ¾µÄÎïÌåÁĞ±í")]
+        [Header("æ²¡æœ‰é€‰æ‹©å™¨å®˜æ˜¾ç¤ºçš„ç‰©ä½“åˆ—è¡¨")]
         public List<GameObject> goNoSelectPartShowList;
-        [Header("ÑªÁ¿ÎÄ±¾")]
+        [Header("è¡€é‡æ–‡æœ¬")]
         public Text txtHealth;
-        [Header("µÈ¼¶ÎÄ±¾")]
+        [Header("ç­‰çº§æ–‡æœ¬")]
         public Text txtLevel;
+        [Header("è¾¾åˆ°äº†æœ€å¤§ç­‰çº§æ˜¾ç¤ºçš„ç‰©ä½“åˆ—è¡¨")]
+        public List<GameObject> goMaxLevelShowList;
     }
 }
