@@ -110,10 +110,30 @@ namespace GameCore.Helpers
             enemy.battlePartInfoList.Add(part);
         }
 
-        public static int GetClampedTurnIndex(int turnIndex, int layoutCount)
+        /// <summary>
+        /// 敌人脸部布局索引：
+        /// <list type="bullet">
+        /// <item><description>大回合索引 <c>0 .. layoutCount-1</c>：依次使用布局 <c>[0]..[layoutCount-1]</c>（首回合开战为 0）。</description></item>
+        /// <item><description>超出列表长度后：在 <c>[1] .. [layoutCount-1]</c> 之间循环，不再使用首回合布局 <c>[0]</c>。</description></item>
+        /// <item><description><c>layoutCount == 1</c> 时始终为 0。</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="turnIndex">大回合计数：开战生成敌人为 0；每经过一次 <see cref="GameModel.DealNextTurn"/> 先自增再取布局。</param>
+        public static int ResolveEnemyLayoutTurnIndex(int turnIndex, int layoutCount)
         {
             if (layoutCount <= 0) return -1;
-            return Mathf.Clamp(turnIndex, 0, layoutCount - 1);
+            if (turnIndex < 0) turnIndex = 0;
+
+            if (turnIndex < layoutCount)
+                return turnIndex;
+
+            if (layoutCount == 1)
+                return 0;
+
+            int cycleLen = layoutCount - 1;
+            int offset = (turnIndex - layoutCount) % cycleLen;
+            if (offset < 0) offset += cycleLen;
+            return 1 + offset;
         }
     }
 }

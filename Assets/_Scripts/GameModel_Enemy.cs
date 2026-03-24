@@ -64,7 +64,7 @@ namespace GameCore
                 EnemyTurnFaceLayout turnLayout = null;
                 if (encounterPreset.turnLayouts != null && encounterPreset.turnLayouts.Count > 0)
                 {
-                    int turnIdx = EnemyLayoutPresetApplicator.GetClampedTurnIndex(0, encounterPreset.turnLayouts.Count);
+                    int turnIdx = EnemyLayoutPresetApplicator.ResolveEnemyLayoutTurnIndex(0, encounterPreset.turnLayouts.Count);
                     turnLayout = encounterPreset.turnLayouts[turnIdx];
                 }
                 EnemyLayoutPresetApplicator.PrepareBusyFromTurnLayoutBestEffort(curEnemyInfo, turnLayout, out var resolvedSlots);
