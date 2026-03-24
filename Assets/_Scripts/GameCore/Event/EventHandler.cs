@@ -34,8 +34,13 @@ namespace GameCore
                             Find(x => x.floor == GameModel.instance.playerInfo.playerFloor);
                         if (getPartRefObj == null)
                             return;
-                        //GameModel.instance.playerInfo.playerMoney += getMoneyRefObj.money;
-                        //GameCommon.ShowPopTip("获得金钱×" + getMoneyRefObj.money, Vector2.zero);
+                        long levelId = getPartRefObj.partList[Random.Range(0, getPartRefObj.partList.Count)];
+                        PartLevelRefObj levelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.id == levelId);
+                        if (levelRefObj == null)
+                            return;
+                        PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
+                        GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
+                        GameCommon.ShowPopTip("获得" + partRefObj.partName, Vector2.zero);
                     }
                     break;
                 case EEventType.TRAP_BATTLE:
