@@ -40,7 +40,7 @@ namespace GameCore.UI
         }
 
         /// <summary>
-        /// ?????????¶À????????????????????????????? SetNodeInfo/RefreshShow ??????????????????????? Update??
+        /// ?????????ùù????????????????????????????? SetNodeInfo/RefreshShow ??????????????????????? Update??
         /// </summary>
         public void RefreshCanWalkState()
         {
@@ -194,27 +194,35 @@ namespace GameCore.UI
         private void EnterEnemyLevel()
         {
             AudioMgr.instance.PlaySfx("sfx_click");
-            GameModel.instance.RollBattleOrder();
-            UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
-            GameModel.instance.GenerateNewBattle();
-            //UICoreMgr.instance.AddNode(new UINodeBattleOrder(SCUIShowType.ADDITION));
-            UICoreMgr.instance.AddNode(new UINodeGuideBattle(SCUIShowType.ADDITION));
+            TVSwitchTransition.Run(() =>
+            {
+                GameModel.instance.RollBattleOrder();
+                UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
+                GameModel.instance.GenerateNewBattle();
+                UICoreMgr.instance.AddNode(new UINodeGuideBattle(SCUIShowType.ADDITION));
+            });
         }
 
         private void EnterBossLevel()
         {
             AudioMgr.instance.PlaySfx("sfx_click");
-            GameModel.instance.RollBattleOrder();
-            UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
-            GameModel.instance.GenerateNewBattle(true,999991);
-            UICoreMgr.instance.AddNode(new UINodeBattleOrder(SCUIShowType.ADDITION));
+            TVSwitchTransition.Run(() =>
+            {
+                GameModel.instance.RollBattleOrder();
+                UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
+                GameModel.instance.GenerateNewBattle(true,999991);
+                UICoreMgr.instance.AddNode(new UINodeBattleOrder(SCUIShowType.ADDITION));
+            });
         }
 
         private void EnterShop()
         {
             AudioMgr.instance.PlaySfx("sfx_click");
-            GameModel.instance.RollRandomShop();
-            UICoreMgr.instance.AddNode(new UINodeStore(SCUIShowType.FULL));
+            TVSwitchTransition.Run(() =>
+            {
+                GameModel.instance.RollRandomShop();
+                UICoreMgr.instance.AddNode(new UINodeStore(SCUIShowType.FULL));
+            });
         }
 
         private void EnterTrial()
@@ -225,13 +233,18 @@ namespace GameCore.UI
         private void EnterEvent()
         {
             AudioMgr.instance.PlaySfx("sfx_click");
-            GameModel.instance.RollEventId();
-            UICoreMgr.instance.AddNode(new UINodeEvent(SCUIShowType.FULL));
+            TVSwitchTransition.Run(() =>
+            {
+                GameModel.instance.RollEventId();
+                UICoreMgr.instance.AddNode(new UINodeEvent(SCUIShowType.FULL));
+            });
         }
         private void EnterStrengthen()
         {
-            UICoreMgr.instance.AddNode(new UINodeStrengthen(SCUIShowType.FULL));
-
+            TVSwitchTransition.Run(() =>
+            {
+                UICoreMgr.instance.AddNode(new UINodeStrengthen(SCUIShowType.FULL));
+            });
         }
 
         #endregion

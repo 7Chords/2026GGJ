@@ -37,10 +37,12 @@ namespace GameCore.UI
             mono.btnGoto.onClick.AddListener(() =>
             {
                 AudioMgr.instance.PlaySfx("sfx_click");
-                GameModel.instance.playerInfo.ApplyPendingMapMove();
-                UICoreMgr.instance.RemoveAllNodes(SCUINodeFuncType.BATTLE);
-                UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
-
+                TVSwitchTransition.Run(() =>
+                {
+                    GameModel.instance.playerInfo.ApplyPendingMapMove();
+                    UICoreMgr.instance.RemoveAllNodes(SCUINodeFuncType.BATTLE);
+                    UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+                });
             });
             _m_enemyRefObj = SCRefDataMgr.instance.enemyRefList.refDataList.Find(x => x.id == GameModel.instance.curEnemyInfo.enemyRefObj.id);
             _m_winContainer?.ShowPanel();
@@ -51,7 +53,7 @@ namespace GameCore.UI
         {
             if (_m_enemyRefObj == null)
             {
-                Debug.LogWarning("UIPanelBattleWin: 敌人配置数据为空！");
+                Debug.LogWarning("UIPanelBattleWin: ????????????????");
                 return;
             }
 
@@ -68,20 +70,20 @@ namespace GameCore.UI
         }
 
         /// <summary>
-        /// 从源列表中根据掉落率随机抽取指定数量的不重复元素
+        /// ????б??и??????????????????????????????
         /// </summary>
-        /// <param name="sourceList">源列表</param>
-        /// <param name="count">抽取数量</param>
-        /// <returns>抽取后的列表</returns>
+        /// <param name="sourceList">??б?</param>
+        /// <param name="count">???????</param>
+        /// <returns>???????б?</returns>
         private List<PartInfo> RandomSelectBooty(List<BootyEffectObj> sourceList, int count)
         {
             List<PartInfo> resultList = new List<PartInfo>();
             if (sourceList == null || sourceList.Count == 0 || count <= 0)
                 return resultList;
 
-            // 复制源列表（避免修改原数据）
+            // ??????б????????????????
             List<BootyEffectObj> tempList = new List<BootyEffectObj>(sourceList);
-            // 需要抽取的数量不能超过列表总数
+            // ????????????????????б?????
             int actualCount = Mathf.Min(count, tempList.Count);
 
             for (int i = 0; i < actualCount; i++)
@@ -89,15 +91,15 @@ namespace GameCore.UI
                 if (tempList.Count == 0)
                     break;
 
-                // 步骤1：计算所有剩余战利品的掉落率总和
+                // ????1???????????????????????????
                 float totalChance = 0;
                 foreach (var booty in tempList)
                 {
-                    // 确保掉落率为非负数
+                    // ???????????????
                     totalChance += Mathf.Max(0, booty.dropChance);
                 }
 
-                // 处理所有掉落率都为0的情况（退化为随机抽取）
+                // ???????е???????0???????????????????
                 if (totalChance <= 0)
                 {
                     int randomIndex = Random.Range(0, tempList.Count);
@@ -106,12 +108,12 @@ namespace GameCore.UI
                 }
                 else
                 {
-                    // 步骤2：生成0到总掉落率之间的随机数
+                    // ????2??????0??????????????????
                     float randomValue = Random.Range(0, totalChance);
                     float currentChance = 0;
                     int selectedIndex = -1;
 
-                    // 步骤3：遍历找到随机数所在的掉落率区间
+                    // ????3????????????????????????????
                     for (int j = 0; j < tempList.Count; j++)
                     {
                         float chance = Mathf.Max(0, tempList[j].dropChance);
@@ -124,7 +126,7 @@ namespace GameCore.UI
                         }
                     }
 
-                    // 步骤4：添加选中的战利品到结果列表，并从临时列表移除（避免重复）
+                    // ????4????????е???????????б???????????б???????????????
                     if (selectedIndex >= 0)
                     {
                         AddBootyToResult(tempList[selectedIndex], resultList);
@@ -137,21 +139,21 @@ namespace GameCore.UI
         }
 
         /// <summary>
-        /// 将战利品转换为PartInfo并添加到结果列表
+        /// ??????????PartInfo???????????б?
         /// </summary>
         private void AddBootyToResult(BootyEffectObj booty, List<PartInfo> resultList)
         {
             PartLevelRefObj partLevelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.id == booty.partLevelId);
             if (partLevelRefObj == null)
             {
-                Debug.LogWarning($"找不到partLevelId为{booty.partLevelId}的配置数据");
+                Debug.LogWarning($"?????partLevelId?{booty.partLevelId}??????????");
                 return;
             }
 
             PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == partLevelRefObj.partId);
             if (partRefObj == null)
             {
-                Debug.LogWarning($"找不到partId为{partLevelRefObj.partId}的配置数据");
+                Debug.LogWarning($"?????partId?{partLevelRefObj.partId}??????????");
                 return;
             }
 

@@ -97,8 +97,11 @@ namespace GameCore.UI
             MapManager.instance.ClearPendingLayout();
             MapGenerator.GetOrFind()?.GenerateMapDataOnly();
 
-            UICoreMgr.instance.CloseTopNode();
-            UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+            TVSwitchTransition.Run(() =>
+            {
+                UICoreMgr.instance.CloseTopNode();
+                UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+            });
         }
 
         private void onBtnContinueClickDown(PointerEventData arg1, object[] arg2)
@@ -112,8 +115,11 @@ namespace GameCore.UI
                 return;
             }
 
-            UICoreMgr.instance.CloseTopNode();
-            UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+            TVSwitchTransition.Run(() =>
+            {
+                UICoreMgr.instance.CloseTopNode();
+                UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+            });
         }
 
         private void onBtnSettingClickDown(PointerEventData arg1, object[] arg2)

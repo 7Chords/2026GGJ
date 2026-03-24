@@ -110,9 +110,12 @@ namespace GameCore.UI
         private void onBtnExitClickDown(PointerEventData _data, object[] _objs)
         {
             AudioMgr.instance.PlaySfx("sfx_click");
-            GameModel.instance.playerInfo.ApplyPendingMapMove();
-            UICoreMgr.instance.CloseTopNode();
-            UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+            TVSwitchTransition.Run(() =>
+            {
+                GameModel.instance.playerInfo.ApplyPendingMapMove();
+                UICoreMgr.instance.CloseTopNode();
+                UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+            });
         }
         private void onBtnConfirmClickDown(PointerEventData _data, object[] _objs)
         {

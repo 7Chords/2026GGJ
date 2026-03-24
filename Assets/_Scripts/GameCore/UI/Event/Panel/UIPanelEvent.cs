@@ -69,13 +69,16 @@ namespace GameCore.UI
             if(_m_eventDialogueRefObj.flagType == EEventDialogueFlagType.END)
             {
                 AudioMgr.instance.PlaySfx("sfx_click");
-                GameModel.instance.playerInfo.ApplyPendingMapMove();
-                UICoreMgr.instance.CloseTopNode();
-                UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+                TVSwitchTransition.Run(() =>
+                {
+                    GameModel.instance.playerInfo.ApplyPendingMapMove();
+                    UICoreMgr.instance.CloseTopNode();
+                    UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+                });
             }
             else
             {
-                if(_m_eventDialogueRefObj.nextList.Count > 1)//大于1说明下一个是选择项
+                if(_m_eventDialogueRefObj.nextList.Count > 1)//????1???????????????
                 {
                     _m_isSelecting = true;
                     SCMsgCenter.SendMsg(SCMsgConst.EVENT_START_SELECT, _m_eventDialogueRefObj);

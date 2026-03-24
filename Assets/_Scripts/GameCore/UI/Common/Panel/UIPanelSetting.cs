@@ -51,12 +51,15 @@ namespace GameCore.UI
         {
             AudioMgr.instance.PlaySfx("sfx_click");
             GameRunSave.SaveFromGameModel();
-            GameModel.instance.playerInfo.ClearPendingMapMove();
-            GameModel.instance.SetAllPlayerPart2Bag();
-            GameModel.instance.SetEnemyEmpty();
-            UICoreMgr.instance.CloseTopNode();
-            UICoreMgr.instance.RemoveAllNodes(SCUINodeFuncType.BATTLE);
-            UICoreMgr.instance.AddNode(new UINodeStart(SCUIShowType.FULL));
+            TVSwitchTransition.Run(() =>
+            {
+                GameModel.instance.playerInfo.ClearPendingMapMove();
+                GameModel.instance.SetAllPlayerPart2Bag();
+                GameModel.instance.SetEnemyEmpty();
+                UICoreMgr.instance.CloseTopNode();
+                UICoreMgr.instance.RemoveAllNodes(SCUINodeFuncType.BATTLE);
+                UICoreMgr.instance.AddNode(new UINodeStart(SCUIShowType.FULL));
+            });
         }
 
         private void onBtnCloseClickDown(PointerEventData _data, object[] _objs)

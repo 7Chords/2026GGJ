@@ -130,7 +130,7 @@ namespace GameCore.UI
             if (info == null)
                 return;
 
-            //对数据层处理
+            //?????????
             info.hasBought = true;
             GameModel.instance.playerInfo.playerMoney = Mathf.Max(GameModel.instance.playerInfo.playerMoney - info.goodsRefObj.goodsPrice, 0);
             switch (info.goodsRefObj.goodsType)
@@ -157,9 +157,12 @@ namespace GameCore.UI
         private void onBtnExitClickDonw(PointerEventData _arg, object[] _objs)
         {
             AudioMgr.instance.PlaySfx("sfx_click");
-            GameModel.instance.playerInfo.ApplyPendingMapMove();
-            UICoreMgr.instance.CloseTopNode();
-            UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+            TVSwitchTransition.Run(() =>
+            {
+                GameModel.instance.playerInfo.ApplyPendingMapMove();
+                UICoreMgr.instance.CloseTopNode();
+                UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+            });
         }
 
         private void onBtnBagMouseEnter(PointerEventData arg1, object[] arg2)
