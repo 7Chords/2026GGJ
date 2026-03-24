@@ -24,11 +24,18 @@ namespace GameCore
 
         private void Awake()
         {
-            _uiMono = GetComponent<UIMonoMapNode>();
+            EnsurePanelCreated();
+        }
+
+        /// <summary> 延迟创建面板包装（部分预制体可能尚未挂上 UIMonoMapNode，或执行顺序导致首次调用时尚未 Awake）。 </summary>
+        private void EnsurePanelCreated()
+        {
+            if (_uiPanel != null)
+                return;
+            if (_uiMono == null)
+                _uiMono = GetComponent<UIMonoMapNode>();
             if (_uiMono != null)
-            {
                 _uiPanel = new UIPanelMapNode(_uiMono, SCUIShowType.INTERNAL);
-            }
         }
 
         public void SetMapNodeIndex(int x, int y)
@@ -40,9 +47,34 @@ namespace GameCore
         public void SetMapNodeType(ERoomType type)
         {
             NodeType = type;
-            _uiPanel.SetNodeInfo(this);
+            EnsurePanelCreated();
+            if (_uiPanel != null)
+                _uiPanel.SetNodeInfo(this);
+            else
+                Debug.LogWarning($"[MapNode] {name} 上未找到 UIMonoMapNode，无法刷新节点 UI。请检查 MapGenerator 的 nodePrefab 是否包含 UIMonoMapNode。");
         }
 
+        /// <summary> 玩家位置或地图数据变化后，由 UIPanelMap 统一刷新各格「可行走」显示。 </summary>
+        public void RefreshCanWalkDisplay()
+        {
+            EnsurePanelCreated();
+            _uiPanel?.RefreshCanWalkState();
+        }
 
+        /// <summary> 根据预生成的纯数据设置变换与路线（打开地图 UI 时调用）。 </summary>
+        public void ApplyFromLayout(MapCellLayoutData data)
+        {
+            if (data == null)
+                return;
+            SetMapNodeIndex(data.gridX, data.gridY);
+            nextLayerConnectedNodes.Clear();
+            if (data.nextLayerConnectedNodes != null)
+                nextLayerConnectedNodes.AddRange(data.nextLayerConnectedNodes);
+            transform.localPosition = data.localPosition;
+            transform.localRotation = Quaternion.Euler(0, 0, data.angleZ);
+            gameObject.SetActive(true);
+            SetMapNodeType(data.roomType);
+            gameObject.SetActive(data.isActive);
+        }
     }
 }

@@ -20,18 +20,20 @@ namespace GameCore
             EnemyRefObj enemyRef = null;
             if (_id != -1)
             {
+                int layerX = playerInfo.GetMapLayerXForEncounter();
                 List<EnemyRefObj> enemies = SCRefDataMgr.instance.enemyRefList.refDataList
                     .Where(refObj => refObj.floor == playerInfo.playerFloor
-                        && refObj.column == playerInfo.playerMapPosition.x + 1).ToList();
+                        && refObj.column == layerX + 1).ToList();
                 if (enemies == null || enemies.Count == 0) return;
                 enemyRef = enemies.Find(x => x.id == _id);
             }
             else
             {
+                int layerX = playerInfo.GetMapLayerXForEncounter();
                 List<EnemyRefObj> enemies = SCRefDataMgr.instance.enemyRefList.refDataList
                     .Where(refObj => refObj.floor == playerInfo.playerFloor
                         && !refObj.isBoss
-                        && refObj.column == playerInfo.playerMapPosition.x + 1).ToList();
+                        && refObj.column == layerX + 1).ToList();
                 if (enemies == null || enemies.Count == 0) return;
                 enemyRef = enemies[Random.Range(0, enemies.Count)];
             }

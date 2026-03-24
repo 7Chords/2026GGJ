@@ -1,3 +1,4 @@
+using GameCore;
 using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
@@ -32,11 +33,18 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            var gen = MapGenerator.GetOrFind();
+            RectTransform mapContent = mono.scrollView != null ? mono.scrollView.content : null;
+            if (gen != null)
+                gen.EnsureMapGeneratedIfNeeded(mapContent);
+
             mono.btnBag.AddMouseLeftClickDown(onBtnBagClickDown);
             mono.btnSetting.AddMouseLeftClickDown(onBtnSettingClickDown);
             mono.btnGuide.AddMouseLeftClickDown(onBtnGuideClickDown);
 
             refreshShow();
+            GameRunSave.NotifyEnteredMapOnce();
+            GameRunSave.SaveFromGameModel();
         }
 
         private void refreshShow()
@@ -44,6 +52,25 @@ namespace GameCore.UI
             updatePlayerIcon();
             setPlayerInfo();
             refreshMapName();
+            RefreshAllMapNodesCanWalk();
+        }
+
+        /// <summary> ???????????????????????? Update?? </summary>
+        private void RefreshAllMapNodesCanWalk()
+        {
+            var grid = MapManager.instance?.currentMapNodes;
+            if (grid == null)
+                return;
+            for (int i = 0; i < grid.GetLength(0); i++)
+            {
+                for (int j = 0; j < grid.GetLength(1); j++)
+                {
+                    var node = grid[i, j];
+                    if (node == null)
+                        continue;
+                    node.RefreshCanWalkDisplay();
+                }
+            }
         }
 
         /// <summary> ? map ?????????????????mapName?? </summary>
@@ -73,7 +100,7 @@ namespace GameCore.UI
                 {
                     if (_m_playerIconGO == null)
                     {
-                        //todo:ù?ùùùicon
+                        //todo:?ùùùicon
                         _m_playerIconGO = new GameObject("PlayerIcon");
                         var img = _m_playerIconGO.AddComponent<UnityEngine.UI.Image>();
                         img.color = Color.green;

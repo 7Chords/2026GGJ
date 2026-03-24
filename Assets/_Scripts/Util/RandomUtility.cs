@@ -41,5 +41,13 @@ namespace GameCore
             }
             return _randomGenerators[module];
         }
+
+        /// <summary>
+        /// 替换指定模块的随机数生成器（用于新游戏时重新随机地图路线等，避免固定全局种子导致地图总相同）。
+        /// </summary>
+        public static void ReseedModule(EModuleType module, int seed)
+        {
+            _randomGenerators[module] = new System.Random(seed);
+        }
     }
 }

@@ -802,7 +802,6 @@ GameObject:
   - component: {fileID: 7955790303324487742}
   - component: {fileID: 3732223678577455298}
   - component: {fileID: 558851171527004152}
-  - component: {fileID: 6471387246735022416}
   m_Layer: 5
   m_Name: panel_map
   m_TagString: Untagged
@@ -909,27 +908,6 @@ MonoBehaviour:
   txtHealth: {fileID: 2353739212123871688}
   txtMapName: {fileID: 4956021523460749308}
   imgHealthBar: {fileID: 453683450788825133}
---- !u!114 &6471387246735022416
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3944008937906124512}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 547200662e0db6c4f937359e4c323483, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nodePrefab: {fileID: 4988794329175121149, guid: 3b90e40e8f1e9624895150f9c6ad45a7, type: 3}
-  linePrefab: {fileID: 4653072183398419852, guid: 66155fc8676566e47bbf9bc33ef810ff, type: 3}
-  mapNodeParentRect: {fileID: 2398427714649396136}
-  nodeSpacing: {x: 200, y: 200}
-  nodeOffset: {x: 0, y: 0}
-  nodeAnglesOffset: 0
-  padding: {x: 0, y: 0}
-  loadMapDataFromTable: 1
-  mapDataAddressOverride: 
 --- !u!1 &5186280222160563769
 GameObject:
   m_ObjectHideFlags: 0

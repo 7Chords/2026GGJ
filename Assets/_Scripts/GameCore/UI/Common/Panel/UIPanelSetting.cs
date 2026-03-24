@@ -1,3 +1,4 @@
+using GameCore;
 using SCFrame.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -49,6 +50,8 @@ namespace GameCore.UI
         private void onBtnReturnMainClickDonw(PointerEventData _data, object[] _objs)
         {
             AudioMgr.instance.PlaySfx("sfx_click");
+            GameRunSave.SaveFromGameModel();
+            GameModel.instance.playerInfo.ClearPendingMapMove();
             GameModel.instance.SetAllPlayerPart2Bag();
             GameModel.instance.SetEnemyEmpty();
             UICoreMgr.instance.CloseTopNode();

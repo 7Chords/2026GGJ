@@ -22,6 +22,12 @@ namespace GameCore
             Discard();
         }
 
+        private void OnApplicationPause(bool _pause)
+        {
+            if (_pause)
+                GameRunSave.SaveFromGameModel();
+        }
+
         public override void OnInitialize()
         {
             SCRefDataMgr.instance.Initialize();

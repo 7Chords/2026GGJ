@@ -1,12 +1,13 @@
 using SCFrame;
 using GameCore.RefData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace GameCore
 {
-    public class MapGenerator : MonoBehaviour
+    public class MapGenerator : SingletonMono<MapGenerator>
     {
         [Header("Reference")]
         //地图房间预制体
@@ -15,9 +16,6 @@ namespace GameCore
         //房间连接线预制体
         [SerializeField]
         private GameObject linePrefab;
-        //地图节点父容器 -- 调整位置大小以契合scroll view
-        [SerializeField]
-        private RectTransform mapNodeParentRect;
         //地图节点Size
         [SerializeField]
         private Vector2Int nodeSpacing;
@@ -43,13 +41,154 @@ namespace GameCore
         private MapData _mapData;
 
         private Vector2Int _layerCount;
-        private MapNode[,] _mapNodeArray;
+        private MapCellLayoutData[,] _layoutData;
+        private Vector2 _pendingContentSize;
 
         private System.Random _mapRandom;
 
-        private void Start()
+
+        private void OnDestroy()
         {
-            GenerateMap();
+            if (ReferenceEquals(instance, this))
+                instance = null;
+        }
+
+        /// <summary>
+        /// 取得场景中的 MapGenerator（含未激活物体上的组件）。Start 只会在物体激活后执行一次，不能依赖 Start 做新游戏重随机。
+        /// </summary>
+        public static MapGenerator GetOrFind()
+        {
+            if (instance != null)
+                return instance;
+
+            // FindObjectOfType 默认不包含未激活物体；Resources.FindObjectsOfTypeAll 可找到（过滤掉非场景里的资源）
+            var all = Resources.FindObjectsOfTypeAll<MapGenerator>();
+            foreach (var m in all)
+            {
+                if (m == null)
+                    continue;
+                var go = m.gameObject;
+                if (go != null && go.scene.IsValid() && go.scene.isLoaded)
+                {
+                    instance = m;
+                    return instance;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary> 打开地图 UI 时：若有待实例化数据则生成物体；否则先生成纯数据再实例化。 </summary>
+        public void EnsureMapGeneratedIfNeeded(RectTransform mapContentParent)
+        {
+            if (MapManager.instance == null)
+                return;
+            if (MapManager.instance.currentMapNodes != null)
+                return;
+            if (mapContentParent == null)
+            {
+                SCDebugHelper.LogError("[MapGenerator] 地图 ScrollRect Content 为空，无法生成节点。");
+                return;
+            }
+
+            if (!MapManager.instance.HasPendingLayout)
+            {
+                var gm = GameModel.instance;
+                int? fixedSeed = gm != null ? gm.PendingRunMapLayoutSeed : (int?)null;
+                GenerateMapDataOnly(fixedSeed);
+            }
+
+            SpawnMapVisuals(mapContentParent);
+        }
+
+        /// <summary> 仅生成格子与路线的纯数据，不依赖任何 UI 父节点；结果保存在 MapManager，供之后 SpawnMapVisuals。 </summary>
+        /// <param name="fixedMapSeed"> 非空时使用该种子复现布局（继续游戏）；为空时新随机一局。 </param>
+        public void GenerateMapDataOnly(int? fixedMapSeed = null)
+        {
+            int usedSeed;
+            if (fixedMapSeed.HasValue)
+            {
+                usedSeed = fixedMapSeed.Value;
+                RandomUtility.ReseedModule(EModuleType.MAP, usedSeed);
+            }
+            else
+                usedSeed = ReseedMapRandomAndReturnSeed();
+
+            MapManager.instance?.SetLastMapLayoutSeed(usedSeed);
+
+            Initialize();
+            if (_mapData == null || _layoutData == null)
+                return;
+
+            createMapLayoutData();
+            generateRouteLoop();
+
+            var lines = CollectLineSegments();
+            if (MapManager.instance == null)
+                return;
+            MapManager.instance.SetPendingMapLayout(_layoutData, _pendingContentSize, lines);
+            _layoutData = null;
+
+            if (fixedMapSeed.HasValue)
+                GameModel.instance?.ClearPendingRunMapLayoutSeed();
+        }
+
+        /// <summary> 根据 MapManager 中暂存的纯数据，在地图 Content 下实例化节点与连线。 </summary>
+        public void SpawnMapVisuals(RectTransform mapContentParent)
+        {
+            if (mapContentParent == null || MapManager.instance == null)
+                return;
+            if (!MapManager.instance.HasPendingLayout)
+                return;
+
+            var pending = MapManager.instance.PendingLayout;
+            var lines = MapManager.instance.PendingLines;
+            mapContentParent.sizeDelta = MapManager.instance.PendingContentSize;
+
+            for (int c = mapContentParent.childCount - 1; c >= 0; c--)
+                UnityEngine.Object.Destroy(mapContentParent.GetChild(c).gameObject);
+
+            int w = pending.GetLength(0);
+            int h = pending.GetLength(1);
+            var mapNodes = new MapNode[w, h];
+
+            for (int i = 0; i < w; i++)
+            {
+                for (int j = 0; j < h; j++)
+                {
+                    var cell = pending[i, j];
+                    var node = SCCommon.InstantiateGameObject(nodePrefab, mapContentParent).GetComponent<MapNode>();
+                    node.ApplyFromLayout(cell);
+                    mapNodes[i, j] = node;
+                }
+            }
+
+            if (lines != null && linePrefab != null)
+            {
+                foreach (var seg in lines)
+                {
+                    GameObject lineInstance = SCCommon.InstantiateGameObject(linePrefab, mapContentParent);
+                    SCCommon.SetGameObjectEnable(lineInstance, true);
+                    lineInstance.transform.SetAsFirstSibling();
+                    SetNodeLinePosition(lineInstance, seg.start, seg.end);
+                }
+            }
+
+            MapManager.instance.SetMapData(mapNodes);
+            MapManager.instance.ClearPendingLayout();
+        }
+
+        /// <summary>
+        /// 地图使用固定全局种子时每次开局路线相同；新开局前重新播种，使路线与节点抖动都不同。
+        /// </summary>
+        static int ReseedMapRandomAndReturnSeed()
+        {
+            unchecked
+            {
+                int seed = (int)(DateTime.UtcNow.Ticks ^ Guid.NewGuid().GetHashCode());
+                RandomUtility.ReseedModule(EModuleType.MAP, seed);
+                return seed;
+            }
         }
 
         /// <summary>
@@ -108,96 +247,62 @@ namespace GameCore
             if (_mapData == null)
             {
                 SCDebugHelper.LogError("[MapGenerator] MapData 加载失败，无法生成地图。");
+                _layoutData = null;
                 return;
             }
             _layerCount = _mapData.layerCount;
 
-            //初始化地图节点数组
-            _mapNodeArray = new MapNode[_layerCount.x, _layerCount.y];
-        }
-
-
-        public void GenerateMap()
-        {
-            // 初始化地图生成器
-            Initialize();
-            if (_mapData == null || _mapNodeArray == null)
-                return;
-
-            // 创建地图房间
-            createMap();
-
-            // 随机生成路线
-            generateRouteLoop();
-
-            // 删除未相连的房间
-            DeleteInactiveNode();
-
-            // 设置房间连接线可视化
-            SetNodeLineVisual();
-
-            MapManager.instance.SetMapData(_mapNodeArray);
+            _layoutData = new MapCellLayoutData[_layerCount.x, _layerCount.y];
         }
 
         #region 设置地图视图
 
         /// <summary>
-        /// 创建地图 根据data里的层数生成所有节点 此时是一个矩形节点阵
+        /// 仅计算格子布局与随机偏移，不实例化物体。
         /// </summary>
-        private void createMap()
+        private void createMapLayoutData()
         {
-            //调整 Content 大小以适应地图 (Horizontal Layout)
-
-            //rectTransform的sizedelta和锚点有关 只有设置为中央模式时以下代码才正确
-            //参考：https://blog.csdn.net/zcaixzy5211314/article/details/86839636
-            // Width = padding左右 + (LayerCount - 1) * NodeSpacingX
             float totalWidth = padding.x + (_layerCount.x - 1) * nodeSpacing.x;
-            // Height = padding上下 + (MaxNodesPerLayer - 1) * NodeSpacingY
             float totalHeight = padding.y + (_layerCount.y - 1) * nodeSpacing.y;
+            _pendingContentSize = new Vector2(totalWidth, totalHeight);
 
-            mapNodeParentRect.sizeDelta = new Vector2(totalWidth, totalHeight);
-
-            //生成节点
-            //第一个节点x坐标
             float startX = -totalWidth / 2 + padding.x;
 
-            for (var i = 0; i < _mapNodeArray.GetLength(0); i++) //有多少层
+            for (var i = 0; i < _layoutData.GetLength(0); i++)
             {
-                // Y Axis Centering for this layer
-                // This layer's height logic (assuming full width for calculation)
                 float layerHeight = (_layerCount.y - 1) * nodeSpacing.y;
-                float startY = -layerHeight / 2; // Center Vertically
+                float startY = -layerHeight / 2;
 
-                for (var j = 0; j < _mapNodeArray.GetLength(1); j++) //每层有多少个
+                for (var j = 0; j < _layoutData.GetLength(1); j++)
                 {
-                    var node = SCCommon.InstantiateGameObject(nodePrefab, mapNodeParentRect).GetComponent<MapNode>();
-                    node.transform.rotation = Quaternion.Euler(0, 0, Random.Range(-nodeAnglesOffset, nodeAnglesOffset));
-                    _mapNodeArray[i, j] = node;
+                    var cell = new MapCellLayoutData
+                    {
+                        gridX = i,
+                        gridY = j,
+                        isActive = false
+                    };
 
-                    node.SetMapNodeIndex(i, j);
+                    float angleZ = _mapRandom.Next(-nodeAnglesOffset, nodeAnglesOffset + 1);
+                    cell.angleZ = angleZ;
 
-                    // Calculate Random Offset
-                    // X axis offset (Depth jitter)
-                    float offsetX = Random.Range(-nodeOffset.x, nodeOffset.x);
-                    // Y axis offset (Height jitter)
-                    float offsetY = Random.Range(-nodeOffset.y, nodeOffset.y);
+                    float offsetX = NextFloatInclusive(-nodeOffset.x, nodeOffset.x);
+                    float offsetY = NextFloatInclusive(-nodeOffset.y, nodeOffset.y);
 
                     if (i == 0 || i == _layerCount.x - 1)
-                    {
-                        // Align start/end layers perfectly on X
                         offsetX = 0;
-                    }
 
-                    // Set Position (Horizontal Layout)
-                    // X depends on Layer (i)
-                    // Y depends on Row (j)
                     float finalX = startX + i * nodeSpacing.x + offsetX;
                     float finalY = startY + j * nodeSpacing.y + offsetY;
+                    cell.localPosition = new Vector3(finalX, finalY, 0);
 
-                    node.transform.localPosition = new Vector3(finalX, finalY, 0);
-                    SCCommon.SetGameObjectEnable(node.gameObject, true);
+                    _layoutData[i, j] = cell;
                 }
             }
+        }
+
+        private float NextFloatInclusive(float min, float max)
+        {
+            return Mathf.Lerp(min, max, (float)_mapRandom.NextDouble());
         }
 
         #endregion
@@ -229,94 +334,78 @@ namespace GameCore
 
             int centerIndex = _layerCount.y / 2;
 
-            for (var i = 0; i < _mapNodeArray.GetLength(0); i++)//有多少层就循环多少次
+            int layerCountX = _layoutData.GetLength(0);
+
+            for (var i = 0; i < layerCountX; i++)
             {
-                var currentNode = _mapNodeArray[i, currentRoom];
-                currentNode.isActive = true;
+                var currentCell = _layoutData[i, currentRoom];
+                currentCell.isActive = true;
 
                 var previousRoomType = currentRoomType;
                 currentRoomType = SetRoomType(i, previousRoomType);
 
-                // 设置新的房间类型
-                currentNode.SetMapNodeType(currentRoomType);
+                currentCell.roomType = currentRoomType;
 
-                // 如果已经是最后一层，不需要设置下一个连接点
-                if (i == _mapNodeArray.Length - 1)
+                if (i == layerCountX - 1)
                     break;
 
-                // === 特殊处理：如果是倒数第二层，强制指向最后一层的中间节点 ===
-                if (i == _mapNodeArray.GetLength(0) - 2)
+                if (i == layerCountX - 2)
                 {
                     var nextRoomIndex = centerIndex;
-                    var nextLayerNodes = currentNode.nextLayerConnectedNodes;
+                    var nextLayerNodes = currentCell.nextLayerConnectedNodes;
                     if (!nextLayerNodes.Contains(nextRoomIndex)) nextLayerNodes.Add(nextRoomIndex);
                     currentRoom = nextRoomIndex;
-                    continue; // 跳过常规随机逻辑
+                    continue;
                 }
 
                 var minIndex = 0;
                 var maxIndex = _layerCount.y - 1;
 
-                // 检查前一层节点约束 (只在i>0时有效)
                 if (currentRoom > 0)
                 {
-                    var previousNode = _mapNodeArray[i, currentRoom - 1];
-                    if (previousNode.nextLayerConnectedNodes.Count > 0)
-                        minIndex = previousNode.nextLayerConnectedNodes.Max();
+                    var previousCell = _layoutData[i, currentRoom - 1];
+                    if (previousCell.nextLayerConnectedNodes.Count > 0)
+                        minIndex = previousCell.nextLayerConnectedNodes.Max();
                 }
 
-                // 检查下一层节点约束
                 if (currentRoom < _layerCount.y - 1)
                 {
-                    var nextNode = _mapNodeArray[i, currentRoom + 1];
-                    if (nextNode.nextLayerConnectedNodes.Count > 0) maxIndex = nextNode.nextLayerConnectedNodes.Min();
+                    var nextCell = _layoutData[i, currentRoom + 1];
+                    if (nextCell.nextLayerConnectedNodes.Count > 0) maxIndex = nextCell.nextLayerConnectedNodes.Min();
                 }
 
-                //路线只能 “逐步移动”（下一个房间只能在当前房间 ±1 范围内），避免路线跳变
                 minIndex = Mathf.Max(minIndex, currentRoom - 1);
                 maxIndex = Mathf.Min(maxIndex, currentRoom + 1);
 
                 var nextRoomIndexRnd = _mapRandom.Next(minIndex, maxIndex + 1);
 
-                var nextLayerConnectedNodes = currentNode.nextLayerConnectedNodes;
+                var nextLayerConnectedNodes = currentCell.nextLayerConnectedNodes;
                 if (!nextLayerConnectedNodes.Contains(nextRoomIndexRnd)) nextLayerConnectedNodes.Add(nextRoomIndexRnd);
 
                 currentRoom = nextRoomIndexRnd;
             }
         }
 
-        private void DeleteInactiveNode()
+        private List<MapLineSegment> CollectLineSegments()
         {
-            foreach (var node in _mapNodeArray)
+            var list = new List<MapLineSegment>();
+            for (var i = 0; i < _layoutData.GetLength(0) - 1; i++)
             {
-                if (!node) continue;
-                node.gameObject.SetActive(node.isActive);
-            }
-        }
-
-        private void SetNodeLineVisual()
-        {
-            for (var i = 0; i < _mapNodeArray.GetLength(0) - 1; i++)
-            {
-                for (var j = 0; j < _mapNodeArray.GetLength(1); j++)
+                for (var j = 0; j < _layoutData.GetLength(1); j++)
                 {
-                    var node = _mapNodeArray[i, j];
-                    Vector2 startPosition = node.transform.localPosition;
-                    if (node.nextLayerConnectedNodes.Count <= 0) continue;
+                    var cell = _layoutData[i, j];
+                    Vector2 startPosition = new Vector2(cell.localPosition.x, cell.localPosition.y);
+                    if (cell.nextLayerConnectedNodes.Count <= 0) continue;
 
-                    var connectedNodes = node.nextLayerConnectedNodes;
-                    foreach (var t in connectedNodes)
+                    foreach (var t in cell.nextLayerConnectedNodes)
                     {
-                        var connectedNode = _mapNodeArray[i + 1, t];
-                        Vector2 endPosition = connectedNode.transform.localPosition;
-
-                        GameObject lineInstance = SCCommon.InstantiateGameObject(linePrefab, mapNodeParentRect);
-                        SCCommon.SetGameObjectEnable(lineInstance,true);
-                        lineInstance.transform.SetAsFirstSibling();//设置为第一个元素 防止图层在node前面
-                        SetNodeLinePosition(lineInstance, startPosition, endPosition);
+                        var endCell = _layoutData[i + 1, t];
+                        Vector2 endPosition = new Vector2(endCell.localPosition.x, endCell.localPosition.y);
+                        list.Add(new MapLineSegment { start = startPosition, end = endPosition });
                     }
                 }
             }
+            return list;
         }
 
         private void SetNodeLinePosition(GameObject lineInstance, Vector2 startPosition, Vector2 endPosition)

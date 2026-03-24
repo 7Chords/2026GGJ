@@ -238,6 +238,7 @@ namespace GameCore
             }
             else
             {
+                GameModel.instance.playerInfo.ClearPendingMapMove();
                 UICoreMgr.instance.AddNode(new UINodeLose(SCUIShowType.FULL));
                 GameModel.instance.SetAllPlayerPart2Bag();
                 GameModel.instance.SetEnemyEmpty();

@@ -157,6 +157,7 @@ namespace GameCore.UI
         private void onBtnExitClickDonw(PointerEventData _arg, object[] _objs)
         {
             AudioMgr.instance.PlaySfx("sfx_click");
+            GameModel.instance.playerInfo.ApplyPendingMapMove();
             UICoreMgr.instance.CloseTopNode();
             UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
         }

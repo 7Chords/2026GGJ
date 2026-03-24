@@ -37,22 +37,52 @@ namespace GameCore.UI
             _m_mapNode = mapNode;
             _m_roomType = mapNode.NodeType;
             RefreshShow();
-            SCTaskHelper.instance.AddUpdateListener(() =>
-            {
-                bool canMove = true;
-                var playerPos = GameModel.instance.playerInfo.playerMapPosition;
-                var targetPos = _m_mapNode.GridPosition;
-                if (targetPos.x != playerPos.x + 1)
-                    canMove = false;
-                var prevNode = MapManager.instance.GetNode(playerPos.x, playerPos.y);
-                if (prevNode != null)
-                {
-                    if (!prevNode.nextLayerConnectedNodes.Contains(targetPos.y))
-                        canMove = false;
-                }
+        }
 
-                SCCommon.SetGameObjectEnable(mono.goCanWalk, canMove);
-            });
+        /// <summary>
+        /// ?????????λ????????????????????????????? SetNodeInfo/RefreshShow ??????????????????????? Update??
+        /// </summary>
+        public void RefreshCanWalkState()
+        {
+            if (_m_mapNode == null || mono == null)
+                return;
+
+            bool canMove = ComputeCanMoveToNode();
+            SetCanWalkVisual(canMove);
+        }
+
+        bool ComputeCanMoveToNode()
+        {
+            if (_m_mapNode == null || GameModel.instance?.playerInfo == null)
+                return false;
+
+            var playerPos = GameModel.instance.playerInfo.playerMapPosition;
+            var targetPos = _m_mapNode.GridPosition;
+            if (targetPos.x != playerPos.x + 1)
+                return false;
+
+            var prevNode = MapManager.instance != null
+                ? MapManager.instance.GetNode(playerPos.x, playerPos.y)
+                : null;
+            if (prevNode != null)
+            {
+                if (!prevNode.nextLayerConnectedNodes.Contains(targetPos.y))
+                    return false;
+            }
+
+            return true;
+        }
+
+        void SetCanWalkVisual(bool canMove)
+        {
+            if (mono.goCanWalk == null || mono.goCanWalk.Count == 0)
+                return;
+            foreach (var go in mono.goCanWalk)
+            {
+                if (go == null)
+                    continue;
+                go.SetActive(canMove);
+            }
         }
 
         private void RefreshShow()
@@ -90,10 +120,7 @@ namespace GameCore.UI
             }
 
 
-            var playerPos = GameModel.instance.playerInfo.playerMapPosition;
-            var targetPos = _m_mapNode.GridPosition;
-            SCCommon.SetGameObjectEnable(mono.goCanWalk, targetPos.x == playerPos.x + 1);
-
+            RefreshCanWalkState();
         }
 
         private void OnClickEnter()
@@ -134,8 +161,8 @@ namespace GameCore.UI
             //    }
             //}
 
-            // 2. Update Position
-            GameModel.instance.playerInfo.playerMapPosition = targetPos;
+            // 2. ??????????????????????????????????????????? ApplyPendingMapMove??
+            GameModel.instance.playerInfo.SetPendingMapTarget(targetPos);
 
             switch (_m_roomType)
             {
@@ -162,7 +189,7 @@ namespace GameCore.UI
             }
         }
 
-        #region 进入节点
+        #region ??????
 
         private void EnterEnemyLevel()
         {

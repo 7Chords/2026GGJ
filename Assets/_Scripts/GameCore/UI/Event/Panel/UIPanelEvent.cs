@@ -69,6 +69,7 @@ namespace GameCore.UI
             if(_m_eventDialogueRefObj.flagType == EEventDialogueFlagType.END)
             {
                 AudioMgr.instance.PlaySfx("sfx_click");
+                GameModel.instance.playerInfo.ApplyPendingMapMove();
                 UICoreMgr.instance.CloseTopNode();
                 UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
             }

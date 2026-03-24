@@ -7,17 +7,18 @@ namespace GameCore
 {
     public class PlayerInfo
     {
-        public List<PartInfo> bagPartInfoList; //背包部位列表(玩家局外拥有的全部)
-        public List<PartInfo> deckPartInfoList; //牌堆部位列表(在牌堆里但是玩家当前未持有的)
-        public List<PartInfo> busyPartInfoList; //玩家当前持有的部位列表
-        public List<PartInfo> battlePartInfoList;//当前战斗中的部位列表（在脸上）
+        public List<PartInfo> bagPartInfoList;
+        public List<PartInfo> deckPartInfoList;
+        public List<PartInfo> busyPartInfoList;
+        public List<PartInfo> battlePartInfoList;
 
-        public int currentHealth; //玩家生命
-        public int maxHealth;//玩家最大生命
-        public int playerMoney;//玩家金钱
+        public int currentHealth;
+        public int maxHealth;
+        public int playerMoney;
 
-        public Vector2Int playerMapPosition = new Vector2Int(-1, -1);//玩家地图坐标位置
-        public int playerFloor = 1;//玩家当前在第几个楼层
+        public Vector2Int playerMapPosition = new Vector2Int(-1, -1);
+        public Vector2Int pendingMapTargetPosition = new Vector2Int(-1, -1);
+        public int playerFloor = 1;
 
         public PlayerInfo(PlayerRefObj _refObj)
         {
@@ -29,6 +30,35 @@ namespace GameCore
             bagPartInfoList = new List<PartInfo>();
             deckPartInfoList = new List<PartInfo>();
             battlePartInfoList = new List<PartInfo>();
+        }
+
+        public void SetPendingMapTarget(Vector2Int target)
+        {
+            pendingMapTargetPosition = target;
+        }
+
+        public void ApplyPendingMapMove()
+        {
+            if (pendingMapTargetPosition.x < 0 || pendingMapTargetPosition.y < 0)
+                return;
+            playerMapPosition = pendingMapTargetPosition;
+            pendingMapTargetPosition = new Vector2Int(-1, -1);
+        }
+
+        public void ClearPendingMapMove()
+        {
+            pendingMapTargetPosition = new Vector2Int(-1, -1);
+        }
+
+        /// <summary>
+        /// 用于遭遇/敌人表匹配：已进入节点但尚未落地 <see cref="playerMapPosition"/> 时，仍按即将进入的格子计算层索引（x）。
+        /// 与 <see cref="GameModel.GenerateRandomEnemy"/> 中 column = 层x+1 一致。
+        /// </summary>
+        public int GetMapLayerXForEncounter()
+        {
+            if (pendingMapTargetPosition.x >= 0 && pendingMapTargetPosition.y >= 0)
+                return pendingMapTargetPosition.x;
+            return playerMapPosition.x;
         }
 
         public void ClearListForNewBattle()
