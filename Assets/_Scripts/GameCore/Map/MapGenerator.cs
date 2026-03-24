@@ -1,4 +1,5 @@
 using SCFrame;
+using GameCore.RefData;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -30,9 +31,16 @@ namespace GameCore
         
         private Vector2Int padding;
 
-        [Header("Map Node Database")]
+        [Header("地图配置（Addressables）")]
+        [Tooltip("为 true 时：优先用「地址覆盖」，否则从 map 配表按当前楼层取 mapCfgName 作为 Addressables 地址加载 MapData")]
         [SerializeField]
-        private MapData mapData;
+        private bool loadMapDataFromTable = true;
+        [Tooltip("可选：直接填 Addressables 地址/标签，将跳过配表（用于测试或单图固定配置）")]
+        [SerializeField]
+        private string mapDataAddressOverride;
+
+        /// <summary> 运行时从 Addressables 加载，不再在 Inspector 拖拽 MapData。 </summary>
+        private MapData _mapData;
 
         private Vector2Int _layerCount;
         private MapNode[,] _mapNodeArray;
@@ -43,18 +51,66 @@ namespace GameCore
         {
             GenerateMap();
         }
+
+        /// <summary>
+        /// 按配表 mapCfgName 或覆盖地址，通过 Addressables 加载 MapData。
+        /// </summary>
+        private MapData LoadMapDataAsset()
+        {
+            string address = mapDataAddressOverride;
+            if (string.IsNullOrEmpty(address) && loadMapDataFromTable)
+            {
+                int floor = 1;
+                if (GameModel.instance != null && GameModel.instance.playerInfo != null)
+                    floor = GameModel.instance.playerInfo.playerFloor;
+
+                var list = SCRefDataMgr.instance?.mapRefList?.refDataList;
+                if (list == null || list.Count == 0)
+                {
+                    SCDebugHelper.LogError("[MapGenerator] map 配表未加载或为空。");
+                    return null;
+                }
+
+                MapRefObj mapRow = list.Find(m => m.floor == floor);
+                if (mapRow == null)
+                {
+                    SCDebugHelper.LogError($"[MapGenerator] map 配表中找不到 floor={floor} 的行。");
+                    return null;
+                }
+
+                if (string.IsNullOrEmpty(mapRow.mapCfgName))
+                {
+                    SCDebugHelper.LogError($"[MapGenerator] map 配表 floor={floor} 的 mapCfgName 为空。");
+                    return null;
+                }
+
+                address = mapRow.mapCfgName;
+            }
+
+            if (string.IsNullOrEmpty(address))
+            {
+                SCDebugHelper.LogError("[MapGenerator] MapData 的 Addressables 地址为空。请填 mapDataAddressOverride 或配表 mapCfgName。");
+                return null;
+            }
+
+            var data = ResourcesHelper.LoadAsset<MapData>(address);
+            if (data == null)
+                SCDebugHelper.LogError($"[MapGenerator] Addressables 加载 MapData 失败，请检查地址与分组：\"{address}\"");
+            return data;
+        }
+
         private void Initialize()
         {
             //从种子管理器获取随机数生成器
             _mapRandom = RandomUtility.GetRandomGenerator(EModuleType.MAP);
 
-            //从地图数据中获取层数
-            if (mapData == null)
+            _mapData = LoadMapDataAsset();
+            if (_mapData == null)
             {
-                SCDebugHelper.LogError("MapData is missing! Please assign it in the inspector.");
+                SCDebugHelper.LogError("[MapGenerator] MapData 加载失败，无法生成地图。");
                 return;
             }
-            _layerCount = mapData.layerCount;
+            _layerCount = _mapData.layerCount;
 
             //初始化地图节点数组
             _mapNodeArray = new MapNode[_layerCount.x, _layerCount.y];
@@ -65,6 +121,8 @@ namespace GameCore
         {
             // 初始化地图生成器
             Initialize();
+            if (_mapData == null || _mapNodeArray == null)
+                return;
 
             // 创建地图房间
             createMap();
@@ -149,7 +207,7 @@ namespace GameCore
         private void generateRouteLoop()
         {
             List<int> originRoomList = new List<int>();
-            int repetitionCount = mapData.repetitionCount;
+            int repetitionCount = _mapData.repetitionCount;
 
             // 强制起点为中间节点
             int centerIndex = _layerCount.y / 2;
@@ -281,10 +339,9 @@ namespace GameCore
         private ERoomType SetRoomType(int layerIndex, ERoomType previousRoomType)
         {
 
-            // 第一层的节点固定是战斗节点 且只有一个节点
-            if (layerIndex == 0) return ERoomType.ENEMY;
-            // 最后一层的节点固定是BOSS节点 且只有一个节点
-            if (layerIndex == _layerCount.x - 1) return ERoomType.BOSS;
+            // 第一层 / 最后一层类型由 MapData 配置（默认战斗 / BOSS）
+            if (layerIndex == 0) return _mapData.firstNodeRoomType;
+            if (layerIndex == _layerCount.x - 1) return _mapData.lastNodeRoomType;
 
             // 确定当前层级的限制条件
             // 被排除的节点类型
@@ -332,7 +389,7 @@ namespace GameCore
 
             do
             {
-                nodeType = mapData.GetRandomMapNodeType(_mapRandom);
+                nodeType = _mapData.GetRandomMapNodeType(_mapRandom);
                 attempts++;
 
                 // 如果尝试次数过多，返回Enemy作为默认类型

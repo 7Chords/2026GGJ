@@ -1,3 +1,4 @@
+using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
 using System;
@@ -42,6 +43,23 @@ namespace GameCore.UI
         {
             updatePlayerIcon();
             setPlayerInfo();
+            refreshMapName();
+        }
+
+        /// <summary> ? map ?????????????????mapName?? </summary>
+        private void refreshMapName()
+        {
+            if (mono.txtMapName == null) return;
+            if (GameModel.instance?.playerInfo == null || SCRefDataMgr.instance?.mapRefList?.refDataList == null)
+            {
+                mono.txtMapName.text = string.Empty;
+                return;
+            }
+            int floor = GameModel.instance.playerInfo.playerFloor;
+            MapRefObj mapRow = SCRefDataMgr.instance.mapRefList.refDataList.Find(m => m.floor == floor);
+            mono.txtMapName.text = mapRow != null && !string.IsNullOrEmpty(mapRow.mapName)
+                ? mapRow.mapName
+                : string.Empty;
         }
         private void updatePlayerIcon()
         {
@@ -55,7 +73,7 @@ namespace GameCore.UI
                 {
                     if (_m_playerIconGO == null)
                     {
-                        //todo:ÃÊªªÕÊº“icon
+                        //todo:ù?ùùùicon
                         _m_playerIconGO = new GameObject("PlayerIcon");
                         var img = _m_playerIconGO.AddComponent<UnityEngine.UI.Image>();
                         img.color = Color.green;

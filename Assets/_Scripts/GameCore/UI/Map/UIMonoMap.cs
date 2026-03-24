@@ -18,6 +18,8 @@ namespace GameCore.UI
         public Button btnSetting;
         [Header("血量文本")]
         public Text txtHealth;
+        [Header("地图名称文本")]
+        public Text txtMapName;
         [Header("血量条")]
         public Image imgHealthBar;
     }
