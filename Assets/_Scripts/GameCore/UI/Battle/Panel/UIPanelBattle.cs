@@ -76,9 +76,13 @@ namespace GameCore.UI
 
         private void refreshIsBossShow()
         {
+            foreach (var cell in mono.bossShowCellList)
+            {
+                SCCommon.SetGameObjectEnable(cell.goBossShow, false);
+            }
             if (GameModel.instance.curEnemyInfo.enemyRefObj.isBoss)
             {
-
+                SCCommon.SetGameObjectEnable(mono.bossShowCellList.Find(x => x.bossType == GameModel.instance.curEnemyInfo.enemyRefObj.bossType).goBossShow, true);
             }
         }
     }
