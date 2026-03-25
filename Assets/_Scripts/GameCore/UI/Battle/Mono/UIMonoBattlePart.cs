@@ -36,5 +36,12 @@ namespace GameCore.UI
         public float activeScale;
         [Header("行动缩放时间")]
         public float scaleChgDuration;
+        [Header("嘴巴攻击：冲出时长")]
+        public float mouthLungeOutDuration = 0.18f;
+        [Header("嘴巴攻击：收回时长")]
+        public float mouthReturnDuration = 0.18f;
+        [Header("嘴巴攻击：冲到目标连线的比例(0-1)")]
+        [Range(0f, 1f)]
+        public float mouthLungeT = 0.85f;
     }
 }

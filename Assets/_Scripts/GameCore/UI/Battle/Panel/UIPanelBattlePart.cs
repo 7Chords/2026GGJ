@@ -97,6 +97,26 @@ namespace GameCore.UI
         {
             GetGameObject().transform.localPosition = _pos;
         }
+
+        /// <summary> World-space lunge toward hit point, invoke damage at peak, then return. </summary>
+        public void PlayMouthLungeTowardWorld(Vector3 _hitWorld, System.Action _onHit, System.Action _onComplete)
+        {
+            var rt = GetGameObject().transform as RectTransform;
+            if (rt == null)
+            {
+                _onHit?.Invoke();
+                _onComplete?.Invoke();
+                return;
+            }
+            Vector3 startWorld = rt.position;
+            Vector3 peakWorld = Vector3.Lerp(startWorld, _hitWorld, Mathf.Clamp01(mono.mouthLungeT));
+            var seq = DOTween.Sequence();
+            seq.Append(rt.DOMove(peakWorld, mono.mouthLungeOutDuration).SetEase(Ease.OutQuad));
+            seq.AppendCallback(() => _onHit?.Invoke());
+            seq.Append(rt.DOMove(startWorld, mono.mouthReturnDuration).SetEase(Ease.InQuad));
+            seq.OnComplete(() => _onComplete?.Invoke());
+            _m_tweenContainer?.RegDoTween(seq);
+        }
         private void refreshShow()
         {
             if (_m_partInfo == null)

@@ -181,9 +181,20 @@ namespace GameCore
             _m_runner.AddTask(GameConst.DELAY_EFFECT_TIME, () =>
             {
                 if (_cancelToken != null && _cancelToken.isCancelled) return;
+                MouthAttackCoordinator.ResetPendingForNewActivation();
+                MouthAttackCoordinator.BindResume(() => SchedulePartActivationEnd(_isPlayer, _part));
                 _part.TriggerActiveLogic();
+                if (!MouthAttackCoordinator.PendingMouthAttack)
+                {
+                    MouthAttackCoordinator.CancelResume();
+                    SchedulePartActivationEnd(_isPlayer, _part);
+                }
             });
-            _m_runner.AddTask(GameConst.DELAY_END_TIME, () =>
+        }
+
+        private void SchedulePartActivationEnd(bool _isPlayer, PartInfo _part)
+        {
+            SCTimeCaller.instance.CallDealy(GameConst.DELAY_END_TIME, () =>
             {
                 if (_cancelToken != null && _cancelToken.isCancelled) return;
                 SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_END, _part);

@@ -1,3 +1,5 @@
+using GameCore;
+using GameCore.Battle;
 using UnityEngine;
 
 namespace GameCore.Battle.Effects
@@ -10,6 +12,17 @@ namespace GameCore.Battle.Effects
             if (battleCtx == null) return;
 
             int damage = Mathf.RoundToInt(_entry.attributeValueList[0]);
+            if (_caster.partRefObj.partType == EPartType.MOUTH)
+            {
+                MouthAttackCoordinator.RegisterPendingAttack(_caster, new MouthAttackDamageData
+                {
+                    kind = MouthPendingDamageKind.RealAttackBody,
+                    caster = _caster,
+                    realAttackBodyDamage = damage
+                });
+                return;
+            }
+
             if (_caster.isEnemyPart)
                 battleCtx.ApplyDamageToPlayer(damage);
             else

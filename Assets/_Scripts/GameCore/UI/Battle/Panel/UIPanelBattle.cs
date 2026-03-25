@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GameCore.RefData;
 using GameCore;
+using GameCore.Battle;
 using SCFrame;
 using DG.Tweening;
 
@@ -40,6 +41,7 @@ namespace GameCore.UI
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.PLAYER_HEAL, refreshShow);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.ENEMY_HURT, onEnemyHurt);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.ENEMY_HEAL, refreshShow);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_MOUTH_ATTACK, onMouthAttack);
             _m_playerBattleFace?.HidePanel();
             _m_enemyBattleFace?.HidePanel();
         }
@@ -50,10 +52,42 @@ namespace GameCore.UI
             SCMsgCenter.RegisterMsgAct(SCMsgConst.PLAYER_HEAL, refreshShow);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.ENEMY_HURT, onEnemyHurt);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.ENEMY_HEAL, refreshShow);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PART_MOUTH_ATTACK, onMouthAttack);
 
             _m_playerBattleFace?.ShowPanel();
             _m_enemyBattleFace?.ShowPanel();
             refreshShow();
+        }
+
+        private void onMouthAttack(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+            {
+                MouthAttackCoordinator.ApplyPendingDamage();
+                MouthAttackCoordinator.NotifyAnimationComplete();
+                return;
+            }
+            PartInfo caster = _objs[0] as PartInfo;
+            if (caster == null)
+            {
+                MouthAttackCoordinator.ApplyPendingDamage();
+                MouthAttackCoordinator.NotifyAnimationComplete();
+                return;
+            }
+            UIPanelBattlePart panel = caster.isEnemyPart
+                ? _m_enemyBattleFace.FindPartPanel(caster)
+                : _m_playerBattleFace.FindPartPanel(caster);
+            if (panel == null)
+            {
+                MouthAttackCoordinator.ApplyPendingDamage();
+                MouthAttackCoordinator.NotifyAnimationComplete();
+                return;
+            }
+            UIPanelBattleFace opponentFace = caster.isEnemyPart ? _m_playerBattleFace : _m_enemyBattleFace;
+            Vector3 targetWorld = opponentFace.GetWorldCenterForGridPositions(caster.curEffectFacePosList);
+            panel.PlayMouthLungeTowardWorld(targetWorld,
+                () => MouthAttackCoordinator.ApplyPendingDamage(),
+                () => MouthAttackCoordinator.NotifyAnimationComplete());
         }
 
         private void refreshShow()

@@ -45,6 +45,8 @@ public class SCMsgConst
     public const int PLAYER_FACE_PART_TARGET_PREVIEW_HIGHLIGHT = 2038;
     public const int ENEMY_FACE_PART_TARGET_PREVIEW_HIGHLIGHT = 2039;
     public const int FACE_PART_TARTGET_PREVIEW_CANCEL = 2040;
+    /// <summary> Mouth-type attack: play lunge UI, then apply deferred damage. </summary>
+    public const int PART_MOUTH_ATTACK = 2041;
     #endregion
 
     #region 系统相关 99

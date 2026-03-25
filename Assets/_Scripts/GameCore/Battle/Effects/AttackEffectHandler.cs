@@ -1,3 +1,5 @@
+using GameCore;
+using GameCore.Battle;
 using UnityEngine;
 
 namespace GameCore.Battle.Effects
@@ -17,9 +19,8 @@ namespace GameCore.Battle.Effects
             int emptyGridNum = 0;
             var partOccupyGridNumDic = new System.Collections.Generic.Dictionary<PartInfo, int>();
 
-            var targetGrids = _caster.isEnemyPart ? battleCtx.playerBattleParts : battleCtx.enemyBattleParts;
-            var gridInfoList = _caster.isEnemyPart 
-                ? GameModel.instance.playerFaceGridInfoList 
+            var gridInfoList = _caster.isEnemyPart
+                ? GameModel.instance.playerFaceGridInfoList
                 : GameModel.instance.enemyFaceGridInfoList;
 
             foreach (var pos in _caster.curEffectFacePosList)
@@ -36,6 +37,19 @@ namespace GameCore.Battle.Effects
                     else
                         partOccupyGridNumDic[gridInfo.ownerPart]++;
                 }
+            }
+
+            if (_caster.partRefObj.partType == EPartType.MOUTH)
+            {
+                MouthAttackCoordinator.RegisterPendingAttack(_caster, new MouthAttackDamageData
+                {
+                    kind = MouthPendingDamageKind.GridAttack,
+                    caster = _caster,
+                    perGridDamage = perGridDamage,
+                    emptyGridNum = emptyGridNum,
+                    partOccupyGridNumDic = partOccupyGridNumDic
+                });
+                return;
             }
 
             if (_caster.isEnemyPart)
