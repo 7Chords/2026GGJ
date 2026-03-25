@@ -69,21 +69,13 @@ namespace GameCore.UI
             GameModel.instance.playerInfo.playerMoney += _m_enemyRefObj.winMoney;
         }
 
-        /// <summary>
-        /// ????งา??งฺ??????????????????????????????
-        /// </summary>
-        /// <param name="sourceList">??งา?</param>
-        /// <param name="count">???????</param>
-        /// <returns>???????งา?</returns>
         private List<PartInfo> RandomSelectBooty(List<BootyEffectObj> sourceList, int count)
         {
             List<PartInfo> resultList = new List<PartInfo>();
             if (sourceList == null || sourceList.Count == 0 || count <= 0)
                 return resultList;
 
-            // ??????งา????????????????
             List<BootyEffectObj> tempList = new List<BootyEffectObj>(sourceList);
-            // ????????????????????งา?????
             int actualCount = Mathf.Min(count, tempList.Count);
 
             for (int i = 0; i < actualCount; i++)
@@ -91,15 +83,12 @@ namespace GameCore.UI
                 if (tempList.Count == 0)
                     break;
 
-                // ????1???????????????????????????
                 float totalChance = 0;
                 foreach (var booty in tempList)
                 {
-                    // ???????????????
                     totalChance += Mathf.Max(0, booty.dropChance);
                 }
 
-                // ???????งึ???????0???????????????????
                 if (totalChance <= 0)
                 {
                     int randomIndex = Random.Range(0, tempList.Count);
@@ -108,12 +97,10 @@ namespace GameCore.UI
                 }
                 else
                 {
-                    // ????2??????0??????????????????
                     float randomValue = Random.Range(0, totalChance);
                     float currentChance = 0;
                     int selectedIndex = -1;
 
-                    // ????3????????????????????????????
                     for (int j = 0; j < tempList.Count; j++)
                     {
                         float chance = Mathf.Max(0, tempList[j].dropChance);
@@ -125,8 +112,6 @@ namespace GameCore.UI
                             break;
                         }
                     }
-
-                    // ????4????????งึ???????????งา???????????งา???????????????
                     if (selectedIndex >= 0)
                     {
                         AddBootyToResult(tempList[selectedIndex], resultList);
@@ -138,24 +123,15 @@ namespace GameCore.UI
             return resultList;
         }
 
-        /// <summary>
-        /// ??????????PartInfo???????????งา?
-        /// </summary>
         private void AddBootyToResult(BootyEffectObj booty, List<PartInfo> resultList)
         {
             PartLevelRefObj partLevelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.id == booty.partLevelId);
             if (partLevelRefObj == null)
-            {
-                Debug.LogWarning($"?????partLevelId?{booty.partLevelId}??????????");
                 return;
-            }
 
             PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == partLevelRefObj.partId);
             if (partRefObj == null)
-            {
-                Debug.LogWarning($"?????partId?{partLevelRefObj.partId}??????????");
                 return;
-            }
 
             resultList.Add(new PartInfo(partRefObj, false, partLevelRefObj.partLevel));
         }
