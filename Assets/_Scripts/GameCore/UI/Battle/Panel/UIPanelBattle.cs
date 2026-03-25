@@ -60,7 +60,7 @@ namespace GameCore.UI
         {
             mono.txtPlayerHealth.text = GameModel.instance.playerInfo.currentHealth + "/" + GameModel.instance.playerInfo.maxHealth;
             mono.txtEnemyHealth.text = GameModel.instance.curEnemyInfo.currentHealth + "/" + GameModel.instance.curEnemyInfo.maxHealth;
-
+            refreshIsBossShow();
         }
 
         private void onPlayerHurt()
@@ -72,6 +72,14 @@ namespace GameCore.UI
         {
             _m_tweenContainer?.RegDoTween(mono.goEnemyHealth.transform.DOShakePosition(mono.healthShakeDuration, mono.healthShakeStrength));
             refreshShow();
+        }
+
+        private void refreshIsBossShow()
+        {
+            if (GameModel.instance.curEnemyInfo.enemyRefObj.isBoss)
+            {
+
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ namespace GameCore.RefData
         public int column;
         public string enemyName;
         public bool isBoss;
+        public EBossType bossType;
         public int enemyHealth;
         public string layoutPresetName;
         public List<PartLevelEffectObj> initPartList;
@@ -25,6 +26,7 @@ namespace GameCore.RefData
             column = getInt("column");
             enemyName = getString("enemyName");
             isBoss = getBool("isBoss");
+            bossType = (EBossType)getEnum("bossType", typeof(EBossType));
             enemyHealth = getInt("enemyHealth");
             layoutPresetName = getString("layoutPresetName");
             initPartList = getList<PartLevelEffectObj>("initPartList");

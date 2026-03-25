@@ -120,6 +120,10 @@ namespace GameCore
         BEGIN,
         END
     }
-
+    public enum EBossType
+    {
+        NONE,
+        MALFORMED,//»ûÐÎµÄÈË
+    }
 
 }
