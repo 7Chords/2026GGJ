@@ -105,9 +105,12 @@ namespace GameCore
         {
             if (_amount <= 0)
                 return;
+            int hpBefore = _partInfo.currentHealth;
+            int damageToPart = Mathf.Min(_amount, hpBefore);
+            int overflowToBody = _amount - damageToPart;
             _partInfo.currentHealth = Mathf.Clamp(_partInfo.currentHealth - _amount, 0, _partInfo.maxHealth);
-            SCMsgCenter.SendMsg(SCMsgConst.PART_HURT, _partInfo, _amount);
-            _partInfo.TriggerGetHitLogic(_senderInfo, _amount);
+            SCMsgCenter.SendMsg(SCMsgConst.PART_HURT, _partInfo, damageToPart);
+            _partInfo.TriggerGetHitLogic(_senderInfo, damageToPart);
             if (_partInfo.currentHealth == 0)
             {
                 SCMsgCenter.SendMsg(SCMsgConst.PART_DIE,_partInfo);
@@ -125,6 +128,13 @@ namespace GameCore
                     SCMsgCenter.SendMsg(SCMsgConst.BATTLE_PLAYER_PART_ORDER_CHG);
 
                 }
+            }
+            if (overflowToBody > 0)
+            {
+                if (_partInfo.isEnemyPart)
+                    EnemyTakeDamage(overflowToBody);
+                else
+                    PlayerTakeDamage(overflowToBody);
             }
         }
         public void PartHeal(PartInfo _partInfo, int _amount)

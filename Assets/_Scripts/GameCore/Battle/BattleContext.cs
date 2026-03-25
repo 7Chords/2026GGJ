@@ -60,9 +60,12 @@ namespace GameCore.Battle
         public void ApplyDamageToPart(PartInfo _part, PartInfo _sender, int _amount)
         {
             if (_amount <= 0) return;
+            int hpBefore = _part.currentHealth;
+            int damageToPart = UnityEngine.Mathf.Min(_amount, hpBefore);
+            int overflowToBody = _amount - damageToPart;
             _part.currentHealth = UnityEngine.Mathf.Clamp(_part.currentHealth - _amount, 0, _part.maxHealth);
-            SCMsgCenter.SendMsg(SCMsgConst.PART_HURT, _part, _amount);
-            _part.TriggerGetHitLogic(_sender, _amount);
+            SCMsgCenter.SendMsg(SCMsgConst.PART_HURT, _part, damageToPart);
+            _part.TriggerGetHitLogic(_sender, damageToPart);
             if (_part.currentHealth == 0)
             {
                 SCMsgCenter.SendMsg(SCMsgConst.PART_DIE, _part);
@@ -78,6 +81,13 @@ namespace GameCore.Battle
                     BattleManager.instance.RemovePartFromList(true, _part);
                     SCMsgCenter.SendMsg(SCMsgConst.BATTLE_PLAYER_PART_ORDER_CHG);
                 }
+            }
+            if (overflowToBody > 0)
+            {
+                if (_part.isEnemyPart)
+                    ApplyDamageToEnemy(overflowToBody);
+                else
+                    ApplyDamageToPlayer(overflowToBody);
             }
         }
 
