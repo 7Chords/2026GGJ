@@ -130,15 +130,15 @@ namespace GameCore.UI
             if (info == null)
                 return;
 
-            //?????????
             info.hasBought = true;
             GameModel.instance.playerInfo.playerMoney = Mathf.Max(GameModel.instance.playerInfo.playerMoney - info.goodsRefObj.goodsPrice, 0);
             switch (info.goodsRefObj.goodsType)
             {
                 case EGoodsType.PART:
                     {
-                        PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x=>x.id == info.goodsRefObj.partId);
-                        GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj,false));
+                        PartLevelRefObj levelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x=>x.id == info.goodsRefObj.partId);
+                        PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
+                        GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj,false, levelRefObj.partLevel));
                     }
                     break;
                 case EGoodsType.HEAL:

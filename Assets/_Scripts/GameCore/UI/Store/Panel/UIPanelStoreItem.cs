@@ -99,10 +99,11 @@ namespace GameCore.UI
 
             if (_m_goodsInfo.goodsRefObj.goodsType == EGoodsType.PART)
             {
-                PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == _m_goodsInfo.goodsRefObj.partId);
-                if (partRefObj == null)
+                PartLevelRefObj levelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.id == _m_goodsInfo.goodsRefObj.partId);
+                if (levelRefObj == null)
                     return;
-                PartInfo info = new PartInfo(partRefObj, false);
+                PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
+                PartInfo info = new PartInfo(partRefObj, false, levelRefObj.partLevel);
                 GameCommon.ShowTooltip(info,
                     GetGameObject().transform.position);
             }
