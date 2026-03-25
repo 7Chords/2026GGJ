@@ -1,0 +1,13 @@
+---
+description: Do not rewrite or "fix" existing Chinese text; avoid encoding mismatch with local editor.
+alwaysApply: true
+---
+
+# Source Encoding: Do Not Touch Existing Chinese Text
+
+- **Do not** treat existing Chinese in this repo (comments, `[Header]`, `Debug.Log`, strings, UI copy) as "garbled" or "wrong" and **do not** rewrite, normalize, or replace it to "fix" display.
+- The user's local encoding/format may differ from the assistant's; **editing those lines often corrupts the file**.
+- When changing code:
+  - **Preserve** existing Chinese text **byte-for-byte** if the line stays.
+  - Prefer **new comments in English** (or no comment) unless the user explicitly asks for Chinese in a specific place.
+- If the user asks to change wording, ask them to paste the exact final string or edit locally if encoding is ambiguous.

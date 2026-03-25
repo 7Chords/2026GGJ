@@ -194,8 +194,8 @@ namespace GameCore.UI
             SCCommon.SetGameObjectEnable(goGrid, _showGridInfo);
             SCCommon.SetGameObjectEnable(goBuff, false);
             SCCommon.SetGameObjectEnable(txtQuality.gameObject, _partRefObj.qualityType != EQualityType.NONE);
-
-            setBaseInfo(_partRefObj.partName, _partRefObj.partDesc, 1,_partRefObj.qualityType);
+            PartLevelRefObj levelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.partId == _partRefObj.id && x.partLevel == 1);
+            setBaseInfo(_partRefObj.partName, levelRefObj.partDesc, 1,_partRefObj.qualityType);
             if (_showGridInfo)
                 setGridInfo(_partRefObj.GetOccupyPosList(), _partRefObj.GetEffectPosList());
 

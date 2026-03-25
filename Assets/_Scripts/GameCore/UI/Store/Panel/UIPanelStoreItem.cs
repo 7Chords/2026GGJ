@@ -72,8 +72,8 @@ namespace GameCore.UI
             if (_m_goodsInfo.goodsRefObj.goodsType == EGoodsType.PART)
             {
                 mono.txtPartPrice.text = _m_goodsInfo.goodsRefObj.goodsPrice.ToString();
-                PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == _m_goodsInfo.goodsRefObj.partId);
-                mono.txtPartHealth.text = partRefObj.partHealth.ToString();
+                PartLevelRefObj partLevelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.id == _m_goodsInfo.goodsRefObj.partId);
+                mono.txtPartHealth.text = partLevelRefObj.partHealth.ToString();
             }
             else
             {

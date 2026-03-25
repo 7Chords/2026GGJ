@@ -58,7 +58,7 @@ namespace GameCore.UI
                 return;
             mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
             if(!mono.isTxtHealthIsRunningInfo)
-                mono.txtHealth.text =_m_partInfo.partRefObj.partHealth.ToString();
+                mono.txtHealth.text =_m_partInfo.maxHealth.ToString();
             else
                 mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.maxHealth;
 
