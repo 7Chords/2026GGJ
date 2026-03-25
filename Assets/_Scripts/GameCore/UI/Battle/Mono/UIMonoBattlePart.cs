@@ -36,12 +36,18 @@ namespace GameCore.UI
         public float activeScale;
         [Header("行动缩放时间")]
         public float scaleChgDuration;
-        [Header("嘴巴攻击：冲出时长")]
+        [Header("嘴巴攻击冲出时长")]
         public float mouthLungeOutDuration = 0.18f;
-        [Header("嘴巴攻击：收回时长")]
+        [Header("嘴巴攻击收回时长")]
         public float mouthReturnDuration = 0.18f;
         [Header("嘴巴攻击：冲到目标连线的比例(0-1)")]
         [Range(0f, 1f)]
         public float mouthLungeT = 0.85f;
+        [Header("受伤颜色")]
+        public Color hurtFlashTint = new Color(1f, 0.4f, 0.4f, 1f);
+        [Header("受伤闪烁淡入时间")]
+        public float hurtFlashInDuration = 0.07f;
+        [Header("受伤闪烁淡出时间")]
+        public float hurtFlashOutDuration = 0.12f;
     }
 }

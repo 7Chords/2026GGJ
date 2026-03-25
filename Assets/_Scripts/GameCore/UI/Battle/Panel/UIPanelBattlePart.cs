@@ -29,6 +29,7 @@ namespace GameCore.UI
 
         public override void BeforeDiscard()
         {
+            resetPartImageColors();
             _m_tweenContainer?.KillAllDoTween();
             _m_tweenContainer = null;
             if (_m_partBuffItemList != null)
@@ -135,7 +136,6 @@ namespace GameCore.UI
             refreshBuffShow();
 
             mono.imgGO.transform.rotation = Quaternion.Euler(0, 0, _m_partInfo.rotateStep * 90);
-            //信息子物体自动适配旋转和rect大小
             autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goHealthInfo, mono.goHealthPosPivot);
             autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goOrder, mono.goOrderPosPivot);
             autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goBuff, mono.goBuffPosPivot);
@@ -173,33 +173,24 @@ namespace GameCore.UI
 
             float scale = parentRT.lossyScale.y;
 
-            // 是否旋转了 90/270 度
             int rotateMod = _m_partInfo.rotateStep % 2;
             bool isRotated90 = rotateMod != 0;
 
-            // 父物体「视觉上」的宽高（旋转后自动互换）
             float parentVisualW = isRotated90 ? parentRT.rect.height : parentRT.rect.width;
             float parentVisualH = isRotated90 ? parentRT.rect.width : parentRT.rect.height;
 
-            // 世界空间下的真实半宽高
             float parentHalfW = parentVisualW * scale * 0.5f;
             float parentHalfH = parentVisualH * scale * 0.5f;
 
-            // 子物体自身半宽高（让子物体自身也居中对齐）
             float childHalfW = childRT.rect.width * scale * 0.5f;
             float childHalfH = childRT.rect.height * scale * 0.5f;
 
-            // ==========================
-            // 核心：子物体放在父物体「内部」
-            // ==========================
             float x = parentRT.position.x + _pivotPos.x * parentHalfW;
             float y = parentRT.position.y + _pivotPos.y * parentHalfH;
 
             Vector3 targetPos = new Vector3(x, y, parentRT.position.z);
 
-            // 应用位置
             _child.transform.position = targetPos;
-            // 永远不旋转
             _child.transform.rotation = Quaternion.identity;
         }
 
@@ -211,7 +202,6 @@ namespace GameCore.UI
 
         private void onMouseEnter(PointerEventData arg1, object[] arg2)
         {
-            //放到最下面 显示在最前面
             GetGameObject().transform.SetAsLastSibling();
             GameCommon.ShowTooltip(_m_partInfo,
                 new Vector2(GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_BATTLE, GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_BATTLE),
@@ -228,11 +218,45 @@ namespace GameCore.UI
             if (_m_partInfo == info)
             {
                 _m_tweenContainer.RegDoTween(GetGameObject().transform.DOShakePosition(mono.hurtShakeDuration, mono.hurtShakeStrength));
+                playHurtRedFlash();
                 mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.maxHealth;
                 GameCommon.ShowDamageFloatText(amount, GetGameObject().transform.position);
 
             }
         }
+
+        private void resetPartImageColors()
+        {
+            if (mono.imgGO != null)
+            {
+                mono.imgGO.DOKill(false);
+                mono.imgGO.color = Color.white;
+            }
+            if (mono.imgPart != null)
+            {
+                mono.imgPart.DOKill(false);
+                mono.imgPart.color = Color.white;
+            }
+        }
+
+        private void playHurtRedFlash()
+        {
+            if (mono.imgGO == null) return;
+            Color baseTint = Color.white;
+            Color flashTint = mono.hurtFlashTint;
+            mono.imgGO.DOKill(false);
+            if (mono.imgPart != null)
+                mono.imgPart.DOKill(false);
+            var seq = DOTween.Sequence();
+            seq.Append(mono.imgGO.DOColor(flashTint, mono.hurtFlashInDuration).SetEase(Ease.OutQuad));
+            if (mono.imgPart != null)
+                seq.Join(mono.imgPart.DOColor(flashTint, mono.hurtFlashInDuration).SetEase(Ease.OutQuad));
+            seq.Append(mono.imgGO.DOColor(baseTint, mono.hurtFlashOutDuration).SetEase(Ease.InQuad));
+            if (mono.imgPart != null)
+                seq.Join(mono.imgPart.DOColor(baseTint, mono.hurtFlashOutDuration).SetEase(Ease.InQuad));
+            _m_tweenContainer?.RegDoTween(seq);
+        }
+
         private void onPartHeal(object[] _objs)
         {
             if (_objs == null || _objs.Length == 0)
