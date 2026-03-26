@@ -22,7 +22,13 @@ namespace GameCore.UI
         public Text txtPlayerCoin;
         [Header("离开按钮")]
         public Button btnExit;
+        [Header("设置按钮")]
+        public Button btnSetting;
         [Header("选择了强化器官要显示的物体")]
         public List<GameObject> goHasSelectPart;
+        [Header("鼠标移入按钮的缩放")]
+        public float scaleMouseEnter = 1.08f;
+        [Header("鼠标移入的缩放时间")]
+        public float scaleChgDuration = 0.15f;
     }
 }
