@@ -95,7 +95,7 @@ namespace GameCore.UI
         {
             mono.imgHealthBar.fillAmount = (float)GameModel.instance.playerInfo.currentHealth / GameModel.instance.playerInfo.maxHealth;
             mono.txtHealth.text = GameModel.instance.playerInfo.currentHealth +"/" + GameModel.instance.playerInfo.maxHealth;
-            mono.txtBattleOrder.text = GameModel.instance.curTurnOwner == ETurnOwnerType.PLAYER ? "玩家回合" : "敌人回合";
+            mono.txtBattleOrder.text = GameModel.instance.curTurnOwner == ETurnOwnerType.PLAYER ? "鎴戞柟鍏堟墜" : "鏁屾柟鍏堟墜";
             mono.txtCoin.text = GameModel.instance.playerInfo.playerMoney.ToString();
             if(GameModel.instance.curEnemyInfo != null)
             {

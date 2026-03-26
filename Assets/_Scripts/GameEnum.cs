@@ -101,7 +101,9 @@ namespace GameCore
     public enum EEventType
     {
         NONE,
-        BLOOD_2_PART,
+        BLOOD_2_PART_HIGH,
+        BLOOD_2_PART_MIDDLE,
+        BLOOD_2_PART_LOW,
         PART_2_PART,
         TREASURE_COIN,
         TREASURE_PART,

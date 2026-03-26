@@ -317,7 +317,7 @@ namespace GameCore.UI
             PartInfo info = _objs[0] as PartInfo;
             if (_m_partInfo == info)
             {
-                GameCommon.ShowEffectText("ÐÐ¶¯", GetGameObject().transform.position);
+                GameCommon.ShowEffectText("è¡ŒåŠ¨", GetGameObject().transform.position);
                 Tween tween = GetGameObject().transform.DOScale(mono.activeScale, mono.scaleChgDuration);
                 _m_tweenContainer?.RegDoTween(tween);
             }

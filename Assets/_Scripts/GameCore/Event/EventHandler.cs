@@ -13,7 +13,20 @@ namespace GameCore
             {
                 case EEventType.NONE:
                     break;
-                case EEventType.BLOOD_2_PART:
+                case EEventType.BLOOD_2_PART_HIGH:
+                    {
+
+                    }
+                    break;
+                case EEventType.BLOOD_2_PART_MIDDLE:
+                    {
+
+                    }
+                    break;
+                case EEventType.BLOOD_2_PART_LOW:
+                    {
+
+                    }
                     break;
                 case EEventType.PART_2_PART:
                     break;

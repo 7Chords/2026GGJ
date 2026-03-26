@@ -22,6 +22,7 @@ namespace GameCore
         public SCRefDataList<EventGetMoneyRefObj> eventGetMoneyRefList = new SCRefDataList<EventGetMoneyRefObj>(EventGetMoneyRefObj.assetPath, EventGetMoneyRefObj.sheetName);
         public SCRefDataList<EventGetPartRefObj> eventGetPartRefList = new SCRefDataList<EventGetPartRefObj>(EventGetPartRefObj.assetPath, EventGetPartRefObj.sheetName);
         public SCRefDataList<MapRefObj> mapRefList = new SCRefDataList<MapRefObj>(MapRefObj.assetPath, MapRefObj.sheetName);
+        public SCRefDataList<EventBlood2PartRefObj> eventBlood2PartRefList = new SCRefDataList<EventBlood2PartRefObj>(EventBlood2PartRefObj.assetPath, EventBlood2PartRefObj.sheetName);
 
         public override void OnInitialize()
         {
@@ -39,6 +40,7 @@ namespace GameCore
             eventGetMoneyRefList.readFromTxt();
             eventGetPartRefList.readFromTxt();
             mapRefList.readFromTxt();
+            eventBlood2PartRefList.readFromTxt();
         }
     }
 }

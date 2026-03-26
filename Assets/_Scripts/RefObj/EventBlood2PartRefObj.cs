@@ -9,6 +9,7 @@ namespace GameCore.RefData
     {
         public long id;
         public int floor;
+        public EEventType eventType;
         public int blood;
         public List<long> partList;
         public EventBlood2PartRefObj()
@@ -22,6 +23,7 @@ namespace GameCore.RefData
         {
             id = getLong("id");
             floor = getInt("floor");
+            eventType = (EEventType)getEnum("eventType", typeof(EEventType));
             blood = getInt("blood");
             partList = getList<long>("partList");
         }
