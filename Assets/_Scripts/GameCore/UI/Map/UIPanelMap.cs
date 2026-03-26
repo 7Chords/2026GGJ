@@ -1,3 +1,4 @@
+using DG.Tweening;
 using GameCore;
 using GameCore.RefData;
 using SCFrame;
@@ -15,20 +16,29 @@ namespace GameCore.UI
         }
 
         private GameObject _m_playerIconGO;
+        private TweenContainer _m_tweenContainer;
 
         public override void AfterInitialize()
         {
-            
+            _m_tweenContainer = new TweenContainer();
         }
+
         public override void BeforeDiscard()
         {
-
+            _m_tweenContainer?.KillAllDoTween();
+            _m_tweenContainer = null;
         }
         public override void OnHidePanel()
         {
             mono.btnBag.RemoveClickDown(onBtnBagClickDown);
+            mono.btnBag.RemoveMouseEnter(onBtnBagMouseEnter);
+            mono.btnBag.RemoveMouseExit(onBtnBagMouseExit);
             mono.btnSetting.RemoveClickDown(onBtnSettingClickDown);
+            mono.btnSetting.RemoveMouseEnter(onBtnSettingMouseEnter);
+            mono.btnSetting.RemoveMouseExit(onBtnSettingMouseExit);
             mono.btnGuide.RemoveClickDown(onBtnGuideClickDown);
+            mono.btnGuide.RemoveMouseEnter(onBtnGuideMouseEnter);
+            mono.btnGuide.RemoveMouseExit(onBtnGuideMouseExit);
         }
 
         public override void OnShowPanel()
@@ -39,8 +49,14 @@ namespace GameCore.UI
                 gen.EnsureMapGeneratedIfNeeded(mapContent);
 
             mono.btnBag.AddMouseLeftClickDown(onBtnBagClickDown);
+            mono.btnBag.AddMouseEnter(onBtnBagMouseEnter);
+            mono.btnBag.AddMouseExit(onBtnBagMouseExit);
             mono.btnSetting.AddMouseLeftClickDown(onBtnSettingClickDown);
+            mono.btnSetting.AddMouseEnter(onBtnSettingMouseEnter);
+            mono.btnSetting.AddMouseExit(onBtnSettingMouseExit);
             mono.btnGuide.AddMouseLeftClickDown(onBtnGuideClickDown);
+            mono.btnGuide.AddMouseEnter(onBtnGuideMouseEnter);
+            mono.btnGuide.AddMouseExit(onBtnGuideMouseExit);
 
             refreshShow();
             GameRunSave.NotifyEnteredMapOnce();
@@ -139,6 +155,42 @@ namespace GameCore.UI
         private void onBtnGuideClickDown(PointerEventData _data, object[] _objs)
         {
             UICoreMgr.instance.AddNode(new UINodeGuideMap(SCUIShowType.ADDITION));
+        }
+
+        private void onBtnBagMouseEnter(PointerEventData _arg1, object[] _arg2)
+        {
+            if (mono.btnBag == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnBag.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
+        }
+
+        private void onBtnBagMouseExit(PointerEventData _arg1, object[] _arg2)
+        {
+            if (mono.btnBag == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnBag.transform.DOScale(Vector3.one, mono.scaleChgDuration));
+        }
+
+        private void onBtnSettingMouseEnter(PointerEventData _arg1, object[] _arg2)
+        {
+            if (mono.btnSetting == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnSetting.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
+        }
+
+        private void onBtnSettingMouseExit(PointerEventData _arg1, object[] _arg2)
+        {
+            if (mono.btnSetting == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnSetting.transform.DOScale(Vector3.one, mono.scaleChgDuration));
+        }
+
+        private void onBtnGuideMouseEnter(PointerEventData _arg1, object[] _arg2)
+        {
+            if (mono.btnGuide == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnGuide.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
+        }
+
+        private void onBtnGuideMouseExit(PointerEventData _arg1, object[] _arg2)
+        {
+            if (mono.btnGuide == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnGuide.transform.DOScale(Vector3.one, mono.scaleChgDuration));
         }
     }
 }

@@ -22,5 +22,9 @@ namespace GameCore.UI
         public Text txtMapName;
         [Header("血量条")]
         public Image imgHealthBar;
+        [Header("鼠标移入按钮的缩放")]
+        public float scaleMouseEnter = 1.08f;
+        [Header("鼠标移入的缩放时间")]
+        public float scaleChgDuration = 0.15f;
     }
 }

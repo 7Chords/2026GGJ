@@ -504,7 +504,7 @@ MonoBehaviour:
   btnSetting: {fileID: 6767369650260056398}
   btnContinue: {fileID: 1206151305670391876}
   btnExit: {fileID: 692505098507962021}
-  scaleMouseEnter: 1.03
+  scaleMouseEnter: 1.1
   scaleChgDuration: 0.1
 --- !u!1 &4309089919273949167
 GameObject:
