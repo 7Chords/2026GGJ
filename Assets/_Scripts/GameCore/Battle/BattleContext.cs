@@ -71,13 +71,13 @@ namespace GameCore.Battle
                 SCMsgCenter.SendMsg(SCMsgConst.PART_DIE, _part);
                 if (_part.isEnemyPart)
                 {
-                    GameModel.instance.curEnemyInfo.battlePartInfoList.Remove(_part);
+                    GameModel.instance.curEnemyInfo?.battlePartInfoList.Remove(_part);
                     BattleManager.instance.RemovePartFromList(false, _part);
                     SCMsgCenter.SendMsg(SCMsgConst.BATTLE_ENEMY_PART_ORDER_CHG);
                 }
                 else
                 {
-                    GameModel.instance.playerInfo.battlePartInfoList.Remove(_part);
+                    GameModel.instance.playerInfo?.battlePartInfoList.Remove(_part);
                     BattleManager.instance.RemovePartFromList(true, _part);
                     SCMsgCenter.SendMsg(SCMsgConst.BATTLE_PLAYER_PART_ORDER_CHG);
                 }
