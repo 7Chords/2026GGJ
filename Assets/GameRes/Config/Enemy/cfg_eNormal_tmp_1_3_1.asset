@@ -39,11 +39,11 @@ MonoBehaviour:
       originFacePosition: {x: 1, y: 2}
       rotationSteps: 0
     - partLevelRefId: 10040
-      originFacePosition: {x: 0, y: 2}
+      originFacePosition: {x: 1, y: 1}
       rotationSteps: 1
     - partLevelRefId: 10037
-      originFacePosition: {x: 2, y: 2}
-      rotationSteps: 3
+      originFacePosition: {x: 0, y: 2}
+      rotationSteps: 1
   - slots:
     - partLevelRefId: 10046
       originFacePosition: {x: 2, y: 2}
