@@ -191,7 +191,7 @@ namespace GameCore.UI
             if (_objs == null || _objs.Length == 0)
                 return;
             PartInfo partInfo = _objs[0] as PartInfo;
-            GoodsRefObj goodsRefObj = SCRefDataMgr.instance.goodsRefList.refDataList.Find(x => x.partId == partInfo.partRefObj.id);
+            GoodsRefObj goodsRefObj = SCRefDataMgr.instance.goodsRefList.refDataList.Find(x => x.partId == partInfo.levelRefObj.id);
             GameModel.instance.playerInfo.playerMoney += goodsRefObj.goodsPrice / 2;
             refreshShow();
         }
