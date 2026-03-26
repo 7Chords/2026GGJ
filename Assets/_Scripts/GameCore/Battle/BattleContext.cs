@@ -24,7 +24,7 @@ namespace GameCore.Battle
             if (_amount <= 0) return;
             GameModel.instance.playerInfo.currentHealth = UnityEngine.Mathf.Clamp(
                 GameModel.instance.playerInfo.currentHealth - _amount, 0, GameModel.instance.playerInfo.maxHealth);
-            SCMsgCenter.SendMsg(SCMsgConst.PLAYER_HURT);
+            SCMsgCenter.SendMsg(SCMsgConst.PLAYER_HURT, _amount);
             if (GameModel.instance.playerInfo.currentHealth == 0)
                 RequestTerminateBattle(false);
         }
@@ -43,7 +43,7 @@ namespace GameCore.Battle
             var enemy = GameModel.instance.curEnemyInfo;
             if (enemy == null) return;
             enemy.currentHealth = UnityEngine.Mathf.Clamp(enemy.currentHealth - _amount, 0, enemy.maxHealth);
-            SCMsgCenter.SendMsg(SCMsgConst.ENEMY_HURT);
+            SCMsgCenter.SendMsg(SCMsgConst.ENEMY_HURT, _amount);
             if (enemy.currentHealth == 0)
                 RequestTerminateBattle(true);
         }

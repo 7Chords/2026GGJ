@@ -77,7 +77,7 @@ namespace GameCore
             if (_amount <= 0)
                 return;
             playerInfo.currentHealth = Mathf.Clamp(playerInfo.currentHealth - _amount, 0, playerInfo.maxHealth);
-            SCMsgCenter.SendMsg(SCMsgConst.PLAYER_HURT);
+            SCMsgCenter.SendMsg(SCMsgConst.PLAYER_HURT, _amount);
             if(playerInfo.currentHealth == 0)
                 BattleManager.instance.TerminateBattle(false);
         }
@@ -96,7 +96,7 @@ namespace GameCore
             if (_amount <= 0)
                 return;
             curEnemyInfo.currentHealth = Mathf.Clamp(curEnemyInfo.currentHealth - _amount, 0, curEnemyInfo.maxHealth);
-            SCMsgCenter.SendMsg(SCMsgConst.ENEMY_HURT);
+            SCMsgCenter.SendMsg(SCMsgConst.ENEMY_HURT, _amount);
             if (curEnemyInfo.currentHealth == 0)
                 BattleManager.instance.TerminateBattle(true);
         }

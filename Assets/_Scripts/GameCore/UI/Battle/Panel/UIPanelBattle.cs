@@ -37,9 +37,9 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
-            SCMsgCenter.UnregisterMsgAct(SCMsgConst.PLAYER_HURT, onPlayerHurt);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PLAYER_HURT, onPlayerHurt);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.PLAYER_HEAL, refreshShow);
-            SCMsgCenter.UnregisterMsgAct(SCMsgConst.ENEMY_HURT, onEnemyHurt);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.ENEMY_HURT, onEnemyHurt);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.ENEMY_HEAL, refreshShow);
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_MOUTH_ATTACK, onMouthAttack);
             _m_playerBattleFace?.HidePanel();
@@ -48,9 +48,9 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
-            SCMsgCenter.RegisterMsgAct(SCMsgConst.PLAYER_HURT, onPlayerHurt);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PLAYER_HURT, onPlayerHurt);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.PLAYER_HEAL, refreshShow);
-            SCMsgCenter.RegisterMsgAct(SCMsgConst.ENEMY_HURT, onEnemyHurt);
+            SCMsgCenter.RegisterMsg(SCMsgConst.ENEMY_HURT, onEnemyHurt);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.ENEMY_HEAL, refreshShow);
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_MOUTH_ATTACK, onMouthAttack);
 
@@ -97,16 +97,28 @@ namespace GameCore.UI
             refreshIsBossShow();
         }
 
-        private void onPlayerHurt()
+        private void onPlayerHurt(object[] _objs)
         {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            int amount = (int)_objs[0];
+            if (amount > 0 && mono.goPlayerHealth != null)
+                GameCommon.ShowDamageFloatText(amount, mono.imgPlayerHealthBar.transform.position);
             _m_tweenContainer?.RegDoTween(mono.goPlayerHealth.transform.DOShakePosition(mono.healthShakeDuration, mono.healthShakeStrength));
             refreshShow();
         }
-        private void onEnemyHurt()
+
+        private void onEnemyHurt(object[] _objs)
         {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            int amount = (int)_objs[0];
+            if (amount > 0 && mono.goEnemyHealth != null)
+                GameCommon.ShowDamageFloatText(amount, mono.imgEnemyHealthBar.transform.position);
             _m_tweenContainer?.RegDoTween(mono.goEnemyHealth.transform.DOShakePosition(mono.healthShakeDuration, mono.healthShakeStrength));
             refreshShow();
         }
+
 
         private void refreshIsBossShow()
         {
