@@ -704,7 +704,7 @@ MonoBehaviour:
   btnSetting: {fileID: 2777183254658889307}
   txtHealth: {fileID: 2353739212123871688}
   txtMapName: {fileID: 4956021523460749308}
-  imgHealthBar: {fileID: 453683450788825133}
+  imgHealthBar: {fileID: 7849524341921394655}
   scaleMouseEnter: 1.1
   scaleChgDuration: 0.1
 --- !u!1 &5186280222160563769
