@@ -27,6 +27,8 @@ namespace GameCore.Battle
             Register(EAttributeType.PART_LOSE_TURN, new Effects.PartLoseTurnEffectHandler());
             Register(EAttributeType.SELF_GET_BUFF, new Effects.SelfGetBuffEffectHandler());
             Register(EAttributeType.ENEMY_GET_BUFF, new Effects.EnemyGetBuffEffectHandler());
+            Register(EAttributeType.ENEMY_MOUTH_GET_BUFF, new Effects.EnemyMouthGetBuffEffectHandler());
+            Register(EAttributeType.USE_HEAT_2_ATTACK_AGAIN, new Effects.UseHeat2AttackAgainEffectHandler());
             Register(EAttributeType.SELF_BUFF_MULTIPLIER, new Effects.SelfBuffMulitiplierEffectHandler());
             Register(EAttributeType.ENEMY_BUFF_MULTIPLIER, new Effects.EnemyBuffMultiplierEffectHandler());
             Register(EAttributeType.SEND_BLEED_BY_GET_HIT, new Effects.SendBleedByGetHitEffectHandler());

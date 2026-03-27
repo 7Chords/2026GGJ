@@ -369,6 +369,7 @@ namespace GameCore
                 // 作用敌方脸上的部位（效果格与敌方脸重叠）
                 case EAttributeType.ATTACK:
                 case EAttributeType.ENEMY_GET_BUFF:
+                case EAttributeType.ENEMY_MOUTH_GET_BUFF:
                 case EAttributeType.ENEMY_BUFF_MULTIPLIER:
                 case EAttributeType.PART_LOSE_TURN:
                 case EAttributeType.CLEAR_ENEMY_BLEED_AND_HEAL_PART:
@@ -390,6 +391,7 @@ namespace GameCore
                 case EAttributeType.GET_COIN:
                 case EAttributeType.GET_COIN_BY_ATTACK:
                 case EAttributeType.ATTACK_BY_COIN:
+                case EAttributeType.USE_HEAT_2_ATTACK_AGAIN:
                     return new List<PartInfo>();
 
                 default:
@@ -433,6 +435,7 @@ namespace GameCore
                 // 作用敌方脸上的部位（效果格与敌方脸重叠）
                 case EAttributeType.ATTACK:
                 case EAttributeType.ENEMY_GET_BUFF:
+                case EAttributeType.ENEMY_MOUTH_GET_BUFF:
                 case EAttributeType.ENEMY_BUFF_MULTIPLIER:
                 case EAttributeType.PART_LOSE_TURN:
                 case EAttributeType.CLEAR_ENEMY_BLEED_AND_HEAL_PART:
@@ -449,6 +452,7 @@ namespace GameCore
                 case EAttributeType.GET_COIN:
                 case EAttributeType.GET_COIN_BY_ATTACK:
                 case EAttributeType.ATTACK_BY_COIN:
+                case EAttributeType.USE_HEAT_2_ATTACK_AGAIN:
                     return new List<PartInfo>();
 
                 default:
