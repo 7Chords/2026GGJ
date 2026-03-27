@@ -352,7 +352,23 @@ namespace GameCore
 
             switch (_entryInfo.attributeType)
             {
-                // 作用己方脸上的部位（效果格与己方脸重叠）
+                // 受击类：展示「对方脸上、效果范围内、可对自己出伤的嘴巴」；真实结算仍由 ctx.senderPart 决定攻击来源
+                case EAttributeType.REFLECT:
+                case EAttributeType.SEND_BLEED_BY_GET_HIT:
+                case EAttributeType.SEND_ALL_FAT_BY_GET_HIT:
+                    return FilterPartsMouthOnly(CollectPartsInEffectArea(_caster, enemyGrid));
+
+                case EAttributeType.REAL_ATTACK:
+                case EAttributeType.GET_COIN:
+                case EAttributeType.GET_COIN_BY_ATTACK:
+                case EAttributeType.ATTACK_BY_COIN:
+                case EAttributeType.USE_HEAT_2_ATTACK_AGAIN:
+                    return new List<PartInfo>();
+            }
+
+            List<PartInfo> raw;
+            switch (_entryInfo.attributeType)
+            {
                 case EAttributeType.CLEAR_DEFULL:
                 case EAttributeType.TRIGGER_MORE:
                 case EAttributeType.DAMAGE_MULTIPILER:
@@ -364,9 +380,9 @@ namespace GameCore
                 case EAttributeType.SELF_BUFF_MULTIPLIER:
                 case EAttributeType.CLEAR_SELF_BLEED_AND_HEAL_SELF:
                 case EAttributeType.INCREASE_ADD_BURN:
-                    return CollectPartsInEffectArea(_caster, allyGrid);
+                    raw = CollectPartsInEffectArea(_caster, allyGrid);
+                    break;
 
-                // 作用敌方脸上的部位（效果格与敌方脸重叠）
                 case EAttributeType.ATTACK:
                 case EAttributeType.ENEMY_GET_BUFF:
                 case EAttributeType.ENEMY_MOUTH_GET_BUFF:
@@ -376,35 +392,19 @@ namespace GameCore
                 case EAttributeType.ATTACK_BY_ENEMY_BLEED:
                 case EAttributeType.CHANGE_FAT_2_BURN:
                 case EAttributeType.SPREAD_BURN:
-                    return CollectPartsInEffectArea(_caster, enemyGrid);
-
-                // 仅针对攻击来源部位
-                case EAttributeType.REFLECT:
-                case EAttributeType.SEND_BLEED_BY_GET_HIT:
-                case EAttributeType.SEND_ALL_FAT_BY_GET_HIT:
-                    if (_ctx.senderPart == null)
-                        return new List<PartInfo>();
-                    return new List<PartInfo> { _ctx.senderPart };
-
-                // 对本体生命造成伤害，无部位列表
-                case EAttributeType.REAL_ATTACK:
-                case EAttributeType.GET_COIN:
-                case EAttributeType.GET_COIN_BY_ATTACK:
-                case EAttributeType.ATTACK_BY_COIN:
-                case EAttributeType.USE_HEAT_2_ATTACK_AGAIN:
-                    return new List<PartInfo>();
+                    raw = CollectPartsInEffectArea(_caster, enemyGrid);
+                    break;
 
                 default:
                     return new List<PartInfo>();
             }
+
+            return ApplyEntryTargetFilters(_entryInfo.attributeType, _entryInfo, raw, false);
         }
 
         /// <summary>
-        /// 根据词条类型返回效果会作用到的部位列表预览
+        /// 根据词条类型返回效果会作用到的部位列表预览（与 GetEntryRealTargetPartList 同一套范围/过滤）。
         /// </summary>
-        /// <param name="_caster">施放该词条的部位</param>
-        /// <param name="_entryInfo">词条</param>
-        /// <param name="_ctx">受击等上下文；反射/传递类词条需要 senderPart</param>
         public List<PartInfo> GetEntryPreviewTargetPartList(PartInfo _caster, EntryInfo _entryInfo)
         {
             if (_entryInfo == null || _caster == null)
@@ -418,7 +418,22 @@ namespace GameCore
 
             switch (_entryInfo.attributeType)
             {
-                // 作用己方脸上的部位（效果格与己方脸重叠）
+                case EAttributeType.REFLECT:
+                case EAttributeType.SEND_BLEED_BY_GET_HIT:
+                case EAttributeType.SEND_ALL_FAT_BY_GET_HIT:
+                    return FilterPartsMouthOnly(CollectPartsInEffectArea(_caster, enemyGrid));
+
+                case EAttributeType.REAL_ATTACK:
+                case EAttributeType.GET_COIN:
+                case EAttributeType.GET_COIN_BY_ATTACK:
+                case EAttributeType.ATTACK_BY_COIN:
+                case EAttributeType.USE_HEAT_2_ATTACK_AGAIN:
+                    return new List<PartInfo>();
+            }
+
+            List<PartInfo> raw;
+            switch (_entryInfo.attributeType)
+            {
                 case EAttributeType.CLEAR_DEFULL:
                 case EAttributeType.TRIGGER_MORE:
                 case EAttributeType.HEAL_ALL_PART:
@@ -430,9 +445,9 @@ namespace GameCore
                 case EAttributeType.CLEAR_SELF_BLEED_AND_HEAL_SELF:
                 case EAttributeType.DAMAGE_MULTIPILER:
                 case EAttributeType.INCREASE_ADD_BURN:
-                    return CollectPartsInEffectArea(_caster, allyGrid);
+                    raw = CollectPartsInEffectArea(_caster, allyGrid);
+                    break;
 
-                // 作用敌方脸上的部位（效果格与敌方脸重叠）
                 case EAttributeType.ATTACK:
                 case EAttributeType.ENEMY_GET_BUFF:
                 case EAttributeType.ENEMY_MOUTH_GET_BUFF:
@@ -442,22 +457,204 @@ namespace GameCore
                 case EAttributeType.ATTACK_BY_ENEMY_BLEED:
                 case EAttributeType.CHANGE_FAT_2_BURN:
                 case EAttributeType.SPREAD_BURN:
-                case EAttributeType.REFLECT:
-                case EAttributeType.SEND_BLEED_BY_GET_HIT:
-                case EAttributeType.SEND_ALL_FAT_BY_GET_HIT:
-                    return CollectPartsInEffectArea(_caster, enemyGrid);
-
-                // 对本体生命造成伤害，无部位列表
-                case EAttributeType.REAL_ATTACK:
-                case EAttributeType.GET_COIN:
-                case EAttributeType.GET_COIN_BY_ATTACK:
-                case EAttributeType.ATTACK_BY_COIN:
-                case EAttributeType.USE_HEAT_2_ATTACK_AGAIN:
-                    return new List<PartInfo>();
+                    raw = CollectPartsInEffectArea(_caster, enemyGrid);
+                    break;
 
                 default:
                     return new List<PartInfo>();
             }
+
+            return ApplyEntryTargetFilters(_entryInfo.attributeType, _entryInfo, raw, true);
+        }
+
+        /// <summary>
+        /// 按词条真实逻辑缩小「效果范围内的部位」列表，使预览/提示与结算一致。
+        /// </summary>
+        private static List<PartInfo> ApplyEntryTargetFilters(EAttributeType _attr, EntryInfo _entry, List<PartInfo> _raw, bool _preview)
+        {
+            if (_raw == null)
+                _raw = new List<PartInfo>();
+
+            switch (_attr)
+            {
+                case EAttributeType.ENEMY_MOUTH_GET_BUFF:
+                    return FilterPartsMouthOnly(_raw);
+
+                case EAttributeType.DAMAGE_MULTIPILER:
+                    return FilterPartsDamageMultiplierTargets(_raw);
+
+                case EAttributeType.INCREASE_ADD_BURN:
+                    return FilterPartsIncreaseAddBurnTargets(_raw);
+
+                case EAttributeType.CHANGE_FAT_2_BURN:
+                    return FilterPartsWithBuffType(_raw, EBuffType.FAT);
+
+                // 结算需完整列表以比较最高燃烧层；预览只高亮会被扣层的部位
+                case EAttributeType.SPREAD_BURN:
+                    if (_preview)
+                        return FilterPartsSpreadBurnVictims(_raw);
+                    return _raw;
+
+                case EAttributeType.ATTACK_BY_ENEMY_BLEED:
+                case EAttributeType.CLEAR_ENEMY_BLEED_AND_HEAL_PART:
+                case EAttributeType.CLEAR_SELF_BLEED_AND_HEAL_SELF:
+                    return FilterPartsWithBuffType(_raw, EBuffType.BLEED);
+
+                case EAttributeType.HEAL_WEAK_PART:
+                    return FilterPartsHealWeakestOnly(_raw);
+
+                case EAttributeType.SELF_BUFF_MULTIPLIER:
+                case EAttributeType.ENEMY_BUFF_MULTIPLIER:
+                    if (_entry?.attributeValueList == null || _entry.attributeValueList.Count < 1)
+                        return _raw;
+                    return FilterPartsWithBuffId(_raw, (long)_entry.attributeValueList[0]);
+
+                default:
+                    return _raw;
+            }
+        }
+
+        private static List<PartInfo> FilterPartsMouthOnly(List<PartInfo> _parts)
+        {
+            var r = new List<PartInfo>();
+            if (_parts == null) return r;
+            for (int i = 0; i < _parts.Count; i++)
+            {
+                var p = _parts[i];
+                if (p?.partRefObj != null && p.partRefObj.partType == EPartType.MOUTH)
+                    r.Add(p);
+            }
+            return r;
+        }
+
+        private static List<PartInfo> FilterPartsDamageMultiplierTargets(List<PartInfo> _parts)
+        {
+            var r = new List<PartInfo>();
+            if (_parts == null) return r;
+            for (int i = 0; i < _parts.Count; i++)
+            {
+                var p = _parts[i];
+                if (p?.partRefObj == null || p.partRefObj.partType != EPartType.MOUTH)
+                    continue;
+                if (p.entryInfoList == null) continue;
+                for (int j = 0; j < p.entryInfoList.Count; j++)
+                {
+                    var e = p.entryInfoList[j];
+                    if (e == null) continue;
+                    if (e.attributeType == EAttributeType.ATTACK || e.attributeType == EAttributeType.REAL_ATTACK)
+                    {
+                        r.Add(p);
+                        break;
+                    }
+                }
+            }
+            return r;
+        }
+
+        private static List<PartInfo> FilterPartsIncreaseAddBurnTargets(List<PartInfo> _parts)
+        {
+            var r = new List<PartInfo>();
+            if (_parts == null) return r;
+            for (int i = 0; i < _parts.Count; i++)
+            {
+                var p = _parts[i];
+                if (p?.entryInfoList == null) continue;
+                for (int j = 0; j < p.entryInfoList.Count; j++)
+                {
+                    var e = p.entryInfoList[j];
+                    if (e == null) continue;
+                    if (e.attributeType == EAttributeType.CHANGE_FAT_2_BURN || e.attributeType == EAttributeType.SPREAD_BURN)
+                    {
+                        r.Add(p);
+                        break;
+                    }
+                }
+            }
+            return r;
+        }
+
+        private static List<PartInfo> FilterPartsWithBuffType(List<PartInfo> _parts, EBuffType _buffType)
+        {
+            var r = new List<PartInfo>();
+            if (_parts == null) return r;
+            for (int i = 0; i < _parts.Count; i++)
+            {
+                var p = _parts[i];
+                if (p?.GetBuff(_buffType) != null)
+                    r.Add(p);
+            }
+            return r;
+        }
+
+        private static List<PartInfo> FilterPartsWithBuffId(List<PartInfo> _parts, long _buffId)
+        {
+            var r = new List<PartInfo>();
+            if (_parts == null) return r;
+            for (int i = 0; i < _parts.Count; i++)
+            {
+                var p = _parts[i];
+                if (p?.GetBuff(_buffId) != null)
+                    r.Add(p);
+            }
+            return r;
+        }
+
+        /// <summary> 与 SpreadBurnEffectHandler 一致：有燃烧层数最高者作为源，其余带燃烧的部位为被均衡对象。 </summary>
+        private static List<PartInfo> FilterPartsSpreadBurnVictims(List<PartInfo> _parts)
+        {
+            var r = new List<PartInfo>();
+            if (_parts == null || _parts.Count == 0) return r;
+            int maxLayer = 0;
+            for (int i = 0; i < _parts.Count; i++)
+            {
+                var b = _parts[i]?.GetBuff(EBuffType.BURN);
+                if (b != null)
+                    maxLayer = Mathf.Max(maxLayer, b.buffLayer);
+            }
+            if (maxLayer <= 0) return r;
+            PartInfo maxPart = null;
+            for (int i = 0; i < _parts.Count; i++)
+            {
+                var p = _parts[i];
+                var b = p?.GetBuff(EBuffType.BURN);
+                if (b != null && b.buffLayer == maxLayer)
+                {
+                    maxPart = p;
+                    break;
+                }
+            }
+            if (maxPart == null) return r;
+            for (int i = 0; i < _parts.Count; i++)
+            {
+                var p = _parts[i];
+                if (p == null || p == maxPart) continue;
+                if (p.GetBuff(EBuffType.BURN) != null)
+                    r.Add(p);
+            }
+            return r;
+        }
+
+        private static List<PartInfo> FilterPartsHealWeakestOnly(List<PartInfo> _parts)
+        {
+            var r = new List<PartInfo>();
+            if (_parts == null || _parts.Count == 0) return r;
+            PartInfo pick = null;
+            float bestRatio = float.MaxValue;
+            for (int i = 0; i < _parts.Count; i++)
+            {
+                var p = _parts[i];
+                if (p == null || p.maxHealth <= 0) continue;
+                float ratio = (float)p.currentHealth / p.maxHealth;
+                if (pick == null || ratio < bestRatio - 1e-5f
+                    || (Mathf.Approximately(ratio, bestRatio) && p.currentHealth < pick.currentHealth))
+                {
+                    bestRatio = ratio;
+                    pick = p;
+                }
+            }
+            if (pick != null)
+                r.Add(pick);
+            return r;
         }
 
         /// <summary>
