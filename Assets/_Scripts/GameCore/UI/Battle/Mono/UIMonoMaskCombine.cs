@@ -8,35 +8,38 @@ namespace GameCore.UI
 {
     public class UIMonoMaskCombine : _ASCUIAnimMonoBase
     {
-        [Header("部位Container")]
+        [Header("??λContainer")]
         public UIMonoCommonContainer monoPartContainer;
-        [Header("脸部mono")]
+        [Header("????mono")]
         public UIMonoMaskCombineFace monoFace;
-        [Header("确定按钮")]
+        [Header("??????")]
         public Button btnConfirm;
-        [Header("敌人面具mono")]
+        [Header("???????mono")]
         public UIMonoEnemyMask monoEnemyMask;
-        [Header("牌堆按钮")]
+        [Header("?????")]
         public Button btnDeck;
-        [Header("血条bar")]
+        [Header("???bar")]
         public Image imgHealthBar;
-        [Header("血量文本")]
+        [Header("??????")]
         public Text txtHealth;
-        [Header("玩家金币")]
+        [Header("?????")]
         public Text txtCoin;
-        [Header("战斗先手文本")]
+        [Header("??????????")]
         public Text txtBattleOrder;
-        [Header("敌人血条bar")]
+        [Header("???????bar")]
         public Image imgEnemyHealthBar;
-        [Header("敌人血量文本")]
+        [Header("??????????")]
         public Text txtEnemyHealth;
-        [Header("设置按钮")]
+        [Header("??????")]
         public Button btnSetting;
-        [Header("教程按钮")]
+        [Header("?????")]
         public Button btnGuide;
-        [Header("鼠标移入按钮的缩放")]
+        [Header("??????????????")]
         public float scaleMouseEnter = 1.08f;
-        [Header("鼠标移入的缩放时间")]
+        [Header("???????????????")]
         public float scaleChgDuration = 0.15f;
+        [Header("Entity HP preview colors")]
+        public Color previewDamageColor = new Color(0.92f, 0.32f, 0.32f, 1f);
+        public Color previewHealColor = new Color(0.32f, 0.82f, 0.45f, 1f);
     }
 }

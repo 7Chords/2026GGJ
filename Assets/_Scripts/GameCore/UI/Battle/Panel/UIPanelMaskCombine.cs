@@ -1,4 +1,5 @@
 using DG.Tweening;
+using GameCore.Battle;
 using SCFrame;
 using SCFrame.UI;
 using System;
@@ -13,6 +14,10 @@ namespace GameCore.UI
         private UIPanelMaskCombineFace _m_playerFace;
         private UIPanelEnemyMask _m_enemyMask;
         private TweenContainer _m_tweenContainer;
+
+        private bool _m_entityHealthPreviewActive;
+        private int _m_previewDmgPlayerBody;
+        private int _m_previewDmgEnemyBody;
         public UIPanelMaskCombine(UIMonoMaskCombine _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -41,6 +46,8 @@ namespace GameCore.UI
         public override void OnHidePanel()
         {
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.NEW_GANE_START, onNewBattleStart);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.FACE_PART_TARGET_PREVIEW_VALUES, onFacePartTargetPreviewValues);
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.FACE_PART_TARTGET_PREVIEW_CANCEL, onFacePartTargetPreviewCancel);
 
             mono.btnConfirm.RemoveClickDown(OnBtnConfirmClick);
             mono.btnDeck.RemoveClickDown(onBtnDeckClickDown);
@@ -60,6 +67,8 @@ namespace GameCore.UI
         public override void OnShowPanel()
         {
             SCMsgCenter.RegisterMsgAct(SCMsgConst.NEW_GANE_START, onNewBattleStart);
+            SCMsgCenter.RegisterMsg(SCMsgConst.FACE_PART_TARGET_PREVIEW_VALUES, onFacePartTargetPreviewValues);
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.FACE_PART_TARTGET_PREVIEW_CANCEL, onFacePartTargetPreviewCancel);
 
             mono.btnConfirm.AddMouseLeftClickDown(OnBtnConfirmClick);
             mono.btnDeck.AddMouseLeftClickDown(onBtnDeckClickDown);
@@ -74,6 +83,9 @@ namespace GameCore.UI
             _m_partContainer?.ShowPanel();
             _m_enemyMask?.ShowPanel();
 
+            _m_entityHealthPreviewActive = false;
+            _m_previewDmgPlayerBody = 0;
+            _m_previewDmgEnemyBody = 0;
             refreshShow();
         }
 
@@ -90,22 +102,96 @@ namespace GameCore.UI
             BattleManager.instance.StartBattle();
         }
 
-        
         private void refreshShow()
         {
+            if (_m_entityHealthPreviewActive)
+                applyEntityHealthPreview();
+            else
+                refreshShowPlain();
+        }
+
+        private void refreshShowPlain()
+        {
             mono.imgHealthBar.fillAmount = (float)GameModel.instance.playerInfo.currentHealth / GameModel.instance.playerInfo.maxHealth;
-            mono.txtHealth.text = GameModel.instance.playerInfo.currentHealth +"/" + GameModel.instance.playerInfo.maxHealth;
+            mono.txtHealth.text = GameModel.instance.playerInfo.currentHealth + "/" + GameModel.instance.playerInfo.maxHealth;
             mono.txtBattleOrder.text = GameModel.instance.curTurnOwner == ETurnOwnerType.PLAYER ? "我方先手" : "敌方先手";
             mono.txtCoin.text = GameModel.instance.playerInfo.playerMoney.ToString();
-            if(GameModel.instance.curEnemyInfo != null)
+            if (GameModel.instance.curEnemyInfo != null)
             {
                 mono.imgEnemyHealthBar.fillAmount = (float)GameModel.instance.curEnemyInfo.currentHealth / GameModel.instance.curEnemyInfo.maxHealth;
                 mono.txtEnemyHealth.text = GameModel.instance.curEnemyInfo.currentHealth + "/" + GameModel.instance.curEnemyInfo.maxHealth;
             }
         }
+
+        private void applyEntityHealthPreview()
+        {
+            var p = GameModel.instance.playerInfo;
+            var e = GameModel.instance.curEnemyInfo;
+            if (e == null)
+            {
+                refreshShowPlain();
+                return;
+            }
+            if (mono.txtHealth != null)
+                SCUICommon.ApplyHealthLinePreview(mono.txtHealth, mono.previewDamageColor, mono.previewHealColor,
+                    p.currentHealth, p.maxHealth, _m_previewDmgPlayerBody, 0);
+            if (mono.imgHealthBar != null && p.maxHealth > 0)
+            {
+                int hpP = Mathf.Clamp(p.currentHealth - _m_previewDmgPlayerBody, 0, p.maxHealth);
+                mono.imgHealthBar.fillAmount = (float)hpP / p.maxHealth;
+            }
+            if (mono.txtEnemyHealth != null)
+                SCUICommon.ApplyHealthLinePreview(mono.txtEnemyHealth, mono.previewDamageColor, mono.previewHealColor,
+                    e.currentHealth, e.maxHealth, _m_previewDmgEnemyBody, 0);
+            if (mono.imgEnemyHealthBar != null && e.maxHealth > 0)
+            {
+                int hpE = Mathf.Clamp(e.currentHealth - _m_previewDmgEnemyBody, 0, e.maxHealth);
+                mono.imgEnemyHealthBar.fillAmount = (float)hpE / e.maxHealth;
+            }
+            mono.txtBattleOrder.text = GameModel.instance.curTurnOwner == ETurnOwnerType.PLAYER ? "我方先手" : "敌方先手";
+            mono.txtCoin.text = GameModel.instance.playerInfo.playerMoney.ToString();
+        }
+
+        private void onFacePartTargetPreviewValues(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+            {
+                clearEntityHealthPreview();
+                return;
+            }
+            var payload = _objs[0] as PartPlacementPreviewPayload;
+            if (payload == null)
+            {
+                clearEntityHealthPreview();
+                return;
+            }
+            _m_previewDmgPlayerBody = payload.damageToPlayerBody;
+            _m_previewDmgEnemyBody = payload.damageToEnemyBody;
+            _m_entityHealthPreviewActive = _m_previewDmgPlayerBody > 0 || _m_previewDmgEnemyBody > 0;
+            if (!_m_entityHealthPreviewActive)
+            {
+                clearEntityHealthPreview();
+                return;
+            }
+            applyEntityHealthPreview();
+        }
+
+        private void onFacePartTargetPreviewCancel()
+        {
+            clearEntityHealthPreview();
+        }
+
+        private void clearEntityHealthPreview()
+        {
+            _m_entityHealthPreviewActive = false;
+            _m_previewDmgPlayerBody = 0;
+            _m_previewDmgEnemyBody = 0;
+            refreshShowPlain();
+        }
+
         private void onNewBattleStart()
         {
-            refreshShow();
+            clearEntityHealthPreview();
         }
         private void onBtnSettingClickDown(PointerEventData _data, object[] _objs)
         {
