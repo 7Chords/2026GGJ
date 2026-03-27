@@ -1,4 +1,7 @@
 using GameCore.RefData;
+using GameCore.UI;
+using SCFrame;
+using SCFrame.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,7 +28,7 @@ namespace GameCore
                             return;
                         PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
                         GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
-                        GameCommon.ShowPopTip("获得" + partRefObj.partName, Vector2.zero);
+                        GameCommon.ShowPopTip("???" + partRefObj.partName, Vector2.zero);
 
                         GameModel.instance.PlayerTakeDamage(blood2PartRefObj.blood);
                     }
@@ -42,7 +45,7 @@ namespace GameCore
                             return;
                         PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
                         GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
-                        GameCommon.ShowPopTip("获得" + partRefObj.partName, Vector2.zero);
+                        GameCommon.ShowPopTip("???" + partRefObj.partName, Vector2.zero);
 
                         GameModel.instance.PlayerTakeDamage(blood2PartRefObj.blood);
                     }
@@ -59,12 +62,21 @@ namespace GameCore
                             return;
                         PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
                         GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
-                        GameCommon.ShowPopTip("获得" + partRefObj.partName, Vector2.zero);
+                        GameCommon.ShowPopTip("???" + partRefObj.partName, Vector2.zero);
 
                         GameModel.instance.PlayerTakeDamage(blood2PartRefObj.blood);
                     }
                     break;
                 case EEventType.PART_2_PART:
+                    {
+                        if (GameModel.instance.playerInfo.bagPartInfoList == null
+                            || GameModel.instance.playerInfo.bagPartInfoList.Count == 0)
+                        {
+                            GameCommon.ShowPopTip("????????в?λ", Vector2.zero);
+                            return;
+                        }
+                        UICoreMgr.instance.AddNode(new UINodeEventPartExchange(SCUIShowType.ADDITION));
+                    }
                     break;
                 case EEventType.TREASURE_COIN:
                     {
@@ -74,7 +86,7 @@ namespace GameCore
                         if (getMoneyRefObj == null)
                             return;
                         GameModel.instance.playerInfo.playerMoney += getMoneyRefObj.money;
-                        GameCommon.ShowPopTip("获得金钱×" + getMoneyRefObj.money,Vector2.zero);
+                        GameCommon.ShowPopTip("???????" + getMoneyRefObj.money,Vector2.zero);
                     }
                     break;
                 case EEventType.TREASURE_PART:
@@ -89,7 +101,7 @@ namespace GameCore
                             return;
                         PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
                         GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
-                        GameCommon.ShowPopTip("获得" + partRefObj.partName, Vector2.zero);
+                        GameCommon.ShowPopTip("???" + partRefObj.partName, Vector2.zero);
                     }
                     break;
                 case EEventType.TRAP_BATTLE:

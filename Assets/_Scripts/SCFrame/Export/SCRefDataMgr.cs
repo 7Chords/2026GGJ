@@ -3,9 +3,6 @@ using SCFrame;
 
 namespace GameCore
 {
-    /// <summary>
-    /// 配表数据管理器
-    /// </summary>
     public class SCRefDataMgr : Singleton<SCRefDataMgr>
     {
         public SCRefDataList<StoreRefObj> storeRefList = new SCRefDataList<StoreRefObj>(StoreRefObj.assetPath, StoreRefObj.sheetName);
@@ -23,6 +20,7 @@ namespace GameCore
         public SCRefDataList<EventGetPartRefObj> eventGetPartRefList = new SCRefDataList<EventGetPartRefObj>(EventGetPartRefObj.assetPath, EventGetPartRefObj.sheetName);
         public SCRefDataList<MapRefObj> mapRefList = new SCRefDataList<MapRefObj>(MapRefObj.assetPath, MapRefObj.sheetName);
         public SCRefDataList<EventBlood2PartRefObj> eventBlood2PartRefList = new SCRefDataList<EventBlood2PartRefObj>(EventBlood2PartRefObj.assetPath, EventBlood2PartRefObj.sheetName);
+        public SCRefDataList<EventPart2PartRefObj> eventPart2PartRefList = new SCRefDataList<EventPart2PartRefObj>(EventPart2PartRefObj.assetPath, EventPart2PartRefObj.sheetName);
 
         public override void OnInitialize()
         {
@@ -41,6 +39,7 @@ namespace GameCore
             eventGetPartRefList.readFromTxt();
             mapRefList.readFromTxt();
             eventBlood2PartRefList.readFromTxt();
+            eventPart2PartRefList.readFromTxt();
         }
     }
 }
