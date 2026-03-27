@@ -57,6 +57,21 @@ namespace GameCore.Battle
                         };
                     }
                     break;
+                case EBuffType.STRONG:
+                    {
+                        // 强壮：仅增加嘴巴攻击力，由 BuffCombatModifiers + 攻击结算处理
+                    }
+                    break;
+                case EBuffType.PREY:
+                    {
+                        // 猎物：受到的伤害增加，由 BuffCombatModifiers + ApplyDamageToPart 处理
+                    }
+                    break;
+                case EBuffType.HATE:
+                    {
+                        // 怨恨：无战斗效果（在特定情况下被消耗）
+                    }
+                    break;
             }
 
             return _buffInfo;

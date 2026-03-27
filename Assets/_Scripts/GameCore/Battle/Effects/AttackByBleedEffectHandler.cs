@@ -1,3 +1,4 @@
+using GameCore.Battle;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +31,7 @@ namespace GameCore.Battle.Effects
 
 
             float totalDamage = layer * attackUnit;
+            totalDamage += BuffCombatModifiers.GetStrongAttackBonus(_caster);
             if (_caster.curEffectFacePosList == null || _caster.curEffectFacePosList.Count == 0) return;
 
             float perGridDamage = totalDamage / _caster.curEffectFacePosList.Count;

@@ -59,6 +59,7 @@ namespace GameCore.Battle
 
         public void ApplyDamageToPart(PartInfo _part, PartInfo _sender, int _amount)
         {
+            _amount += BuffCombatModifiers.GetPreyExtraDamage(_part);
             if (_amount <= 0) return;
             int hpBefore = _part.currentHealth;
             int damageToPart = UnityEngine.Mathf.Min(_amount, hpBefore);

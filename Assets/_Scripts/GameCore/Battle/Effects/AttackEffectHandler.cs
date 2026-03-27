@@ -12,6 +12,7 @@ namespace GameCore.Battle.Effects
             if (battleCtx == null) return;
 
             float totalDamage = _entry.attributeValueList[0];
+            totalDamage += BuffCombatModifiers.GetStrongAttackBonus(_caster);
             if (_caster.curEffectFacePosList == null || _caster.curEffectFacePosList.Count == 0) return;
 
             // ATTACK 需按「每格」分摊伤害（含空格打本体），不能仅用部位去重列表，故不调用 GetEntryAttributeTargetPartList。

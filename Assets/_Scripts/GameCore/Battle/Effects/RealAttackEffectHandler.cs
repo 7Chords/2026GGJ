@@ -12,6 +12,7 @@ namespace GameCore.Battle.Effects
             if (battleCtx == null) return;
 
             int damage = Mathf.RoundToInt(_entry.attributeValueList[0]);
+            damage += BuffCombatModifiers.GetStrongAttackBonus(_caster);
             if (_caster.partRefObj.partType == EPartType.MOUTH)
             {
                 MouthAttackCoordinator.RegisterPendingAttack(_caster, new MouthAttackDamageData

@@ -103,6 +103,7 @@ namespace GameCore
 
         public void PartTakeDamage(PartInfo _partInfo, PartInfo _senderInfo, int _amount)
         {
+            _amount += BuffCombatModifiers.GetPreyExtraDamage(_partInfo);
             if (_amount <= 0)
                 return;
             int hpBefore = _partInfo.currentHealth;
