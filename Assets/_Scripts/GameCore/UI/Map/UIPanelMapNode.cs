@@ -1,9 +1,11 @@
+using DG.Tweening;
 using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace GameCore.UI
 {
@@ -11,6 +13,7 @@ namespace GameCore.UI
     {
         private MapNode _m_mapNode;
         private ERoomType _m_roomType;
+        private TweenContainer _m_tweenContainer;
 
         public UIPanelMapNode(UIMonoMapNode _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
@@ -18,12 +21,25 @@ namespace GameCore.UI
 
         public override void AfterInitialize()
         {
-            mono.btnEnter.onClick.AddListener(OnClickEnter);
+            _m_tweenContainer = new TweenContainer();
+            if (mono.btnEnter != null)
+            {
+                mono.btnEnter.onClick.AddListener(OnClickEnter);
+                mono.btnEnter.AddMouseEnter(onBtnEnterMouseEnter);
+                mono.btnEnter.AddMouseExit(onBtnEnterMouseExit);
+            }
         }
 
         public override void BeforeDiscard()
         {
-            mono.btnEnter.onClick.RemoveListener(OnClickEnter);
+            if (mono.btnEnter != null)
+            {
+                mono.btnEnter.onClick.RemoveListener(OnClickEnter);
+                mono.btnEnter.RemoveMouseEnter(onBtnEnterMouseEnter);
+                mono.btnEnter.RemoveMouseExit(onBtnEnterMouseExit);
+            }
+            _m_tweenContainer?.KillAllDoTween();
+            _m_tweenContainer = null;
         }
         public override void OnHidePanel()
         {
@@ -31,6 +47,18 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+        }
+
+        private void onBtnEnterMouseEnter(PointerEventData _arg1, object[] _arg2)
+        {
+            if (mono.btnEnter == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnEnter.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
+        }
+
+        private void onBtnEnterMouseExit(PointerEventData _arg1, object[] _arg2)
+        {
+            if (mono.btnEnter == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnEnter.transform.DOScale(Vector3.one, mono.scaleChgDuration));
         }
         public void SetNodeInfo(MapNode mapNode)
         {
@@ -40,7 +68,7 @@ namespace GameCore.UI
         }
 
         /// <summary>
-        /// ?????????ùù????????????????????????????? SetNodeInfo/RefreshShow ??????????????????????? Update??
+        /// ???????????????????????????????????????? SetNodeInfo/RefreshShow ??????????????????????? Update??
         /// </summary>
         public void RefreshCanWalkState()
         {

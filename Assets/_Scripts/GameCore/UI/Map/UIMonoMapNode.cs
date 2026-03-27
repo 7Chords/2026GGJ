@@ -13,5 +13,9 @@ namespace GameCore.UI
         public Button btnEnter;
         [Header("可以行走的标识")]
         public List<GameObject> goCanWalk;
+        [Header("鼠标移入节点按钮的缩放")]
+        public float scaleMouseEnter = 1.08f;
+        [Header("鼠标移入的缩放时间")]
+        public float scaleChgDuration = 0.15f;
     }
 }
