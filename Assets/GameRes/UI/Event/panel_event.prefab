@@ -189,6 +189,7 @@ MonoBehaviour:
   txtContent: {fileID: 1471481170829746649}
   monoSelectContainer: {fileID: 3305939092363307566}
   imgClickArea: {fileID: 4119648899044899912}
+  dialogueTypewriterInterval: 0.04
 --- !u!1 &1087676965119621720
 GameObject:
   m_ObjectHideFlags: 0
