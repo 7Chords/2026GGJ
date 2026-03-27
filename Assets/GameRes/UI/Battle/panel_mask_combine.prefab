@@ -1416,6 +1416,8 @@ MonoBehaviour:
   btnGuide: {fileID: 2914836955523166671}
   scaleMouseEnter: 1.1
   scaleChgDuration: 0.1
+  previewDamageColor: {r: 1, g: 0, b: 0, a: 1}
+  previewHealColor: {r: 0.111935385, g: 0.7550309, b: 0, a: 1}
 --- !u!1 &4111750531699556325
 GameObject:
   m_ObjectHideFlags: 0
