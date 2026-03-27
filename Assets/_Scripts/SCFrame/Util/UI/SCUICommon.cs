@@ -1,6 +1,7 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SCFrame
 {
@@ -45,6 +46,43 @@ namespace SCFrame
             return string.Format("<color={0}>{1}</color>", richTextColor, txt);
         }
 
+        /// <summary>
+        /// Face part placement preview: left of "/" shows post-preview HP; damage tint vs heal tint using AddColorForRichText.
+        /// </summary>
+        public static void ApplyHealthLinePreview(Text txt, Color damageColor, Color healColor, int currentHp, int maxHp, int damage, int heal)
+        {
+            if (txt == null)
+                return;
+
+            string maxPart = maxHp.ToString();
+            string sep = "/";
+
+            if (damage <= 0 && heal <= 0)
+            {
+                txt.supportRichText = false;
+                txt.text = currentHp + sep + maxPart;
+                return;
+            }
+
+            int previewHp = Mathf.Clamp(currentHp - damage + heal, 0, maxHp);
+            string numStr = previewHp.ToString();
+
+            if (previewHp < currentHp)
+            {
+                txt.supportRichText = true;
+                txt.text = AddColorForRichText(numStr, damageColor) + sep + maxPart;
+            }
+            else if (previewHp > currentHp)
+            {
+                txt.supportRichText = true;
+                txt.text = AddColorForRichText(numStr, healColor) + sep + maxPart;
+            }
+            else
+            {
+                txt.supportRichText = false;
+                txt.text = numStr + sep + maxPart;
+            }
+        }
 
         private static string ColorToString(Color color)
         {

@@ -523,6 +523,8 @@ MonoBehaviour:
   goHealthInfo: {fileID: 6692865887880802804}
   goOrder: {fileID: 5799995615946025734}
   goBuff: {fileID: 1992479598787525217}
+  previewDamageColor: {r: 1, g: 0, b: 0, a: 1}
+  previewHealColor: {r: 0, g: 1, b: 0.05730152, a: 1}
   goHealthPosPivot: {x: 0, y: -0.8}
   goOrderPosPivot: {x: -0.7, y: 0.7}
   goBuffPosPivot: {x: 0.6, y: 0.7}

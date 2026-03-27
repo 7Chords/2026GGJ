@@ -1,3 +1,4 @@
+using GameCore.Battle;
 using SCFrame;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,17 +10,17 @@ namespace GameCore.UI
 {
     public class FacePartPreview : MonoBehaviour
     {
-        [Header("物体图片")]
+        [Header("??????")]
         public Image imgGO;
-        [Header("部位图片")]
+        [Header("??????")]
         public Image imgPart;
-        [Header("生命文本")]
+        [Header("???????")]
         public Text txtHealth;
-        [Header("顺序文本")]
+        [Header("??????")]
         public Text txtOrder;
-        [Header("生命信息物体")]
+        [Header("???????????")]
         public GameObject goHealthInfo;
-        [Header("序号信息物体")]
+        [Header("??????????")]
         public GameObject goOrder;
 
 
@@ -64,6 +65,7 @@ namespace GameCore.UI
             if (_m_curHitGridGO == null)
             {
                 SCMsgCenter.SendMsg(SCMsgConst.CLEAR_PLAYER_PREVIEW);
+                PlacementPreviewHelper.BroadcastClear();
             }
             else
             {
@@ -73,6 +75,7 @@ namespace GameCore.UI
                 _m_partInfo.curOccupyFacePosList = faceOccupyPosList;
                 _m_partInfo.curEffectFacePosList = faceEffectPosList;
                 SCMsgCenter.SendMsg(SCMsgConst.PLAYER_FACE_PART_TARGET_PREVIEW_HIGHLIGHT, GameModel.instance.GetPartPreviewTargetPartList(_m_partInfo));
+                PlacementPreviewHelper.BroadcastValues(_m_partInfo);
             }
 
         }
@@ -91,9 +94,9 @@ namespace GameCore.UI
                 _m_dragLoopCoroutine = null;
             }
 
-            //当前鼠标指向的脸部的格子物体
+            //???????????????????????
             _m_curHitGridGO = GameCommon.GetHitGridGameObj(_data);
-            bool placementSuccess = false;//是否放置成功
+            bool placementSuccess = false;//?????????
 
             if (_m_curHitGridGO != null)
             {
@@ -139,6 +142,10 @@ namespace GameCore.UI
                         List<Vector2Int> faceOccupyPosList = GameModel.instance.GetPlaceFaceOccupyPosList(_m_curHitGridGO, Input.mousePosition, _m_partInfo.localOccupyPosList);
                         List<Vector2Int> faceEffectPosList = GameModel.instance.GetPlaceFaceEffectPosList(_m_partInfo.localEffectPosList, faceOccupyPosList, _m_partInfo.localOccupyPosList);
                         SCMsgCenter.SendMsg(SCMsgConst.PLACE_PART_PREVIEW, faceOccupyPosList, faceEffectPosList);
+                        _m_partInfo.curOccupyFacePosList = faceOccupyPosList;
+                        _m_partInfo.curEffectFacePosList = faceEffectPosList;
+                        SCMsgCenter.SendMsg(SCMsgConst.PLAYER_FACE_PART_TARGET_PREVIEW_HIGHLIGHT, GameModel.instance.GetPartPreviewTargetPartList(_m_partInfo));
+                        PlacementPreviewHelper.BroadcastValues(_m_partInfo);
                     }
                 }
                 yield return null;
@@ -154,7 +161,7 @@ namespace GameCore.UI
             imgPart.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
             imgPart.SetNativeSize();
 
-            //信息不要跟着旋转
+            //?????????????
             imgGO.transform.rotation = Quaternion.Euler(0, 0, _m_partInfo.rotateStep * 90);
             goHealthInfo.transform.eulerAngles = Vector3.zero;
             goOrder.transform.eulerAngles = Vector3.zero;

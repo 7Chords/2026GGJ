@@ -1,10 +1,10 @@
 public class SCMsgConst
 {
-    #region 玩家输入相关 10
+    #region ?????????? 10
     #endregion
 
 
-    #region 玩法相关 20
+    #region ?淨??? 20
     public const int PURCHASE_GOODS = 2001;
     public const int SELL_PART = 2002;
     public const int NEW_GANE_START = 2003;
@@ -47,12 +47,13 @@ public class SCMsgConst
     public const int FACE_PART_TARTGET_PREVIEW_CANCEL = 2040;
     /// <summary> Mouth-type attack: play lunge UI, then apply deferred damage. </summary>
     public const int PART_MOUTH_ATTACK = 2041;
+    public const int FACE_PART_TARGET_PREVIEW_VALUES = 2042;
     #endregion
 
-    #region 系统相关 99
+    #region ????? 99
     public const int GAME_START = 9901;
     public const int GAME_END = 9902;
-    public const int UI_NODE_CHG = 9903;//ui节点变化事件
+    public const int UI_NODE_CHG = 9903;//ui???仯???
     public const int UI_PANEL_HIDE_ANIM_OVER = 9904;
 
     #endregion

@@ -6,7 +6,7 @@ namespace GameCore.UI
 {
     public class UIMonoPlayerFacePart : _ASCUIMonoBase
     {
-        [Header("物体图片")]
+        [Header("部位物体")]
         public Image imgGO;
         [Header("部位图片")]
         public Image imgPart;
@@ -16,19 +16,23 @@ namespace GameCore.UI
         public Text txtOrder;
         [Header("生命信息物体")]
         public GameObject goHealthInfo;
-        [Header("序号信息物体")]
+        [Header("顺序信息物体")]
         public GameObject goOrder;
-        [Header("buff信息物体")]
+        [Header("Buff信息物体")]
         public GameObject goBuff;
-        [Header("生命信息物体所处位置比例")]
+        [Header("Preview Damage Color")]
+        public Color previewDamageColor = new Color(0.92f, 0.32f, 0.32f, 1f);
+        [Header("Preview Heal Color")]
+        public Color previewHealColor = new Color(0.32f, 0.82f, 0.45f, 1f);
+        [Header("生命信息物体锚点")]
         public Vector2 goHealthPosPivot;
-        [Header("序号信息物体所处位置比例")]
+        [Header("顺序信息物体锚点")]
         public Vector2 goOrderPosPivot;
-        [Header("buff信息物体所处位置比例")]
+        [Header("buff信息物体锚点")]
         public Vector2 goBuffPosPivot;
         [Header("鼠标移入缩放")]
         public float scaleMouseEnter;
-        [Header("缩放时间")]
+        [Header("鼠标移入缩放时间")]
         public float scaleChgDuration;
 
     }
