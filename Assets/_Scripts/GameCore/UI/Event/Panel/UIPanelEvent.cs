@@ -4,6 +4,7 @@ using SCFrame.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -16,6 +17,9 @@ namespace GameCore.UI
         private long _m_eventDialogueId;
         private EventDialogueRefObj _m_eventDialogueRefObj;
         private bool _m_isSelecting;
+
+        private string _m_currentDialogueFullContent;
+        private bool _m_dialogueLineRevealComplete;
         public UIPanelEvent(UIMonoEvent _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -27,13 +31,15 @@ namespace GameCore.UI
 
         public override void BeforeDiscard()
         {
+            stopDialogueTypewriter();
             _m_selectContainer?.Discard();
         }
 
         public override void OnHidePanel()
         {
-            SCMsgCenter.RegisterMsg(SCMsgConst.EVENT_SELECT_CONFIRM, onEventSelectConfirm);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.EVENT_SELECT_CONFIRM, onEventSelectConfirm);
             mono.imgClickArea.RemoveClickDown(onMouseClickDialogue);
+            stopDialogueTypewriter();
             _m_selectContainer?.HidePanel();
 
         }
@@ -53,18 +59,68 @@ namespace GameCore.UI
         {
             if (_m_eventDialogueRefObj == null)
                 return;
-            if(_m_eventDialogueRefObj.dialogueType == EEventDialogueType.STANDARD)
+            stopDialogueTypewriter();
+            if (_m_eventDialogueRefObj.dialogueType == EEventDialogueType.STANDARD)
             {
                 mono.txtName.text = _m_eventDialogueRefObj.name;
-                mono.txtContent.text = _m_eventDialogueRefObj.content;
+                _m_currentDialogueFullContent = _m_eventDialogueRefObj.content ?? string.Empty;
+                if (mono.txtContent != null)
+                    mono.txtContent.text = string.Empty;
+                if (string.IsNullOrEmpty(_m_currentDialogueFullContent))
+                {
+                    _m_dialogueLineRevealComplete = true;
+                }
+                else
+                {
+                    _m_dialogueLineRevealComplete = false;
+                    SCTaskHelper.instance.CreateCoroutine(this, dialogueTypewriterRoutine(), "EventDialogueTypewriter");
+                }
+            }
+            else
+            {
+                _m_dialogueLineRevealComplete = true;
+                _m_currentDialogueFullContent = string.Empty;
             }
         }
+
+        private void stopDialogueTypewriter()
+        {
+            SCTaskHelper.instance?.KillAllCoroutines(this);
+        }
+
+        private IEnumerator dialogueTypewriterRoutine()
+        {
+            if (mono.txtContent == null)
+            {
+                _m_dialogueLineRevealComplete = true;
+                yield break;
+            }
+            string full = _m_currentDialogueFullContent ?? string.Empty;
+            var sb = new StringBuilder(full.Length);
+            float interval = Mathf.Max(0.001f, mono.dialogueTypewriterInterval);
+            foreach (char c in full)
+            {
+                sb.Append(c);
+                mono.txtContent.text = sb.ToString();
+                yield return new WaitForSeconds(interval);
+            }
+            _m_dialogueLineRevealComplete = true;
+        }
+
         private void onMouseClickDialogue(PointerEventData _data, object[] _objs)
         {
             if (_m_eventDialogueRefObj == null)
                 return;
             if (_m_isSelecting)
                 return;
+            if (_m_eventDialogueRefObj.dialogueType == EEventDialogueType.STANDARD && !_m_dialogueLineRevealComplete)
+            {
+                stopDialogueTypewriter();
+                if (mono.txtContent != null)
+                    mono.txtContent.text = _m_currentDialogueFullContent ?? string.Empty;
+                _m_dialogueLineRevealComplete = true;
+                return;
+            }
             EventHandler.DealEvent(_m_eventDialogueRefObj.eventType);
             if(_m_eventDialogueRefObj.flagType == EEventDialogueFlagType.END)
             {
@@ -78,7 +134,7 @@ namespace GameCore.UI
             }
             else
             {
-                if(_m_eventDialogueRefObj.nextList.Count > 1)//????1???????????????
+                if(_m_eventDialogueRefObj.nextList.Count > 1)
                 {
                     _m_isSelecting = true;
                     SCMsgCenter.SendMsg(SCMsgConst.EVENT_START_SELECT, _m_eventDialogueRefObj);

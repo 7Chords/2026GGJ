@@ -16,6 +16,8 @@ namespace GameCore.UI
         public UIMonoCommonContainer monoSelectContainer;
         [Header("对话点击区域")]
         public Image imgClickArea;
+        [Header("对话内容逐字显示间隔（秒）")]
+        public float dialogueTypewriterInterval = 0.04f;
 
     }
 }

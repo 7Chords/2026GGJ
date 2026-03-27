@@ -46,6 +46,8 @@ namespace GameCore
         SPREAD_BURN,//传播范围内最大的燃烧层数（-2且最少1层）
         SEND_ALL_FAT_BY_GET_HIT,//被击中时施加对方自身所有油脂
         INCREASE_ADD_BURN,//增加己方部位提供燃烧效果时的层数
+        ENEMY_MOUTH_GET_BUFF,//敌人嘴巴获得buff,
+        USE_HEAT_2_ATTACK_AGAIN,//自身强壮超过x层后，消耗超过的强壮概率再次攻击
     }
 
     public enum EAttributeTriggerPointType
@@ -95,7 +97,10 @@ namespace GameCore
     {
         BLEED,//点燃
         FAT,//油脂
-        BURN//燃烧
+        BURN,//燃烧
+        STRONG,//强壮
+        PREY,//猎物
+        HEAT,//怨恨
     }
 
     public enum EEventType
