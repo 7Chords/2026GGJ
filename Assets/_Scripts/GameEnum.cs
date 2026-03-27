@@ -100,7 +100,7 @@ namespace GameCore
         BURN,//»º…’
         STRONG,//«ø◊≥
         PREY,//¡‘ŒÔ
-        HEAT,//‘π∫ﬁ
+        HATE,//‘π∫ﬁ
     }
 
     public enum EEventType
