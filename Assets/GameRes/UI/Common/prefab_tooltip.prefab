@@ -470,7 +470,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 3.15
+  m_PixelsPerUnitMultiplier: 5.49
 --- !u!114 &1647633092265034855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1709,7 +1709,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 2.04
+  m_PixelsPerUnitMultiplier: 3
 --- !u!1 &8546918590046844848
 GameObject:
   m_ObjectHideFlags: 0
