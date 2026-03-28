@@ -426,22 +426,31 @@ namespace GameCore
         /// <summary>
         /// 逆时针旋转格子形状
         /// 旋转后根据参考的旋转列表归0所需要的偏移 进行格子偏移 用于效果格子的旋转
+        /// 效果格须与占用格共用 <see cref="RotateShape"/> 的锚点（占用 min 角），否则占用包围盒不含 (0,0) 时（如嘴型伸出负 Y）旋转后范围会与占用错位。
         /// </summary>
         public static List<Vector2Int> RotateShapeAndMoveBySample(List<Vector2Int> _originalPoints, int _step, List<Vector2Int> _sampleList)
         {
             if (_originalPoints == null || _originalPoints.Count == 0)
                 return new List<Vector2Int>();
-            //逆时针旋转
-            List<Vector2Int> rotated = _originalPoints.Select(p => RotatePoint(p, _step)).ToList();
+            if (_sampleList == null || _sampleList.Count == 0)
+                return new List<Vector2Int>();
 
-            List<Vector2Int> originalSampleRotateList = RotateShape(_sampleList, _step);
-            List<Vector2Int> dealSampleRotateList = RotateShapeAndMove2Zero(_sampleList, _step);
-            Vector2Int sampleMove = dealSampleRotateList[0] - originalSampleRotateList[0];
+            int anchorX = _sampleList.Min(p => p.x);
+            int anchorY = _sampleList.Min(p => p.y);
 
-            List<Vector2Int> ret = rotated.Select(p => new Vector2Int(p.x + sampleMove.x,p.y + sampleMove.y)).ToList();
+            List<Vector2Int> effectLocal = _originalPoints
+                .Select(p => new Vector2Int(p.x - anchorX, p.y - anchorY))
+                .ToList();
+            List<Vector2Int> rotated = effectLocal.Select(p => RotatePoint(p, _step)).ToList();
 
+            List<Vector2Int> sampleRotated = RotateShape(_sampleList, _step);
+            if (sampleRotated == null || sampleRotated.Count == 0)
+                return new List<Vector2Int>();
+            int rMinX = sampleRotated.Min(p => p.x);
+            int rMinY = sampleRotated.Min(p => p.y);
+            Vector2Int sampleMove = new Vector2Int(-rMinX, -rMinY);
 
-            return ret;
+            return rotated.Select(p => new Vector2Int(p.x + sampleMove.x, p.y + sampleMove.y)).ToList();
         }
 
 
