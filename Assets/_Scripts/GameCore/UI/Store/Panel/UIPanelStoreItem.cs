@@ -46,6 +46,7 @@ namespace GameCore.UI
             {
                 AudioMgr.instance.PlaySfx("sfx_buy");
                 SCMsgCenter.SendMsg(SCMsgConst.PURCHASE_GOODS, _m_goodsInfo.goodsRefObj.id);
+                GameCommon.ShowPopTip("获得" + _m_goodsInfo.goodsRefObj.goodsName,Vector2.zero);
             }
         }
 
@@ -84,6 +85,7 @@ namespace GameCore.UI
         private void refreshHasBuyShow()
         {
             mono.canvasGroup.alpha = _m_goodsInfo.hasBought ? mono.hasPurchaseAlpha : 1;
+            SCCommon.SetGameObjectEnable(mono.goHasBuyShowList, _m_goodsInfo.hasBought);
         }
         private void refreshActiveShow()
         {

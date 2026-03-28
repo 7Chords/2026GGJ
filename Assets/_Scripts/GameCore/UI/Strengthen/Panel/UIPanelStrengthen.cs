@@ -153,6 +153,7 @@ namespace GameCore.UI
             GameModel.instance.playerInfo.playerMoney = Mathf.Max(GameModel.instance.playerInfo.playerMoney - _m_curSelectPart.GetLevelRefObj().levelUpCost, 0);
             _m_curSelectPart.LevelUp();
             refreshShow();
+            GameCommon.ShowPopTip("强化成功", Vector2.zero);
         }
 
         private void onBtnConfirmMouseEnter(PointerEventData _arg1, object[] _arg2)

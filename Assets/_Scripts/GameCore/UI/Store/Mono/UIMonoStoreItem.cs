@@ -28,5 +28,7 @@ namespace GameCore.UI
         public List<GameObject> goIsPartShowList;
         [Header("是回血货物显示的物品列表")]
         public List<GameObject> goIsHealthShowList;
+        [Header("已购买后显示的物体")]
+        public List<GameObject> goHasBuyShowList;
     }
 }
