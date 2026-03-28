@@ -31,11 +31,13 @@ namespace GameCore
         public override void OnInitialize()
         {
             SCRefDataMgr.instance.Initialize();
+            LanguageHelper.instance.Initialize();
             SCTimeCaller.instance.Initialize();
             SCTaskHelper.instance.Initialize();
             SCMsgCenter.instance.Initialize();
             SCPoolMgr.instance.Initialize();
             SCInputListener.instance.Initialize();
+            SCSettingMgr.instance.Initialize();
             UICoreMgr.instance.Initialize();
             GameModel.instance.Initialize();
             MapManager.instance.Initialize();
@@ -54,6 +56,8 @@ namespace GameCore
             SCPoolMgr.instance.Discard();
             SCMsgCenter.instance.Discard();
             SCTaskHelper.instance.Discard();
+            LanguageHelper.instance.Discard();
+
             SCRefDataMgr.instance.Discard();
             SCTimeCaller.instance.Discard();
 

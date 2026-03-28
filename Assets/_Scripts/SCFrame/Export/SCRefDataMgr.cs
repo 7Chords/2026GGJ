@@ -21,6 +21,7 @@ namespace GameCore
         public SCRefDataList<MapRefObj> mapRefList = new SCRefDataList<MapRefObj>(MapRefObj.assetPath, MapRefObj.sheetName);
         public SCRefDataList<EventBlood2PartRefObj> eventBlood2PartRefList = new SCRefDataList<EventBlood2PartRefObj>(EventBlood2PartRefObj.assetPath, EventBlood2PartRefObj.sheetName);
         public SCRefDataList<EventPart2PartRefObj> eventPart2PartRefList = new SCRefDataList<EventPart2PartRefObj>(EventPart2PartRefObj.assetPath, EventPart2PartRefObj.sheetName);
+        public SCRefDataList<TextLanguageRefObj> textLanguageRefList = new SCRefDataList<TextLanguageRefObj>(TextLanguageRefObj.assetPath, TextLanguageRefObj.sheetName);
 
         public override void OnInitialize()
         {
@@ -40,6 +41,7 @@ namespace GameCore
             mapRefList.readFromTxt();
             eventBlood2PartRefList.readFromTxt();
             eventPart2PartRefList.readFromTxt();
+            textLanguageRefList.readFromTxt();
         }
     }
 }
