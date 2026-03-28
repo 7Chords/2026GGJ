@@ -4,6 +4,7 @@ using SCFrame;
 using SCFrame.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace GameCore
@@ -45,7 +46,7 @@ namespace GameCore
                             return;
                         PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
                         GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
-                        GameCommon.ShowPopTip("???" + partRefObj.partName, Vector2.zero);
+                        GameCommon.ShowPopTip("get" + partRefObj.partName, Vector2.zero);
 
                         GameModel.instance.PlayerTakeDamage(blood2PartRefObj.blood);
                     }
@@ -62,7 +63,7 @@ namespace GameCore
                             return;
                         PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
                         GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
-                        GameCommon.ShowPopTip("???" + partRefObj.partName, Vector2.zero);
+                        GameCommon.ShowPopTip("get" + partRefObj.partName, Vector2.zero);
 
                         GameModel.instance.PlayerTakeDamage(blood2PartRefObj.blood);
                     }
@@ -72,7 +73,7 @@ namespace GameCore
                         if (GameModel.instance.playerInfo.bagPartInfoList == null
                             || GameModel.instance.playerInfo.bagPartInfoList.Count == 0)
                         {
-                            GameCommon.ShowPopTip("????????§Ó?¦Ë", Vector2.zero);
+                            GameCommon.ShowPopTip("????", Vector2.zero);
                             return;
                         }
                         UICoreMgr.instance.AddNode(new UINodeEventPartExchange(SCUIShowType.ADDITION));
@@ -86,7 +87,7 @@ namespace GameCore
                         if (getMoneyRefObj == null)
                             return;
                         GameModel.instance.playerInfo.playerMoney += getMoneyRefObj.money;
-                        GameCommon.ShowPopTip("???????" + getMoneyRefObj.money,Vector2.zero);
+                        GameCommon.ShowPopTip("get" + getMoneyRefObj.money,Vector2.zero);
                     }
                     break;
                 case EEventType.TREASURE_PART:
@@ -101,10 +102,36 @@ namespace GameCore
                             return;
                         PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
                         GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
-                        GameCommon.ShowPopTip("???" + partRefObj.partName, Vector2.zero);
+                        GameCommon.ShowPopTip("get" + partRefObj.partName, Vector2.zero);
                     }
                     break;
                 case EEventType.TRAP_BATTLE:
+                    {
+                        int floor = GameModel.instance.playerInfo.playerFloor;
+                        List<EnemyRefObj> pool = SCRefDataMgr.instance.enemyRefList.refDataList
+                            .Where(e => e.floor == floor && e.battleType == EBattleType.EVENT && !e.isBoss)
+                            .ToList();
+                        if (pool == null || pool.Count == 0)
+                        {
+                            SCDebugHelper.LogWarning(
+                                $"[TRAP_BATTLE] No enemy with battleType=EVENT on floor {floor}. Check enemy sheet.");
+                            GameCommon.ShowPopTip(
+                                "\u672c\u5c42\u672a\u914d\u7f6e EVENT \u7c7b\u578b\u654c\u4eba\uff08\u9677\u9631\u6218\u6597\uff09\u3002",
+                                Vector2.zero);
+                            return;
+                        }
+                        EnemyRefObj pick = pool[Random.Range(0, pool.Count)];
+                        AudioMgr.instance.PlaySfx("sfx_click");
+                        TVSwitchTransition.Run(() =>
+                        {
+                            UICoreMgr.instance.RemoveNode(nameof(UINodeEventPartExchange));
+                            UICoreMgr.instance.RemoveNode(nameof(UINodeEvent));
+                            GameModel.instance.RollBattleOrder();
+                            UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
+                            GameModel.instance.GenerateNewBattle(false, pick.id);
+                            UICoreMgr.instance.AddNode(new UINodeGuideBattle(SCUIShowType.ADDITION));
+                        });
+                    }
                     break;
             }
         }

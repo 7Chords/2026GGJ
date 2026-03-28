@@ -11,6 +11,7 @@ namespace GameCore.RefData
         public int floor;
         public int column;
         public string enemyName;
+        public EBattleType battleType;
         public bool isBoss;
         public EBossType bossType;
         public int enemyHealth;
@@ -25,6 +26,7 @@ namespace GameCore.RefData
             floor = getInt("floor");
             column = getInt("column");
             enemyName = getString("enemyName");
+            battleType = (EBattleType)getEnum("battleType", typeof(EBattleType));
             isBoss = getBool("isBoss");
             bossType = (EBossType)getEnum("bossType", typeof(EBossType));
             enemyHealth = getInt("enemyHealth");

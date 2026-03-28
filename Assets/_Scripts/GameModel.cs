@@ -282,7 +282,9 @@ namespace GameCore
                 }
             }
             PlayerDrawParts(GameConst.DRAW_CARD_COUNT_PER_TURN);
-            if(_isBoss)
+            if (_isBoss)
+                GenerateRandomEnemy(_id);
+            else if (_id != -1)
                 GenerateRandomEnemy(_id);
             else
                 GenerateRandomEnemy();

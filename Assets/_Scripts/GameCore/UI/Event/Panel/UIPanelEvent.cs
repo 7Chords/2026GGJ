@@ -124,7 +124,9 @@ namespace GameCore.UI
                 return;
             }
             EventHandler.DealEvent(_m_eventDialogueRefObj.eventType);
-            if(_m_eventDialogueRefObj.flagType == EEventDialogueFlagType.END)
+            // TRAP_BATTLE runs its own TVSwitch into mask-combine + battle; do not run END->map or it cancels that flow.
+            if (_m_eventDialogueRefObj.flagType == EEventDialogueFlagType.END
+                && _m_eventDialogueRefObj.eventType != EEventType.TRAP_BATTLE)
             {
                 AudioMgr.instance.PlaySfx("sfx_click");
                 TVSwitchTransition.Run(() =>

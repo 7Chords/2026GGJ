@@ -133,4 +133,9 @@ namespace GameCore
         MALFORMED,//»ûÐÎµÄÈË
     }
 
+    public enum EBattleType
+    {
+        NORMAL,
+        EVENT,
+    }
 }
