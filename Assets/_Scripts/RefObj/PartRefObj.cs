@@ -13,7 +13,6 @@ namespace GameCore.RefData
         public string partSpriteObjName;
         public string partGameObjectName;
         public List<PosEffectObj> occupyPosList;
-        public List<PosEffectObj> effectPosList;
         public string triggerSuccessTip;
         public string triggerFailTip;
         public string triggerEffectTip;
@@ -35,7 +34,6 @@ namespace GameCore.RefData
             partSpriteObjName = getString("partSpriteObjName");
             partGameObjectName = getString("partGameObjectName");
             occupyPosList = getList<PosEffectObj>("occupyPosList");
-            effectPosList = getList<PosEffectObj>("effectPosList");
             triggerSuccessTip = getString("triggerSuccessTip");
             triggerFailTip = getString("triggerFailTip");
             triggerEffectTip = getString("triggerEffectTip");
@@ -45,16 +43,6 @@ namespace GameCore.RefData
         {
             List<Vector2Int> result = new List<Vector2Int>();
             foreach (PosEffectObj obj in occupyPosList)
-            {
-                result.Add(new Vector2Int(obj.x, obj.y));
-            }
-            return result;
-        }
-
-        public List<Vector2Int> GetEffectPosList()
-        {
-            List<Vector2Int> result = new List<Vector2Int>();
-            foreach (PosEffectObj obj in effectPosList)
             {
                 result.Add(new Vector2Int(obj.x, obj.y));
             }

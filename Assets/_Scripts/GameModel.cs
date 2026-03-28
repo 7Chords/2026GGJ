@@ -326,9 +326,8 @@ namespace GameCore
             }
             else
             {
-                int enemyDrawCnt = Mathf.Min(GameConst.DRAW_CARD_COUNT_PER_TURN, GameConst.BUSY_CARD_MAX_COUNT - curEnemyInfo.busyPartInfoList.Count);
-                EnemyDrawParts(enemyDrawCnt);
-                EnemyLayoutGenerator.GenerateLayout(curEnemyInfo, enemyFaceGridInfoList);
+                SCDebugHelper.LogError(
+                    $"[Enemy] id={curEnemyInfo.enemyRefObj.id} 缺少有效 layoutPresetName，回合布局无法应用。战斗中敌人应始终使用预设。");
             }
 
             RollBattleOrder();

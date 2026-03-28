@@ -184,23 +184,6 @@ namespace GameCore.UI
                 setBuffInfo(_partInfo.buffLogic.buffList);
             _m_tweenContainer.RegDoTween(canvasGroup.DOFade(1, fadeInDuratin));
         }
-
-        public void ShowTooltip(PartRefObj _partRefObj, Vector2 _targetLocalPos, bool _showGridInfo = true)
-        {
-            Vector2 adaptivePos = calculateAdaptivePosition(_targetLocalPos);
-            setLocalPosition(adaptivePos);
-            canvasGroup.alpha = 0;
-            SCCommon.SetGameObjectEnable(gameObject, true);
-            SCCommon.SetGameObjectEnable(goGrid, _showGridInfo);
-            SCCommon.SetGameObjectEnable(goBuff, false);
-            SCCommon.SetGameObjectEnable(txtQuality.gameObject, _partRefObj.qualityType != EQualityType.NONE);
-            PartLevelRefObj levelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.partId == _partRefObj.id && x.partLevel == 1);
-            setBaseInfo(_partRefObj.partName, levelRefObj.partDesc, 1,_partRefObj.qualityType);
-            if (_showGridInfo)
-                setGridInfo(_partRefObj.GetOccupyPosList(), _partRefObj.GetEffectPosList());
-
-            _m_tweenContainer.RegDoTween(canvasGroup.DOFade(1, fadeInDuratin));
-        }
         #endregion
 
         #region Util

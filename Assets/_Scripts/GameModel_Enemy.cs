@@ -11,7 +11,7 @@ namespace GameCore
     public partial class GameModel
     {
         /// <summary>
-        /// 生成当前敌人：若 enemy 表配置了 layoutPresetName 则仅用预设摆脸（缺牌时跳过槽位，不回退随机）；否则随机手牌 + 算法摆脸。
+        /// 生成当前敌人：从 initPartList 填充牌堆，并按 layoutPresetName 加载 <see cref="EnemyLayoutPreset"/> 摆脸（缺牌时跳过槽位）。必须配置有效预设资源。
         /// </summary>
         public void GenerateRandomEnemy(long _id = -1)
         {
@@ -60,30 +60,21 @@ namespace GameCore
             }
 
             var encounterPreset = ResourcesHelper.LoadAsset<EnemyLayoutPreset>(enemyRef.layoutPresetName);
-
-            if (encounterPreset != null)
+            if (encounterPreset == null)
             {
-                EnemyTurnFaceLayout turnLayout = null;
-                if (encounterPreset.turnLayouts != null && encounterPreset.turnLayouts.Count > 0)
-                {
-                    int turnIdx = EnemyLayoutPresetApplicator.ResolveEnemyLayoutTurnIndex(0, encounterPreset.turnLayouts.Count);
-                    turnLayout = encounterPreset.turnLayouts[turnIdx];
-                }
-                EnemyLayoutPresetApplicator.PrepareBusyFromTurnLayoutBestEffort(curEnemyInfo, turnLayout, out var resolvedSlots);
-                EnemyLayoutPresetApplicator.ApplyTurnLayoutToFace(curEnemyInfo, enemyFaceGridInfoList, resolvedSlots);
+                SCDebugHelper.LogError(
+                    $"[Enemy] id={enemyRef.id} layoutPresetName=\"{enemyRef.layoutPresetName}\" 未加载到 EnemyLayoutPreset，请检查 Resources 路径与配表。");
                 return;
             }
 
-            int pickCount = Mathf.Min(GameConst.INIT_ENEMY_PART_COUNT, curEnemyInfo.deckPartInfoList.Count);
-            for (int i = 0; i < pickCount; i++)
+            EnemyTurnFaceLayout turnLayout = null;
+            if (encounterPreset.turnLayouts != null && encounterPreset.turnLayouts.Count > 0)
             {
-                int idx = Random.Range(0, curEnemyInfo.deckPartInfoList.Count);
-                PartInfo selectPartInfo = curEnemyInfo.deckPartInfoList[idx];
-                curEnemyInfo.deckPartInfoList.RemoveAt(idx);
-                curEnemyInfo.busyPartInfoList.Add(selectPartInfo);
+                int turnIdx = EnemyLayoutPresetApplicator.ResolveEnemyLayoutTurnIndex(0, encounterPreset.turnLayouts.Count);
+                turnLayout = encounterPreset.turnLayouts[turnIdx];
             }
-
-            EnemyLayoutGenerator.GenerateLayout(curEnemyInfo, enemyFaceGridInfoList);
+            EnemyLayoutPresetApplicator.PrepareBusyFromTurnLayoutBestEffort(curEnemyInfo, turnLayout, out var resolvedSlots);
+            EnemyLayoutPresetApplicator.ApplyTurnLayoutToFace(curEnemyInfo, enemyFaceGridInfoList, resolvedSlots);
         }
     }
 }
