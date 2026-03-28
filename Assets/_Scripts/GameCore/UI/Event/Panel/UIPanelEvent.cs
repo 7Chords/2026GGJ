@@ -38,6 +38,7 @@ namespace GameCore.UI
         public override void OnHidePanel()
         {
             SCMsgCenter.UnregisterMsg(SCMsgConst.EVENT_SELECT_CONFIRM, onEventSelectConfirm);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.EVENT_PART_EXCHANGE_COMPLETED, onEventPartExchangeCompleted);
             mono.imgClickArea.RemoveClickDown(onMouseClickDialogue);
             stopDialogueTypewriter();
             _m_selectContainer?.HidePanel();
@@ -47,6 +48,7 @@ namespace GameCore.UI
         public override void OnShowPanel()
         {
             SCMsgCenter.RegisterMsg(SCMsgConst.EVENT_SELECT_CONFIRM, onEventSelectConfirm);
+            SCMsgCenter.RegisterMsg(SCMsgConst.EVENT_PART_EXCHANGE_COMPLETED, onEventPartExchangeCompleted);
             mono.imgClickArea.AddMouseLeftClickDown(onMouseClickDialogue);
             _m_eventDialogueId = GameModel.instance.rollEventId;
             _m_eventDialogueRefObj = SCRefDataMgr.instance.eventDialogueRefList.refDataList.Find(x => x.id == _m_eventDialogueId);
@@ -141,12 +143,29 @@ namespace GameCore.UI
                 }
                 else
                 {
-                    _m_eventDialogueId = _m_eventDialogueRefObj.nextList[0];
-                    _m_eventDialogueRefObj = SCRefDataMgr.instance.eventDialogueRefList.refDataList.Find(x => x.id == _m_eventDialogueId);
-                    refreshShow();
+                    bool waitForPartExchange = _m_eventDialogueRefObj.eventType == EEventType.PART_2_PART
+                        && GameModel.instance.playerInfo.bagPartInfoList != null
+                        && GameModel.instance.playerInfo.bagPartInfoList.Count > 0;
+                    if (!waitForPartExchange)
+                        advanceToNextSingleDialogue();
                 }
             }
         }
+
+        private void advanceToNextSingleDialogue()
+        {
+            if (_m_eventDialogueRefObj == null || _m_eventDialogueRefObj.nextList == null || _m_eventDialogueRefObj.nextList.Count < 1)
+                return;
+            _m_eventDialogueId = _m_eventDialogueRefObj.nextList[0];
+            _m_eventDialogueRefObj = SCRefDataMgr.instance.eventDialogueRefList.refDataList.Find(x => x.id == _m_eventDialogueId);
+            refreshShow();
+        }
+
+        private void onEventPartExchangeCompleted(object[] _objs)
+        {
+            advanceToNextSingleDialogue();
+        }
+
         private void onEventSelectConfirm(object[] _objs)
         {
             if (_objs == null || _objs.Length == 0)

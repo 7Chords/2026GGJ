@@ -58,6 +58,7 @@ namespace GameCore.UI
                 return;
             if (!EventPartExchangeHelper.TryExecute(_part))
                 return;
+            SCMsgCenter.SendMsg(SCMsgConst.EVENT_PART_EXCHANGE_COMPLETED);
             closeExchangeNode();
         }
 
