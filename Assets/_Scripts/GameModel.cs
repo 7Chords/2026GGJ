@@ -410,6 +410,7 @@ namespace GameCore
                 case EAttributeType.TRIGGER_CHANCE_UP:
                 case EAttributeType.CLEAR_BAD_SKIN:
                 case EAttributeType.SELF_GET_BUFF:
+                case EAttributeType.SELF_MOUTH_GET_BUFF:
                 case EAttributeType.SELF_BUFF_MULTIPLIER:
                 case EAttributeType.CLEAR_SELF_BLEED_AND_HEAL_SELF:
                 case EAttributeType.INCREASE_ADD_BURN:
@@ -474,6 +475,7 @@ namespace GameCore
                 case EAttributeType.TRIGGER_CHANCE_UP:
                 case EAttributeType.CLEAR_BAD_SKIN:
                 case EAttributeType.SELF_GET_BUFF:
+                case EAttributeType.SELF_MOUTH_GET_BUFF:
                 case EAttributeType.SELF_BUFF_MULTIPLIER:
                 case EAttributeType.CLEAR_SELF_BLEED_AND_HEAL_SELF:
                 case EAttributeType.DAMAGE_MULTIPILER:
@@ -511,6 +513,7 @@ namespace GameCore
             switch (_attr)
             {
                 case EAttributeType.ENEMY_MOUTH_GET_BUFF:
+                case EAttributeType.SELF_MOUTH_GET_BUFF:
                     return FilterPartsMouthOnly(_raw);
 
                 case EAttributeType.DAMAGE_MULTIPILER:

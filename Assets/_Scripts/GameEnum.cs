@@ -47,7 +47,9 @@ namespace GameCore
         SEND_ALL_FAT_BY_GET_HIT,//被击中时施加对方自身所有油脂
         INCREASE_ADD_BURN,//增加己方部位提供燃烧效果时的层数
         ENEMY_MOUTH_GET_BUFF,//敌人嘴巴获得buff,
+        SELF_MOUTH_GET_BUFF,//己方嘴巴获得buff,
         USE_HEAT_2_ATTACK_AGAIN,//自身强壮超过x层后，消耗超过的强壮概率再次攻击
+        CLEAR_ALL_HATE_AND_MOUTH_GET_STRONG,//清除所有怨恨并嘴巴获得强壮
     }
 
     public enum EAttributeTriggerPointType
