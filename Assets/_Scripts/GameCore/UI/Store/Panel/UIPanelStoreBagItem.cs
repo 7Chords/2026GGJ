@@ -1,4 +1,5 @@
 using DG.Tweening;
+using GameCore;
 using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
@@ -84,6 +85,12 @@ namespace GameCore.UI
 
         private void onBtnSellClickDown(PointerEventData arg1, object[] arg2)
         {
+            var bag = GameModel.instance.playerInfo.bagPartInfoList;
+            if (bag == null || bag.Count <= 1)
+            {
+                GameCommon.ShowPopTip("最少需要拥有一个部位", Vector2.zero);
+                return;
+            }
             AudioMgr.instance.PlaySfx("sfx_money");
             GameCommon.DiscardToolTip();
             SCMsgCenter.SendMsg(SCMsgConst.SELL_PART, _m_partInfo);
