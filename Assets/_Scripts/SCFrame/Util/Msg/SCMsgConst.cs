@@ -1,7 +1,5 @@
 public class SCMsgConst
 {
-
-
     #region game func 20
     public const int PURCHASE_GOODS = 2001;
     public const int SELL_PART = 2002;
@@ -40,20 +38,18 @@ public class SCMsgConst
     public const int EVENT_START_SELECT = 2035;
     public const int EVENT_END_SELECT = 2036;
     public const int EVENT_SELECT_CONFIRM = 2037;
-    /// <summary> PART_2_PART: exchange succeeded; event dialogue may advance to next line. </summary>
-    public const int EVENT_PART_EXCHANGE_COMPLETED = 2043;
     public const int PLAYER_FACE_PART_TARGET_PREVIEW_HIGHLIGHT = 2038;
     public const int ENEMY_FACE_PART_TARGET_PREVIEW_HIGHLIGHT = 2039;
     public const int FACE_PART_TARTGET_PREVIEW_CANCEL = 2040;
-    /// <summary> Mouth-type attack: play lunge UI, then apply deferred damage. </summary>
     public const int PART_MOUTH_ATTACK = 2041;
     public const int FACE_PART_TARGET_PREVIEW_VALUES = 2042;
+    public const int EVENT_PART_EXCHANGE_COMPLETED = 2043;
     #endregion
 
     #region system 99
     public const int GAME_START = 9901;
     public const int GAME_END = 9902;
-    public const int UI_NODE_CHG = 9903;//ui????????
+    public const int UI_NODE_CHG = 9903;
     public const int UI_PANEL_HIDE_ANIM_OVER = 9904;
 
     #endregion
