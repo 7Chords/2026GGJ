@@ -40,7 +40,7 @@ MonoBehaviour:
       rotationSteps: 1
     - partLevelRefId: 10013
       originFacePosition: {x: 1, y: 0}
-      rotationSteps: 1
+      rotationSteps: 0
     - partLevelRefId: 10004
       originFacePosition: {x: 0, y: 1}
       rotationSteps: 0
@@ -49,7 +49,7 @@ MonoBehaviour:
       rotationSteps: 0
     - partLevelRefId: 10013
       originFacePosition: {x: 1, y: 5}
-      rotationSteps: 1
+      rotationSteps: 0
   - slots:
     - partLevelRefId: 10016
       originFacePosition: {x: 0, y: 3}
