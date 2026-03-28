@@ -225,8 +225,40 @@ namespace GameCore
         public void RollEventId()
         {
             EventRefObj eventRefObj = SCRefDataMgr.instance.eventRefList.refDataList.Find(refObj => refObj.floor == playerInfo.playerFloor);
-            long id = eventRefObj.eventList[Random.Range(0, eventRefObj.eventList.Count)];
-            rollEventId = id;
+            if (eventRefObj == null || eventRefObj.eventList == null || eventRefObj.eventList.Count == 0)
+            {
+                rollEventId = 0;
+                return;
+            }
+
+            var pool = eventRefObj.eventList;
+            int hp = playerInfo.currentHealth;
+            int minHpForBlood2Part = GameConst.EVENT_BLOOD_2_PART_ROLL_MIN_CURRENT_HEALTH;
+
+            var candidates = new List<long>();
+            foreach (long dialogueId in pool)
+            {
+                EventDialogueRefObj dialogue = SCRefDataMgr.instance.eventDialogueRefList.refDataList.Find(x => x.id == dialogueId);
+                if (dialogue == null)
+                {
+                    candidates.Add(dialogueId);
+                    continue;
+                }
+                if (!IsBloodForPartEventType(dialogue.eventType) || hp >= minHpForBlood2Part)
+                    candidates.Add(dialogueId);
+            }
+
+            if (candidates.Count == 0)
+                rollEventId = pool[Random.Range(0, pool.Count)];
+            else
+                rollEventId = candidates[Random.Range(0, candidates.Count)];
+        }
+
+        private static bool IsBloodForPartEventType(EEventType _type)
+        {
+            return _type == EEventType.BLOOD_2_PART_HIGH
+                || _type == EEventType.BLOOD_2_PART_MIDDLE
+                || _type == EEventType.BLOOD_2_PART_LOW;
         }
 
         public void RollBattleOrder()

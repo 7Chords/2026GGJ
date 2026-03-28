@@ -48,6 +48,8 @@ namespace GameCore
 
         public const int BUFF_LAYER_MAX = 99;
 
+        public const int EVENT_BLOOD_2_PART_ROLL_MIN_CURRENT_HEALTH = 30;
+
         public const float DELAY_START_TIME = 0.75f;
         public const float DELAY_EFFECT_TIME = 0.75f;
         public const float DELAY_END_TIME = 1f;
