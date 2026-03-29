@@ -9,19 +9,22 @@ namespace GameCore
     [CreateAssetMenu(fileName = "NewMapData", menuName = "Map/MapData")]
     public class MapData : ScriptableObject
     {
-        [Header("x：每列多少个节点/y：多少列")]
+        [Header("地图行列")]
         public Vector2Int layerCount = new Vector2Int(12, 5);
-        [Header("有多少个节点是公共的(交叉路口节点)")]
+        [Header("地图交叉点")]
         public int repetitionCount = 5;
 
-        [Header("首层 / 末层节点类型（原逻辑写死为战斗与 BOSS，现可配）")]
-        [Tooltip("第一层（入口侧）节点固定使用的房间类型")]
+        [Header("节点配置")]
+        [Tooltip("第一个节点")]
         public ERoomType firstNodeRoomType = ERoomType.ENEMY;
-        [Tooltip("最后一层节点固定使用的房间类型")]
+        [Tooltip("最后一个节点")]
         public ERoomType lastNodeRoomType = ERoomType.BOSS;
 
-        [Header("房间分布概率排布")]
+        [Header("节点概率")]
         public List<RoomProbability> roomProbabilities;
+
+        [Tooltip("If true, use legacy per-step weighted random for interior rooms. If false (default), after routes are built interior visible nodes get types by count quota so ratios match Room Probabilities.")]
+        public bool useLegacyInteriorRoomRandom = false;
 
         public ERoomType GetRandomMapNodeType(System.Random random)
         {

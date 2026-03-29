@@ -122,6 +122,8 @@ namespace GameCore
 
             createMapLayoutData();
             generateRouteLoop();
+            if (!_mapData.useLegacyInteriorRoomRandom)
+                ApplyInteriorRoomTypeQuotasFromConfiguredWeights();
 
             var lines = CollectLineSegments();
             if (MapManager.instance == null)
@@ -424,6 +426,107 @@ namespace GameCore
         #endregion
 
         #region 随机房间类型
+
+        /// <summary>
+        /// Reassign interior layer room types so counts match <see cref="MapData.roomProbabilities"/> weights
+        /// among <b>visible</b> nodes only (isActive, excluding first/last column which stay fixed types).
+        /// </summary>
+        private void ApplyInteriorRoomTypeQuotasFromConfiguredWeights()
+        {
+            if (_layoutData == null || _mapData == null || _mapRandom == null)
+                return;
+
+            var probs = _mapData.roomProbabilities;
+            if (probs == null || probs.Count == 0)
+                return;
+
+            var mergedWeight = new Dictionary<ERoomType, int>();
+            for (int i = 0; i < probs.Count; i++)
+            {
+                var rp = probs[i];
+                if (rp == null || rp.weight <= 0)
+                    continue;
+                if (!mergedWeight.ContainsKey(rp.type))
+                    mergedWeight[rp.type] = 0;
+                mergedWeight[rp.type] += rp.weight;
+            }
+
+            if (mergedWeight.Count == 0)
+                return;
+
+            int totalW = 0;
+            foreach (var w in mergedWeight.Values)
+                totalW += w;
+            if (totalW <= 0)
+                return;
+
+            var interiorCells = new List<MapCellLayoutData>();
+            for (int i = 1; i < _layerCount.x - 1; i++)
+            {
+                for (int j = 0; j < _layerCount.y; j++)
+                {
+                    var cell = _layoutData[i, j];
+                    if (cell != null && cell.isActive)
+                        interiorCells.Add(cell);
+                }
+            }
+
+            int n = interiorCells.Count;
+            if (n <= 0)
+                return;
+
+            var quota = new Dictionary<ERoomType, int>();
+            var fracOrder = new List<(ERoomType type, float frac)>();
+            int sumFloor = 0;
+
+            foreach (var kv in mergedWeight)
+            {
+                float exact = (float)n * kv.Value / totalW;
+                int fl = Mathf.FloorToInt(exact);
+                quota[kv.Key] = fl;
+                sumFloor += fl;
+                fracOrder.Add((kv.Key, exact - fl));
+            }
+
+            int deficit = n - sumFloor;
+            fracOrder.Sort((a, b) => b.frac.CompareTo(a.frac));
+            for (int k = 0; k < deficit; k++)
+            {
+                var t = fracOrder[k % fracOrder.Count].type;
+                quota[t] = quota[t] + 1;
+            }
+
+            var pool = new List<ERoomType>(n);
+            foreach (var kv in quota)
+            {
+                for (int c = 0; c < kv.Value; c++)
+                    pool.Add(kv.Key);
+            }
+
+            while (pool.Count < n)
+                pool.Add(fracOrder[0].type);
+            while (pool.Count > n)
+                pool.RemoveAt(pool.Count - 1);
+
+            for (int k = pool.Count - 1; k > 0; k--)
+            {
+                int j = _mapRandom.Next(k + 1);
+                var tmp = pool[k];
+                pool[k] = pool[j];
+                pool[j] = tmp;
+            }
+
+            for (int k = interiorCells.Count - 1; k > 0; k--)
+            {
+                int j = _mapRandom.Next(k + 1);
+                var tmp = interiorCells[k];
+                interiorCells[k] = interiorCells[j];
+                interiorCells[j] = tmp;
+            }
+
+            for (int i = 0; i < n; i++)
+                interiorCells[i].roomType = pool[i];
+        }
 
         private ERoomType SetRoomType(int layerIndex, ERoomType previousRoomType)
         {
