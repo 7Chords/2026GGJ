@@ -45,6 +45,7 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.CHEAT_DEBUG_UI_REFRESH, onCheatDebugUiRefresh);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.NEW_GANE_START, onNewBattleStart);
             SCMsgCenter.UnregisterMsg(SCMsgConst.FACE_PART_TARGET_PREVIEW_VALUES, onFacePartTargetPreviewValues);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.FACE_PART_TARTGET_PREVIEW_CANCEL, onFacePartTargetPreviewCancel);
@@ -66,6 +67,7 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.CHEAT_DEBUG_UI_REFRESH, onCheatDebugUiRefresh);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.NEW_GANE_START, onNewBattleStart);
             SCMsgCenter.RegisterMsg(SCMsgConst.FACE_PART_TARGET_PREVIEW_VALUES, onFacePartTargetPreviewValues);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.FACE_PART_TARTGET_PREVIEW_CANCEL, onFacePartTargetPreviewCancel);
@@ -100,6 +102,11 @@ namespace GameCore.UI
             AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.AddNode(new UINodeBattle(SCUIShowType.FULL));
             BattleManager.instance.StartBattle();
+        }
+
+        private void onCheatDebugUiRefresh()
+        {
+            refreshShow();
         }
 
         private void refreshShow()

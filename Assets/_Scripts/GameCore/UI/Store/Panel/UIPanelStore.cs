@@ -52,6 +52,7 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.CHEAT_DEBUG_UI_REFRESH, onCheatDebugUiRefresh);
             SCMsgCenter.UnregisterMsg(SCMsgConst.PURCHASE_GOODS, onPurchaseGoods);
             SCMsgCenter.UnregisterMsg(SCMsgConst.SELL_PART, onSellPart);
             mono.btnBag.RemoveClickDown(onBtnBagClickDown);
@@ -68,6 +69,7 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.CHEAT_DEBUG_UI_REFRESH, onCheatDebugUiRefresh);
             SCMsgCenter.RegisterMsg(SCMsgConst.PURCHASE_GOODS, onPurchaseGoods);
             SCMsgCenter.RegisterMsg(SCMsgConst.SELL_PART, onSellPart);
 
@@ -104,6 +106,11 @@ namespace GameCore.UI
                 GoodsInfo info = new GoodsInfo(goodsRefObj, effectObj.goodsLevel);
                 _m_goodsInfoList.Add(info);
             }
+            refreshShow();
+        }
+
+        private void onCheatDebugUiRefresh()
+        {
             refreshShow();
         }
 

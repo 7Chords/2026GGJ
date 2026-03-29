@@ -1,3 +1,4 @@
+using GameCore.RuntimeDebug;
 using GameCore.UI;
 using SCFrame;
 using System.Collections;
@@ -43,6 +44,7 @@ namespace GameCore
             MapManager.instance.Initialize();
             AudioMgr.instance.Initialize();
             BattleManager.instance.Initialize();
+            RuntimeDebug.CheatDebugRuntimePanel.AttachIfNeeded(gameObject);
             startGame();
         }
 

@@ -46,6 +46,7 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.CHEAT_DEBUG_UI_REFRESH, onCheatDebugUiRefresh);
             SCMsgCenter.UnregisterMsg(SCMsgConst.SELECT_STRENGTHEN_PART, onSelectStrengthenPart);
             mono.btnExit.RemoveClickDown(onBtnExitClickDown);
             mono.btnConfirm.RemoveClickDown(onBtnConfirmClickDown);
@@ -67,6 +68,7 @@ namespace GameCore.UI
         {
             _m_curSelectPart = null;
 
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.CHEAT_DEBUG_UI_REFRESH, onCheatDebugUiRefresh);
             SCMsgCenter.RegisterMsg(SCMsgConst.SELECT_STRENGTHEN_PART, onSelectStrengthenPart);
             mono.btnExit.AddMouseLeftClickDown(onBtnExitClickDown);
             mono.btnConfirm.AddMouseLeftClickDown(onBtnConfirmClickDown);
@@ -85,6 +87,11 @@ namespace GameCore.UI
             
             _m_strengthenContainer?.SetListInfo(GameModel.instance.playerInfo.bagPartInfoList);
 
+            refreshShow();
+        }
+
+        private void onCheatDebugUiRefresh()
+        {
             refreshShow();
         }
 
@@ -153,7 +160,7 @@ namespace GameCore.UI
             GameModel.instance.playerInfo.playerMoney = Mathf.Max(GameModel.instance.playerInfo.playerMoney - _m_curSelectPart.GetLevelRefObj().levelUpCost, 0);
             _m_curSelectPart.LevelUp();
             refreshShow();
-            GameCommon.ShowPopTip("强化成功", Vector2.zero);
+            GameCommon.ShowPopTip("??????", Vector2.zero);
         }
 
         private void onBtnConfirmMouseEnter(PointerEventData _arg1, object[] _arg2)

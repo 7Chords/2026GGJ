@@ -44,6 +44,7 @@ public class SCMsgConst
     public const int PART_MOUTH_ATTACK = 2041;
     public const int FACE_PART_TARGET_PREVIEW_VALUES = 2042;
     public const int EVENT_PART_EXCHANGE_COMPLETED = 2043;
+    public const int CHEAT_DEBUG_UI_REFRESH = 2044;
     #endregion
 
     #region system 99

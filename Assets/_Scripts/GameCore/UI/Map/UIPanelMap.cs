@@ -30,6 +30,7 @@ namespace GameCore.UI
         }
         public override void OnHidePanel()
         {
+            SCMsgCenter.UnregisterMsgAct(SCMsgConst.CHEAT_DEBUG_UI_REFRESH, onCheatDebugUiRefresh);
             mono.btnBag.RemoveClickDown(onBtnBagClickDown);
             mono.btnBag.RemoveMouseEnter(onBtnBagMouseEnter);
             mono.btnBag.RemoveMouseExit(onBtnBagMouseExit);
@@ -58,9 +59,15 @@ namespace GameCore.UI
             mono.btnGuide.AddMouseEnter(onBtnGuideMouseEnter);
             mono.btnGuide.AddMouseExit(onBtnGuideMouseExit);
 
+            SCMsgCenter.RegisterMsgAct(SCMsgConst.CHEAT_DEBUG_UI_REFRESH, onCheatDebugUiRefresh);
             refreshShow();
             GameRunSave.NotifyEnteredMapOnce();
             GameRunSave.SaveFromGameModel();
+        }
+
+        private void onCheatDebugUiRefresh()
+        {
+            refreshShow();
         }
 
         private void refreshShow()
