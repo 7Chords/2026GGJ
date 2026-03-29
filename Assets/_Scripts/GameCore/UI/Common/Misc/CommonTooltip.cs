@@ -111,28 +111,30 @@ namespace GameCore.UI
                 createOneGrid(p, t);
             }
         }
-        private void setBuffInfo(List<BuffInfo> _buffInfoList)
+        private void setBuffTooltipRows(List<BuffInfo> buffInfoList)
         {
-            if (_buffInfoList == null)
+            if (buffInfoList == null || tranParentBuff == null)
                 return;
-            if (tranParentBuff == null)
-                return;
-            GameObject itemGO = null;
-            TooltipBuffItem item = null;
-            GameObject sideGO = null;
-            CommonBuffSideItem sideItem = null;
-            for (int i =0;i< _buffInfoList.Count;i++)
+            for (int i = 0; i < buffInfoList.Count; i++)
             {
-                itemGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_TOOLTIP_BUFF_ITEM, tranParentBuff.transform);
-                item = itemGO.GetComponent<TooltipBuffItem>();
+                GameObject itemGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_TOOLTIP_BUFF_ITEM, tranParentBuff.transform);
+                var item = itemGO.GetComponent<TooltipBuffItem>();
                 if (item != null)
-                    item.SetBuffInfo(_buffInfoList[i]);
-                sideGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_BUFF_SIDE_ITEM, tranParentBuffSideInfo.transform);
-                sideItem = sideGO.GetComponent<CommonBuffSideItem>();
-                if (sideItem != null)
-                    sideItem.Initialize(_buffInfoList[i].buffType);
+                    item.SetBuffInfo(buffInfoList[i]);
             }
+        }
 
+        private void setBuffSideItems(IList<EBuffType> buffTypes)
+        {
+            if (buffTypes == null || buffTypes.Count == 0 || tranParentBuffSideInfo == null)
+                return;
+            for (int i = 0; i < buffTypes.Count; i++)
+            {
+                GameObject sideGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_BUFF_SIDE_ITEM, tranParentBuffSideInfo.transform);
+                var sideItem = sideGO.GetComponent<CommonBuffSideItem>();
+                if (sideItem != null)
+                    sideItem.Initialize(buffTypes[i]);
+            }
         }
         public void setLocalPosition(Vector2 _localPos)
         {
@@ -174,15 +176,26 @@ namespace GameCore.UI
             setLocalPosition(adaptivePos);
             canvasGroup.alpha = 0;
             SCCommon.SetGameObjectEnable(gameObject, true);
+            var sideHintTypes = PartTooltipBuffSideHintCollector.CollectSideHintBuffTypes(_partInfo);
+            bool hasBuffRows = _partInfo.HasBuff();
+            bool showBuffSection = hasBuffRows || sideHintTypes.Count > 0;
+
             SCCommon.SetGameObjectEnable(goGrid, _showGridInfo);
-            SCCommon.SetGameObjectEnable(goBuff, _partInfo.HasBuff());
+            SCCommon.SetGameObjectEnable(goBuff, showBuffSection);
+            if (tranParentBuff != null)
+                SCCommon.SetGameObjectEnable(tranParentBuff, hasBuffRows);
+            if (tranParentBuffSideInfo != null)
+                SCCommon.SetGameObjectEnable(tranParentBuffSideInfo, sideHintTypes.Count > 0);
+
             SCCommon.SetGameObjectEnable(txtQuality.gameObject, _partInfo.partRefObj.qualityType != EQualityType.NONE);
 
             setBaseInfo(_partInfo.partRefObj.partName, PartDescriptionFormat.GetResolvedDescription(_partInfo), _partInfo.partLevel,_partInfo.partRefObj.qualityType);
             if (_showGridInfo)
                 setGridInfo(_partInfo.partRefObj.GetOccupyPosList(), _partInfo.localEffectPosList);
-            if (_partInfo.HasBuff())
-                setBuffInfo(_partInfo.buffLogic.buffList);
+            if (hasBuffRows)
+                setBuffTooltipRows(_partInfo.buffLogic.buffList);
+            if (sideHintTypes.Count > 0)
+                setBuffSideItems(sideHintTypes);
             _m_tweenContainer.RegDoTween(canvasGroup.DOFade(1, fadeInDuratin));
         }
         #endregion
