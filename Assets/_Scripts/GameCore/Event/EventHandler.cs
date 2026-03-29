@@ -32,7 +32,7 @@ namespace GameCore
                         if (GameModel.instance.playerInfo.bagPartInfoList == null
                             || GameModel.instance.playerInfo.bagPartInfoList.Count == 0)
                         {
-                            GameCommon.ShowPopTip("????", Vector2.zero);
+                            GameCommon.ShowPopTip("Î´³ÖÓÐÈÎºÎ²¿Î»", Vector2.zero);
                             return;
                         }
                         UICoreMgr.instance.AddNode(new UINodeEventPartExchange(SCUIShowType.ADDITION));
@@ -61,7 +61,7 @@ namespace GameCore
                             return;
                         PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
                         GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
-                        GameCommon.ShowPopTip("get" + partRefObj.partName, Vector2.zero);
+                        GameCommon.ShowPopTip("»ñµÃ" + partRefObj.partName + " Lv" + levelRefObj.partLevel, Vector2.zero);
                     }
                     break;
                 case EEventType.TRAP_BATTLE:
@@ -114,8 +114,7 @@ namespace GameCore
             if (partRefObj == null)
                 return;
             GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
-            string tipPrefix = poolType == EEventType.BLOOD_2_PART_HIGH ? "???" : "get";
-            GameCommon.ShowPopTip(tipPrefix + partRefObj.partName, Vector2.zero);
+            GameCommon.ShowPopTip("»ñµÃ" + partRefObj.partName + " Lv" + levelRefObj.partLevel, Vector2.zero);
             GameModel.instance.PlayerTakeDamage(blood2PartRefObj.blood);
         }
     }

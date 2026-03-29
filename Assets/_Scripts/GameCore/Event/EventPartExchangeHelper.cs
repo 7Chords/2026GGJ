@@ -59,7 +59,7 @@ namespace GameCore
 
             bag.Remove(sacrifice);
             bag.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
-            GameCommon.ShowPopTip("获得" + partRefObj.partName, Vector2.zero);
+            GameCommon.ShowPopTip("获得" + partRefObj.partName + " 等级" + levelRefObj.partLevel, Vector2.zero);
             return true;
         }
     }
