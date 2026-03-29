@@ -409,6 +409,7 @@ namespace GameCore
                 case EAttributeType.HEAL_WEAK_PART:
                 case EAttributeType.TRIGGER_CHANCE_UP:
                 case EAttributeType.CLEAR_BAD_SKIN:
+                case EAttributeType.CLEAR_ALL_HATE_AND_MOUTH_GET_STRONG:
                 case EAttributeType.SELF_GET_BUFF:
                 case EAttributeType.SELF_MOUTH_GET_BUFF:
                 case EAttributeType.SELF_BUFF_MULTIPLIER:
@@ -474,6 +475,7 @@ namespace GameCore
                 case EAttributeType.HEAL_WEAK_PART:
                 case EAttributeType.TRIGGER_CHANCE_UP:
                 case EAttributeType.CLEAR_BAD_SKIN:
+                case EAttributeType.CLEAR_ALL_HATE_AND_MOUTH_GET_STRONG:
                 case EAttributeType.SELF_GET_BUFF:
                 case EAttributeType.SELF_MOUTH_GET_BUFF:
                 case EAttributeType.SELF_BUFF_MULTIPLIER:

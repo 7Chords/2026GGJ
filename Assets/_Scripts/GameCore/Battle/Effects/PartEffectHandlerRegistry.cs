@@ -40,7 +40,8 @@ namespace GameCore.Battle
             Register(EAttributeType.INCREASE_ADD_BURN, new Effects.IncreaseAddBurnEffectHandler());
             Register(EAttributeType.SPREAD_BURN, new Effects.SpreadBurnEffectHandler());
             Register(EAttributeType.SEND_ALL_FAT_BY_GET_HIT, new Effects.SendAllFatByGetHitEffectHandler());
-
+            Register(EAttributeType.CLEAR_BAD_SKIN, new Effects.ClearBadSkinEffectHandler());
+            Register(EAttributeType.CLEAR_ALL_HATE_AND_MOUTH_GET_STRONG, new Effects.ClearAllHateAndMouthGetStrongEffectHandler());
 
         }
 
