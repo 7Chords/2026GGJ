@@ -6,7 +6,7 @@ using UnityEngine;
 namespace GameCore
 {
     /// <summary>
-    /// PART_2_PART: remove one bag part, add a random part from event_part_2_part pool (same floor; prefer same quality row).
+    /// PART_2_PART: remove one bag part, add a weighted random part from event_part_2_part (same floor; prefer row matching sacrifice partLevel).
     /// </summary>
     public static class EventPartExchangeHelper
     {
@@ -26,7 +26,8 @@ namespace GameCore
                 return false;
             }
 
-            List<EventPart2PartRefObj> configs = all.FindAll(x => x.floor == floor && x.qualityType == sacrifice.partRefObj.qualityType);
+            List<EventPart2PartRefObj> configs =
+                all.FindAll(x => x.floor == floor && x.partLevel == sacrifice.partLevel);
             if (configs == null || configs.Count == 0)
                 configs = all.FindAll(x => x.floor == floor);
             if (configs == null || configs.Count == 0)

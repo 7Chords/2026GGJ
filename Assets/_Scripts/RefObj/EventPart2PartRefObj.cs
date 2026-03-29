@@ -17,14 +17,13 @@ namespace GameCore.RefData
         }
         public long id;
         public int floor;
-        public EQualityType qualityType;
-        /// <summary>Each entry: part_level id and weight, same format as enemy bootyList (id:weight;). Plain id defaults weight 1.</summary>
+        public int partLevel;
         public List<BootyEffectObj> partList;
         protected override void _parseFromString()
         {
             id = getLong("id");
             floor = getInt("floor");
-            qualityType = (EQualityType)getEnum("qualityType",typeof(EQualityType));
+            partLevel = getInt("partLevel");
             partList = getList<BootyEffectObj>("partList");
         }
         public static string assetPath => "RefData/ExportTxt";
