@@ -47,6 +47,12 @@ namespace GameCore
 
         public const int BUFF_LAYER_MAX = 99;
 
+        /// <summary> Primary keys in buff.txt; keep in sync with table and effect handlers. </summary>
+        public const long BUFF_ID_BLEED = 100001;
+        public const long BUFF_ID_FAT = 100002;
+        public const long BUFF_ID_BURN = 100003;
+        public const long BUFF_ID_STRONG = 100004;
+
         public const int EVENT_BLOOD_2_PART_ROLL_MIN_CURRENT_HEALTH = 30;
 
         public const float DELAY_START_TIME = 0.75f;

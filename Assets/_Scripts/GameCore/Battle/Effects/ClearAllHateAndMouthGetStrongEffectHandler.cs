@@ -1,13 +1,13 @@
+using GameCore;
+
 namespace GameCore.Battle.Effects
 {
     /// <summary>
     /// CLEAR_ALL_HATE_AND_MOUTH_GET_STRONG: strip all HATE from ally parts in the effect area, then each mouth in that area gains
-    /// (totalHateConsumed / hatePerGrant) * strongPerGrant layers of STRONG. Params: [0]=hatePerGrant, [1]=strongPerGrant. Buff id 100004.
+    /// (totalHateConsumed / hatePerGrant) * strongPerGrant layers of STRONG. Params: [0]=hatePerGrant, [1]=strongPerGrant. Uses <see cref="GameConst.BUFF_ID_STRONG"/>.
     /// </summary>
     public class ClearAllHateAndMouthGetStrongEffectHandler : IPartEffectHandler
     {
-        private const long StrongBuffId = 100004;
-
         public void Execute(PartInfo _caster, EntryInfo _entry, PartEffectContext _ctx)
         {
             var battleCtx = BattleContext.current;
@@ -49,7 +49,7 @@ namespace GameCore.Battle.Effects
                 var part = partInfoList[i];
                 if (part?.partRefObj == null || part.partRefObj.partType != EPartType.MOUTH)
                     continue;
-                battleCtx.ApplyBuffToPart(part, _caster, StrongBuffId, strongLayers);
+                battleCtx.ApplyBuffToPart(part, _caster, GameConst.BUFF_ID_STRONG, strongLayers);
             }
         }
     }

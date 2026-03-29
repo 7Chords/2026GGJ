@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameCore;
 using UnityEngine;
 
 namespace GameCore.Battle.Effects
@@ -14,8 +15,8 @@ namespace GameCore.Battle.Effects
             if (info == null)
                 return;
             int buffLayer = info.buffLayer;
-            battleCtx.ApplyBuffToPart(_ctx.senderPart, _caster, 100002, buffLayer);
-            battleCtx.ApplyReduceBuffLayerToPart(_caster, 100002, buffLayer);
+            battleCtx.ApplyBuffToPart(_ctx.senderPart, _caster, GameConst.BUFF_ID_FAT, buffLayer);
+            battleCtx.ApplyReduceBuffLayerToPart(_caster, GameConst.BUFF_ID_FAT, buffLayer);
         }
     }
 }

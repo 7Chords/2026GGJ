@@ -11,11 +11,6 @@ namespace GameCore.Helpers
     /// </summary>
     public static class PartTooltipBuffSideHintCollector
     {
-        // Keep in sync with effect handlers that use literal buff ids.
-        private const long BleedBuffId = 100001;
-        private const long FatBuffId = 100002;
-        private const long BurnBuffId = 100003;
-
         public static List<EBuffType> CollectSideHintBuffTypes(PartInfo part)
         {
             var result = new List<EBuffType>();
@@ -71,24 +66,24 @@ namespace GameCore.Helpers
                     break;
 
                 case EAttributeType.SEND_BLEED_BY_GET_HIT:
-                    if (TryGetBuffTypeFromId(BleedBuffId, out var bleed))
+                    if (TryGetBuffTypeFromId(GameConst.BUFF_ID_BLEED, out var bleed))
                         yield return bleed;
                     break;
 
                 case EAttributeType.SEND_ALL_FAT_BY_GET_HIT:
-                    if (TryGetBuffTypeFromId(FatBuffId, out var fat))
+                    if (TryGetBuffTypeFromId(GameConst.BUFF_ID_FAT, out var fat))
                         yield return fat;
                     break;
 
                 case EAttributeType.CHANGE_FAT_2_BURN:
-                    if (TryGetBuffTypeFromId(FatBuffId, out var fat2))
+                    if (TryGetBuffTypeFromId(GameConst.BUFF_ID_FAT, out var fat2))
                         yield return fat2;
-                    if (TryGetBuffTypeFromId(BurnBuffId, out var burn))
+                    if (TryGetBuffTypeFromId(GameConst.BUFF_ID_BURN, out var burn))
                         yield return burn;
                     break;
 
                 case EAttributeType.SPREAD_BURN:
-                    if (TryGetBuffTypeFromId(BurnBuffId, out var burn2))
+                    if (TryGetBuffTypeFromId(GameConst.BUFF_ID_BURN, out var burn2))
                         yield return burn2;
                     break;
 

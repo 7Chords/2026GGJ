@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameCore;
 using UnityEngine;
 
 namespace GameCore.Battle.Effects
@@ -11,7 +12,7 @@ namespace GameCore.Battle.Effects
             var battleCtx = BattleContext.current;
             if (battleCtx == null || _ctx.senderPart == null) return;
             int buffLayer = (int)_entry.attributeValueList[0];
-            battleCtx.ApplyBuffToPart(_ctx.senderPart, _caster, 100001, buffLayer);
+            battleCtx.ApplyBuffToPart(_ctx.senderPart, _caster, GameConst.BUFF_ID_BLEED, buffLayer);
         }
     }
 }

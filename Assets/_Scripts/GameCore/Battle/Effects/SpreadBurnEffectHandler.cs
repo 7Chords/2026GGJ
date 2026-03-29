@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameCore;
 using UnityEngine;
 
 namespace GameCore.Battle.Effects
@@ -35,7 +36,7 @@ namespace GameCore.Battle.Effects
             {
                 if (part == maxBurnPart)
                     continue;
-                battleCtx.ApplyReduceBuffLayerToPart(part, 100003, Mathf.Max(minLayer, maxBurnLayer + reduceLayer));
+                battleCtx.ApplyReduceBuffLayerToPart(part, GameConst.BUFF_ID_BURN, Mathf.Max(minLayer, maxBurnLayer + reduceLayer));
             }
         }
     }

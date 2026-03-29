@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameCore;
 using UnityEngine;
 
 namespace GameCore.Battle.Effects
@@ -21,8 +22,8 @@ namespace GameCore.Battle.Effects
                 if(part.GetBuff(EBuffType.FAT) == null) continue;
                 //todo��Ӳ��������֬��ȼ��id
                 int changeAmount = part.GetBuff(EBuffType.FAT).buffLayer / changeUnit;
-                battleCtx.ApplyReduceBuffLayerToPart(part, 100002, changeAmount * changeUnit);
-                battleCtx.ApplyBuffToPart(part, _caster, 100003, changeAmount* targetUnit);
+                battleCtx.ApplyReduceBuffLayerToPart(part, GameConst.BUFF_ID_FAT, changeAmount * changeUnit);
+                battleCtx.ApplyBuffToPart(part, _caster, GameConst.BUFF_ID_BURN, changeAmount * targetUnit);
 
             }
         }
