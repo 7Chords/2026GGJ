@@ -213,7 +213,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d2250c02ca088ce4488a7ac1c7cd3a10
-    m_Address: spr_icon_buff_pery
+    m_Address: spr_icon_buff_prey
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
