@@ -26,17 +26,24 @@ namespace GameCore
             buffType = _buffRefObj.buffType;
             buffValue = _buffRefObj.buffValue;
             isPositive = _buffRefObj.isPositive;
-            buffLayer = _layer;
+            buffLayer = Mathf.Clamp(_layer, -GameConst.BUFF_LAYER_MAX, GameConst.BUFF_LAYER_MAX);
             creator = _creator;
             owner = _owner;
         }
+        /// <summary> Stack delta; negative layers mean reverse effect (e.g. STRONG reduces attack). </summary>
         public void AddBuffLayer(int _layer = 1)
         {
-            buffLayer = Mathf.Min(buffLayer + _layer, GameConst.BUFF_LAYER_MAX);
+            buffLayer = Mathf.Clamp(buffLayer + _layer, -GameConst.BUFF_LAYER_MAX, GameConst.BUFF_LAYER_MAX);
         }
+        /// <summary> Move stack toward zero by <paramref name="_layer"/> (peels both positive and negative stacks). </summary>
         public void ReduceBuffLayer(int _layer = 1)
         {
-            buffLayer = Mathf.Max(buffLayer - _layer, 0);
+            if (_layer <= 0)
+                return;
+            if (buffLayer > 0)
+                buffLayer = Mathf.Max(0, buffLayer - _layer);
+            else if (buffLayer < 0)
+                buffLayer = Mathf.Min(0, buffLayer + _layer);
         }
     }
 }

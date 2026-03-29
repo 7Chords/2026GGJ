@@ -4,8 +4,8 @@ using UnityEngine;
 namespace GameCore.Battle
 {
     /// <summary>
-    /// STRONG: mouth-only flat attack bonus (layer * buffValue from buff table).
-    /// PREY: extra flat damage taken by the part (layer * buffValue), applied in ApplyDamageToPart.
+    /// STRONG: mouth-only flat attack delta (buffLayer * buffValue); negative layers reduce attack.
+    /// PREY: flat damage taken delta (buffLayer * buffValue); negative layers reduce incoming damage from this modifier.
     /// HATE: no combat modifier (reserved for other systems).
     /// </summary>
     public static class BuffCombatModifiers
@@ -17,7 +17,7 @@ namespace GameCore.Battle
             if (caster.partRefObj.partType != EPartType.MOUTH)
                 return 0;
             BuffInfo strong = caster.GetBuff(EBuffType.STRONG);
-            if (strong == null || strong.buffLayer <= 0)
+            if (strong == null || strong.buffLayer == 0)
                 return 0;
             return Mathf.RoundToInt(strong.buffLayer * strong.buffValue);
         }
@@ -27,7 +27,7 @@ namespace GameCore.Battle
             if (target == null)
                 return 0;
             BuffInfo prey = target.GetBuff(EBuffType.PREY);
-            if (prey == null || prey.buffLayer <= 0)
+            if (prey == null || prey.buffLayer == 0)
                 return 0;
             return Mathf.RoundToInt(prey.buffLayer * prey.buffValue);
         }

@@ -37,11 +37,11 @@ namespace GameCore.Battle.Effects
                 part.buffLogic.ClearBuff(EBuffType.HATE);
             }
 
-            if (hatePerGrant <= 0 || strongPerGrant <= 0 || totalHate <= 0)
+            if (hatePerGrant <= 0 || totalHate <= 0)
                 return;
 
             int strongLayers = totalHate / hatePerGrant * strongPerGrant;
-            if (strongLayers <= 0)
+            if (strongLayers == 0)
                 return;
 
             for (int i = 0; i < partInfoList.Count; i++)

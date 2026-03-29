@@ -13,16 +13,15 @@ namespace GameCore.Battle
             List<BuffInfo> deleteBuffList = new List<BuffInfo>();
             foreach (var buffInfo in buffList)
             {
-                buffInfo.buffLayer--;
+                if (buffInfo.buffLayer > 0)
+                    buffInfo.buffLayer--;
+                else if (buffInfo.buffLayer < 0)
+                    buffInfo.buffLayer++;
 
                 if (buffInfo.buffLayer == 0)
-                {
                     deleteBuffList.Add(buffInfo);
-                }
                 else
-                {
                     SCDebugHelper.LogWarning(buffInfo.buffRefObj.buffName + ":" + buffInfo.buffLayer);
-                }
             }
 
             foreach (var buffInfo in deleteBuffList)
@@ -38,10 +37,15 @@ namespace GameCore.Battle
             if (findBuffInfo != null)
             {
                 findBuffInfo.AddBuffLayer(_buffInfo.buffLayer);
-                SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, findBuffInfo);
+                if (findBuffInfo.buffLayer == 0)
+                    RemoveBuff(findBuffInfo);
+                else
+                    SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, findBuffInfo);
             }
             else
             {
+                if (_buffInfo.buffLayer == 0)
+                    return;
                 buffList.Add(_buffInfo);
                 SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_ADD, _buffInfo);
             }
@@ -66,7 +70,7 @@ namespace GameCore.Battle
             if (convert <= 0) return;
 
             fat.ReduceBuffLayer(convert * 2);
-            if (fat.buffLayer <= 0)
+            if (fat.buffLayer == 0)
                 RemoveBuff(fat);
             else
                 SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, fat);
@@ -93,15 +97,11 @@ namespace GameCore.Battle
             BuffInfo buffInfo = buffList.Find(x => x.buffRefObj.id == _id);
             if (buffInfo == null)
                 return;
-            buffInfo.buffLayer = Mathf.Max(0, buffInfo.buffLayer - _reduceLayer);
-            if(buffInfo.buffLayer == 0)
-            {
+            buffInfo.ReduceBuffLayer(_reduceLayer);
+            if (buffInfo.buffLayer == 0)
                 RemoveBuff(buffInfo);
-            }
             else
-            {
                 SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, buffInfo);
-            }
 
         }
 
@@ -110,17 +110,14 @@ namespace GameCore.Battle
             if (_reduceLayer <= 0)
                 return;
 
-            for(int i =0;i<buffList.Count;i++)
+            for (int i = buffList.Count - 1; i >= 0; i--)
             {
-                buffList[i].buffLayer = Mathf.Max(0, buffList[i].buffLayer - _reduceLayer);
-                if (buffList[i].buffLayer == 0)
-                {
-                    RemoveBuff(buffList[i]);
-                }
+                var b = buffList[i];
+                b.ReduceBuffLayer(_reduceLayer);
+                if (b.buffLayer == 0)
+                    RemoveBuff(b);
                 else
-                {
-                    SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, buffList[i]);
-                }
+                    SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, b);
             }
 
         }
