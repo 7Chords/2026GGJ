@@ -14,7 +14,7 @@ namespace GameCore.Battle.Effects
             if (partInfoList == null)
                 return;
 
-            for (int j = 0; j < triggerMoreTimes - 1; j++)
+            for (int j = 0; j < triggerMoreTimes; j++)
             {
                 foreach (var part in partInfoList)
                 {
