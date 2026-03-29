@@ -46,7 +46,7 @@ namespace GameCore
                         if (getMoneyRefObj == null)
                             return;
                         GameModel.instance.playerInfo.playerMoney += getMoneyRefObj.money;
-                        GameCommon.ShowPopTip("get" + getMoneyRefObj.money,Vector2.zero);
+                        GameCommon.ShowPopTip("»ñµÃ" + getMoneyRefObj.money, Vector2.zero);
                     }
                     break;
                 case EEventType.TREASURE_PART:
