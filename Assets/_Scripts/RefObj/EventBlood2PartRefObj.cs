@@ -11,7 +11,8 @@ namespace GameCore.RefData
         public int floor;
         public EEventType eventType;
         public int blood;
-        public List<long> partList;
+        /// <summary>Each entry: part_level id and weight, same format as enemy bootyList (id:weight;). Plain id defaults weight 1.</summary>
+        public List<BootyEffectObj> partList;
         public EventBlood2PartRefObj()
         {
         }
@@ -25,7 +26,7 @@ namespace GameCore.RefData
             floor = getInt("floor");
             eventType = (EEventType)getEnum("eventType", typeof(EEventType));
             blood = getInt("blood");
-            partList = getList<long>("partList");
+            partList = getList<BootyEffectObj>("partList");
         }
         public static string assetPath => "RefData/ExportTxt";
         public static string sheetName => "event_blood_2_part";

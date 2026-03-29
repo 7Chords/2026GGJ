@@ -1,3 +1,4 @@
+using GameCore.Helpers;
 using GameCore.RefData;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,8 +42,14 @@ namespace GameCore
                 return false;
             }
 
-            long levelId = cfg.partList[Random.Range(0, cfg.partList.Count)];
-            PartLevelRefObj levelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.id == levelId);
+            if (!WeightedBootyPickHelper.TryPickOne(cfg.partList, out var booty) || booty == null)
+            {
+                GameCommon.ShowPopTip("Part exchange weight pick failed.", Vector2.zero);
+                return false;
+            }
+
+            PartLevelRefObj levelRefObj =
+                SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.id == booty.partLevelId);
             if (levelRefObj == null)
                 return false;
             PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
