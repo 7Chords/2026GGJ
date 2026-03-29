@@ -1,3 +1,4 @@
+using GameCore.Helpers;
 using GameCore.RefData;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine;
 namespace GameCore
 {
     /// <summary>
-    /// PART_2_PART: remove one bag part, add a random part from event_part_2_part pool (same floor; prefer same quality row).
+    /// PART_2_PART: remove one bag part, add a weighted random part from event_part_2_part (same floor; prefer row matching sacrifice partLevel).
     /// </summary>
     public static class EventPartExchangeHelper
     {
@@ -25,7 +26,8 @@ namespace GameCore
                 return false;
             }
 
-            List<EventPart2PartRefObj> configs = all.FindAll(x => x.floor == floor && x.qualityType == sacrifice.partRefObj.qualityType);
+            List<EventPart2PartRefObj> configs =
+                all.FindAll(x => x.floor == floor && x.partLevel == sacrifice.partLevel);
             if (configs == null || configs.Count == 0)
                 configs = all.FindAll(x => x.floor == floor);
             if (configs == null || configs.Count == 0)
@@ -41,8 +43,14 @@ namespace GameCore
                 return false;
             }
 
-            long levelId = cfg.partList[Random.Range(0, cfg.partList.Count)];
-            PartLevelRefObj levelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.id == levelId);
+            if (!WeightedBootyPickHelper.TryPickOne(cfg.partList, out var booty) || booty == null)
+            {
+                GameCommon.ShowPopTip("Part exchange weight pick failed.", Vector2.zero);
+                return false;
+            }
+
+            PartLevelRefObj levelRefObj =
+                SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.id == booty.partLevelId);
             if (levelRefObj == null)
                 return false;
             PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
@@ -51,7 +59,7 @@ namespace GameCore
 
             bag.Remove(sacrifice);
             bag.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
-            GameCommon.ShowPopTip("获得" + partRefObj.partName, Vector2.zero);
+            GameCommon.ShowPopTip("获得" + partRefObj.partName + " 等级" + levelRefObj.partLevel, Vector2.zero);
             return true;
         }
     }

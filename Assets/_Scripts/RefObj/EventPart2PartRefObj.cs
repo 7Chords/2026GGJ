@@ -17,14 +17,14 @@ namespace GameCore.RefData
         }
         public long id;
         public int floor;
-        public EQualityType qualityType;
-        public List<long> partList;
+        public int partLevel;
+        public List<BootyEffectObj> partList;
         protected override void _parseFromString()
         {
             id = getLong("id");
             floor = getInt("floor");
-            qualityType = (EQualityType)getEnum("qualityType",typeof(EQualityType));
-            partList = getList<long>("partList");
+            partLevel = getInt("partLevel");
+            partList = getList<BootyEffectObj>("partList");
         }
         public static string assetPath => "RefData/ExportTxt";
         public static string sheetName => "event_part_2_part";

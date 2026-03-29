@@ -1,3 +1,4 @@
+using GameCore.Helpers;
 using GameCore.RefData;
 using GameCore.UI;
 using SCFrame;
@@ -18,62 +19,20 @@ namespace GameCore
                 case EEventType.NONE:
                     break;
                 case EEventType.BLOOD_2_PART_HIGH:
-                    {
-                        EventBlood2PartRefObj blood2PartRefObj = SCRefDataMgr.instance.eventBlood2PartRefList.refDataList.
-                            Find(x => x.floor == GameModel.instance.playerInfo.playerFloor && x.eventType == EEventType.BLOOD_2_PART_HIGH);
-                        if (blood2PartRefObj == null)
-                            return;
-                        long levelId = blood2PartRefObj.partList[Random.Range(0, blood2PartRefObj.partList.Count)];
-                        PartLevelRefObj levelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.id == levelId);
-                        if (levelRefObj == null)
-                            return;
-                        PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
-                        GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
-                        GameCommon.ShowPopTip("???" + partRefObj.partName, Vector2.zero);
-
-                        GameModel.instance.PlayerTakeDamage(blood2PartRefObj.blood);
-                    }
+                    ExecuteBlood2Part(EEventType.BLOOD_2_PART_HIGH);
                     break;
                 case EEventType.BLOOD_2_PART_MIDDLE:
-                    {
-                        EventBlood2PartRefObj blood2PartRefObj = SCRefDataMgr.instance.eventBlood2PartRefList.refDataList.
-                            Find(x => x.floor == GameModel.instance.playerInfo.playerFloor && x.eventType == EEventType.BLOOD_2_PART_MIDDLE);
-                        if (blood2PartRefObj == null)
-                            return;
-                        long levelId = blood2PartRefObj.partList[Random.Range(0, blood2PartRefObj.partList.Count)];
-                        PartLevelRefObj levelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.id == levelId);
-                        if (levelRefObj == null)
-                            return;
-                        PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
-                        GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
-                        GameCommon.ShowPopTip("get" + partRefObj.partName, Vector2.zero);
-
-                        GameModel.instance.PlayerTakeDamage(blood2PartRefObj.blood);
-                    }
+                    ExecuteBlood2Part(EEventType.BLOOD_2_PART_MIDDLE);
                     break;
                 case EEventType.BLOOD_2_PART_LOW:
-                    {
-                        EventBlood2PartRefObj blood2PartRefObj = SCRefDataMgr.instance.eventBlood2PartRefList.refDataList.
-                            Find(x => x.floor == GameModel.instance.playerInfo.playerFloor && x.eventType == EEventType.BLOOD_2_PART_LOW);
-                        if (blood2PartRefObj == null)
-                            return;
-                        long levelId = blood2PartRefObj.partList[Random.Range(0, blood2PartRefObj.partList.Count)];
-                        PartLevelRefObj levelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.id == levelId);
-                        if (levelRefObj == null)
-                            return;
-                        PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
-                        GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
-                        GameCommon.ShowPopTip("get" + partRefObj.partName, Vector2.zero);
-
-                        GameModel.instance.PlayerTakeDamage(blood2PartRefObj.blood);
-                    }
+                    ExecuteBlood2Part(EEventType.BLOOD_2_PART_LOW);
                     break;
                 case EEventType.PART_2_PART:
                     {
                         if (GameModel.instance.playerInfo.bagPartInfoList == null
                             || GameModel.instance.playerInfo.bagPartInfoList.Count == 0)
                         {
-                            GameCommon.ShowPopTip("????", Vector2.zero);
+                            GameCommon.ShowPopTip("Î´³ÖÓÐÈÎºÎ²¿Î»", Vector2.zero);
                             return;
                         }
                         UICoreMgr.instance.AddNode(new UINodeEventPartExchange(SCUIShowType.ADDITION));
@@ -87,7 +46,7 @@ namespace GameCore
                         if (getMoneyRefObj == null)
                             return;
                         GameModel.instance.playerInfo.playerMoney += getMoneyRefObj.money;
-                        GameCommon.ShowPopTip("get" + getMoneyRefObj.money,Vector2.zero);
+                        GameCommon.ShowPopTip("»ñµÃ" + getMoneyRefObj.money, Vector2.zero);
                     }
                     break;
                 case EEventType.TREASURE_PART:
@@ -102,7 +61,7 @@ namespace GameCore
                             return;
                         PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
                         GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
-                        GameCommon.ShowPopTip("get" + partRefObj.partName, Vector2.zero);
+                        GameCommon.ShowPopTip("»ñµÃ" + partRefObj.partName + " Lv" + levelRefObj.partLevel, Vector2.zero);
                     }
                     break;
                 case EEventType.TRAP_BATTLE:
@@ -134,6 +93,29 @@ namespace GameCore
                     }
                     break;
             }
+        }
+
+        private static void ExecuteBlood2Part(EEventType poolType)
+        {
+            EventBlood2PartRefObj blood2PartRefObj = SCRefDataMgr.instance.eventBlood2PartRefList.refDataList
+                .Find(x => x.floor == GameModel.instance.playerInfo.playerFloor && x.eventType == poolType);
+            if (blood2PartRefObj == null)
+                return;
+            if (blood2PartRefObj.partList == null || blood2PartRefObj.partList.Count == 0)
+                return;
+            if (!WeightedBootyPickHelper.TryPickOne(blood2PartRefObj.partList, out var booty) || booty == null)
+                return;
+            PartLevelRefObj levelRefObj =
+                SCRefDataMgr.instance.partLevelRefList.refDataList.Find(x => x.id == booty.partLevelId);
+            if (levelRefObj == null)
+                return;
+            PartRefObj partRefObj =
+                SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
+            if (partRefObj == null)
+                return;
+            GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
+            GameCommon.ShowPopTip("»ñµÃ" + partRefObj.partName + " Lv" + levelRefObj.partLevel, Vector2.zero);
+            GameModel.instance.PlayerTakeDamage(blood2PartRefObj.blood);
         }
     }
 

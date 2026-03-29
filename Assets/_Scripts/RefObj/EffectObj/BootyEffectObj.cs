@@ -11,12 +11,16 @@ namespace GameCore.RefData
         public float dropChance;
         protected override void OnDeserialize(string _str)
         {
-            string[] strArr = _str.Split(':');
-            if (strArr == null || strArr.Length < 2)
+            if (string.IsNullOrEmpty(_str))
                 return;
-            partLevelId = SCCommon.ParseInt(strArr[0]);
-            dropChance = SCCommon.ParseFloat(strArr[1]);
-
+            string[] strArr = _str.Split(':');
+            if (strArr == null || strArr.Length == 0)
+                return;
+            partLevelId = SCCommon.ParseLong(strArr[0].Trim());
+            if (strArr.Length >= 2)
+                dropChance = SCCommon.ParseFloat(strArr[1]);
+            else
+                dropChance = 1f;
         }
 
         protected override string OnSerialise()
