@@ -1,5 +1,6 @@
 using DG.Tweening;
 using GameCore;
+using GameCore.Helpers;
 using GameCore.RefData;
 using SCFrame;
 using System.Collections;
@@ -177,7 +178,7 @@ namespace GameCore.UI
             SCCommon.SetGameObjectEnable(goBuff, _partInfo.HasBuff());
             SCCommon.SetGameObjectEnable(txtQuality.gameObject, _partInfo.partRefObj.qualityType != EQualityType.NONE);
 
-            setBaseInfo(_partInfo.partRefObj.partName, _partInfo.levelRefObj.partDesc, _partInfo.partLevel,_partInfo.partRefObj.qualityType);
+            setBaseInfo(_partInfo.partRefObj.partName, PartDescriptionFormat.GetResolvedDescription(_partInfo), _partInfo.partLevel,_partInfo.partRefObj.qualityType);
             if (_showGridInfo)
                 setGridInfo(_partInfo.partRefObj.GetOccupyPosList(), _partInfo.localEffectPosList);
             if (_partInfo.HasBuff())

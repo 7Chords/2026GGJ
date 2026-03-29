@@ -1,4 +1,5 @@
 using GameCore;
+using GameCore.Helpers;
 using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
@@ -67,7 +68,7 @@ namespace GameCore.UI
             PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == _m_levelRefObj.partId);
             if (partRefObj == null)
                 return;
-            setBaseInfo(partRefObj.partName, _m_levelRefObj.partDesc, partRefObj.qualityType, _m_levelRefObj.partHealth, _m_levelRefObj.partLevel);
+            setBaseInfo(partRefObj.partName, PartDescriptionFormat.GetResolvedDescription(_m_levelRefObj, partRefObj), partRefObj.qualityType, _m_levelRefObj.partHealth, _m_levelRefObj.partLevel);
             setGridInfo(partRefObj.GetOccupyPosList(), _m_levelRefObj.GetEffectPosList());
         }
 
@@ -86,16 +87,16 @@ namespace GameCore.UI
                 switch (_quality)
                 {
                     case EQualityType.NONE:
-                        mono.txtQuality.text = "Œﬁ";
+                        mono.txtQuality.text = "NONE";
                         break;
                     case EQualityType.NORMAL:
-                        mono.txtQuality.text = "∆’Õ®";
+                        mono.txtQuality.text = "NORMAL";
                         break;
                     case EQualityType.RARE:
-                        mono.txtQuality.text = "œ°”–";
+                        mono.txtQuality.text = "RARE";
                         break;
                     case EQualityType.PRECIOUS:
-                        mono.txtQuality.text = "’‰πÛ";
+                        mono.txtQuality.text = "PRECIOUS";
                         break;
                 }
             }
