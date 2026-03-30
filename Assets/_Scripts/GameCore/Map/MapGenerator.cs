@@ -122,6 +122,7 @@ namespace GameCore
 
             createMapLayoutData();
             generateRouteLoop();
+            RecenterLayoutOnActiveCluster();
             if (!_mapData.useLegacyInteriorRoomRandom)
                 ApplyInteriorRoomTypeQuotasFromConfiguredWeights();
 
@@ -300,6 +301,70 @@ namespace GameCore
                     _layoutData[i, j] = cell;
                 }
             }
+        }
+
+        /// <summary>
+        /// Inactive nodes are hidden but the grid still spans all rows; ScrollRect centers the full rect so the path
+        /// looks shifted. Shift all cells so the active-route bounding box is centered and tighten content size to it.
+        /// </summary>
+        private void RecenterLayoutOnActiveCluster()
+        {
+            if (_layoutData == null)
+                return;
+
+            int w = _layoutData.GetLength(0);
+            int h = _layoutData.GetLength(1);
+            bool any = false;
+            float minX = 0f, maxX = 0f, minY = 0f, maxY = 0f;
+
+            for (int i = 0; i < w; i++)
+            {
+                for (int j = 0; j < h; j++)
+                {
+                    var cell = _layoutData[i, j];
+                    if (cell == null || !cell.isActive)
+                        continue;
+                    Vector3 p = cell.localPosition;
+                    if (!any)
+                    {
+                        minX = maxX = p.x;
+                        minY = maxY = p.y;
+                        any = true;
+                    }
+                    else
+                    {
+                        if (p.x < minX) minX = p.x;
+                        if (p.x > maxX) maxX = p.x;
+                        if (p.y < minY) minY = p.y;
+                        if (p.y > maxY) maxY = p.y;
+                    }
+                }
+            }
+
+            if (!any)
+                return;
+
+            float cx = (minX + maxX) * 0.5f;
+            float cy = (minY + maxY) * 0.5f;
+            var offset = new Vector3(cx, cy, 0f);
+
+            for (int i = 0; i < w; i++)
+            {
+                for (int j = 0; j < h; j++)
+                {
+                    var cell = _layoutData[i, j];
+                    if (cell != null)
+                        cell.localPosition -= offset;
+                }
+            }
+
+            float spanX = maxX - minX;
+            float spanY = maxY - minY;
+            const float minSpan = 1f;
+            if (spanX < minSpan) spanX = minSpan;
+            if (spanY < minSpan) spanY = minSpan;
+
+            _pendingContentSize = new Vector2(spanX + padding.x, spanY + padding.y);
         }
 
         private float NextFloatInclusive(float min, float max)

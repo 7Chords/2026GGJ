@@ -144,8 +144,9 @@ namespace GameCore.Helpers
                 case 101008:
                     {
                         var e = FindEntry(part, EAttributeTriggerPointType.ACTIVE, EAttributeType.DAMAGE_MULTIPILER);
-                        int mult = e?.attributeValueList != null && e.attributeValueList.Count > 1
-                            ? Mathf.RoundToInt(e.attributeValueList[1])
+                        // EntryEffectObj: chance = strArr[2], multiplier = attributeValueList[0] (see DamageMultiplierEffectHandler).
+                        int mult = e?.attributeValueList != null && e.attributeValueList.Count > 0
+                            ? Mathf.RoundToInt(e.attributeValueList[0])
                             : 0;
                         return new object[] { ChancePercentLabel(e?.attributeChance ?? 0f), mult };
                     }
