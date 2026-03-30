@@ -107,6 +107,7 @@ namespace GameCore.UI
         private void onCheatDebugUiRefresh()
         {
             refreshShow();
+            _m_partContainer?.ReloadBusyParts();
         }
 
         private void refreshShow()

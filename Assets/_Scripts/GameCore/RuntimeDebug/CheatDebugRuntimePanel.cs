@@ -1,3 +1,4 @@
+using GameCore;
 using GameCore.RefData;
 using SCFrame;
 using System.Collections.Generic;
@@ -15,8 +16,10 @@ namespace GameCore.RuntimeDebug
         private static readonly KeyCode ToggleKey = KeyCode.F9;
 
         private bool _visible;
-        private Rect _winRect = new Rect(24f, 24f, 300f, 380f);
+        private Rect _winRect = new Rect(24f, 24f, 320f, 520f);
         private Vector2 _scroll;
+        private string _cheatAddPartIdText = "101001";
+        private string _cheatAddPartLevelText = "1";
 
         public static void AttachIfNeeded(GameObject host)
         {
@@ -95,6 +98,26 @@ namespace GameCore.RuntimeDebug
                     CheatFullEnemyBodyHp();
                     NotifyUiRefresh();
                 }
+
+                if (GUILayout.Button("当前敌人本体血量变为 1"))
+                {
+                    CheatEnemyBodyHpToOne();
+                    NotifyUiRefresh();
+                }
+            }
+
+            GUILayout.Space(6f);
+            GUILayout.Label("部位 id / 等级 → 手牌");
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("id", GUILayout.Width(22f));
+            _cheatAddPartIdText = GUILayout.TextField(_cheatAddPartIdText, GUILayout.MinWidth(80f));
+            GUILayout.Label("lv", GUILayout.Width(18f));
+            _cheatAddPartLevelText = GUILayout.TextField(_cheatAddPartLevelText, GUILayout.Width(28f));
+            GUILayout.EndHorizontal();
+            if (GUILayout.Button("添加部位到手牌"))
+            {
+                CheatAddPartToPlayerHand(_cheatAddPartIdText, _cheatAddPartLevelText);
+                NotifyUiRefresh();
             }
 
             GUILayout.EndScrollView();
@@ -122,6 +145,88 @@ namespace GameCore.RuntimeDebug
                 return;
             gm.curEnemyInfo.currentHealth = gm.curEnemyInfo.maxHealth;
             SCMsgCenter.SendMsg(SCMsgConst.ENEMY_HEAL);
+        }
+
+        private static void CheatEnemyBodyHpToOne()
+        {
+            var gm = GameModel.instance;
+            if (gm?.curEnemyInfo == null)
+                return;
+            if (gm.curEnemyInfo.maxHealth <= 0)
+                return;
+            gm.curEnemyInfo.currentHealth = 1;
+            SCMsgCenter.SendMsg(SCMsgConst.ENEMY_HEAL);
+        }
+
+        private static void CheatAddPartToPlayerHand(string partIdText, string levelText)
+        {
+            var gm = GameModel.instance;
+            if (gm?.playerInfo?.busyPartInfoList == null)
+                return;
+
+            string idTrim = partIdText != null ? partIdText.Trim() : string.Empty;
+            if (!long.TryParse(idTrim, out long partId))
+            {
+                Debug.LogWarning("[Cheat] Invalid part id.");
+                return;
+            }
+
+            int level = 1;
+            if (levelText != null && int.TryParse(levelText.Trim(), out int parsed) && parsed >= 1)
+                level = parsed;
+
+            PartRefObj partRef = FindPartRefById(partId);
+            if (partRef == null)
+            {
+                Debug.LogWarning($"[Cheat] partRef not found: {partId}");
+                return;
+            }
+
+            PartLevelRefObj levelRow = FindPartLevelRefObj(partId, level) ?? FindLowestLevelRowForPart(partId);
+            if (levelRow == null)
+            {
+                Debug.LogWarning($"[Cheat] no part_level row for partId={partId}");
+                return;
+            }
+
+            if (gm.playerInfo.busyPartInfoList.Count >= GameConst.BUSY_CARD_MAX_COUNT)
+            {
+                Debug.LogWarning($"[Cheat] hand full (max {GameConst.BUSY_CARD_MAX_COUNT}).");
+                return;
+            }
+
+            var info = new PartInfo(partRef, false, levelRow.partLevel);
+            if (info.levelRefObj == null)
+                return;
+            gm.playerInfo.busyPartInfoList.Add(info);
+        }
+
+        private static PartRefObj FindPartRefById(long partId)
+        {
+            var list = SCRefDataMgr.instance?.partRefList?.refDataList;
+            if (list == null)
+                return null;
+            for (int i = 0; i < list.Count; i++)
+            {
+                var p = list[i];
+                if (p != null && p.id == partId)
+                    return p;
+            }
+            return null;
+        }
+
+        private static PartLevelRefObj FindPartLevelRefObj(long partId, int partLevel)
+        {
+            var rows = SCRefDataMgr.instance?.partLevelRefList?.refDataList;
+            if (rows == null)
+                return null;
+            for (int i = 0; i < rows.Count; i++)
+            {
+                var row = rows[i];
+                if (row != null && row.partId == partId && row.partLevel == partLevel)
+                    return row;
+            }
+            return null;
         }
 
         private static void CheatAddGold(int amount)

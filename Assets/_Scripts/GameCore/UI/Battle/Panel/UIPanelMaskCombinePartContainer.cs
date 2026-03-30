@@ -63,6 +63,12 @@ namespace GameCore.UI
             reloadParts();
         }
 
+        /// <summary> Rebuild hand UI from <see cref="GameModel.playerInfo.busyPartInfoList"/> (e.g. cheat / runtime list changes). </summary>
+        public void ReloadBusyParts()
+        {
+            reloadParts();
+        }
+
         private void reloadParts()
         {
             if (_m_partItemList != null)
