@@ -300,11 +300,13 @@ namespace GameCore.Helpers
                         var heat = FindEntry(part, EAttributeTriggerPointType.ACTIVE,
                             EAttributeType.USE_HEAT_2_ATTACK_AGAIN);
                         int d = AttackBasePlusStrong(part, atk);
-                        int n = heat?.attributeValueList != null && heat.attributeValueList.Count > 0
+                        int threshold = heat?.attributeValueList != null && heat.attributeValueList.Count > 0
                             ? Mathf.RoundToInt(heat.attributeValueList[0])
                             : 0;
-                        int pct = HeatExtraAttackPercent(heat);
-                        return new object[] { n, pct };
+                        int perLayerPct = HeatExtraAttackPercent(heat);
+                        // Matches #2_part_desc_101028: {2}=layers per probability step (config has per-layer x% only).
+                        const int layersPerChanceStep = 1;
+                        return new object[] { d, threshold, layersPerChanceStep, perLayerPct };
                     }
                 case 101029:
                     {
