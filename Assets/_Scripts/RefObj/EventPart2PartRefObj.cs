@@ -17,13 +17,13 @@ namespace GameCore.RefData
         }
         public long id;
         public int floor;
-        public EQualityType qualityType;
+        public int partLevel;
         public List<long> partList;
         protected override void _parseFromString()
         {
             id = getLong("id");
             floor = getInt("floor");
-            qualityType = (EQualityType)getEnum("qualityType",typeof(EQualityType));
+            partLevel = getInt("partLevel");
             partList = getList<long>("partList");
         }
         public static string assetPath => "RefData/ExportTxt";
