@@ -58,8 +58,8 @@ MonoBehaviour:
       originFacePosition: {x: 0, y: 0}
       rotationSteps: 0
     - partLevelRefId: 10055
-      originFacePosition: {x: 0, y: 4}
-      rotationSteps: 0
+      originFacePosition: {x: 0, y: 2}
+      rotationSteps: 1
     - partLevelRefId: 10040
       originFacePosition: {x: 1, y: 3}
       rotationSteps: 0
