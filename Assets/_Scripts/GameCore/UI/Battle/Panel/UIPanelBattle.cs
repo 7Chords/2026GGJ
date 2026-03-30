@@ -92,8 +92,17 @@ namespace GameCore.UI
 
         private void refreshShow()
         {
-            mono.txtPlayerHealth.text = GameModel.instance.playerInfo.currentHealth + "/" + GameModel.instance.playerInfo.maxHealth;
-            mono.txtEnemyHealth.text = GameModel.instance.curEnemyInfo.currentHealth + "/" + GameModel.instance.curEnemyInfo.maxHealth;
+            PlayerInfo playerInfo = GameModel.instance.playerInfo;
+            EnemyInfo currentEnemyInfo = GameModel.instance.curEnemyInfo;
+            mono.txtPlayerHealth.text = playerInfo.currentHealth + "/" + playerInfo.maxHealth;
+            if (mono.imgPlayerHealthBar != null && playerInfo.maxHealth > 0)
+                mono.imgPlayerHealthBar.fillAmount = (float)playerInfo.currentHealth / playerInfo.maxHealth;
+            if (currentEnemyInfo != null)
+            {
+                mono.txtEnemyHealth.text = currentEnemyInfo.currentHealth + "/" + currentEnemyInfo.maxHealth;
+                if (mono.imgEnemyHealthBar != null && currentEnemyInfo.maxHealth > 0)
+                    mono.imgEnemyHealthBar.fillAmount = (float)currentEnemyInfo.currentHealth / currentEnemyInfo.maxHealth;
+            }
             refreshIsBossShow();
         }
 
