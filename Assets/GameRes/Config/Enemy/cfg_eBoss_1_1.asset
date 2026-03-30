@@ -19,77 +19,77 @@ MonoBehaviour:
   - {x: 3, y: 6}
   turnLayouts:
   - slots:
-    - partLevelRefId: 10399
+    - partLevelRefId: 10073
       originFacePosition: {x: 0, y: 0}
       rotationSteps: 0
-    - partLevelRefId: 10399
+    - partLevelRefId: 10073
       originFacePosition: {x: 1, y: 2}
       rotationSteps: 0
-    - partLevelRefId: 10403
+    - partLevelRefId: 10077
       originFacePosition: {x: 0, y: 0}
       rotationSteps: 0
-    - partLevelRefId: 10403
+    - partLevelRefId: 10077
       originFacePosition: {x: 0, y: 2}
       rotationSteps: 1
-    - partLevelRefId: 10403
+    - partLevelRefId: 10077
       originFacePosition: {x: 2, y: 1}
       rotationSteps: 3
-    - partLevelRefId: 10403
+    - partLevelRefId: 10077
       originFacePosition: {x: 1, y: 4}
       rotationSteps: 0
-    - partLevelRefId: 10404
+    - partLevelRefId: 10078
       originFacePosition: {x: 2, y: 3}
       rotationSteps: 0
   - slots:
-    - partLevelRefId: 10400
+    - partLevelRefId: 10074
       originFacePosition: {x: 0, y: 4}
       rotationSteps: 0
-    - partLevelRefId: 10401
+    - partLevelRefId: 10075
       originFacePosition: {x: 2, y: 1}
       rotationSteps: 0
-    - partLevelRefId: 10403
+    - partLevelRefId: 10077
       originFacePosition: {x: 0, y: 0}
       rotationSteps: 1
-    - partLevelRefId: 10402
+    - partLevelRefId: 10076
       originFacePosition: {x: 2, y: 2}
       rotationSteps: 1
-    - partLevelRefId: 10403
+    - partLevelRefId: 10077
       originFacePosition: {x: 0, y: 2}
       rotationSteps: 1
-    - partLevelRefId: 10400
+    - partLevelRefId: 10074
       originFacePosition: {x: 3, y: 1}
       rotationSteps: 0
-    - partLevelRefId: 10401
+    - partLevelRefId: 10075
       originFacePosition: {x: 0, y: 5}
       rotationSteps: 3
   - slots:
-    - partLevelRefId: 10399
+    - partLevelRefId: 10073
       originFacePosition: {x: 2, y: 0}
       rotationSteps: 0
-    - partLevelRefId: 10399
+    - partLevelRefId: 10073
       originFacePosition: {x: 0, y: 3}
       rotationSteps: 1
-    - partLevelRefId: 10403
+    - partLevelRefId: 10077
       originFacePosition: {x: 0, y: 3}
       rotationSteps: 0
-    - partLevelRefId: 10403
+    - partLevelRefId: 10077
       originFacePosition: {x: 2, y: 1}
       rotationSteps: 1
-    - partLevelRefId: 10403
+    - partLevelRefId: 10077
       originFacePosition: {x: 1, y: 4}
       rotationSteps: 0
-    - partLevelRefId: 10403
+    - partLevelRefId: 10077
       originFacePosition: {x: 0, y: 0}
       rotationSteps: 1
-    - partLevelRefId: 10404
+    - partLevelRefId: 10078
       originFacePosition: {x: 0, y: 2}
       rotationSteps: 0
-    - partLevelRefId: 10404
+    - partLevelRefId: 10078
       originFacePosition: {x: 3, y: 1}
       rotationSteps: 0
-    - partLevelRefId: 10404
+    - partLevelRefId: 10078
       originFacePosition: {x: 0, y: 5}
       rotationSteps: 0
-    - partLevelRefId: 10404
+    - partLevelRefId: 10078
       originFacePosition: {x: 3, y: 5}
       rotationSteps: 0
