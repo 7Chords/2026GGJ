@@ -292,6 +292,42 @@ namespace GameCore
             SCMsgCenter.SendMsg(SCMsgConst.NEW_GANE_START);
         }
 
+        /// <summary>
+        /// Buff types stripped from all in-combat parts (face, hand, deck) after both sides finish their queues once.
+        /// Extend this list when adding more round-scoped battle buffs.
+        /// </summary>
+        private static readonly EBuffType[] BuffTypesClearedAfterFullBattleRound =
+        {
+            EBuffType.STRONG,
+            EBuffType.PREY,
+        };
+
+        /// <summary>
+        /// Clears every type in <see cref="BuffTypesClearedAfterFullBattleRound"/> for player and enemy battle lists.
+        /// </summary>
+        public void ClearBuffsAfterFullBattleRound()
+        {
+            ClearBuffTypesOnPartList(playerInfo?.battlePartInfoList, BuffTypesClearedAfterFullBattleRound);
+            ClearBuffTypesOnPartList(playerInfo?.busyPartInfoList, BuffTypesClearedAfterFullBattleRound);
+            ClearBuffTypesOnPartList(playerInfo?.deckPartInfoList, BuffTypesClearedAfterFullBattleRound);
+            if (curEnemyInfo == null) return;
+            ClearBuffTypesOnPartList(curEnemyInfo.battlePartInfoList, BuffTypesClearedAfterFullBattleRound);
+            ClearBuffTypesOnPartList(curEnemyInfo.busyPartInfoList, BuffTypesClearedAfterFullBattleRound);
+            ClearBuffTypesOnPartList(curEnemyInfo.deckPartInfoList, BuffTypesClearedAfterFullBattleRound);
+        }
+
+        private static void ClearBuffTypesOnPartList(List<PartInfo> parts, EBuffType[] types)
+        {
+            if (parts == null || types == null || types.Length == 0) return;
+            for (int i = 0; i < parts.Count; i++)
+            {
+                var p = parts[i];
+                if (p?.buffLogic == null) continue;
+                for (int t = 0; t < types.Length; t++)
+                    p.buffLogic.ClearBuff(types[t]);
+            }
+        }
+
         public void DealNextTurn()
         {
             PartDeckHelper.RecycleBusyToDeck(playerInfo.deckPartInfoList, playerInfo.busyPartInfoList);

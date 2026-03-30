@@ -90,6 +90,7 @@ namespace GameCore
 
         private void OnBattleRoundFinish()
         {
+            GameModel.instance.ClearBuffsAfterFullBattleRound();
             SCTimeCaller.instance.CallDealy(1f, () =>
             {
                 if (_cancelToken != null && _cancelToken.isCancelled) return;
