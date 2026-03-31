@@ -82,7 +82,8 @@ namespace GameCore.Helpers
             int baseDmg = Mathf.RoundToInt(e.attributeValueList[0]);
             if (part.partRefObj != null && part.partRefObj.partType == EPartType.MOUTH)
                 baseDmg += BuffCombatModifiers.GetStrongAttackBonus(part);
-            return baseDmg;
+            // Match combat: non-positive damage is not applied (BattleContext.ApplyDamageToPart).
+            return Mathf.Max(0, baseDmg);
         }
 
         private static int RealAttackTotal(PartInfo part, EntryInfo e)
@@ -92,7 +93,7 @@ namespace GameCore.Helpers
             int v = Mathf.RoundToInt(e.attributeValueList[0]);
             if (part.partRefObj != null && part.partRefObj.partType == EPartType.MOUTH)
                 v += BuffCombatModifiers.GetStrongAttackBonus(part);
-            return v;
+            return Mathf.Max(0, v);
         }
 
         private static object[] BuildFormatArgs(PartInfo part)
