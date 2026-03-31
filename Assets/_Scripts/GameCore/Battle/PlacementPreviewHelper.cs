@@ -182,6 +182,8 @@ namespace GameCore.Battle
             foreach (var pair in partOccupyGridNumDic)
             {
                 int baseDmg = Mathf.RoundToInt(pair.Value * perGridDamage);
+                if (caster.isEnemyPart)
+                    baseDmg = EnemyPassiveController.AdjustEnemyOutgoingDamageToPlayerPart(pair.Key, caster, baseDmg);
                 int prey = BuffCombatModifiers.GetPreyExtraDamage(pair.Key);
                 AddDamage(p, pair.Key, baseDmg + prey);
             }

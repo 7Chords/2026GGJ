@@ -44,6 +44,7 @@ namespace GameCore.Battle
             if (enemy == null) return;
             enemy.currentHealth = UnityEngine.Mathf.Clamp(enemy.currentHealth - _amount, 0, enemy.maxHealth);
             SCMsgCenter.SendMsg(SCMsgConst.ENEMY_HURT, _amount);
+            EnemyPassiveController.OnEnemyBodyDamageApplied(_amount);
             if (enemy.currentHealth == 0)
                 RequestTerminateBattle(true);
         }
@@ -59,6 +60,7 @@ namespace GameCore.Battle
 
         public void ApplyDamageToPart(PartInfo _part, PartInfo _sender, int _amount)
         {
+            _amount = EnemyPassiveController.AdjustEnemyOutgoingDamageToPlayerPart(_part, _sender, _amount);
             _amount += BuffCombatModifiers.GetPreyExtraDamage(_part);
             if (_amount <= 0) return;
             int hpBefore = _part.currentHealth;

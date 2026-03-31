@@ -140,4 +140,19 @@ namespace GameCore
         NORMAL,
         EVENT,
     }
+    public enum EEnemyPassiveSkillType
+    {
+        NONE,
+        /// <summary> floatParamList[0]: loss chunk as fraction of max body HP (e.g. 0.2); [1]: heal as fraction of current body HP (e.g. 0.1); [2]: STRONG layers per mouth (rounded) </summary>
+        DEAD_NOT_STIFF,
+        /// <summary> floatParamList[0]: evaluate every N enemy action phases (rounded); [1]: flat +damage vs player parts with PREY if any HATE (rounded); [2]: flat -damage vs all player parts otherwise (rounded) </summary>
+        REVENGE_EVERY_N_PHASES,
+    }
+
+    public enum EEnemyOutgoingPartDamageMod
+    {
+        NONE,
+        PREY_FLAT_BONUS,
+        ALL_PART_FLAT_PENALTY,
+    }
 }

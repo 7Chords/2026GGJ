@@ -10,6 +10,7 @@ namespace GameCore
         public SCRefDataList<PartRefObj> partRefList = new SCRefDataList<PartRefObj>(PartRefObj.assetPath, PartRefObj.sheetName);
         public PlayerRefObj playerConfigRefObj = new PlayerRefObj(PlayerRefObj.assetPath, PlayerRefObj.sheetName);
         public SCRefDataList<EnemyRefObj> enemyRefList = new SCRefDataList<EnemyRefObj>(EnemyRefObj.assetPath, EnemyRefObj.sheetName);
+        public SCRefDataList<EnemyPassiveRefObj> enemyPassiveRefList = new SCRefDataList<EnemyPassiveRefObj>(EnemyPassiveRefObj.assetPath, EnemyPassiveRefObj.sheetName);
         public SCRefDataList<PartLevelRefObj> partLevelRefList = new SCRefDataList<PartLevelRefObj>(PartLevelRefObj.assetPath, PartLevelRefObj.sheetName);
         public SCRefDataList<TrialRefObj> trialRefList = new SCRefDataList<TrialRefObj>(TrialRefObj.assetPath, TrialRefObj.sheetName);
         public SCRefDataList<TrialRewardRefObj> trialRewardRefList = new SCRefDataList<TrialRewardRefObj>(TrialRewardRefObj.assetPath, TrialRewardRefObj.sheetName);
@@ -30,6 +31,7 @@ namespace GameCore
             partRefList.readFromTxt();
             playerConfigRefObj.readFromTxt();
             enemyRefList.readFromTxt();
+            enemyPassiveRefList.readFromTxt();
             partLevelRefList.readFromTxt();
             trialRefList.readFromTxt();
             trialRewardRefList.readFromTxt();

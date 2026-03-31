@@ -105,6 +105,8 @@ namespace GameCore
 
         public void StartExecuteParts(bool _isPlayer, List<PartInfo> _parts, Action _onFinish = null)
         {
+            if (!_isPlayer)
+                EnemyPassiveController.OnEnemyPhaseStart();
             var list = _isPlayer ? playerExcuteInfoList : enemyExcuteInfoList;
             var queue = _isPlayer ? _playerQueue : _enemyQueue;
 

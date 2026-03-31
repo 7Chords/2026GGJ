@@ -11,6 +11,7 @@ namespace GameCore
         public List<PartInfo> deckPartInfoList;
         public int maxHealth;
         public int currentHealth;
+        public EnemyPassiveBattleState passiveBattleState;
         
         public EnemyInfo(EnemyRefObj _enemyRefObj)
         {
@@ -22,6 +23,7 @@ namespace GameCore
             deckPartInfoList = new List<PartInfo>();
             maxHealth = _enemyRefObj.enemyHealth;
             currentHealth = maxHealth;
+            passiveBattleState = new EnemyPassiveBattleState();
         }
     }
 }

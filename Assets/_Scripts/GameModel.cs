@@ -97,6 +97,7 @@ namespace GameCore
                 return;
             curEnemyInfo.currentHealth = Mathf.Clamp(curEnemyInfo.currentHealth - _amount, 0, curEnemyInfo.maxHealth);
             SCMsgCenter.SendMsg(SCMsgConst.ENEMY_HURT, _amount);
+            EnemyPassiveController.OnEnemyBodyDamageApplied(_amount);
             if (curEnemyInfo.currentHealth == 0)
                 BattleManager.instance.TerminateBattle(true);
         }
