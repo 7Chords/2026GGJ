@@ -59,9 +59,9 @@ namespace GameCore.UI
             mono.btnExit.RemoveClickDown(onBtnExitClickDonw);
             mono.btnBag.RemoveMouseEnter(onBtnBagMouseEnter);
             mono.btnBag.RemoveMouseExit(onBtnBagMouseExit);
-
             mono.btnExit.RemoveMouseEnter(onBtnExitMouseEnter);
             mono.btnExit.RemoveMouseExit(onBtnExitMouseExit);
+            
 
             foreach (var item in _m_storeItemList)
                 item?.HidePanel();
