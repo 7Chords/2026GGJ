@@ -18,8 +18,12 @@ namespace GameCore.UI
         public float scaleMouseEnter;
         [Header("鼠标移入的缩放时间")]
         public float scaleChgDuration;
+        [Header("Sell button hover scale")]
+        public float scaleMouseEnterSell;
         [Header("出售按钮")]
         public Button btnSell;
+        [Header("内容物体")]
+        public GameObject goContent;
 
     }
 }

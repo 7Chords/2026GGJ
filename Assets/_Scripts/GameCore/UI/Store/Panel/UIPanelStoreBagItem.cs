@@ -36,16 +36,19 @@ namespace GameCore.UI
         public override void OnHidePanel()
         {
             mono.btnSell.RemoveClickDown(onBtnSellClickDown);
-            GetGameObject().transform.RemoveMouseEnter(onGameObjMouseEnter);
-            GetGameObject().transform.RemoveMouseExit(onGameObjMouseExit);
+            mono.btnSell.RemoveMouseEnter(onBtnSellMouseEnter);
+            mono.btnSell.RemoveMouseExit(onBtnSellMouseExit);
+            mono.goContent.transform.RemoveMouseEnter(onGameObjMouseEnter);
+            mono.goContent.transform.RemoveMouseExit(onGameObjMouseExit);
         }
 
         public override void OnShowPanel()
         {
             mono.btnSell.AddMouseLeftClickDown(onBtnSellClickDown);
-            GetGameObject().transform.AddMouseEnter(onGameObjMouseEnter);
-            GetGameObject().transform.AddMouseExit(onGameObjMouseExit);
-
+            mono.btnSell.AddMouseEnter(onBtnSellMouseEnter);
+            mono.btnSell.AddMouseExit(onBtnSellMouseExit);
+            mono.goContent.transform.AddMouseEnter(onGameObjMouseEnter);
+            mono.goContent.transform.AddMouseExit(onGameObjMouseExit);
         }
 
         public void SetInfo(PartInfo _partInfo)
@@ -68,7 +71,8 @@ namespace GameCore.UI
         private void onGameObjMouseExit(PointerEventData arg1, object[] arg2)
         {
             GameCommon.DiscardToolTip();
-            _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(Vector3.one, mono.scaleChgDuration));
+            if (mono.goContent != null)
+                _m_tweenContainer.RegDoTween(mono.goContent.transform.DOScale(Vector3.one, mono.scaleChgDuration));
         }
 
         private void onGameObjMouseEnter(PointerEventData arg1, object[] arg2)
@@ -76,11 +80,25 @@ namespace GameCore.UI
             if (_m_partInfo == null)
                 return;
 
-
             GameCommon.ShowTooltip(_m_partInfo, GetGameObject().transform.position);
 
-            _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
+            if (mono.goContent != null)
+                _m_tweenContainer.RegDoTween(mono.goContent.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
+        }
 
+        private float sellHoverScale =>
+            mono.scaleMouseEnterSell != 0f ? mono.scaleMouseEnterSell : mono.scaleMouseEnter;
+
+        private void onBtnSellMouseEnter(PointerEventData arg1, object[] arg2)
+        {
+            if (mono.btnSell == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnSell.transform.DOScale(sellHoverScale, mono.scaleChgDuration));
+        }
+
+        private void onBtnSellMouseExit(PointerEventData arg1, object[] arg2)
+        {
+            if (mono.btnSell == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnSell.transform.DOScale(Vector3.one, mono.scaleChgDuration));
         }
 
         private void onBtnSellClickDown(PointerEventData arg1, object[] arg2)
@@ -88,7 +106,7 @@ namespace GameCore.UI
             var bag = GameModel.instance.playerInfo.bagPartInfoList;
             if (bag == null || bag.Count <= 1)
             {
-                GameCommon.ShowPopTip("最少需要拥有一个部位", Vector2.zero);
+                GameCommon.ShowPopTip("至少需要拥有一个部位", Vector2.zero);
                 return;
             }
             AudioMgr.instance.PlaySfx("sfx_money");
