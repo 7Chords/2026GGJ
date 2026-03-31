@@ -20,5 +20,9 @@ namespace GameCore.UI
         public List<Vector2Int> disabledGrids;
         [Header("部位父物体")]
         public Transform tranParentPart;
+        [Header("Passive item container")]
+        public Transform tranPassiveContainer;
+        [Header("Passive item prefab resource name")]
+        public string passiveItemPrefabName;
     }
 }

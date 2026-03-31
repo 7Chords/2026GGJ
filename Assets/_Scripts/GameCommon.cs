@@ -16,6 +16,7 @@ namespace GameCore
     {
 
         private static GameObject _m_toolTipCache;
+        private static GameObject _m_introTipCache;
         /// <summary>
         /// 展示伤害飘字
         /// </summary>
@@ -253,6 +254,48 @@ namespace GameCore
                 return;
             _m_toolTipCache.GetComponent<CommonTooltip>().Discard();
             _m_toolTipCache = null;
+        }
+
+        /// <summary> Hover intro tip (CommonIntroTip). Call DiscardIntroTip on exit. </summary>
+        public static void ShowIntroTip(string title, string desc, Vector3 worldPos)
+        {
+            DiscardIntroTip();
+            GameObject go = ResourcesHelper.LoadGameObject(
+                GameConst.PREFAB_INTRO_TIP,
+                SCGame.instance.topLayerRoot.transform);
+
+            float sx = RectTransformUtility.WorldToScreenPoint(SCGame.instance.gameCamera, worldPos).x;
+            float sy = RectTransformUtility.WorldToScreenPoint(SCGame.instance.gameCamera, worldPos).y;
+            bool showOnLeft = sx > Screen.width * GameConst.TOOLTIP_SHOW_ON_LEFT_THRESHOLD;
+            bool showOnUp = sy < Screen.height * GameConst.TOOLTIP_SHOW_ON_UP_THRESHOLD;
+            Vector2 offset = new Vector2(
+                GameConst.TOOLTIP_SHOW_X_OFFSET_SCREEN_RATIO * Screen.width * (showOnLeft ? -1 : 1),
+                GameConst.TOOLTIP_SHOW_Y_OFFSET_SCREEN_RATIO * Screen.height * (showOnUp ? -1 : 1));
+            Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(SCGame.instance.gameCamera, worldPos) + offset;
+
+            RectTransform rt = go.GetRectTransform();
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                SCGame.instance.topLayerRoot.GetRectTransform(),
+                screenPos,
+                SCGame.instance.gameCamera,
+                out Vector2 localPoint);
+
+            var tip = go.GetComponent<CommonIntroTip>();
+            if (tip != null)
+                tip.Show(title ?? string.Empty, desc ?? string.Empty, localPoint);
+            _m_introTipCache = go;
+        }
+
+        public static void DiscardIntroTip()
+        {
+            if (_m_introTipCache == null)
+                return;
+            var tip = _m_introTipCache.GetComponent<CommonIntroTip>();
+            if (tip != null)
+                tip.Discard();
+            else
+                SCCommon.DestoryGameObject(_m_introTipCache);
+            _m_introTipCache = null;
         }
 
         public static void ShowPopTip(string _content, Vector3 _worldPos)

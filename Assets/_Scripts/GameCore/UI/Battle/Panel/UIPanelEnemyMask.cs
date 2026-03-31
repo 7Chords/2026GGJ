@@ -1,4 +1,5 @@
 using GameCore;
+using GameCore.RefData;
 using SCFrame.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace GameCore.UI
 
         private EnemyInfo _m_curEnemyInfo;
         private List<UIPanelEnemyFacePart> _m_facePartPanelList;
+        private List<UIPanelPassiveItem> _m_passiveItemPanelList;
         public UIPanelEnemyMask(UIMonoEnemyMask _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -28,6 +30,7 @@ namespace GameCore.UI
             _m_gridInfoList = new List<FaceGridInfo>();
             _m_gridGOList = new List<GameObject>();
             _m_facePartPanelList = new List<UIPanelEnemyFacePart>();
+            _m_passiveItemPanelList = new List<UIPanelPassiveItem>();
             createGrids();
         }
 
@@ -46,6 +49,7 @@ namespace GameCore.UI
                     panel?.Discard();
                 _m_facePartPanelList.Clear();
             }
+            clearPassiveItems();
         }
 
         public override void OnHidePanel()
@@ -68,6 +72,11 @@ namespace GameCore.UI
             {
                 foreach (var panel in _m_facePartPanelList)
                     panel?.HidePanel();
+            }
+            if (_m_passiveItemPanelList != null)
+            {
+                foreach (var p in _m_passiveItemPanelList)
+                    p?.HidePanel();
             }
         }
 
@@ -144,6 +153,8 @@ namespace GameCore.UI
                 _m_facePartPanelList.Clear();
             }
 
+            clearPassiveItems();
+
             _m_curEnemyInfo = GameModel.instance.curEnemyInfo;
 
             if (_m_curEnemyInfo == null)
@@ -183,6 +194,50 @@ namespace GameCore.UI
                 panel.SetInfo(partInfo);
                 panel.ShowPanel();
                 _m_facePartPanelList.Add(panel);
+            }
+
+            refreshPassiveItems();
+        }
+
+        private void clearPassiveItems()
+        {
+            if (_m_passiveItemPanelList == null)
+                return;
+            foreach (var p in _m_passiveItemPanelList)
+            {
+                p?.HidePanel();
+                p?.Discard();
+            }
+            _m_passiveItemPanelList.Clear();
+        }
+
+        private void refreshPassiveItems()
+        {
+            clearPassiveItems();
+            if (mono.tranPassiveContainer == null || string.IsNullOrEmpty(mono.passiveItemPrefabName))
+                return;
+            _m_curEnemyInfo = GameModel.instance.curEnemyInfo;
+            if (_m_curEnemyInfo?.enemyRefObj?.passiveIdList == null || _m_curEnemyInfo.enemyRefObj.passiveIdList.Count == 0)
+                return;
+            var passiveTable = SCRefDataMgr.instance.enemyPassiveRefList.refDataList;
+            if (passiveTable == null)
+                return;
+            for (int i = 0; i < _m_curEnemyInfo.enemyRefObj.passiveIdList.Count; i++)
+            {
+                long pid = _m_curEnemyInfo.enemyRefObj.passiveIdList[i];
+                EnemyPassiveRefObj row = passiveTable.Find(x => x.id == pid);
+                if (row == null)
+                    continue;
+                GameObject go = ResourcesHelper.LoadGameObject(mono.passiveItemPrefabName, mono.tranPassiveContainer);
+                if (go == null)
+                    continue;
+                UIMonoPassiveItem itemMono = go.GetComponent<UIMonoPassiveItem>();
+                if (itemMono == null)
+                    continue;
+                UIPanelPassiveItem itemPanel = new UIPanelPassiveItem(itemMono, SCUIShowType.INTERNAL);
+                itemPanel.SetInfo(row);
+                itemPanel.ShowPanel();
+                _m_passiveItemPanelList.Add(itemPanel);
             }
         }
 

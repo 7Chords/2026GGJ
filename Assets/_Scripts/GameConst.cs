@@ -17,6 +17,7 @@ namespace GameCore
         public const string PREFAB_POP_TIP = "prefab_pop_tip";
         public const string PREFAB_TOOLTIP = "prefab_tooltip";
         public const string PREFAB_BUFF_SIDE_ITEM = "prefab_buff_side_item";
+        public const string PREFAB_INTRO_TIP = "prefab_intro_tip";
         #endregion
 
         #region TAG & LAYER
