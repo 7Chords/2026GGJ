@@ -61,7 +61,9 @@ namespace GameCore.UI
             mono.btnBag.RemoveMouseExit(onBtnBagMouseExit);
             mono.btnExit.RemoveMouseEnter(onBtnExitMouseEnter);
             mono.btnExit.RemoveMouseExit(onBtnExitMouseExit);
-            
+            mono.btnGuide.RemoveClickDown(onBtnGuideClickDown);
+            mono.btnGuide.RemoveMouseEnter(onBtnGuideMouseEnter);
+            mono.btnGuide.RemoveMouseExit(onBtnGuideMouseExit);
 
             foreach (var item in _m_storeItemList)
                 item?.HidePanel();
@@ -79,7 +81,9 @@ namespace GameCore.UI
             mono.btnBag.AddMouseExit(onBtnBagMouseExit);
             mono.btnExit.AddMouseEnter(onBtnExitMouseEnter);
             mono.btnExit.AddMouseExit(onBtnExitMouseExit);
-
+            mono.btnGuide.AddMouseLeftClickDown(onBtnGuideClickDown);
+            mono.btnGuide.AddMouseEnter(onBtnGuideMouseEnter);
+            mono.btnGuide.AddMouseExit(onBtnGuideMouseExit);
 
             foreach (var item in _m_storeItemList)
                 item?.ShowPanel();
@@ -161,6 +165,11 @@ namespace GameCore.UI
             AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.AddNode(new UINodeStoreBag(SCUIShowType.ADDITION));
         }
+        private void onBtnGuideClickDown(PointerEventData _arg, object[] _objs)
+        {
+            AudioMgr.instance.PlaySfx("sfx_click");
+            UICoreMgr.instance.AddNode(new UINodeGuideStore(SCUIShowType.ADDITION));
+        }
         private void onBtnExitClickDonw(PointerEventData _arg, object[] _objs)
         {
             AudioMgr.instance.PlaySfx("sfx_click");
@@ -193,6 +202,19 @@ namespace GameCore.UI
         {
             _m_tweenContainer.RegDoTween(mono.btnExit.transform.DOScale(Vector3.one, mono.scaleChgDuration));
         }
+
+        private void onBtnGuideMouseEnter(PointerEventData arg1, object[] arg2)
+        {
+            if (mono.btnGuide == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnGuide.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
+        }
+
+        private void onBtnGuideMouseExit(PointerEventData arg1, object[] arg2)
+        {
+            if (mono.btnGuide == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnGuide.transform.DOScale(Vector3.one, mono.scaleChgDuration));
+        }
+
         private void onSellPart(object[] _objs)
         {
             if (_objs == null || _objs.Length == 0)
