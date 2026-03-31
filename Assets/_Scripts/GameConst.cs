@@ -37,7 +37,7 @@ namespace GameCore
         public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_COMBINE = 0.2f;
 
         public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_BATTLE = 0.5f;
-        public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_BATTLE = 0.15f;
+        public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_BATTLE = 0.2f;
 
         #endregion
 
@@ -55,9 +55,9 @@ namespace GameCore
 
         public const int EVENT_BLOOD_2_PART_ROLL_MIN_CURRENT_HEALTH = 30;
 
-        public const float DELAY_START_TIME = 0.75f;
-        public const float DELAY_EFFECT_TIME = 0.75f;
-        public const float DELAY_END_TIME = 1f;
+        public const float DELAY_START_TIME = 0.5f;
+        public const float DELAY_EFFECT_TIME = 0.5f;
+        public const float DELAY_END_TIME = 0.5f;
         public const float DELAY_ACTIVE_BUFF_TIME = 0.75f;
         #endregion
     }
