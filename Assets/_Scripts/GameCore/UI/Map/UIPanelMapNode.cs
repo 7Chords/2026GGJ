@@ -236,9 +236,17 @@ namespace GameCore.UI
             AudioMgr.instance.PlaySfx("sfx_click");
             TVSwitchTransition.Run(() =>
             {
+                int floor = GameModel.instance.playerInfo.playerFloor;
+                EnemyRefObj bossRef = SCRefDataMgr.instance.enemyRefList.refDataList
+                    .Find(e => e.isBoss && e.floor == floor);
+                if (bossRef == null)
+                {
+                    SCDebugHelper.LogError($"[Map] No boss row in enemy sheet for floor={floor}.");
+                    return;
+                }
                 GameModel.instance.RollBattleOrder();
                 UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
-                GameModel.instance.GenerateNewBattle(true,999991);
+                GameModel.instance.GenerateNewBattle(true, bossRef.id);
                 UICoreMgr.instance.AddNode(new UINodeBattleOrder(SCUIShowType.ADDITION));
             });
         }

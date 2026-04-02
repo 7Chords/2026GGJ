@@ -58,6 +58,10 @@ namespace GameCore.Battle
             if (e?.passiveBattleState == null)
                 return;
 
+            // Caller has already applied body damage. DEAD_NOT_STIFF heal uses Max(1, ...) so at 0 HP it would revive.
+            if (e.currentHealth <= 0)
+                return;
+
             var refP = FindPassiveRef(e, EEnemyPassiveSkillType.DEAD_NOT_STIFF);
             if (refP == null)
                 return;

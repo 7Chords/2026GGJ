@@ -26,11 +26,20 @@ namespace GameCore
             else
             {
                 int layerX = playerInfo.GetMapLayerXForEncounter();
+                int floor = playerInfo.playerFloor;
                 List<EnemyRefObj> enemies = SCRefDataMgr.instance.enemyRefList.refDataList
-                    .Where(refObj => refObj.floor == playerInfo.playerFloor
+                    .Where(refObj => refObj.floor == floor
                         && !refObj.isBoss
                         && refObj.battleType != EBattleType.EVENT
                         && refObj.column == layerX + 1).ToList();
+                if (enemies == null || enemies.Count == 0)
+                {
+                    enemies = SCRefDataMgr.instance.enemyRefList.refDataList
+                        .Where(refObj => refObj.floor == 1
+                            && !refObj.isBoss
+                            && refObj.battleType != EBattleType.EVENT
+                            && refObj.column == layerX + 1).ToList();
+                }
                 if (enemies == null || enemies.Count == 0) return;
                 enemyRef = enemies[Random.Range(0, enemies.Count)];
             }

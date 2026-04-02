@@ -1,3 +1,4 @@
+using GameCore;
 using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
@@ -40,11 +41,36 @@ namespace GameCore.UI
                 TVSwitchTransition.Run(() =>
                 {
                     GameModel.instance.playerInfo.ApplyPendingMapMove();
+
+                    bool bossWin = GameModel.instance.LastWinEnemyWasBoss;
+                    int winFloor = GameModel.instance.LastWinPlayerFloor;
+                    bool finalBoss = bossWin && winFloor >= GameConst.RUN_TOTAL_FLOORS;
+
+                    GameModel.instance.ClearEnemyWinSnapshot();
+
                     UICoreMgr.instance.RemoveAllNodes(SCUINodeFuncType.BATTLE);
-                    UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+
+                    if (finalBoss)
+                    {
+                        GameRunSave.SaveFromGameModel();
+                        UICoreMgr.instance.AddNode(new UINodeWin(SCUIShowType.FULL));
+                    }
+                    else if (bossWin)
+                    {
+                        GameModel.instance.AdvanceToNextRunFloorAndResetMap();
+                        GameRunSave.SaveFromGameModel();
+                        UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+                    }
+                    else
+                    {
+                        UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
+                    }
                 });
             });
-            _m_enemyRefObj = SCRefDataMgr.instance.enemyRefList.refDataList.Find(x => x.id == GameModel.instance.curEnemyInfo.enemyRefObj.id);
+            long winEnemyId = GameModel.instance.LastWinEnemyRefId;
+            _m_enemyRefObj = winEnemyId != 0
+                ? SCRefDataMgr.instance.enemyRefList.refDataList.Find(x => x.id == winEnemyId)
+                : null;
             _m_winContainer?.ShowPanel();
             refreshShow();
         }

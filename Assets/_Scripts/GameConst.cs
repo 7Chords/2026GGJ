@@ -60,6 +60,9 @@ namespace GameCore
         public const float DELAY_EFFECT_TIME = 0.5f;
         public const float DELAY_END_TIME = 0.5f;
         public const float DELAY_ACTIVE_BUFF_TIME = 0.75f;
+
+        /// <summary> One run spans this many map floors; boss on the last floor opens run victory (panel_win). </summary>
+        public const int RUN_TOTAL_FLOORS = 2;
         #endregion
     }
 }

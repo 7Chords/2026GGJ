@@ -6,6 +6,49 @@ namespace GameCore
 {
     public partial class GameModel
     {
+        /// <summary> Filled on player win before <see cref="SetEnemyEmpty"/> so battle-win UI can read loot / boss flags. </summary>
+        public long LastWinEnemyRefId { get; private set; }
+        public bool LastWinEnemyWasBoss { get; private set; }
+        public int LastWinPlayerFloor { get; private set; }
+
+        public void CaptureEnemyWinSnapshot()
+        {
+            if (curEnemyInfo?.enemyRefObj == null)
+            {
+                LastWinEnemyRefId = 0;
+                LastWinEnemyWasBoss = false;
+                LastWinPlayerFloor = playerInfo != null ? playerInfo.playerFloor : 1;
+                return;
+            }
+            LastWinEnemyRefId = curEnemyInfo.enemyRefObj.id;
+            LastWinEnemyWasBoss = curEnemyInfo.enemyRefObj.isBoss;
+            LastWinPlayerFloor = playerInfo.playerFloor;
+        }
+
+        public void ClearEnemyWinSnapshot()
+        {
+            LastWinEnemyRefId = 0;
+            LastWinEnemyWasBoss = false;
+            LastWinPlayerFloor = 1;
+        }
+
+        /// <summary> After floor-1 boss (etc.): next map cfg and encounters use higher floor; map is regenerated. </summary>
+        public void AdvanceToNextRunFloorAndResetMap()
+        {
+            if (playerInfo == null)
+                return;
+            playerInfo.playerFloor += 1;
+            playerInfo.playerMapPosition = new Vector2Int(-1, -1);
+            playerInfo.ClearPendingMapMove();
+            if (MapManager.instance != null)
+            {
+                MapManager.instance.ClearCurrentMapNodes();
+                MapManager.instance.ClearPendingLayout();
+                MapManager.instance.SetLastMapLayoutSeed(-1);
+            }
+            PendingRunMapLayoutSeed = null;
+        }
+
         /// <summary> 读档后由 MapGenerator 在生成地图前读取；成功写入 pending 布局后清空。 </summary>
         public int? PendingRunMapLayoutSeed { get; private set; }
 
@@ -53,6 +96,7 @@ namespace GameCore
             rollEventId = 0;
             enemyFaceLayoutTurnIndex = 0;
             PendingRunMapLayoutSeed = null;
+            ClearEnemyWinSnapshot();
         }
 
         /// <summary> 从存档恢复玩家与地图进度字段。 </summary>
