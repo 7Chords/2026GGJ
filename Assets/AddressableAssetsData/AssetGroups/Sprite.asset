@@ -177,13 +177,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d3f1edea424e22a42a18440f71855bed
-    m_Address: spr_icon_node_strengthen
+  - m_GUID: cfe4aa65dcf02f0498a6e596d4322e1a
+    m_Address: spr_icon_node_event
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d763ebcb0870cfa42804d6c9c4b608d9
-    m_Address: spr_icon_node_event
+  - m_GUID: e96fc9b7fb80851418f964d114ee6679
+    m_Address: spr_icon_node_strengthen
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

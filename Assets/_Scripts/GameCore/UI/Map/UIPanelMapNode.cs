@@ -134,6 +134,9 @@ namespace GameCore.UI
                     }
                     break;
                 case ERoomType.EVENT:
+                    {
+                        mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>("spr_icon_node_event");
+                    }
                     break;
                 case ERoomType.BOSS:
                     {
