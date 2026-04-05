@@ -29,49 +29,64 @@ MonoBehaviour:
       originFacePosition: {x: 1, y: 4}
       rotationSteps: 0
   - slots:
-    - partLevelRefId: 10070
-      originFacePosition: {x: 0, y: 0}
-      rotationSteps: 0
-    - partLevelRefId: 10058
-      originFacePosition: {x: 1, y: 2}
-      rotationSteps: 0
     - partLevelRefId: 10064
-      originFacePosition: {x: 2, y: 3}
-      rotationSteps: 1
-    - partLevelRefId: 10061
-      originFacePosition: {x: 1, y: 4}
-      rotationSteps: 0
-    - partLevelRefId: 10070
-      originFacePosition: {x: 2, y: 1}
-      rotationSteps: 0
-    - partLevelRefId: 10070
-      originFacePosition: {x: 2, y: 4}
-      rotationSteps: 0
-    - partLevelRefId: 10058
-      originFacePosition: {x: 1, y: 5}
-      rotationSteps: 0
-    - partLevelRefId: 10067
-      originFacePosition: {x: 0, y: 4}
-      rotationSteps: 3
-  - slots:
-    - partLevelRefId: 10061
-      originFacePosition: {x: 2, y: 2}
+      originFacePosition: {x: 1, y: 3}
       rotationSteps: 0
     - partLevelRefId: 10058
       originFacePosition: {x: 0, y: 2}
       rotationSteps: 0
+    - partLevelRefId: 10061
+      originFacePosition: {x: 2, y: 2}
+      rotationSteps: 0
     - partLevelRefId: 10064
-      originFacePosition: {x: 1, y: 3}
-      rotationSteps: 0
-    - partLevelRefId: 10070
       originFacePosition: {x: 2, y: 3}
-      rotationSteps: 0
-    - partLevelRefId: 10070
+      rotationSteps: 2
+    - partLevelRefId: 10058
       originFacePosition: {x: 1, y: 5}
       rotationSteps: 0
+    - partLevelRefId: 10061
+      originFacePosition: {x: 3, y: 5}
+      rotationSteps: 0
+    - partLevelRefId: 10064
+      originFacePosition: {x: 1, y: 0}
+      rotationSteps: 2
+    - partLevelRefId: 10058
+      originFacePosition: {x: 1, y: 2}
+      rotationSteps: 0
+    - partLevelRefId: 10064
+      originFacePosition: {x: 0, y: 3}
+      rotationSteps: 0
+    - partLevelRefId: 10064
+      originFacePosition: {x: 3, y: 3}
+      rotationSteps: 0
+  - slots:
     - partLevelRefId: 10070
-      originFacePosition: {x: 0, y: 0}
+      originFacePosition: {x: 1, y: 0}
+      rotationSteps: 0
+    - partLevelRefId: 10070
+      originFacePosition: {x: 2, y: 2}
       rotationSteps: 0
     - partLevelRefId: 10067
-      originFacePosition: {x: 1, y: 1}
-      rotationSteps: 2
+      originFacePosition: {x: 0, y: 0}
+      rotationSteps: 3
+    - partLevelRefId: 10067
+      originFacePosition: {x: 0, y: 4}
+      rotationSteps: 0
+    - partLevelRefId: 10070
+      originFacePosition: {x: 0, y: 3}
+      rotationSteps: 0
+    - partLevelRefId: 10058
+      originFacePosition: {x: 3, y: 1}
+      rotationSteps: 0
+    - partLevelRefId: 10058
+      originFacePosition: {x: 3, y: 4}
+      rotationSteps: 0
+    - partLevelRefId: 10058
+      originFacePosition: {x: 3, y: 5}
+      rotationSteps: 0
+    - partLevelRefId: 10061
+      originFacePosition: {x: 1, y: 6}
+      rotationSteps: 0
+    - partLevelRefId: 10061
+      originFacePosition: {x: 2, y: 6}
+      rotationSteps: 0
