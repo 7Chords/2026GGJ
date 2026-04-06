@@ -20,6 +20,11 @@ namespace GameCore
         [Tooltip("最后一个节点")]
         public ERoomType lastNodeRoomType = ERoomType.BOSS;
 
+        [Tooltip("When true, the column before the last uses penultimateNodeRoomType instead of interior random/quota.")]
+        public bool usePenultimateNodeRoomType;
+        [Tooltip("Room type for the second-to-last column (used when usePenultimateNodeRoomType and map has at least 3 columns).")]
+        public ERoomType penultimateNodeRoomType = ERoomType.ENEMY;
+
         [Header("节点概率")]
         public List<RoomProbability> roomProbabilities;
 

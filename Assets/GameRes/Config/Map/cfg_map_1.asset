@@ -16,11 +16,13 @@ MonoBehaviour:
   repetitionCount: 6
   firstNodeRoomType: 1
   lastNodeRoomType: 4
+  usePenultimateNodeRoomType: 1
+  penultimateNodeRoomType: 2
   roomProbabilities:
   - type: 1
     weight: 25
   - type: 2
-    weight: 15
+    weight: 10
   - type: 6
     weight: 10
   - type: 3

@@ -528,6 +528,8 @@ namespace GameCore
             var interiorCells = new List<MapCellLayoutData>();
             for (int i = 1; i < _layerCount.x - 1; i++)
             {
+                if (_mapData.usePenultimateNodeRoomType && _layerCount.x >= 3 && i == _layerCount.x - 2)
+                    continue;
                 for (int j = 0; j < _layerCount.y; j++)
                 {
                     var cell = _layoutData[i, j];
@@ -599,6 +601,8 @@ namespace GameCore
             // 第一层 / 最后一层类型由 MapData 配置（默认战斗 / BOSS）
             if (layerIndex == 0) return _mapData.firstNodeRoomType;
             if (layerIndex == _layerCount.x - 1) return _mapData.lastNodeRoomType;
+            if (_mapData.usePenultimateNodeRoomType && _layerCount.x >= 3 && layerIndex == _layerCount.x - 2)
+                return _mapData.penultimateNodeRoomType;
 
             // 确定当前层级的限制条件
             // 被排除的节点类型
