@@ -29,13 +29,12 @@ namespace GameCore.UI
             mono.sldSound.onValueChanged.RemoveAllListeners();
             mono.btnClose.RemoveClickDown(onBtnCloseClickDown);
             mono.btnReturnMain.RemoveClickDown(onBtnReturnMainClickDonw);
-            mono.togCRT.RemoveClickDown(onTogCRTClickDown);
-
+            mono.togCRT.onValueChanged.RemoveAllListeners();
         }
 
-        private void onTogCRTClickDown(PointerEventData arg1, object[] arg2)
+        private void onTogCRTClickDown(bool _isOn)
         {
-            SCGame.instance.rendererData.rendererFeatures.Find(x => x.name == "TintRenderFeature").SetActive(mono.togCRT.isOn);
+            SCGame.instance.rendererData.rendererFeatures.Find(x => x.name == "TintRenderFeature").SetActive(_isOn);
         }
 
         public override void OnShowPanel()
@@ -50,7 +49,7 @@ namespace GameCore.UI
             });
             mono.btnClose.AddMouseLeftClickDown(onBtnCloseClickDown);
             mono.btnReturnMain.AddMouseLeftClickDown(onBtnReturnMainClickDonw);
-            mono.togCRT.AddMouseLeftClickDown(onTogCRTClickDown);
+            mono.togCRT.onValueChanged.AddListener(onTogCRTClickDown);
 
             mono.sldMusic.value = AudioMgr.instance.bgmVolumeFactor;
             mono.sldSound.value = AudioMgr.instance.sfxVolumeFactor;
