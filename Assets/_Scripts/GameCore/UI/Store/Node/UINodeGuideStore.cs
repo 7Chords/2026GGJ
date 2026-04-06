@@ -24,7 +24,7 @@ namespace GameCore.UI
 
         public override SCUINodeFuncType nodeFuncType => SCUINodeFuncType.EVENT;
 
-        public override bool needMoveToBottomWhenHide => false;
+        public override bool needMoveToBottomWhenHide => true;
 
         private GameObject _m_panelGO;
         private UIPanelCommonGuide _m_guidePanel;
