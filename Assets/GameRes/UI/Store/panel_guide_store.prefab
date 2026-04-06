@@ -2568,7 +2568,7 @@ GameObject:
   - component: {fileID: 2623827643638307918}
   - component: {fileID: 687140567735642073}
   m_Layer: 5
-  m_Name: txt_Hbar_desc (2)
+  m_Name: txt_icon_desc
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2951,7 +2951,7 @@ GameObject:
   - component: {fileID: 3421840383926240748}
   - component: {fileID: 9030280099695679938}
   m_Layer: 5
-  m_Name: txt_Hbar_desc (3)
+  m_Name: txt_price_desc
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3261,7 +3261,7 @@ GameObject:
   - component: {fileID: 639919991664224423}
   - component: {fileID: 681285081477061798}
   m_Layer: 5
-  m_Name: txt_Hbar_desc (2)
+  m_Name: txt_icon_desc
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3415,7 +3415,7 @@ GameObject:
   - component: {fileID: 1266566007789645018}
   - component: {fileID: 2775676843487503765}
   m_Layer: 5
-  m_Name: txt_money_desc (1)
+  m_Name: txt_tip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3438,7 +3438,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 8, y: -244}
-  m_SizeDelta: {x: 799.5524, y: 106.9514}
+  m_SizeDelta: {x: 1072.822, y: 106.9514}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1266566007789645018
 CanvasRenderer:
@@ -3470,7 +3470,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 8e5bb06171da842409a927f6f7d54334, type: 3}
-    m_FontSize: 30
+    m_FontSize: 40
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 3
@@ -4186,7 +4186,7 @@ GameObject:
   - component: {fileID: 1455089127134507305}
   - component: {fileID: 3084527716768249552}
   m_Layer: 5
-  m_Name: txt_money_desc
+  m_Name: txt_func
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4209,7 +4209,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 17, y: 193}
-  m_SizeDelta: {x: 732.4608, y: 106.9514}
+  m_SizeDelta: {x: 1000.4, y: 106.9514}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1455089127134507305
 CanvasRenderer:
@@ -4241,7 +4241,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 8e5bb06171da842409a927f6f7d54334, type: 3}
-    m_FontSize: 30
+    m_FontSize: 40
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 3
@@ -4531,7 +4531,7 @@ GameObject:
   - component: {fileID: 8905952053559694660}
   - component: {fileID: 3930476062654624125}
   m_Layer: 5
-  m_Name: txt_Hbar_desc (1)
+  m_Name: txt_health_desc
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5608,7 +5608,7 @@ GameObject:
   - component: {fileID: 5570986279639221303}
   - component: {fileID: 3807152778679334374}
   m_Layer: 5
-  m_Name: txt_Hbar_desc (1)
+  m_Name: txt_price_desc
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
