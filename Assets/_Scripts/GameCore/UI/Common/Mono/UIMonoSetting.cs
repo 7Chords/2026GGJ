@@ -16,5 +16,7 @@ namespace GameCore.UI
         public Button btnClose;
         [Header("返回主页面按钮")]
         public Button btnReturnMain;
+        [Header("CRT开关")]
+        public Toggle togCRT;
     }
 }

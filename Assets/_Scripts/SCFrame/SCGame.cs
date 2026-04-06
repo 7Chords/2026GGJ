@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace SCFrame
 {
@@ -17,6 +19,10 @@ namespace SCFrame
 
         [Header("Camera")]
         public Camera gameCamera;
+
+        [Header("Volumn")]
+        public Volume globalVolumn;
+        public UniversalRendererData rendererData;
 
     }
 }
