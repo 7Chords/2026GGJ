@@ -97,6 +97,13 @@ namespace GameCore
             enemyFaceLayoutTurnIndex = 0;
             PendingRunMapLayoutSeed = null;
             ClearEnemyWinSnapshot();
+
+            if (MapManager.instance != null)
+            {
+                MapManager.instance.ClearCurrentMapNodes();
+                MapManager.instance.ClearPendingLayout();
+                MapManager.instance.SetLastMapLayoutSeed(-1);
+            }
         }
 
         /// <summary> 从存档恢复玩家与地图进度字段。 </summary>

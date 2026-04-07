@@ -115,6 +115,11 @@ namespace GameCore.UI
                 return;
             }
 
+            var genPre = MapGenerator.GetOrFind();
+            var gmPre = GameModel.instance;
+            if (genPre != null && gmPre != null && gmPre.PendingRunMapLayoutSeed.HasValue)
+                genPre.GenerateMapDataOnly(gmPre.PendingRunMapLayoutSeed);
+
             TVSwitchTransition.Run(() =>
             {
                 UICoreMgr.instance.CloseTopNode();

@@ -83,8 +83,18 @@ namespace GameCore
         {
             if (MapManager.instance == null)
                 return;
-            if (MapManager.instance.currentMapNodes != null)
-                return;
+
+            var grid = MapManager.instance.currentMapNodes;
+            if (grid != null && grid.GetLength(0) > 0 && grid.GetLength(1) > 0)
+            {
+                var probe = grid[0, 0];
+                if (probe != null)
+                    return;
+            }
+
+            if (grid != null)
+                MapManager.instance.ClearCurrentMapNodes();
+
             if (mapContentParent == null)
             {
                 SCDebugHelper.LogError("[MapGenerator] 地图 ScrollRect Content 为空，无法生成节点。");
@@ -95,6 +105,8 @@ namespace GameCore
             {
                 var gm = GameModel.instance;
                 int? fixedSeed = gm != null ? gm.PendingRunMapLayoutSeed : (int?)null;
+                if (!fixedSeed.HasValue && MapManager.instance.LastMapLayoutSeed >= 0)
+                    fixedSeed = MapManager.instance.LastMapLayoutSeed;
                 GenerateMapDataOnly(fixedSeed);
             }
 
