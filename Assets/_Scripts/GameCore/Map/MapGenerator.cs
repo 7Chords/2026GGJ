@@ -122,6 +122,7 @@ namespace GameCore
 
             createMapLayoutData();
             generateRouteLoop();
+            StackActiveNodesVerticallyPerColumn();
             RecenterLayoutOnActiveCluster();
             if (!_mapData.useLegacyInteriorRoomRandom)
                 ApplyInteriorRoomTypeQuotasFromConfiguredWeights();
@@ -299,6 +300,48 @@ namespace GameCore
                     cell.localPosition = new Vector3(finalX, finalY, 0);
 
                     _layoutData[i, j] = cell;
+                }
+            }
+        }
+
+        /// <summary>
+        /// After routes are chosen, snap each column's active nodes to a vertical stack centered on Y=0 (before global
+        /// recenter), so edges are not all biased to one screen direction while grid indices and connections stay the same.
+        /// </summary>
+        private void StackActiveNodesVerticallyPerColumn()
+        {
+            if (_layoutData == null)
+                return;
+
+            int w = _layoutData.GetLength(0);
+            int h = _layoutData.GetLength(1);
+            float layerHeight = (_layerCount.y - 1) * nodeSpacing.y;
+            float gridBaseY = -layerHeight * 0.5f;
+
+            for (int i = 0; i < w; i++)
+            {
+                var activeRows = new List<int>();
+                for (int j = 0; j < h; j++)
+                {
+                    var c = _layoutData[i, j];
+                    if (c != null && c.isActive)
+                        activeRows.Add(j);
+                }
+
+                activeRows.Sort();
+                int k = activeRows.Count;
+                if (k == 0)
+                    continue;
+
+                for (int r = 0; r < k; r++)
+                {
+                    int j = activeRows[r];
+                    var cell = _layoutData[i, j];
+                    float slotY = (r - (k - 1) * 0.5f) * nodeSpacing.y;
+                    float jitterY = cell.localPosition.y - (gridBaseY + j * nodeSpacing.y);
+                    float x = cell.localPosition.x;
+                    float z = cell.localPosition.z;
+                    cell.localPosition = new Vector3(x, slotY + jitterY, z);
                 }
             }
         }
