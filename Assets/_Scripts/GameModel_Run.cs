@@ -135,7 +135,9 @@ namespace GameCore
             curEnemyInfo = null;
             enemyFaceLayoutTurnIndex = 0;
 
-            if (data.mapLayoutFromSave)
+            // Prefer flag; also accept non-zero seed if older JSON omitted mapLayoutFromSave.
+            bool useSavedLayoutSeed = data.mapLayoutFromSave || data.mapLayoutSeed != 0;
+            if (useSavedLayoutSeed)
             {
                 PendingRunMapLayoutSeed = data.mapLayoutSeed;
                 // 与 MapManager 同步，避免读档后、生成地图前逻辑误判；继续游戏时用同一种子复现布局

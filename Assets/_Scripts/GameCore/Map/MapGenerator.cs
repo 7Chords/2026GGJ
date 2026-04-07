@@ -145,6 +145,14 @@ namespace GameCore
             MapManager.instance.SetPendingMapLayout(_layoutData, _pendingContentSize, lines);
             _layoutData = null;
 
+            // Persist seed as soon as layout data exists so continue matches even if map UI never finishes
+            // (e.g. quit during transition) or a later save path is skipped.
+            if (GameModel.instance != null && GameModel.instance.playerInfo != null)
+            {
+                GameRunSave.NotifyEnteredMapOnce();
+                GameRunSave.SaveFromGameModel();
+            }
+
             if (fixedMapSeed.HasValue)
                 GameModel.instance?.ClearPendingRunMapLayoutSeed();
         }
