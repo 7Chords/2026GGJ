@@ -1,4 +1,5 @@
 using DG.Tweening;
+using GameCore;
 using SCFrame;
 using SCFrame.UI;
 using System;
@@ -332,7 +333,37 @@ namespace GameCore.UI
             if (_m_partInfo == info)
             {
                 GameCommon.ShowEffectText(_m_partInfo.partRefObj.triggerSuccessTip, GetGameObject().transform.position);
+                var refObj = _m_partInfo.partRefObj;
+                if (refObj != null)
+                {
+                    EPartType t = refObj.partType;
+                    if (t == EPartType.EYE || t == EPartType.NOSE)
+                        playEyeNoseTriggerSuccessBounce();
+                }
             }
+        }
+
+        /// <summary> Vertical hop + light scale punch; avoids random DOShake used by hurt. </summary>
+        private void playEyeNoseTriggerSuccessBounce()
+        {
+            var rt = GetGameObject().transform as RectTransform;
+            if (rt == null)
+                return;
+            Vector2 baseAp = rt.anchoredPosition;
+            float h = mono.triggerSuccessBounceHeight;
+            float total = Mathf.Max(0.05f, mono.triggerSuccessBounceDuration);
+            float upPortion = Mathf.Clamp(mono.triggerSuccessBounceUpPortion, 0.15f, 0.55f);
+            float upT = total * upPortion;
+            float downT = total - upT;
+            var seq = DOTween.Sequence();
+            seq.Append(rt.DOAnchorPos(new Vector2(baseAp.x, baseAp.y + h), upT).SetEase(Ease.OutQuad));
+            seq.Append(rt.DOAnchorPos(baseAp, downT).SetEase(Ease.OutBounce));
+            if (mono.imgGO != null && mono.triggerSuccessPunchScale > 0.001f)
+            {
+                seq.Insert(0,
+                    mono.imgGO.transform.DOPunchScale(Vector3.one * mono.triggerSuccessPunchScale, total * 0.85f, 5, 0.35f));
+            }
+            _m_tweenContainer?.RegDoTween(seq);
         }
 
 

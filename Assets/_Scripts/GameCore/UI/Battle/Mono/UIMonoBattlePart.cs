@@ -1,4 +1,4 @@
-using SCFrame.UI;
+ï»¿using SCFrame.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,46 +8,52 @@ namespace GameCore.UI
 {
     public class UIMonoBattlePart : _ASCUIMonoBase
     {
-        [Header("ÎïÌåÍ¼Æ¬")]
+        [Header("ç‰©ä½“")]
         public Image imgGO;
-        [Header("²¿Î»Í¼Æ¬")]
+        [Header("éƒ¨ä½å›¾ç‰‡")]
         public Image imgPart;
-        [Header("ÉúÃüÎÄ±¾")]
+        [Header("ç”Ÿå‘½å€¼æ–‡æœ¬")]
         public Text txtHealth;
-        [Header("Ë³ĞòÎÄ±¾")]
+        [Header("é¡ºåºæ–‡æœ¬")]
         public Text txtOrder;
-        [Header("ÉúÃüĞÅÏ¢ÎïÌå")]
+        [Header("ç”Ÿå‘½å€¼ä¿¡æ¯ç‰©ä½“")]
         public GameObject goHealthInfo;
-        [Header("ĞòºÅĞÅÏ¢ÎïÌå")]
+        [Header("é¡ºåºä¿¡æ¯ç‰©ä½“")]
         public GameObject goOrder;
-        [Header("buffĞÅÏ¢ÎïÌå")]
+        [Header("buffä¿¡æ¯ç‰©ä½“")]
         public GameObject goBuff;
-        [Header("ÉúÃüĞÅÏ¢ÎïÌåËù´¦Î»ÖÃ±ÈÀı")]
+        [Header("ç”Ÿå‘½å€¼ä¿¡æ¯ç‰©ä½“é”šç‚¹")]
         public Vector2 goHealthPosPivot;
-        [Header("ĞòºÅĞÅÏ¢ÎïÌåËù´¦Î»ÖÃ±ÈÀı")]
+        [Header("é¡ºåºä¿¡æ¯ç‰©ä½“é”šç‚¹")]
         public Vector2 goOrderPosPivot;
-        [Header("buffĞÅÏ¢ÎïÌåËù´¦Î»ÖÃ±ÈÀı")]
+        [Header("buffä¿¡æ¯ç‰©ä½“é”šç‚¹")]
         public Vector2 goBuffPosPivot;
-        [Header("ÊÜÉËÕğ¶¯Ç¿¶È")]
+        [Header("å—ä¼¤éœ‡åŠ¨å¼ºåº¦")]
         public float hurtShakeStrength;
-        [Header("ÊÜÉËÕğ¶¯Ê±¼ä")]
+        [Header("å—ä¼¤éœ‡åŠ¨æŒç»­æ—¶é—´")]
         public float hurtShakeDuration;
-        [Header("ĞĞ¶¯Ëõ·Å")]
+        [Header("æ¿€æ´»ç¼©æ”¾")]
         public float activeScale;
-        [Header("ĞĞ¶¯Ëõ·ÅÊ±¼ä")]
+        [Header("æ¿€æ´»ç¼©æ”¾æ—¶é—´")]
         public float scaleChgDuration;
-        [Header("×ì°Í¹¥»÷³å³öÊ±³¤")]
+        [Header("å˜´å·´å‡ºå»æ—¶é—´")]
         public float mouthLungeOutDuration = 0.18f;
-        [Header("×ì°Í¹¥»÷ÊÕ»ØÊ±³¤")]
+        [Header("å˜´å·´è¿”å›æ—¶é—´")]
         public float mouthReturnDuration = 0.18f;
-        [Header("×ì°Í¹¥»÷£º³åµ½Ä¿±êÁ¬ÏßµÄ±ÈÀı(0-1)")]
+        [Header("å˜´å·´ç§»åŠ¨æ¯”ä¾‹(0-1)")]
         [Range(0f, 1f)]
         public float mouthLungeT = 0.85f;
-        [Header("ÊÜÉËÑÕÉ«")]
+        [Header("å—ä¼¤é—ªçƒé¢œè‰²")]
         public Color hurtFlashTint = new Color(1f, 0.4f, 0.4f, 1f);
-        [Header("ÊÜÉËÉÁË¸µ­ÈëÊ±¼ä")]
+        [Header("å—ä¼¤é—ªçƒæ·¡å…¥æ—¶é—´")]
         public float hurtFlashInDuration = 0.07f;
-        [Header("ÊÜÉËÉÁË¸µ­³öÊ±¼ä")]
+        [Header("å—ä¼¤é—ªçƒæ·¡å‡ºé¢œè‰²")]
         public float hurtFlashOutDuration = 0.12f;
+        [Header("Eye/Nose trigger success bounce (distinct from hurt shake)")]
+        public float triggerSuccessBounceHeight = 22f;
+        public float triggerSuccessBounceDuration = 0.38f;
+        [Range(0.15f, 0.55f)]
+        public float triggerSuccessBounceUpPortion = 0.32f;
+        public float triggerSuccessPunchScale = 0.1f;
     }
 }
