@@ -27,7 +27,9 @@ namespace GameCore
                 case EEventType.BLOOD_2_PART_LOW:
                     ExecuteBlood2Part(EEventType.BLOOD_2_PART_LOW);
                     break;
-                case EEventType.PART_2_PART:
+                case EEventType.PART_2_PART_BLEED:
+                case EEventType.PART_2_PART_BURN:
+                case EEventType.PART_2_PART_NORMAL:
                     {
                         if (GameModel.instance.playerInfo.bagPartInfoList == null
                             || GameModel.instance.playerInfo.bagPartInfoList.Count == 0)
@@ -35,7 +37,7 @@ namespace GameCore
                             GameCommon.ShowPopTip("未持有任何部位", Vector2.zero);
                             return;
                         }
-                        UICoreMgr.instance.AddNode(new UINodeEventPartExchange(SCUIShowType.ADDITION));
+                        UICoreMgr.instance.AddNode(new UINodeEventPartExchange(SCUIShowType.ADDITION, _eventType));
                     }
                     break;
                 case EEventType.TREASURE_COIN:

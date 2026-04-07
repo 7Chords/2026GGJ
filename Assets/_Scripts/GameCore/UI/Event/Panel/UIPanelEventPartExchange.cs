@@ -11,8 +11,10 @@ namespace GameCore.UI
     {
         private UIPanelEventPartExchangeContainer _m_container;
 
-        public UIPanelEventPartExchange(UIMonoEventPartExchange _mono, SCUIShowType _showType) : base(_mono, _showType)
+        private EEventType _m_eventType;
+        public UIPanelEventPartExchange(UIMonoEventPartExchange _mono, SCUIShowType _showType,EEventType _eventType) : base(_mono, _showType)
         {
+            _m_eventType = _eventType;
         }
 
         public override void AfterInitialize()
@@ -56,7 +58,7 @@ namespace GameCore.UI
         {
             if (_part == null)
                 return;
-            if (!EventPartExchangeHelper.TryExecute(_part))
+            if (!EventPartExchangeHelper.TryExecute(_part, _m_eventType))
                 return;
             SCMsgCenter.SendMsg(SCMsgConst.EVENT_PART_EXCHANGE_COMPLETED);
             closeExchangeNode();

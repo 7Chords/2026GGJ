@@ -145,7 +145,7 @@ namespace GameCore.UI
                 }
                 else
                 {
-                    bool waitForPartExchange = _m_eventDialogueRefObj.eventType == EEventType.PART_2_PART
+                    bool waitForPartExchange = _m_eventDialogueRefObj.eventType == EEventType.PART_2_PART_NORMAL
                         && GameModel.instance.playerInfo.bagPartInfoList != null
                         && GameModel.instance.playerInfo.bagPartInfoList.Count > 0;
                     if (!waitForPartExchange)

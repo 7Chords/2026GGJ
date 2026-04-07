@@ -10,9 +10,9 @@ namespace GameCore
     /// </summary>
     public static class EventPartExchangeHelper
     {
-        public static bool TryExecute(PartInfo sacrifice)
+        public static bool TryExecute(PartInfo sacrifice, EEventType eventType)
         {
-            if (sacrifice == null || sacrifice.partRefObj == null)
+            if (sacrifice == null || sacrifice.partRefObj == null || eventType == EEventType.NONE)
                 return false;
             var bag = GameModel.instance.playerInfo.bagPartInfoList;
             if (bag == null || !bag.Contains(sacrifice))
@@ -27,7 +27,9 @@ namespace GameCore
             }
 
             List<EventPart2PartRefObj> configs =
-                all.FindAll(x => x.floor == floor && x.partLevel == sacrifice.partLevel);
+                all.FindAll(x => x.floor == floor 
+                && x.partLevel == sacrifice.partLevel
+                && x.eventType == eventType);
             if (configs == null || configs.Count == 0)
                 configs = all.FindAll(x => x.floor == floor);
             if (configs == null || configs.Count == 0)

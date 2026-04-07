@@ -7,8 +7,9 @@ namespace GameCore.UI
 {
     public class UINodeEventPartExchange : _ASCUINodeBase
     {
-        public UINodeEventPartExchange(SCUIShowType _showType) : base(_showType)
+        public UINodeEventPartExchange(SCUIShowType _showType,EEventType _eventType) : base(_showType)
         {
+            _m_eventType = _eventType;
         }
 
         public override bool needHideWhenEnterNewSameTypeNode => false;
@@ -29,6 +30,7 @@ namespace GameCore.UI
         private UIPanelEventPartExchange _m_panel;
         private UIMonoEventPartExchange _m_mono;
 
+        private EEventType _m_eventType;
         public override string GetNodeName()
         {
             return nameof(UINodeEventPartExchange);
@@ -53,7 +55,7 @@ namespace GameCore.UI
                 Debug.LogError("UIMonoEventPartExchange missing on " + GetResName());
                 return;
             }
-            _m_panel = new UIPanelEventPartExchange(_m_mono, _m_showType);
+            _m_panel = new UIPanelEventPartExchange(_m_mono, _m_showType,_m_eventType);
             _m_panel.Initialize();
         }
 

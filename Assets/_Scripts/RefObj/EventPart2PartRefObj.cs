@@ -18,12 +18,14 @@ namespace GameCore.RefData
         public long id;
         public int floor;
         public int partLevel;
+        public EEventType eventType;
         public List<BootyEffectObj> partList;
         protected override void _parseFromString()
         {
             id = getLong("id");
             floor = getInt("floor");
             partLevel = getInt("partLevel");
+            eventType = (EEventType)getEnum("eventType", typeof(EEventType));
             partList = getList<BootyEffectObj>("partList");
         }
         public static string assetPath => "RefData/ExportTxt";
