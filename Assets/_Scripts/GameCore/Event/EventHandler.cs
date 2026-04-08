@@ -1,4 +1,4 @@
-using GameCore.Helpers;
+ï»¿using GameCore.Helpers;
 using GameCore.RefData;
 using GameCore.UI;
 using SCFrame;
@@ -34,7 +34,7 @@ namespace GameCore
                         if (GameModel.instance.playerInfo.bagPartInfoList == null
                             || GameModel.instance.playerInfo.bagPartInfoList.Count == 0)
                         {
-                            GameCommon.ShowPopTip("Î´³ÖÓÐÈÎºÎ²¿Î»", Vector2.zero);
+                            GameCommon.ShowPopTip("æœªæŒæœ‰éƒ¨ä½", Vector2.zero);
                             return;
                         }
                         UICoreMgr.instance.AddNode(new UINodeEventPartExchange(SCUIShowType.ADDITION, _eventType));
@@ -48,7 +48,7 @@ namespace GameCore
                         if (getMoneyRefObj == null)
                             return;
                         GameModel.instance.playerInfo.playerMoney += getMoneyRefObj.money;
-                        GameCommon.ShowPopTip("»ñµÃ" + getMoneyRefObj.money, Vector2.zero);
+                        GameCommon.ShowPopTip("èŽ·å¾—é‡‘å¸Ã—" + getMoneyRefObj.money, Vector2.zero);
                     }
                     break;
                 case EEventType.TREASURE_PART:
@@ -63,7 +63,7 @@ namespace GameCore
                             return;
                         PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList.Find(x => x.id == levelRefObj.partId);
                         GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
-                        GameCommon.ShowPopTip("»ñµÃ" + partRefObj.partName + " Lv" + levelRefObj.partLevel, Vector2.zero);
+                        GameCommon.ShowPopTip("èŽ·å¾—" + partRefObj.partName + " Lv" + levelRefObj.partLevel, Vector2.zero);
                     }
                     break;
                 case EEventType.TRAP_BATTLE:
@@ -90,7 +90,7 @@ namespace GameCore
                             GameModel.instance.RollBattleOrder();
                             UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
                             GameModel.instance.GenerateNewBattle(false, pick.id);
-                            UICoreMgr.instance.AddNode(new UINodeGuideBattle(SCUIShowType.ADDITION));
+                            RunTutorialAuto.TryShowBattleGuideFirstTimeInRun();
                         });
                     }
                     break;
@@ -116,7 +116,7 @@ namespace GameCore
             if (partRefObj == null)
                 return;
             GameModel.instance.playerInfo.bagPartInfoList.Add(new PartInfo(partRefObj, false, levelRefObj.partLevel));
-            GameCommon.ShowPopTip("»ñµÃ" + partRefObj.partName + " Lv" + levelRefObj.partLevel, Vector2.zero);
+            GameCommon.ShowPopTip("èŽ·å¾—" + partRefObj.partName + " Lv" + levelRefObj.partLevel, Vector2.zero);
             GameModel.instance.PlayerTakeDamage(blood2PartRefObj.blood);
         }
     }

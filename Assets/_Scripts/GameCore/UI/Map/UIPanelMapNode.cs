@@ -230,7 +230,7 @@ namespace GameCore.UI
                 GameModel.instance.RollBattleOrder();
                 UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
                 GameModel.instance.GenerateNewBattle();
-                UICoreMgr.instance.AddNode(new UINodeGuideBattle(SCUIShowType.ADDITION));
+                RunTutorialAuto.TryShowBattleGuideFirstTimeInRun();
             });
         }
 
@@ -250,6 +250,7 @@ namespace GameCore.UI
                 GameModel.instance.RollBattleOrder();
                 UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
                 GameModel.instance.GenerateNewBattle(true, bossRef.id);
+                RunTutorialAuto.TryShowBattleGuideFirstTimeInRun();
                 UICoreMgr.instance.AddNode(new UINodeBattleOrder(SCUIShowType.ADDITION));
             });
         }

@@ -18,9 +18,13 @@ namespace GameCore
         private static bool _allowSaveAfterMapEntered;
         private static string _resolvedSavesDirectory;
 
+        public const int CurrentRunSaveVersion = 1;
+
         [Serializable]
         public class RunSaveData
         {
+            /// <summary> 1 = 含每局教程标记；旧档缺省为 0，读档时视为已看过教程。 </summary>
+            public int runSaveVersion;
             public bool mapVisited;
             public int mapX, mapY;
             public int pendingX, pendingY;
@@ -34,6 +38,9 @@ namespace GameCore
             /// <summary> 为 true 时 mapLayoutSeed 有效，继续游戏时用同一种子复现地图。 </summary>
             public bool mapLayoutFromSave;
             public int mapLayoutSeed;
+            public bool tutorialMapAutoShown;
+            public bool tutorialBattleAutoShown;
+            public bool tutorialStoreAutoShown;
         }
 
         [Serializable]
@@ -179,6 +186,7 @@ namespace GameCore
 
             var data = new RunSaveData
             {
+                runSaveVersion = CurrentRunSaveVersion,
                 mapVisited = true,
                 mapX = p.playerMapPosition.x,
                 mapY = p.playerMapPosition.y,
@@ -196,6 +204,9 @@ namespace GameCore
                 battleParts = SerializeParts(p.battlePartInfoList),
                 mapLayoutFromSave = hasMapSeed,
                 mapLayoutSeed = hasMapSeed ? mm.LastMapLayoutSeed : 0,
+                tutorialMapAutoShown = gm.RunTutorialMapAutoShown,
+                tutorialBattleAutoShown = gm.RunTutorialBattleAutoShown,
+                tutorialStoreAutoShown = gm.RunTutorialStoreAutoShown,
             };
 
             try

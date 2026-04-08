@@ -67,7 +67,9 @@ namespace GameCore.UI
 
         private void onBtnCloseClickDonw(PointerEventData _data, object[] _objs)
         {
-            UICoreMgr.instance.CloseTopNode();
+            // CloseTopNode() uses list tail as "top"; after hiding tutorial with needMoveToBottomWhenHide,
+            // order can be [Guide, Map] so tail is Map and the map gets closed. ADDITION stack matches visuals.
+            UICoreMgr.instance.CloseTopAdditionNode();
         }
     }
 }

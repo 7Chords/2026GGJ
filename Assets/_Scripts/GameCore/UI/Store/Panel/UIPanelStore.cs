@@ -1,4 +1,5 @@
 using DG.Tweening;
+using GameCore;
 using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
@@ -111,6 +112,12 @@ namespace GameCore.UI
                 _m_goodsInfoList.Add(info);
             }
             refreshShow();
+            if (!GameModel.instance.RunTutorialStoreAutoShown)
+            {
+                GameModel.instance.MarkRunTutorialStoreAutoShown();
+                UICoreMgr.instance.AddNode(new UINodeGuideStore(SCUIShowType.ADDITION));
+                GameRunSave.SaveFromGameModel();
+            }
         }
 
         private void onCheatDebugUiRefresh()

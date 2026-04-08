@@ -145,6 +145,65 @@ namespace SCFrame
         }
 
         /// <summary>
+        /// Close the topmost ADDITION-layer node (scan from list end). Use when list order does not match
+        /// visual stack after needMoveToBottomWhenHide (e.g. tutorial at index 0 while FULL node is last).
+        /// </summary>
+        public void CloseTopAdditionNode()
+        {
+            if (_m_nodeList == null || _m_nodeList.Count == 0)
+                return;
+
+            _ASCUINodeBase topNode = null;
+            for (int i = _m_nodeList.Count - 1; i >= 0; i--)
+            {
+                var node = _m_nodeList[i];
+                if (node == null || node.ignoreOnUIList)
+                    continue;
+                if (node.showType == SCUIShowType.ADDITION)
+                {
+                    topNode = node;
+                    break;
+                }
+            }
+
+            if (topNode == null)
+            {
+                CloseTopNode();
+                return;
+            }
+
+            topNode.HideNode();
+
+            if (topNode.needMoveToBottomWhenHide)
+            {
+                _m_nodeList.Remove(topNode);
+                _m_nodeList.Insert(0, topNode);
+            }
+
+            _ASCUINodeBase lastSameTypeNode = null;
+
+            for (int i = _m_nodeList.Count - 2; i > -1; i--)
+            {
+                lastSameTypeNode = _m_nodeList[i];
+                if (lastSameTypeNode == null)
+                    continue;
+                if (lastSameTypeNode.showType == topNode.showType)
+                {
+                    if (lastSameTypeNode.needShowWhenQuitNewSameTypeNode)
+                    {
+                        lastSameTypeNode.ShowNode();
+                        _m_nodeList.Remove(lastSameTypeNode);
+                        _m_nodeList.Add(lastSameTypeNode);
+                        break;
+                    }
+                }
+            }
+
+            _ASCUINodeBase nextTopNode = GetTopNode(true);
+            SCMsgCenter.SendMsg(SCMsgConst.UI_NODE_CHG, topNode, nextTopNode);
+        }
+
+        /// <summary>
         /// ͨ通过esc关闭节点
         /// </summary>
         public void CloseNodeByEsc()

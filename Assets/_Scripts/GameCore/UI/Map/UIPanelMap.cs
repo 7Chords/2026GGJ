@@ -61,6 +61,11 @@ namespace GameCore.UI
 
             SCMsgCenter.RegisterMsgAct(SCMsgConst.CHEAT_DEBUG_UI_REFRESH, onCheatDebugUiRefresh);
             refreshShow();
+            if (!GameModel.instance.RunTutorialMapAutoShown)
+            {
+                GameModel.instance.MarkRunTutorialMapAutoShown();
+                UICoreMgr.instance.AddNode(new UINodeGuideMap(SCUIShowType.ADDITION));
+            }
             GameRunSave.NotifyEnteredMapOnce();
             GameRunSave.SaveFromGameModel();
         }

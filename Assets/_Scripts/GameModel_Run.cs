@@ -49,6 +49,35 @@ namespace GameCore
             PendingRunMapLayoutSeed = null;
         }
 
+        /// <summary> 本局是否已自动弹出过地图教程（每局一次，随存档）。 </summary>
+        public bool RunTutorialMapAutoShown { get; private set; }
+        /// <summary> 本局是否已自动弹出过战斗教程（每局一次，随存档）。 </summary>
+        public bool RunTutorialBattleAutoShown { get; private set; }
+        /// <summary> 本局是否已自动弹出过商店教程（每局一次，随存档）。 </summary>
+        public bool RunTutorialStoreAutoShown { get; private set; }
+
+        public void MarkRunTutorialMapAutoShown()
+        {
+            RunTutorialMapAutoShown = true;
+        }
+
+        public void MarkRunTutorialBattleAutoShown()
+        {
+            RunTutorialBattleAutoShown = true;
+        }
+
+        public void MarkRunTutorialStoreAutoShown()
+        {
+            RunTutorialStoreAutoShown = true;
+        }
+
+        void ResetRunTutorialFlagsForNewRun()
+        {
+            RunTutorialMapAutoShown = false;
+            RunTutorialBattleAutoShown = false;
+            RunTutorialStoreAutoShown = false;
+        }
+
         /// <summary> 读档后由 MapGenerator 在生成地图前读取；成功写入 pending 布局后清空。 </summary>
         public int? PendingRunMapLayoutSeed { get; private set; }
 
@@ -97,6 +126,7 @@ namespace GameCore
             enemyFaceLayoutTurnIndex = 0;
             PendingRunMapLayoutSeed = null;
             ClearEnemyWinSnapshot();
+            ResetRunTutorialFlagsForNewRun();
 
             if (MapManager.instance != null)
             {
@@ -150,6 +180,16 @@ namespace GameCore
                 // 旧存档无布局种子：清掉上一轮残留，避免与本次「将重随机地图」不一致
                 if (MapManager.instance != null)
                     MapManager.instance.SetLastMapLayoutSeed(-1);
+            }
+
+            RunTutorialMapAutoShown = data.tutorialMapAutoShown;
+            RunTutorialBattleAutoShown = data.tutorialBattleAutoShown;
+            RunTutorialStoreAutoShown = data.tutorialStoreAutoShown;
+            if (data.runSaveVersion < GameRunSave.CurrentRunSaveVersion)
+            {
+                RunTutorialMapAutoShown = true;
+                RunTutorialBattleAutoShown = true;
+                RunTutorialStoreAutoShown = true;
             }
         }
 
