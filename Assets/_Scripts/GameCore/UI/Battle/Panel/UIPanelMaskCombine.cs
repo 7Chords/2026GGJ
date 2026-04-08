@@ -1,4 +1,5 @@
 using DG.Tweening;
+using GameCore;
 using GameCore.Battle;
 using SCFrame;
 using SCFrame.UI;
@@ -49,6 +50,9 @@ namespace GameCore.UI
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.NEW_GANE_START, onNewBattleStart);
             SCMsgCenter.UnregisterMsg(SCMsgConst.FACE_PART_TARGET_PREVIEW_VALUES, onFacePartTargetPreviewValues);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.FACE_PART_TARTGET_PREVIEW_CANCEL, onFacePartTargetPreviewCancel);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PLACE_PART_SUCCESS, onPlayerHandBusyChanged);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.REPLACE_PART_POS_SUCCESS, onPlayerHandBusyChanged);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onPlayerHandBusyChanged);
 
             mono.btnConfirm.RemoveClickDown(OnBtnConfirmClick);
             mono.btnDeck.RemoveClickDown(onBtnDeckClickDown);
@@ -71,6 +75,9 @@ namespace GameCore.UI
             SCMsgCenter.RegisterMsgAct(SCMsgConst.NEW_GANE_START, onNewBattleStart);
             SCMsgCenter.RegisterMsg(SCMsgConst.FACE_PART_TARGET_PREVIEW_VALUES, onFacePartTargetPreviewValues);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.FACE_PART_TARTGET_PREVIEW_CANCEL, onFacePartTargetPreviewCancel);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PLACE_PART_SUCCESS, onPlayerHandBusyChanged);
+            SCMsgCenter.RegisterMsg(SCMsgConst.REPLACE_PART_POS_SUCCESS, onPlayerHandBusyChanged);
+            SCMsgCenter.RegisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onPlayerHandBusyChanged);
 
             mono.btnConfirm.AddMouseLeftClickDown(OnBtnConfirmClick);
             mono.btnDeck.AddMouseLeftClickDown(onBtnDeckClickDown);
@@ -124,11 +131,22 @@ namespace GameCore.UI
             mono.txtHealth.text = GameModel.instance.playerInfo.currentHealth + "/" + GameModel.instance.playerInfo.maxHealth;
             mono.txtBattleOrder.text = GameModel.instance.curTurnOwner == ETurnOwnerType.PLAYER ? "我方先手" : "敌方先手";
             mono.txtCoin.text = GameModel.instance.playerInfo.playerMoney.ToString();
+            refreshBusyCountText();
             if (GameModel.instance.curEnemyInfo != null)
             {
                 mono.imgEnemyHealthBar.fillAmount = (float)GameModel.instance.curEnemyInfo.currentHealth / GameModel.instance.curEnemyInfo.maxHealth;
                 mono.txtEnemyHealth.text = GameModel.instance.curEnemyInfo.currentHealth + "/" + GameModel.instance.curEnemyInfo.maxHealth;
             }
+        }
+
+        /// <summary> Hand (busy) count / max hand size from <see cref="GameConst.BUSY_CARD_MAX_COUNT"/>. </summary>
+        private void refreshBusyCountText()
+        {
+            if (mono.txtBusyCount == null)
+                return;
+            var p = GameModel.instance?.playerInfo;
+            int n = p?.busyPartInfoList != null ? p.busyPartInfoList.Count : 0;
+            mono.txtBusyCount.text = n + "/" + GameConst.BUSY_CARD_MAX_COUNT;
         }
 
         private void applyEntityHealthPreview()
@@ -158,6 +176,12 @@ namespace GameCore.UI
             }
             mono.txtBattleOrder.text = GameModel.instance.curTurnOwner == ETurnOwnerType.PLAYER ? "我方先手" : "敌方先手";
             mono.txtCoin.text = GameModel.instance.playerInfo.playerMoney.ToString();
+            refreshBusyCountText();
+        }
+
+        private void onPlayerHandBusyChanged(object[] _objs)
+        {
+            refreshShow();
         }
 
         private void onFacePartTargetPreviewValues(object[] _objs)
