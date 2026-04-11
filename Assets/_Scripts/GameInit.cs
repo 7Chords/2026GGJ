@@ -48,6 +48,7 @@ namespace GameCore
             GameModel.instance.Initialize();
             MapManager.instance.Initialize();
             AudioMgr.instance.Initialize();
+            ParticleMgr.instance.Initialize();
             BattleManager.instance.Initialize();
             RuntimeDebug.CheatDebugRuntimePanel.AttachIfNeeded(gameObject);
             startGame();
@@ -57,6 +58,7 @@ namespace GameCore
         {
             BattleManager.instance.Discard();
             AudioMgr.instance.Discard();
+            ParticleMgr.instance.Discard();
             MapManager.instance.Discard();
             UICoreMgr.instance.Discard();
             SCInputListener.instance.Discard();

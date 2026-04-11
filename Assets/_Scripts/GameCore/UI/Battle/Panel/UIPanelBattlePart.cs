@@ -261,6 +261,7 @@ namespace GameCore.UI
             {
                 _m_tweenContainer.RegDoTween(GetGameObject().transform.DOShakePosition(mono.hurtShakeDuration, mono.hurtShakeStrength));
                 playHurtRedFlash();
+                ParticleMgr.instance.PlayOneShot("vfx_blood", GetGameObject().GetRectTransform(), Vector2.zero, 1f, true);
                 mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.maxHealth;
                 GameCommon.ShowDamageFloatText(amount, GetGameObject().transform.position);
 
