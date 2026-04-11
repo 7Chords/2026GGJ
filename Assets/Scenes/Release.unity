@@ -309,6 +309,8 @@ MonoBehaviour:
   additionLayerRoot: {fileID: 1599705780}
   topLayerRoot: {fileID: 152977516}
   gameCamera: {fileID: 390589528}
+  globalVolumn: {fileID: 1472403725}
+  rendererData: {fileID: 11400000, guid: e8ff9b24602f1394daf4ad8a8c311517, type: 2}
 --- !u!114 &365919297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -637,7 +639,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodePrefab: {fileID: 4988794329175121149, guid: 3b90e40e8f1e9624895150f9c6ad45a7, type: 3}
   linePrefab: {fileID: 4653072183398419852, guid: 66155fc8676566e47bbf9bc33ef810ff, type: 3}
-  nodeSpacing: {x: 200, y: 150}
+  nodeSpacing: {x: 190, y: 130}
   nodeOffset: {x: 0, y: 0}
   nodeAnglesOffset: 0
   padding: {x: 0, y: 0}
