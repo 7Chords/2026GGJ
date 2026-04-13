@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 202106253086782127}
   - component: {fileID: 495459956777129734}
   m_Layer: 0
-  m_Name: blood
+  m_Name: blood_boom
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

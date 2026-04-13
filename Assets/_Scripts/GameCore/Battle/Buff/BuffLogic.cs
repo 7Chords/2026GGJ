@@ -41,6 +41,9 @@ namespace GameCore.Battle
                     RemoveBuff(findBuffInfo);
                 else
                     SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, findBuffInfo);
+
+                if (findBuffInfo.buffType == EBuffType.STRONG && _buffInfo.buffLayer > 0 && findBuffInfo.buffLayer != 0)
+                    SCMsgCenter.SendMsg(SCMsgConst.PART_POSITIVE_BUFF_GAIN, findBuffInfo.owner);
             }
             else
             {
@@ -48,6 +51,9 @@ namespace GameCore.Battle
                     return;
                 buffList.Add(_buffInfo);
                 SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_ADD, _buffInfo);
+
+                if (_buffInfo.buffType == EBuffType.STRONG && _buffInfo.buffLayer > 0)
+                    SCMsgCenter.SendMsg(SCMsgConst.PART_POSITIVE_BUFF_GAIN, _buffInfo.owner);
             }
 
             PostProcessAfterBuffAdded(_buffInfo);

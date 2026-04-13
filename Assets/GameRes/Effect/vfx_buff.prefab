@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 202106253086782127}
   - component: {fileID: 495459956777129734}
   m_Layer: 0
-  m_Name: blood
+  m_Name: buff_slash
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,7 +109,7 @@ Transform:
   m_GameObject: {fileID: 7082636189846774079}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -268,7 +268,7 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 1, g: 0.849371, b: 0.096226394, a: 0.5019608}
+      minColor: {r: 1, g: 0.4031197, b: 0.043396115, a: 1}
       maxColor: {r: 1, g: 0.8632547, b: 0.57924527, a: 1}
       maxGradient:
         serializedVersion: 2
@@ -716,9 +716,9 @@ ParticleSystem:
     boxThickness: {x: 1, y: 1, z: 1}
     radiusThickness: 0
     donutRadius: 0.2
-    m_Position: {x: 0, y: 0, z: 0}
+    m_Position: {x: 0, y: 0, z: 2}
     m_Rotation: {x: 0, y: 180, z: 0}
-    m_Scale: {x: 5, y: 1, z: 1}
+    m_Scale: {x: 8, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -916,7 +916,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 50
+      scalar: 20
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -4712,14 +4712,14 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_MeshDistribution: 0
   m_SortMode: 2
   m_MinParticleSize: 0
   m_MaxParticleSize: 2
   m_CameraVelocityScale: 0
-  m_VelocityScale: 0
-  m_LengthScale: 2
+  m_VelocityScale: -0.15
+  m_LengthScale: 4
   m_SortingFudge: 1
   m_NormalDirection: 1
   m_ShadowBias: -0.5

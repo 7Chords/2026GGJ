@@ -45,6 +45,8 @@ public class SCMsgConst
     public const int FACE_PART_TARGET_PREVIEW_VALUES = 2042;
     public const int EVENT_PART_EXCHANGE_COMPLETED = 2043;
     public const int CHEAT_DEBUG_UI_REFRESH = 2044;
+    /// <summary> Combat gain on a part: STRONG stacks, extra queue insert, DAMAGE_MULTIPILER mouth hit, INCREASE_ADD_BURN entry buff. UI: vfx_buff. </summary>
+    public const int PART_POSITIVE_BUFF_GAIN = 2045;
     #endregion
 
     #region system 99

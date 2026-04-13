@@ -59,6 +59,7 @@ namespace GameCore.UI
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_BUFF_ADD, onPartBuffAdd);
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_BUFF_UPDATE, onPartUpdate);
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_BUFF_REMOVE, onPartBuffRemove);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.PART_POSITIVE_BUFF_GAIN, onCombatGainVfx);
 
             mono.imgGO.RemoveMouseEnter(onMouseEnter);
             mono.imgGO.RemoveMouseExit(onMouseExit);
@@ -83,6 +84,7 @@ namespace GameCore.UI
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_BUFF_ADD, onPartBuffAdd);
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_BUFF_UPDATE, onPartUpdate);
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_BUFF_REMOVE, onPartBuffRemove);
+            SCMsgCenter.RegisterMsg(SCMsgConst.PART_POSITIVE_BUFF_GAIN, onCombatGainVfx);
 
             mono.imgGO.AddMouseEnter(onMouseEnter);
             mono.imgGO.AddMouseExit(onMouseExit);
@@ -412,6 +414,15 @@ namespace GameCore.UI
             else
                 mono.txtOrder.text = GameModel.instance.GetPlayerBattleOrderByPartInfo(_m_partInfo).ToString();
 
+        }
+
+        private void onCombatGainVfx(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            PartInfo info = _objs[0] as PartInfo;
+            if (_m_partInfo == info)
+                ParticleMgr.instance.PlayOneShot("vfx_buff", GetGameObject().GetRectTransform(), Vector2.zero, 1f, true);
         }
 
         private void onPartBuffAdd(object[] _objs)

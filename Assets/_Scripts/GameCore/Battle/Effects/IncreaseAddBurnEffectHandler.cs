@@ -17,6 +17,7 @@ namespace GameCore.Battle.Effects
 
             foreach (var part in partInfoList)
             {
+                bool beneficiary = false;
                 for(int i=0;i<part.entryInfoList.Count;i++)
                 {
                     //ע��ӵ��ĸ�������
@@ -24,13 +25,17 @@ namespace GameCore.Battle.Effects
                     {
                         part.entryInfoList[i].attributeValueList[1] += addLayer;
                         SCMsgCenter.SendMsg(SCMsgConst.PART_TRIGGER_EFFECT, part, _caster);
+                        beneficiary = true;
                     }
                     if (part.entryInfoList[i].attributeType == EAttributeType.SPREAD_BURN)
                     {
                         part.entryInfoList[i].attributeValueList[0] += addLayer;
                         SCMsgCenter.SendMsg(SCMsgConst.PART_TRIGGER_EFFECT, part, _caster);
+                        beneficiary = true;
                     }
                 }
+                if (beneficiary)
+                    SCMsgCenter.SendMsg(SCMsgConst.PART_POSITIVE_BUFF_GAIN, part);
             }
         }
     }

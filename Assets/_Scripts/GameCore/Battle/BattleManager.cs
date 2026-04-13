@@ -125,6 +125,8 @@ namespace GameCore
             int index = Mathf.Clamp(_index, 0, list.Count);
             list.Insert(index, _part);
 
+            SCMsgCenter.SendMsg(SCMsgConst.PART_POSITIVE_BUFF_GAIN, _part);
+
             if (!queue.isExecuting)
                 ExecuteNext(_isPlayer);
         }

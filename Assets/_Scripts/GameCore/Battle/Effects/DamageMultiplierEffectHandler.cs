@@ -25,6 +25,7 @@ namespace GameCore.Battle.Effects
                     {
                         SCMsgCenter.SendMsg(SCMsgConst.PART_TRIGGER_EFFECT, part, _caster);
                         attackEntry.attributeValueList[0] *= multiplier;
+                        SCMsgCenter.SendMsg(SCMsgConst.PART_POSITIVE_BUFF_GAIN, part);
                     }
                 }
             }
