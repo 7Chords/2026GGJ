@@ -47,8 +47,11 @@ namespace GameCore.UI
         public Color hurtFlashTint = new Color(1f, 0.4f, 0.4f, 1f);
         [Header("受伤闪烁淡入时间")]
         public float hurtFlashInDuration = 0.07f;
-        [Header("受伤闪烁淡出颜色")]
+        [Header("受伤闪烁淡出时间")]
         public float hurtFlashOutDuration = 0.12f;
+        [Header("Body HP hurt: extra part shake vs part-hurt shake strength")]
+        [Range(0.05f, 1f)]
+        public float bodyHurtPartFollowShakeStrengthMul = 0.36f;
         [Header("Eye/Nose trigger success bounce (distinct from hurt shake)")]
         public float triggerSuccessBounceHeight = 22f;
         public float triggerSuccessBounceDuration = 0.38f;

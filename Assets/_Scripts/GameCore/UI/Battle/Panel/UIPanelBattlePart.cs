@@ -106,6 +106,18 @@ namespace GameCore.UI
             GetGameObject().transform.localPosition = _pos;
         }
 
+        /// <summary> Extra shake when face body HP is hurt (layered on top of root shake). </summary>
+        public void PlayBodyFollowShake(TweenContainer _tc)
+        {
+            if (_tc == null)
+                return;
+            var t = GetGameObject().transform;
+            t.DOKill(false);
+            float dur = mono.hurtShakeDuration * 0.82f;
+            float str = mono.hurtShakeStrength * mono.bodyHurtPartFollowShakeStrengthMul;
+            _tc.RegDoTween(t.DOShakePosition(dur, str));
+        }
+
         /// <summary> World-space lunge toward hit point, invoke damage at peak, then return. </summary>
         public void PlayMouthLungeTowardWorld(Vector3 _hitWorld, System.Action _onHit, System.Action _onComplete)
         {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GameCore.RefData;
 using SCFrame;
+using DG.Tweening;
 
 namespace GameCore.UI
 {
@@ -174,7 +175,7 @@ namespace GameCore.UI
                     int index = _m_gridInfoList.IndexOf(tmpInfo);
                     tmpGOList.Add(_m_gridGOList[index].transform.localPosition);
                 }
-                //计算生成的位置
+                //?????????????
                 Vector2 placeWorldPos = GameCommon.CalculateStandardCenterPos(tmpGOList);
                 GameObject partGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_BATTLE_PART, mono.tranParentPart);
                 UIMonoBattlePart monoFacePart = partGO.GetComponent<UIMonoBattlePart>();
@@ -229,6 +230,34 @@ namespace GameCore.UI
             for (int i = 0; i < acc.Count; i++)
                 sum += acc[i];
             return sum / acc.Count;
+        }
+
+        /// <summary> Player/enemy face HP damage: shake face root, optional red flash, light extra shake on each part. </summary>
+        public void PlayBodyDamageFeedback(TweenContainer _tc)
+        {
+            if (_tc == null || mono == null)
+                return;
+            var root = mono.transform;
+            root.DOKill(false);
+            _tc.RegDoTween(root.DOShakePosition(mono.faceBodyHurtShakeDuration, mono.faceBodyHurtShakeStrength));
+            playFaceBodyHurtFlash(_tc);
+            if (_m_partPanelList == null)
+                return;
+            for (int i = 0; i < _m_partPanelList.Count; i++)
+                _m_partPanelList[i]?.PlayBodyFollowShake(_tc);
+        }
+
+        private void playFaceBodyHurtFlash(TweenContainer _tc)
+        {
+            var img = mono.faceBodyHurtFlashImage;
+            if (img == null)
+                return;
+            Color baseCol = img.color;
+            img.DOKill(false);
+            var seq = DOTween.Sequence();
+            seq.Append(img.DOColor(mono.faceBodyHurtFlashTint, mono.faceBodyHurtFlashInDuration).SetEase(Ease.OutQuad));
+            seq.Append(img.DOColor(baseCol, mono.faceBodyHurtFlashOutDuration).SetEase(Ease.InQuad));
+            _tc.RegDoTween(seq);
         }
     }
 }

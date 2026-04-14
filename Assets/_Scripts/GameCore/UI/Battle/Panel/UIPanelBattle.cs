@@ -114,6 +114,7 @@ namespace GameCore.UI
             if (amount > 0 && mono.goPlayerHealth != null)
                 GameCommon.ShowDamageFloatText(amount, mono.imgPlayerHealthBar.transform.position);
             _m_tweenContainer?.RegDoTween(mono.goPlayerHealth.transform.DOShakePosition(mono.healthShakeDuration, mono.healthShakeStrength));
+            _m_playerBattleFace?.PlayBodyDamageFeedback(_m_tweenContainer);
             refreshShow();
         }
 
@@ -125,6 +126,7 @@ namespace GameCore.UI
             if (amount > 0 && mono.goEnemyHealth != null)
                 GameCommon.ShowDamageFloatText(amount, mono.imgEnemyHealthBar.transform.position);
             _m_tweenContainer?.RegDoTween(mono.goEnemyHealth.transform.DOShakePosition(mono.healthShakeDuration, mono.healthShakeStrength));
+            _m_enemyBattleFace?.PlayBodyDamageFeedback(_m_tweenContainer);
             refreshShow();
         }
 
