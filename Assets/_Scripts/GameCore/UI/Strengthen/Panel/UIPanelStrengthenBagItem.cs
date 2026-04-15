@@ -54,7 +54,7 @@ namespace GameCore.UI
         {
             if (_m_partInfo == null)
                 return;
-            mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
+            mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partPlayerSpriteObjName);
             mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.maxHealth;
 
             SCCommon.SetGameObjectEnable(mono.goHasSelectedShowList, _m_hasSelected);

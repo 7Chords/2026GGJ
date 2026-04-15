@@ -56,7 +56,7 @@ namespace GameCore.UI
         {
             if (_m_partInfo == null)
                 return;
-            mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
+            mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partPlayerSpriteObjName);
             if(!mono.isTxtHealthIsRunningInfo)
                 mono.txtHealth.text =_m_partInfo.maxHealth.ToString();
             else

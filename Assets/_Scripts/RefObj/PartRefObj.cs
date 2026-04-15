@@ -10,7 +10,8 @@ namespace GameCore.RefData
         public string partName;
         public EPartType partType;
         public EQualityType qualityType;
-        public string partSpriteObjName;
+        public string partPlayerSpriteObjName;
+        public string partEnemySpriteObjName;
         public string partGameObjectName;
         public List<PosEffectObj> occupyPosList;
         public string triggerSuccessTip;
@@ -31,7 +32,8 @@ namespace GameCore.RefData
             partName = getString("partName");
             partType = (EPartType)getEnum("partType",typeof(EPartType));
             qualityType = (EQualityType)getEnum("qualityType", typeof(EQualityType));
-            partSpriteObjName = getString("partSpriteObjName");
+            partPlayerSpriteObjName = getString("partPlayerSpriteObjName");
+            partEnemySpriteObjName = getString("partEnemySpriteObjName");
             partGameObjectName = getString("partGameObjectName");
             occupyPosList = getList<PosEffectObj>("occupyPosList");
             triggerSuccessTip = getString("triggerSuccessTip");
