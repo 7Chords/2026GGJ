@@ -50,6 +50,9 @@ namespace GameCore
         SELF_MOUTH_GET_BUFF,//己方嘴巴获得buff,
         USE_HEAT_2_ATTACK_AGAIN,//自身强壮超过x层后，消耗超过的强壮概率再次攻击
         CLEAR_ALL_HATE_AND_MOUTH_GET_STRONG,//清除所有怨恨并嘴巴获得强壮
+        TRIGGER_MAX_MASS_EFFECT,//触发层数最高的繁殖菌团以外的菌团的效果
+        CHANGE_BREEDING_MASS_2_OTHER,//繁殖菌团层数超过20时，如果效果范围内存在己方部位繁殖菌团层数未超过20，则将超出的部分转化为医疗菌团；反之，则将超出部分转化为进击菌团
+        SEND_MOLD_2_BY_GET_HIT,//若部位存在一种菌团，对攻击部位施加2层霉菌
     }
 
     public enum EAttributeTriggerPointType
