@@ -61,6 +61,7 @@ namespace GameCore
         GET_EFFECT,
         TURN_OVER,
         ACTION_OVER,
+        TOTAL_TURN_OVER,//双方回合结束
     }
 
     public enum ERoomType
@@ -103,6 +104,10 @@ namespace GameCore
         STRONG,//强壮
         PREY,//猎物
         HATE,//怨恨
+        MOLD,//霉菌
+        BREEDING_MASS,//繁殖菌团
+        HEAL_MASS,//医疗菌团
+        ATTACK_MASS,//进击菌团
     }
 
     public enum EEventType
@@ -135,6 +140,7 @@ namespace GameCore
     {
         NONE,
         MALFORMED,//畸形的人
+        KING_OF_MOLD,//霉菌之王
     }
 
     public enum EBattleType
@@ -149,6 +155,7 @@ namespace GameCore
         DEAD_NOT_STIFF,
         /// <summary> floatParamList[0]: evaluate every N enemy action phases (rounded); [1]: flat +damage vs player parts with PREY if any HATE (rounded); [2]: flat -damage vs all player parts otherwise (rounded) </summary>
         REVENGE_EVERY_N_PHASES,
+        GERMS_AT_THE_READY,
     }
 
     public enum EEnemyOutgoingPartDamageMod
