@@ -616,7 +616,9 @@ namespace GameCore
                 {
                     var e = p.entryInfoList[j];
                     if (e == null) continue;
-                    if (e.attributeType == EAttributeType.ATTACK || e.attributeType == EAttributeType.REAL_ATTACK)
+                    if (e.attributeType == EAttributeType.ATTACK
+                        || e.attributeType == EAttributeType.REAL_ATTACK
+                        || e.attributeType == EAttributeType.ATTACK_BY_ENEMY_BLEED)
                     {
                         r.Add(p);
                         break;

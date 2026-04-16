@@ -17,17 +17,26 @@ namespace GameCore.Battle.Effects
 
             foreach (var part in partInfoList)
             {
-                if (part.partRefObj.partType == EPartType.MOUTH)
+                if (part.partRefObj.partType != EPartType.MOUTH)
+                    continue;
+                var attackEntry = part.entryInfoList.Find(x =>
+                    x.attributeType == EAttributeType.ATTACK
+                    || x.attributeType == EAttributeType.REAL_ATTACK
+                    || x.attributeType == EAttributeType.ATTACK_BY_ENEMY_BLEED);
+                if (attackEntry == null)
+                    continue;
+
+                SCMsgCenter.SendMsg(SCMsgConst.PART_TRIGGER_EFFECT, part, _caster);
+                if (attackEntry.attributeType == EAttributeType.ATTACK_BY_ENEMY_BLEED)
                 {
-                    var attackEntry = part.entryInfoList.Find(x => 
-                        x.attributeType == EAttributeType.ATTACK || x.attributeType == EAttributeType.REAL_ATTACK);
-                    if (attackEntry != null)
-                    {
-                        SCMsgCenter.SendMsg(SCMsgConst.PART_TRIGGER_EFFECT, part, _caster);
-                        attackEntry.attributeValueList[0] *= multiplier;
-                        SCMsgCenter.SendMsg(SCMsgConst.PART_POSITIVE_BUFF_GAIN, part);
-                    }
+                    // AttackByBleedEffectHandler: [0]=bleedUnit, [1]=attackUnit; scale per-stack damage.
+                    if (attackEntry.attributeValueList != null && attackEntry.attributeValueList.Count > 1)
+                        attackEntry.attributeValueList[1] *= multiplier;
                 }
+                else
+                    attackEntry.attributeValueList[0] *= multiplier;
+
+                SCMsgCenter.SendMsg(SCMsgConst.PART_POSITIVE_BUFF_GAIN, part);
             }
         }
     }
