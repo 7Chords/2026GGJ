@@ -47,6 +47,8 @@ public class SCMsgConst
     public const int CHEAT_DEBUG_UI_REFRESH = 2044;
     /// <summary> Combat gain on a part: STRONG stacks, extra queue insert, DAMAGE_MULTIPILER mouth hit, INCREASE_ADD_BURN entry buff. UI: vfx_buff. </summary>
     public const int PART_POSITIVE_BUFF_GAIN = 2045;
+    /// <summary> Negative outcome on a part: debuff stacks (per buff table), STRONG negative stacks, PART_LOSE_TURN. UI: vfx_debuff. </summary>
+    public const int PART_DEBUFF_GAIN = 2046;
     #endregion
 
     #region system 99

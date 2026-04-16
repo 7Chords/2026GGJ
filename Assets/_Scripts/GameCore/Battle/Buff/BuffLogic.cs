@@ -44,6 +44,11 @@ namespace GameCore.Battle
 
                 if (findBuffInfo.buffType == EBuffType.STRONG && _buffInfo.buffLayer > 0 && findBuffInfo.buffLayer != 0)
                     SCMsgCenter.SendMsg(SCMsgConst.PART_POSITIVE_BUFF_GAIN, findBuffInfo.owner);
+
+                if (!findBuffInfo.buffRefObj.isPositive && findBuffInfo.buffType != EBuffType.STRONG && _buffInfo.buffLayer > 0 && findBuffInfo.buffLayer != 0)
+                    SCMsgCenter.SendMsg(SCMsgConst.PART_DEBUFF_GAIN, findBuffInfo.owner);
+                if (findBuffInfo.buffType == EBuffType.STRONG && _buffInfo.buffLayer < 0 && findBuffInfo.buffLayer != 0)
+                    SCMsgCenter.SendMsg(SCMsgConst.PART_DEBUFF_GAIN, findBuffInfo.owner);
             }
             else
             {
@@ -54,6 +59,11 @@ namespace GameCore.Battle
 
                 if (_buffInfo.buffType == EBuffType.STRONG && _buffInfo.buffLayer > 0)
                     SCMsgCenter.SendMsg(SCMsgConst.PART_POSITIVE_BUFF_GAIN, _buffInfo.owner);
+
+                if (!_buffInfo.buffRefObj.isPositive && _buffInfo.buffType != EBuffType.STRONG && _buffInfo.buffLayer > 0)
+                    SCMsgCenter.SendMsg(SCMsgConst.PART_DEBUFF_GAIN, _buffInfo.owner);
+                if (_buffInfo.buffType == EBuffType.STRONG && _buffInfo.buffLayer < 0)
+                    SCMsgCenter.SendMsg(SCMsgConst.PART_DEBUFF_GAIN, _buffInfo.owner);
             }
 
             PostProcessAfterBuffAdded(_buffInfo);

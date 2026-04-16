@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7634352580582280332}
   - component: {fileID: 5330581918437957535}
   m_Layer: 5
-  m_Name: vfx_buff
+  m_Name: vfx_debuff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -233,7 +233,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 40
+      scalar: 25
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -268,8 +268,8 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 1, g: 0.4031197, b: 0.043396115, a: 1}
-      maxColor: {r: 1, g: 0.8632547, b: 0.57924527, a: 1}
+      minColor: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}
+      maxColor: {r: 0, g: 0, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
