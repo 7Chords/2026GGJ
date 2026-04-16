@@ -166,6 +166,12 @@ MonoBehaviour:
   girdLayoutGroup: {fileID: 7096030775589006647}
   tranParentPart: {fileID: 8947006611322938644}
   isEnemyFace: 1
+  faceBodyHurtShakeStrength: 20
+  faceBodyHurtShakeDuration: 0.26
+  faceBodyHurtFlashImage: {fileID: 0}
+  faceBodyHurtFlashTint: {r: 1, g: 0.38, b: 0.38, a: 0.62}
+  faceBodyHurtFlashInDuration: 0.07
+  faceBodyHurtFlashOutDuration: 0.14
 --- !u!1 &703010221469980743
 GameObject:
   m_ObjectHideFlags: 0
@@ -1570,6 +1576,12 @@ MonoBehaviour:
   girdLayoutGroup: {fileID: 629427676596701135}
   tranParentPart: {fileID: 3121195260461846949}
   isEnemyFace: 0
+  faceBodyHurtShakeStrength: 20
+  faceBodyHurtShakeDuration: 0.26
+  faceBodyHurtFlashImage: {fileID: 0}
+  faceBodyHurtFlashTint: {r: 1, g: 0.38, b: 0.38, a: 0.62}
+  faceBodyHurtFlashInDuration: 0.07
+  faceBodyHurtFlashOutDuration: 0.14
 --- !u!1 &6362608036904214565
 GameObject:
   m_ObjectHideFlags: 0
