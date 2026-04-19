@@ -108,7 +108,7 @@ namespace GameCore.UI
                 return;
             }
 
-            mono.imgGoods.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partPlayerSpriteObjName);
+            mono.imgGoods.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
 
             string hpStr = $"{_m_partInfo.currentHealth}/{_m_partInfo.maxHealth}";
 

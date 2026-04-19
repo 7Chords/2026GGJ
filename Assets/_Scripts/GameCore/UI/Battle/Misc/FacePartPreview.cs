@@ -156,9 +156,9 @@ namespace GameCore.UI
         {
             if (_m_partInfo == null)
                 return;
-            imgGO.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
+            imgGO.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partPlayerGameObjectName);
             imgGO.SetNativeSize();
-            imgPart.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partGameObjectName);
+            imgPart.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partPlayerGameObjectName);
             imgPart.SetNativeSize();
 
             //?????????????
