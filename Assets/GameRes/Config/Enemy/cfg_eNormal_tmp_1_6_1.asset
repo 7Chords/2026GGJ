@@ -20,31 +20,34 @@ MonoBehaviour:
   turnLayouts:
   - slots:
     - partLevelRefId: 10010
-      originFacePosition: {x: 1, y: 3}
+      originFacePosition: {x: 1, y: 1}
       rotationSteps: 0
     - partLevelRefId: 10010
-      originFacePosition: {x: 2, y: 3}
+      originFacePosition: {x: 2, y: 4}
       rotationSteps: 0
     - partLevelRefId: 10028
-      originFacePosition: {x: 3, y: 1}
+      originFacePosition: {x: 0, y: 2}
       rotationSteps: 0
     - partLevelRefId: 10028
-      originFacePosition: {x: 3, y: 3}
-      rotationSteps: 0
-    - partLevelRefId: 10028
-      originFacePosition: {x: 1, y: 4}
+      originFacePosition: {x: 2, y: 1}
       rotationSteps: 1
     - partLevelRefId: 10028
-      originFacePosition: {x: 0, y: 3}
+      originFacePosition: {x: 1, y: 5}
       rotationSteps: 0
     - partLevelRefId: 10028
-      originFacePosition: {x: 0, y: 1}
+      originFacePosition: {x: 1, y: 3}
+      rotationSteps: 1
+    - partLevelRefId: 10028
+      originFacePosition: {x: 3, y: 3}
+      rotationSteps: 1
+    - partLevelRefId: 10028
+      originFacePosition: {x: 0, y: 0}
+      rotationSteps: 1
+    - partLevelRefId: 10004
+      originFacePosition: {x: 1, y: 0}
       rotationSteps: 0
     - partLevelRefId: 10004
-      originFacePosition: {x: 1, y: 2}
-      rotationSteps: 0
-    - partLevelRefId: 10004
-      originFacePosition: {x: 2, y: 2}
+      originFacePosition: {x: 2, y: 3}
       rotationSteps: 0
   - slots:
     - partLevelRefId: 10016
