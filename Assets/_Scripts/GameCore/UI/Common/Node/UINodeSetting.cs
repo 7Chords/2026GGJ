@@ -8,8 +8,9 @@ namespace GameCore.UI
 {
     public class UINodeSetting : _ASCUINodeBase
     {
-        public UINodeSetting(SCUIShowType _showType) : base(_showType)
+        public UINodeSetting(SCUIShowType _showType,bool _needShowReturnBtn) : base(_showType)
         {
+            _m_needShowReturnBtn = _needShowReturnBtn;
         }
 
         public override bool needHideWhenEnterNewSameTypeNode => false;
@@ -29,6 +30,8 @@ namespace GameCore.UI
         private GameObject _m_panelGO;
         private UIPanelSetting _m_settingPanel;
         private UIMonoSetting _m_settingMono;
+
+        private bool _m_needShowReturnBtn;
         public override string GetNodeName()
         {
             return nameof(UINodeSetting);
@@ -71,6 +74,12 @@ namespace GameCore.UI
         public override void OnShowNode()
         {
             _m_settingPanel?.ShowPanel();
+            _m_settingPanel.SetReturnBtnShowState(_m_needShowReturnBtn);
+        }
+
+        public override void CopyData(_ASCUINodeBase _anotherNode)
+        {
+            _m_needShowReturnBtn = (_anotherNode as UINodeSetting)._m_needShowReturnBtn;
         }
     }
 }

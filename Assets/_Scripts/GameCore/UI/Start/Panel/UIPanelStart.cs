@@ -130,7 +130,7 @@ namespace GameCore.UI
         private void onBtnSettingClickDown(PointerEventData arg1, object[] arg2)
         {
             AudioMgr.instance.PlaySfx("sfx_click");
-            UICoreMgr.instance.AddNode(new UINodeSetting(SCUIShowType.ADDITION));
+            UICoreMgr.instance.AddNode(new UINodeSetting(SCUIShowType.ADDITION,false));
         }
 
         private void onBtnStartMouseEnter(PointerEventData arg1, object[] arg2)

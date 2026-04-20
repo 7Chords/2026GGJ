@@ -18,5 +18,9 @@ namespace GameCore.UI
         public Button btnReturnMain;
         [Header("CRT开关")]
         public Toggle togCRT;
+        [Header("按钮缩放大小")]
+        public float btnEnterScale;
+        [Header("按钮缩放时间")]
+        public float btnScaleChgTime;
     }
 }

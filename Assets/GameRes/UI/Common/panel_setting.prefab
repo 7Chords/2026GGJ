@@ -1275,6 +1275,8 @@ MonoBehaviour:
   btnClose: {fileID: 7907063780256801141}
   btnReturnMain: {fileID: 2688813119377945979}
   togCRT: {fileID: 6607302815328470070}
+  btnEnterScale: 1.1
+  btnScaleChgTime: 0.1
 --- !u!1 &4794273927940713272
 GameObject:
   m_ObjectHideFlags: 0
@@ -1709,11 +1711,11 @@ RectTransform:
   - {fileID: 4799625249049317881}
   m_Father: {fileID: 9039059715601504493}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 96.54492}
-  m_SizeDelta: {x: 293.0339, y: 87.9102}
-  m_Pivot: {x: 0.5, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -246}
+  m_SizeDelta: {x: 293.0339, y: 87.91022}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4249102566872338568
 CanvasRenderer:
   m_ObjectHideFlags: 0

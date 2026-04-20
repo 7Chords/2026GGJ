@@ -1,26 +1,27 @@
-using GameCore;
-using SCFrame.UI;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using SCFrame;
+using SCFrame.UI;
 using UnityEngine.EventSystems;
-using System;
+using DG.Tweening;
+using UnityEngine;
 
 namespace GameCore.UI
 {
     public class UIPanelSetting : _ASCUIPanelBase<UIMonoSetting>
     {
+        private TweenContainer _m_tweenContainer;
         public UIPanelSetting(UIMonoSetting _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
 
         public override void AfterInitialize()
         {
+            _m_tweenContainer = new TweenContainer();
         }
 
         public override void BeforeDiscard()
         {
+            _m_tweenContainer?.KillAllDoTween();
+            _m_tweenContainer = null;
         }
 
         public override void OnHidePanel()
@@ -29,6 +30,8 @@ namespace GameCore.UI
             mono.sldSound.onValueChanged.RemoveAllListeners();
             mono.btnClose.RemoveClickDown(onBtnCloseClickDown);
             mono.btnReturnMain.RemoveClickDown(onBtnReturnMainClickDonw);
+            mono.btnReturnMain.RemoveMouseEnter(onBtnReturnMainMouseEnter);
+            mono.btnReturnMain.RemoveMouseExit(onBtnReturnMainMouseExit);
             mono.togCRT.onValueChanged.RemoveAllListeners();
         }
 
@@ -49,10 +52,23 @@ namespace GameCore.UI
             });
             mono.btnClose.AddMouseLeftClickDown(onBtnCloseClickDown);
             mono.btnReturnMain.AddMouseLeftClickDown(onBtnReturnMainClickDonw);
+            mono.btnReturnMain.AddMouseEnter(onBtnReturnMainMouseEnter);
+            mono.btnReturnMain.AddMouseExit(onBtnReturnMainMouseExit);
             mono.togCRT.onValueChanged.AddListener(onTogCRTClickDown);
 
             mono.sldMusic.value = AudioMgr.instance.bgmVolumeFactor;
             mono.sldSound.value = AudioMgr.instance.sfxVolumeFactor;
+        }
+
+        private void onBtnReturnMainMouseExit(PointerEventData _data, object[] _objs)
+        {
+            _m_tweenContainer?.RegDoTween(mono.btnReturnMain.transform.DOScale(Vector3.one, mono.btnScaleChgTime));
+
+        }
+
+        private void onBtnReturnMainMouseEnter(PointerEventData _data, object[] _objs)
+        {
+            _m_tweenContainer?.RegDoTween(mono.btnReturnMain.transform.DOScale(mono.btnEnterScale, mono.btnScaleChgTime));
         }
 
         private void onBtnReturnMainClickDonw(PointerEventData _data, object[] _objs)
@@ -74,6 +90,11 @@ namespace GameCore.UI
         {
             AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.CloseTopNode();
+        }
+
+        public void SetReturnBtnShowState(bool _needShow)
+        {
+            SCCommon.SetGameObjectEnable(mono.btnReturnMain.gameObject, _needShow);
         }
     }
 }
