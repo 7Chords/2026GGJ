@@ -24,6 +24,8 @@ namespace GameCore.UI
         public Button btnExit;
         [Header("设置按钮")]
         public Button btnSetting;
+        [Header("教程按钮")]
+        public Button btnGuide;
         [Header("选择了强化器官要显示的物体")]
         public List<GameObject> goHasSelectPart;
         [Header("鼠标移入按钮的缩放")]

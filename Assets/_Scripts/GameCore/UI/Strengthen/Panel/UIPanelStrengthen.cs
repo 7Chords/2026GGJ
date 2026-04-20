@@ -52,13 +52,12 @@ namespace GameCore.UI
             mono.btnConfirm.RemoveClickDown(onBtnConfirmClickDown);
             mono.btnConfirm.RemoveMouseEnter(onBtnConfirmMouseEnter);
             mono.btnConfirm.RemoveMouseExit(onBtnConfirmMouseExit);
-            if (mono.btnSetting != null)
-            {
-                mono.btnSetting.RemoveClickDown(onBtnSettingClickDown);
-                mono.btnSetting.RemoveMouseEnter(onBtnSettingMouseEnter);
-                mono.btnSetting.RemoveMouseExit(onBtnSettingMouseExit);
-            }
-
+            mono.btnSetting.RemoveClickDown(onBtnSettingClickDown);
+            mono.btnSetting.RemoveMouseEnter(onBtnSettingMouseEnter);
+            mono.btnSetting.RemoveMouseExit(onBtnSettingMouseExit);
+            mono.btnGuide.RemoveClickDown(onBtnGuideClickDown);
+            mono.btnGuide.RemoveMouseEnter(onBtnGuideMouseEnter);
+            mono.btnGuide.RemoveMouseExit(onBtnGuideMouseExit);
             _m_strengthenContainer?.HidePanel();
             _m_strengthenBeforePreview?.HidePanel();
             _m_strengthenAfterPreview?.HidePanel();
@@ -74,13 +73,12 @@ namespace GameCore.UI
             mono.btnConfirm.AddMouseLeftClickDown(onBtnConfirmClickDown);
             mono.btnConfirm.AddMouseEnter(onBtnConfirmMouseEnter);
             mono.btnConfirm.AddMouseExit(onBtnConfirmMouseExit);
-            if (mono.btnSetting != null)
-            {
-                mono.btnSetting.AddMouseLeftClickDown(onBtnSettingClickDown);
-                mono.btnSetting.AddMouseEnter(onBtnSettingMouseEnter);
-                mono.btnSetting.AddMouseExit(onBtnSettingMouseExit);
-            }
-
+            mono.btnSetting.AddMouseLeftClickDown(onBtnSettingClickDown);
+            mono.btnSetting.AddMouseEnter(onBtnSettingMouseEnter);
+            mono.btnSetting.AddMouseExit(onBtnSettingMouseExit);
+            mono.btnGuide.AddMouseLeftClickDown(onBtnGuideClickDown);
+            mono.btnGuide.AddMouseEnter(onBtnGuideMouseEnter);
+            mono.btnGuide.AddMouseExit(onBtnGuideMouseExit);
             _m_strengthenContainer?.ShowPanel();
             _m_strengthenBeforePreview?.ShowPanel();
             _m_strengthenAfterPreview?.ShowPanel();
@@ -196,6 +194,24 @@ namespace GameCore.UI
         {
             if (mono.btnSetting == null) return;
             _m_tweenContainer.RegDoTween(mono.btnSetting.transform.DOScale(Vector3.one, mono.scaleChgDuration));
+        }
+
+        private void onBtnGuideClickDown(PointerEventData _data, object[] _objs)
+        {
+            AudioMgr.instance.PlaySfx("sfx_click");
+            UICoreMgr.instance.AddNode(new UINodeGuideStrengthen(SCUIShowType.ADDITION));
+        }
+
+        private void onBtnGuideMouseEnter(PointerEventData _arg1, object[] _arg2)
+        {
+            if (mono.btnSetting == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnGuide.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
+        }
+
+        private void onBtnGuideMouseExit(PointerEventData _arg1, object[] _arg2)
+        {
+            if (mono.btnSetting == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnGuide.transform.DOScale(Vector3.one, mono.scaleChgDuration));
         }
     }
 }
