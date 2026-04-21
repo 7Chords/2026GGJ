@@ -147,6 +147,7 @@ namespace GameCore.UI
             GoodsInfo info = _m_goodsInfoList.Find(x => x.goodsRefObj.id == goodsId);
             if (info == null)
                 return;
+            int boughtIndex = _m_goodsInfoList.IndexOf(info);
 
             info.hasBought = true;
             GameModel.instance.playerInfo.playerMoney = Mathf.Max(GameModel.instance.playerInfo.playerMoney - info.goodsRefObj.goodsPrice, 0);
@@ -166,6 +167,10 @@ namespace GameCore.UI
                     break;
             }
             refreshShow();
+            if (boughtIndex >= 0 && boughtIndex < _m_storeItemList.Count)
+            {
+                _m_storeItemList[boughtIndex]?.PlayPurchaseRotateEffect();
+            }
         }
         private void onBtnBagClickDown(PointerEventData _arg, object[] _objs)
         {

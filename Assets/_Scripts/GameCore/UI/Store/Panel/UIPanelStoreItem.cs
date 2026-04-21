@@ -15,6 +15,7 @@ namespace GameCore.UI
         private GoodsInfo _m_goodsInfo;
 
         private TweenContainer _m_tweenContainer;
+        private Tween _m_purchaseRotateTween;
         public UIPanelStoreItem(UIMonoStoreItem _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -26,6 +27,8 @@ namespace GameCore.UI
 
         public override void BeforeDiscard()
         {
+            _m_purchaseRotateTween?.Kill();
+            _m_purchaseRotateTween = null;
             _m_tweenContainer?.KillAllDoTween();
             _m_tweenContainer = null;
         }
@@ -127,6 +130,18 @@ namespace GameCore.UI
             GameCommon.DiscardToolTip();
             _m_tweenContainer.RegDoTween(GetGameObject().transform.DOScale(Vector3.one, mono.scaleChgDuration));
 
+        }
+
+        public void PlayPurchaseRotateEffect(float _duration = 0.4f)
+        {
+            if (GetGameObject() == null)
+                return;
+
+            _m_purchaseRotateTween?.Kill();
+            _m_purchaseRotateTween = GetGameObject().transform
+                .DOLocalRotate(new Vector3(0f, 360f, 0f), _duration, RotateMode.LocalAxisAdd)
+                .SetEase(Ease.OutCubic);
+            _m_tweenContainer.RegDoTween(_m_purchaseRotateTween);
         }
     }
 }
