@@ -36,8 +36,6 @@ namespace GameCore.UI
         {
         }
 
-        /// <param name="_partLevelRefObj">???????????????????????????????????????????? null??</param>
-        /// <param name="_isAtMaxStrengthenLevel">??????????????????????????????????</param>
         public void SetInfo(PartLevelRefObj _partLevelRefObj, bool _isAtMaxStrengthenLevel = false)
         {
             _m_levelRefObj = _partLevelRefObj;
@@ -77,26 +75,26 @@ namespace GameCore.UI
             SCCommon.SetGameObjectEnable(mono.txtLevel.gameObject, _level > 1);
 
             if (mono.txtName != null)
-                mono.txtName.text = string.IsNullOrEmpty(_name) ? "??????" : _name;
+                mono.txtName.text = string.IsNullOrEmpty(_name) ? "" : _name;
 
             if (mono.txtDesc != null)
-                mono.txtDesc.text = string.IsNullOrEmpty(_desc) ? "??????????" : _desc;
+                mono.txtDesc.text = string.IsNullOrEmpty(_desc) ? "" : _desc;
 
             if (mono.txtQuality != null)
             {
                 switch (_quality)
                 {
                     case EQualityType.NONE:
-                        mono.txtQuality.text = "NONE";
+                        mono.txtQuality.text = "Œﬁ";
                         break;
                     case EQualityType.NORMAL:
-                        mono.txtQuality.text = "NORMAL";
+                        mono.txtQuality.text = "∆’Õ®";
                         break;
                     case EQualityType.RARE:
-                        mono.txtQuality.text = "RARE";
+                        mono.txtQuality.text = "œ°”–";
                         break;
                     case EQualityType.PRECIOUS:
-                        mono.txtQuality.text = "PRECIOUS";
+                        mono.txtQuality.text = "’‰πÛ";
                         break;
                 }
             }
