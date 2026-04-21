@@ -8,5 +8,6 @@ namespace GameCore
         public EEnemyOutgoingPartDamageMod outgoingPartDamageMod;
         public int outgoingPreyBonus;
         public int outgoingPartPenalty;
+        public bool germsAtTheReadyApplied;
     }
 }

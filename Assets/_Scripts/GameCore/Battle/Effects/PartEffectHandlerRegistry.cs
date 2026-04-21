@@ -42,6 +42,9 @@ namespace GameCore.Battle
             Register(EAttributeType.SEND_ALL_FAT_BY_GET_HIT, new Effects.SendAllFatByGetHitEffectHandler());
             Register(EAttributeType.CLEAR_BAD_SKIN, new Effects.ClearBadSkinEffectHandler());
             Register(EAttributeType.CLEAR_ALL_HATE_AND_MOUTH_GET_STRONG, new Effects.ClearAllHateAndMouthGetStrongEffectHandler());
+            Register(EAttributeType.TRIGGER_MAX_MASS_EFFECT, new Effects.TriggerMaxMassEffectHandler());
+            Register(EAttributeType.CHANGE_BREEDING_MASS_2_OTHER, new Effects.ChangeBreedingMass2OtherEffectHandler());
+            Register(EAttributeType.SEND_MOLD_2_BY_GET_HIT, new Effects.SendMold2ByGetHitEffectHandler());
 
         }
 

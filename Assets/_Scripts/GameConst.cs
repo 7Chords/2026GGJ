@@ -53,6 +53,10 @@ namespace GameCore
         public const long BUFF_ID_FAT = 100002;
         public const long BUFF_ID_BURN = 100003;
         public const long BUFF_ID_STRONG = 100004;
+        public const long BUFF_ID_MOLD = 100007;
+        public const long BUFF_ID_BREEDING_MASS = 100008;
+        public const long BUFF_ID_HEAL_MASS = 100009;
+        public const long BUFF_ID_ATTACK_MASS = 100010;
 
         public const int EVENT_BLOOD_2_PART_ROLL_MIN_CURRENT_HEALTH = 30;
 

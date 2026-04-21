@@ -220,6 +220,9 @@ namespace GameCore.Battle
                     case EAttributeTriggerPointType.TURN_OVER:
                         buffInfo.onTurnOver?.Invoke();
                         break;
+                    case EAttributeTriggerPointType.TOTAL_TURN_OVER:
+                        buffInfo.onTotalTurnOver?.Invoke();
+                        break;
                     case EAttributeTriggerPointType.ACTION_OVER:
                         buffInfo.onPartActionOver?.Invoke();
                         break;
@@ -236,6 +239,12 @@ namespace GameCore.Battle
                         {
                             triggerLayer = buffInfo.buffLayer;
                         }
+                        break;
+                    case EBuffType.MOLD:
+                    case EBuffType.BREEDING_MASS:
+                    case EBuffType.HEAL_MASS:
+                    case EBuffType.ATTACK_MASS:
+                        triggerLayer = 0;
                         break;
                     default:
                         break;

@@ -74,6 +74,24 @@ namespace GameCore
              });
         }
 
+        private void TriggerTotalTurnOverForAllBattleParts()
+        {
+            TriggerTotalTurnOverOnList(playerExcuteInfoList);
+            TriggerTotalTurnOverOnList(enemyExcuteInfoList);
+        }
+
+        static void TriggerTotalTurnOverOnList(List<PartInfo> list)
+        {
+            if (list == null) return;
+            for (int i = 0; i < list.Count; i++)
+            {
+                var part = list[i];
+                if (part == null) continue;
+                if (!part.HasBuff(EAttributeTriggerPointType.TOTAL_TURN_OVER)) continue;
+                part.TriggerBuff(EAttributeTriggerPointType.TOTAL_TURN_OVER);
+            }
+        }
+
         private void TriggerTurnOverForSide(bool _isPlayer)
         {
             // 回合结束触发：玩家回合结束触发玩家部位，敌人回合结束触发敌人部位
@@ -90,6 +108,7 @@ namespace GameCore
 
         private void OnBattleRoundFinish()
         {
+            TriggerTotalTurnOverForAllBattleParts();
             GameModel.instance.ClearBuffsAfterFullBattleRound();
             SCTimeCaller.instance.CallDealy(1f, () =>
             {
@@ -202,6 +221,8 @@ namespace GameCore
             SCTimeCaller.instance.CallDealy(GameConst.DELAY_END_TIME, () =>
             {
                 if (_cancelToken != null && _cancelToken.isCancelled) return;
+                if (_part != null && _part.currentHealth > 0 && _part.HasBuff(EAttributeTriggerPointType.ACTION_OVER))
+                    _part.TriggerBuff(EAttributeTriggerPointType.ACTION_OVER);
                 SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_END, _part);
                 ExecuteNext(_isPlayer);
             });

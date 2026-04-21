@@ -426,6 +426,7 @@ namespace GameCore
                 case EAttributeType.REFLECT:
                 case EAttributeType.SEND_BLEED_BY_GET_HIT:
                 case EAttributeType.SEND_ALL_FAT_BY_GET_HIT:
+                case EAttributeType.SEND_MOLD_2_BY_GET_HIT:
                     return FilterPartsMouthOnly(CollectPartsInEffectArea(_caster, enemyGrid));
 
                 case EAttributeType.REAL_ATTACK:
@@ -452,6 +453,8 @@ namespace GameCore
                 case EAttributeType.SELF_BUFF_MULTIPLIER:
                 case EAttributeType.CLEAR_SELF_BLEED_AND_HEAL_SELF:
                 case EAttributeType.INCREASE_ADD_BURN:
+                case EAttributeType.TRIGGER_MAX_MASS_EFFECT:
+                case EAttributeType.CHANGE_BREEDING_MASS_2_OTHER:
                     raw = CollectPartsInEffectArea(_caster, allyGrid);
                     break;
 
@@ -493,6 +496,7 @@ namespace GameCore
                 case EAttributeType.REFLECT:
                 case EAttributeType.SEND_BLEED_BY_GET_HIT:
                 case EAttributeType.SEND_ALL_FAT_BY_GET_HIT:
+                case EAttributeType.SEND_MOLD_2_BY_GET_HIT:
                     return FilterPartsMouthOnly(CollectPartsInEffectArea(_caster, enemyGrid));
 
                 case EAttributeType.REAL_ATTACK:
@@ -519,6 +523,8 @@ namespace GameCore
                 case EAttributeType.CLEAR_SELF_BLEED_AND_HEAL_SELF:
                 case EAttributeType.DAMAGE_MULTIPILER:
                 case EAttributeType.INCREASE_ADD_BURN:
+                case EAttributeType.TRIGGER_MAX_MASS_EFFECT:
+                case EAttributeType.CHANGE_BREEDING_MASS_2_OTHER:
                     raw = CollectPartsInEffectArea(_caster, allyGrid);
                     break;
 
@@ -737,7 +743,7 @@ namespace GameCore
         /// <summary>
         /// 遍历施法部位当前效果格，收集指定脸图上占据格子的部位（去重）。
         /// </summary>
-        private static List<PartInfo> CollectPartsInEffectArea(PartInfo _caster, List<FaceGridInfo> _gridInfoList)
+        public static List<PartInfo> CollectPartsInEffectArea(PartInfo _caster, List<FaceGridInfo> _gridInfoList)
         {
             var result = new List<PartInfo>();
             if (_caster?.curEffectFacePosList == null || _gridInfoList == null)

@@ -26,7 +26,7 @@ namespace GameCore.Battle.Effects
                 if (attackEntry == null)
                     continue;
 
-                SCMsgCenter.SendMsg(SCMsgConst.PART_TRIGGER_EFFECT, part, _caster);
+                PartTriggerEffectNotifier.Notify(part, _caster);
                 if (attackEntry.attributeType == EAttributeType.ATTACK_BY_ENEMY_BLEED)
                 {
                     // AttackByBleedEffectHandler: [0]=bleedUnit, [1]=attackUnit; scale per-stack damage.

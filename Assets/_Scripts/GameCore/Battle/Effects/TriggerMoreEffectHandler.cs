@@ -18,7 +18,7 @@ namespace GameCore.Battle.Effects
             {
                 foreach (var part in partInfoList)
                 {
-                    SCMsgCenter.SendMsg(SCMsgConst.PART_TRIGGER_EFFECT, part, _caster);
+                    PartTriggerEffectNotifier.Notify(part, _caster);
                     int index = battleCtx.GetPartIndexInQueue(part, !_caster.isEnemyPart);
                     if (index >= 0)
                         battleCtx.InsertPartAtInQueue(!_caster.isEnemyPart, index, part);

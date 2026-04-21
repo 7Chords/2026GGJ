@@ -25,6 +25,7 @@ namespace GameCore.Battle
             st.outgoingPartPenalty = 0;
 
             st.enemyPhaseCounter++;
+            TryApplyGermsAtTheReady(e, st);
             var refPassive = FindPassiveRef(e, EEnemyPassiveSkillType.REVENGE_EVERY_N_PHASES);
             if (refPassive == null)
                 return;
@@ -150,6 +151,29 @@ namespace GameCore.Battle
                     return true;
             }
             return false;
+        }
+
+        static void TryApplyGermsAtTheReady(EnemyInfo e, EnemyPassiveBattleState st)
+        {
+            if (st.germsAtTheReadyApplied)
+                return;
+            var refG = FindPassiveRef(e, EEnemyPassiveSkillType.GERMS_AT_THE_READY);
+            if (refG == null)
+                return;
+            st.germsAtTheReadyApplied = true;
+            int layers = 20;
+            if (refG.paramList != null && refG.paramList.Count > 0)
+                layers = Mathf.Max(1, Mathf.RoundToInt(refG.paramList[0]));
+            var list = e.battlePartInfoList;
+            if (list == null) return;
+            for (int i = 0; i < list.Count; i++)
+            {
+                var p = list[i];
+                if (p == null) continue;
+                var bi = BuffFactory.CreateBuffInfoByType(EBuffType.BREEDING_MASS, layers, p, p);
+                if (bi != null)
+                    p.AddBuff(bi);
+            }
         }
 
         static EnemyPassiveRefObj FindPassiveRef(EnemyInfo e, EEnemyPassiveSkillType type)

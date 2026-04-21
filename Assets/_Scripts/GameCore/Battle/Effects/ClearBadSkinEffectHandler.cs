@@ -23,7 +23,7 @@ namespace GameCore.Battle.Effects
                 if (part.partRefObj.qualityType != EQualityType.NONE)
                     continue;
 
-                SCMsgCenter.SendMsg(SCMsgConst.PART_TRIGGER_EFFECT, part, _caster);
+                PartTriggerEffectNotifier.Notify(part, _caster);
                 RemovePartFromBattleFace(part);
             }
         }

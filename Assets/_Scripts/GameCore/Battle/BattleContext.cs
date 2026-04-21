@@ -62,6 +62,8 @@ namespace GameCore.Battle
         {
             _amount = EnemyPassiveController.AdjustEnemyOutgoingDamageToPlayerPart(_part, _sender, _amount);
             _amount += BuffCombatModifiers.GetPreyExtraDamage(_part);
+            if (GermMassDamageAbsorption.PartHasSendMoldGetHitEntry(_part))
+                GermMassDamageAbsorption.AbsorbDamageThroughGerms(_part, ref _amount);
             if (_amount <= 0) return;
             int hpBefore = _part.currentHealth;
             int damageToPart = UnityEngine.Mathf.Min(_amount, hpBefore);

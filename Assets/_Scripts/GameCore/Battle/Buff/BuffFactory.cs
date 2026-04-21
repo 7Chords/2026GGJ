@@ -72,6 +72,26 @@ namespace GameCore.Battle
                         // 怨恨：无战斗效果（在特定情况下被消耗）
                     }
                     break;
+                case EBuffType.MOLD:
+                    {
+                        _buffInfo.onTotalTurnOver += () => GermMassBuffEffects.RunMoldTotalTurnOver(_buffInfo);
+                    }
+                    break;
+                case EBuffType.BREEDING_MASS:
+                    {
+                        _buffInfo.onPartActionOver += () => GermMassBuffEffects.RunBreedingMassAfterPartAction(_buffInfo);
+                    }
+                    break;
+                case EBuffType.HEAL_MASS:
+                    {
+                        _buffInfo.onPartGetEffect += () => GermMassBuffEffects.RunHealMassEffect(_buffInfo);
+                    }
+                    break;
+                case EBuffType.ATTACK_MASS:
+                    {
+                        _buffInfo.onPartGetEffect += () => GermMassBuffEffects.RunAttackMassEffect(_buffInfo);
+                    }
+                    break;
             }
 
             return _buffInfo;

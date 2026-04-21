@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,45 +14,45 @@ namespace GameCore
 
     public enum EGoodsType
     {
-        PART,//��λ
-        HEAL,//��Ѫ
+        PART,//部位
+        HEAL,//回血
     }
 
     public enum EAttributeType
     {
-        ATTACK,//����
-        REAL_ATTACK,//��ʵ�˺�
-        REFLECT,//����
-        TRIGGER_MORE,//��������
-        DAMAGE_MULTIPILER,//�����౶�˺�
-        TRIGGER_CHANCE_UP,//��������
-        HEAL_ALL_PART,//����Χ�����в�λ��Ѫ
-        HEAL_WEAK_PART,//����Χ��Ѫ����͵Ĳ�λ��Ѫ
-        CLEAR_DEFULL,//�������Ч��
-        CLEAR_BAD_SKIN,//�������Ƥ��
-        PART_LOSE_TURN,//��λ�޷��ж�
-        GET_COIN,//��ý��
-        GET_COIN_BY_ATTACK,//�����ɹ���ý��
-        ATTACK_BY_COIN,//���ݽ������ù�����
-        SELF_GET_BUFF,//��һ��buff
-        ENEMY_GET_BUFF,//���˻��buff
-        SELF_BUFF_MULTIPLIER,//���BUFF����������
-        ENEMY_BUFF_MULTIPLIER,// ����BUFF����������
-        CLEAR_SELF_BLEED_AND_HEAL_SELF,// ���������Ѫ״̬�����Ʊ���
-        CLEAR_ENEMY_BLEED_AND_HEAL_PART,// ����з���Ѫ״̬�������Լ�����λ��
-        ATTACK_BY_ENEMY_BLEED,// ͨ���з���Ѫ״̬��ù�����
-        SEND_BLEED_BY_GET_HIT,// ������ʱʩ�ӵз���ѪЧ��
-        CHANGE_FAT_2_BURN,//ת����֬Ϊȼ��
-        SPREAD_BURN,//������Χ������ȼ�ղ�����-2������1�㣩
-        SEND_ALL_FAT_BY_GET_HIT,//������ʱʩ�ӶԷ�����������֬
-        INCREASE_ADD_BURN,//���Ӽ�����λ�ṩȼ��Ч��ʱ�Ĳ���
-        ENEMY_MOUTH_GET_BUFF,//������ͻ��buff,
-        SELF_MOUTH_GET_BUFF,//������ͻ��buff,
-        USE_HEAT_2_ATTACK_AGAIN,//����ǿ׳����x������ĳ�����ǿ׳�����ٴι���
-        CLEAR_ALL_HATE_AND_MOUTH_GET_STRONG,//�������Թ�޲���ͻ��ǿ׳
-        TRIGGER_MAX_MASS_EFFECT,//����������ߵķ�ֳ��������ľ��ŵ�Ч��
-        CHANGE_BREEDING_MASS_2_OTHER,//��ֳ���Ų�������20ʱ�����Ч����Χ�ڴ��ڼ�����λ��ֳ���Ų���δ����20���򽫳����Ĳ���ת��Ϊҽ�ƾ��ţ���֮���򽫳�������ת��Ϊ��������
-        SEND_MOLD_2_BY_GET_HIT,//����λ����һ�־��ţ��Թ�����λʩ��2��ù��
+        ATTACK,//攻击
+        REAL_ATTACK,//真实伤害
+        REFLECT,//反射
+        TRIGGER_MORE,//触发两次
+        DAMAGE_MULTIPILER,//攻击多倍伤害
+        TRIGGER_CHANCE_UP,//触发上升
+        HEAL_ALL_PART,//给范围内所有部位回血
+        HEAL_WEAK_PART,//给范围内血量最低的部位回血
+        CLEAR_DEFULL,//清除负面效果
+        CLEAR_BAD_SKIN,//清楚坏的皮肤
+        PART_LOSE_TURN,//部位无法行动
+        GET_COIN,//获得金币
+        GET_COIN_BY_ATTACK,//攻击成功获得金币
+        ATTACK_BY_COIN,//根据金币数获得攻击力
+        SELF_GET_BUFF,//玩家获得buff
+        ENEMY_GET_BUFF,//敌人获得buff
+        SELF_BUFF_MULTIPLIER,//玩家BUFF层数翻倍数
+        ENEMY_BUFF_MULTIPLIER,// 敌人BUFF层数翻倍数
+        CLEAR_SELF_BLEED_AND_HEAL_SELF,// 清除自身流血状态并治疗本体
+        CLEAR_ENEMY_BLEED_AND_HEAL_PART,// 清除敌方流血状态并治疗自己（部位）
+        ATTACK_BY_ENEMY_BLEED,// 通过敌方流血状态获得攻击力
+        SEND_BLEED_BY_GET_HIT,// 被击中时施加敌方流血效果
+        CHANGE_FAT_2_BURN,//转化油脂为燃烧
+        SPREAD_BURN,//传播范围内最大的燃烧层数（-2且最少1层）
+        SEND_ALL_FAT_BY_GET_HIT,//被击中时施加对方自身所有油脂
+        INCREASE_ADD_BURN,//增加己方部位提供燃烧效果时的层数
+        ENEMY_MOUTH_GET_BUFF,//敌人嘴巴获得buff,
+        SELF_MOUTH_GET_BUFF,//己方嘴巴获得buff,
+        USE_HEAT_2_ATTACK_AGAIN,//自身强壮超过x层后，消耗超过的强壮概率再次攻击
+        CLEAR_ALL_HATE_AND_MOUTH_GET_STRONG,//清除所有怨恨并嘴巴获得强壮
+        TRIGGER_MAX_MASS_EFFECT,//触发层数最高的繁殖菌团以外的菌团的效果
+        CHANGE_BREEDING_MASS_2_OTHER,//繁殖菌团层数超过20时，如果效果范围内存在己方部位繁殖菌团层数未超过20，则将超出的部分转化为医疗菌团；反之，则将超出部分转化为进击菌团
+        SEND_MOLD_2_BY_GET_HIT,//若部位存在一种菌团，对攻击部位施加2层霉菌
     }
 
     public enum EAttributeTriggerPointType
@@ -64,7 +64,7 @@ namespace GameCore
         GET_EFFECT,
         TURN_OVER,
         ACTION_OVER,
-        TOTAL_TURN_OVER,//˫���غϽ���
+        TOTAL_TURN_OVER,//双方回合结束
     }
 
     public enum ERoomType
@@ -81,9 +81,9 @@ namespace GameCore
     public enum EQualityType
     {
         NONE,
-        NORMAL,//��ͨ��
-        RARE,//ϡ�е�
-        PRECIOUS,//����
+        NORMAL,//普通的
+        RARE,//稀有的
+        PRECIOUS,//珍贵的
     }
 
     public enum EGridPosType
@@ -101,16 +101,16 @@ namespace GameCore
 
     public enum EBuffType
     {
-        BLEED,//��ȼ
-        FAT,//��֬
-        BURN,//ȼ��
-        STRONG,//ǿ׳
-        PREY,//����
-        HATE,//Թ��
-        MOLD,//ù��
-        BREEDING_MASS,//��ֳ����
-        HEAL_MASS,//ҽ�ƾ���
-        ATTACK_MASS,//��������
+        BLEED,//点燃
+        FAT,//油脂
+        BURN,//燃烧
+        STRONG,//强壮
+        PREY,//猎物
+        HATE,//怨恨
+        MOLD,//霉菌
+        BREEDING_MASS,//繁殖菌团
+        HEAL_MASS,//医疗菌团
+        ATTACK_MASS,//进击菌团
     }
 
     public enum EEventType
@@ -142,8 +142,8 @@ namespace GameCore
     public enum EBossType
     {
         NONE,
-        MALFORMED,//���ε���
-        KING_OF_MOLD,//ù��֮��
+        MALFORMED,//畸形的人
+        KING_OF_MOLD,//霉菌之王
     }
 
     public enum EBattleType

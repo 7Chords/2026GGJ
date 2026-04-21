@@ -24,13 +24,13 @@ namespace GameCore.Battle.Effects
                     if(part.entryInfoList[i].attributeType==EAttributeType.CHANGE_FAT_2_BURN)
                     {
                         part.entryInfoList[i].attributeValueList[1] += addLayer;
-                        SCMsgCenter.SendMsg(SCMsgConst.PART_TRIGGER_EFFECT, part, _caster);
+                        PartTriggerEffectNotifier.Notify(part, _caster);
                         beneficiary = true;
                     }
                     if (part.entryInfoList[i].attributeType == EAttributeType.SPREAD_BURN)
                     {
                         part.entryInfoList[i].attributeValueList[0] += addLayer;
-                        SCMsgCenter.SendMsg(SCMsgConst.PART_TRIGGER_EFFECT, part, _caster);
+                        PartTriggerEffectNotifier.Notify(part, _caster);
                         beneficiary = true;
                     }
                 }

@@ -18,6 +18,7 @@ namespace GameCore
         public Action onPartActionOver;
         public Action onPartDie;
         public Action onTurnOver;
+        public Action onTotalTurnOver;
         public Action onPartGetHit;
         public Action onPartGetEffect;
         public BuffInfo(BuffRefObj _buffRefObj,int _layer, PartInfo _creator,PartInfo _owner)
