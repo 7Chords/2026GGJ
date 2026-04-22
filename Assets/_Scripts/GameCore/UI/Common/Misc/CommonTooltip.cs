@@ -196,6 +196,8 @@ namespace GameCore.UI
                 setBuffTooltipRows(_partInfo.buffLogic.buffList);
             if (sideHintTypes.Count > 0)
                 setBuffSideItems(sideHintTypes);
+            if (_m_tooltipRect != null && sideHintTypes.Count > 0)
+                LayoutRebuilder.ForceRebuildLayoutImmediate(_m_tooltipRect);
             _m_tweenContainer.RegDoTween(canvasGroup.DOFade(1, fadeInDuratin));
         }
         #endregion

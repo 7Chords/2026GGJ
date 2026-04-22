@@ -342,6 +342,23 @@ namespace GameCore.Helpers
                             : 0;
                         return new object[] { p0, p1 };
                     }
+                case 101031:
+                    {
+                        var change = FindEntry(part, EAttributeTriggerPointType.ACTIVE,
+                            EAttributeType.CHANGE_BREEDING_MASS_2_OTHER);
+                        var mold = FindEntry(part, EAttributeTriggerPointType.GET_HIT,
+                            EAttributeType.SEND_MOLD_2_BY_GET_HIT);
+                        int capSelf = change?.attributeValueList != null && change.attributeValueList.Count > 0
+                            ? Mathf.RoundToInt(change.attributeValueList[0])
+                            : 20;
+                        int capAlly = change?.attributeValueList != null && change.attributeValueList.Count > 1
+                            ? Mathf.RoundToInt(change.attributeValueList[1])
+                            : 20;
+                        int moldLayers = mold?.attributeValueList != null && mold.attributeValueList.Count > 0
+                            ? Mathf.RoundToInt(mold.attributeValueList[0])
+                            : 2;
+                        return new object[] { capSelf, capAlly, moldLayers };
+                    }
                 default:
                     return Array.Empty<object>();
             }

@@ -199,7 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
-  m_VerticalFit: 1
+  m_VerticalFit: 2
 --- !u!1 &746395345163376720
 GameObject:
   m_ObjectHideFlags: 0
@@ -588,7 +588,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "name\u3001name\u3001name\u3001name\u3001name\u3001name\u3001name\u3001"
+  m_Text: wdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadada
 --- !u!1 &2546634910560738816
 GameObject:
   m_ObjectHideFlags: 0
@@ -1436,7 +1436,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 218.55185, y: -345.05}
+  m_AnchoredPosition: {x: 218.55185, y: -372.05}
   m_SizeDelta: {x: 437.1037, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7603656062021809402
@@ -1588,7 +1588,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 218.55185, y: -146}
+  m_AnchoredPosition: {x: 218.55185, y: -159.5}
   m_SizeDelta: {x: 437.1037, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3377494056976667983

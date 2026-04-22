@@ -108,6 +108,36 @@ namespace GameCore.Helpers
                 case EAttributeType.INCREASE_ADD_BURN:
                     yield return EBuffType.BURN;
                     break;
+
+                case EAttributeType.CHANGE_BREEDING_MASS_2_OTHER:
+                    yield return EBuffType.BREEDING_MASS;
+                    if (list != null && list.Count >= 4)
+                    {
+                        if (TryGetBuffTypeFromId(ToLong(list[2]), out var healOrOther))
+                            yield return healOrOther;
+                        if (TryGetBuffTypeFromId(ToLong(list[3]), out var atkOrOther))
+                            yield return atkOrOther;
+                    }
+                    else
+                    {
+                        if (TryGetBuffTypeFromId(GameConst.BUFF_ID_HEAL_MASS, out var healDefault))
+                            yield return healDefault;
+                        if (TryGetBuffTypeFromId(GameConst.BUFF_ID_ATTACK_MASS, out var atkDefault))
+                            yield return atkDefault;
+                    }
+                    break;
+
+                case EAttributeType.SEND_MOLD_2_BY_GET_HIT:
+                    if (TryGetBuffTypeFromId(GameConst.BUFF_ID_MOLD, out var mold))
+                        yield return mold;
+                    break;
+
+                case EAttributeType.TRIGGER_MAX_MASS_EFFECT:
+                    if (TryGetBuffTypeFromId(GameConst.BUFF_ID_HEAL_MASS, out var healMass))
+                        yield return healMass;
+                    if (TryGetBuffTypeFromId(GameConst.BUFF_ID_ATTACK_MASS, out var attackMass))
+                        yield return attackMass;
+                    break;
             }
         }
 
