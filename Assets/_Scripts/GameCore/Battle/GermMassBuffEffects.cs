@@ -6,19 +6,20 @@ using UnityEngine;
 namespace GameCore.Battle
 {
     /// <summary>
-    /// Runtime logic for germ / mold buff stacks (HEAL_MASS, ATTACK_MASS, BREEDING_MASS, MOLD).
+    /// Runtime logic for germ / mold buff stacks (HEAL_MASS → grant BREEDING_MASS in area, ATTACK_MASS, BREEDING_MASS, MOLD).
     /// </summary>
     public static class GermMassBuffEffects
     {
+        /// <summary>
+        /// 医疗菌团 GET_EFFECT：用触发者当前医疗菌团层数，给效果范围内每个己方部位增加相同层数的繁殖菌团。
+        /// </summary>
         public static void RunHealMassEffect(BuffInfo buff)
         {
             if (buff?.owner == null) return;
-            var ctx = BattleContext.current;
-            if (ctx == null) return;
+            if (BattleContext.current == null) return;
             var owner = buff.owner;
             if (!owner.isOnFace || buff.buffLayer <= 0) return;
-            int healEach = buff.buffLayer - 6;
-            if (healEach <= 0) return;
+            int addLayers = buff.buffLayer;
             var allyGrid = owner.isEnemyPart
                 ? GameModel.instance.enemyFaceGridInfoList
                 : GameModel.instance.playerFaceGridInfoList;
@@ -28,7 +29,10 @@ namespace GameCore.Battle
                 var p = targets[i];
                 if (p == null || p.currentHealth <= 0) continue;
                 if (p.isEnemyPart != owner.isEnemyPart) continue;
-                ctx.ApplyHealToPart(p, healEach);
+
+                var breedingDelta = BuffFactory.CreateBuffInfoByType(EBuffType.BREEDING_MASS, addLayers, owner, p);
+                if (breedingDelta != null)
+                    p.AddBuff(breedingDelta);
             }
         }
 
