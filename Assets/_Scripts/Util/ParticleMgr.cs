@@ -25,6 +25,9 @@ namespace GameCore
             if (go == null)
                 return null;
 
+            // 父节点（如战斗部位）常带旋转；世界旋转改为预制体根上的朝向，不叠父节点旋转
+            ApplyPrefabRootWorldRotationIgnoringParent(go.transform);
+
             UIParticle uip = go.GetComponentInChildren<UIParticle>(true);
             if (uip == null)
             {
@@ -164,6 +167,17 @@ namespace GameCore
             if (SCGame.instance != null && SCGame.instance.topLayerRoot != null)
                 return SCGame.instance.topLayerRoot.transform;
             return null;
+        }
+
+        /// <summary>
+        /// Instantiate 后 root.localRotation 与预制体根一致；将其设为世界旋转，避免父 Transform 旋转叠加到特效上。
+        /// </summary>
+        static void ApplyPrefabRootWorldRotationIgnoringParent(Transform root)
+        {
+            if (root == null)
+                return;
+            Quaternion prefabRoot = root.localRotation;
+            root.rotation = prefabRoot;
         }
 
         static IEnumerator CoDestroyAfter(GameObject _go, float _delay)
