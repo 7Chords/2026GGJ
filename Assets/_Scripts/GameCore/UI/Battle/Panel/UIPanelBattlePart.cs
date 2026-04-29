@@ -15,9 +15,6 @@ namespace GameCore.UI
         private PartInfo _m_partInfo;
         private TweenContainer _m_tweenContainer;
 
-        private Transform _m_mouthLungeRestoreParent;
-        private int _m_mouthLungeRestoreSiblingIndex;
-
         public PartInfo partInfo => _m_partInfo;
         private List<UIPanelPartBuff> _m_partBuffItemList;
 
@@ -35,7 +32,6 @@ namespace GameCore.UI
         {
             resetPartImageColors();
             _m_tweenContainer?.KillAllDoTween();
-            RestoreMouthLungeOverlayIfNeeded();
             _m_tweenContainer = null;
             if (_m_partBuffItemList != null)
             {
@@ -120,61 +116,29 @@ namespace GameCore.UI
             _tc.RegDoTween(t.DOShakePosition(dur, str));
         }
 
-        /// <summary> World-space lunge toward hit point, invoke damage at peak, then return. </summary>
-        public void PlayMouthLungeTowardWorld(Vector3 _hitWorld, System.Action _onHit, System.Action _onComplete)
+        /// <summary> Local Z rotation shake on the mouth graphic; damage at start of feedback. </summary>
+        public void PlayMouthAttackShake(System.Action _onHit, System.Action _onComplete)
         {
-            var rt = GetGameObject().transform as RectTransform;
-            if (rt == null)
-            {
-                _onHit?.Invoke();
-                _onComplete?.Invoke();
-                return;
-            }
+            var t = mono.imgGO != null ? mono.imgGO.transform : GetGameObject().transform;
+            t.DOKill(false);
+            float z = _m_partInfo != null ? _m_partInfo.rotateStep * 90f : 0f;
+            void applyBaseRot() { t.rotation = Quaternion.Euler(0f, 0f, z); }
+            applyBaseRot();
 
-            RestoreMouthLungeOverlayIfNeeded();
-            GameObject topRoot = SCGame.instance != null ? SCGame.instance.topLayerRoot : null;
-            bool useTopLayerOverlay = _m_partInfo != null && !_m_partInfo.isEnemyPart && topRoot != null;
-            if (useTopLayerOverlay)
-            {
-                _m_mouthLungeRestoreParent = rt.parent;
-                _m_mouthLungeRestoreSiblingIndex = rt.GetSiblingIndex();
-                rt.SetParent(topRoot.transform, true);
-                rt.SetAsLastSibling();
-            }
-
-            Vector3 startWorld = rt.position;
-            Vector3 peakWorld = Vector3.Lerp(startWorld, _hitWorld, Mathf.Clamp01(mono.mouthLungeT));
             var seq = DOTween.Sequence();
-            seq.Append(rt.DOMove(peakWorld, mono.mouthLungeOutDuration).SetEase(Ease.OutQuad));
             seq.AppendCallback(() => _onHit?.Invoke());
-            seq.Append(rt.DOMove(startWorld, mono.mouthReturnDuration).SetEase(Ease.InQuad));
+            float dur = Mathf.Max(0.04f, mono.mouthAttackShakeDuration);
+            float ang = mono.mouthAttackShakeAngle;
+            int vib = Mathf.Clamp(mono.mouthAttackShakeVibrato, 1, 30);
+            seq.Append(t.DOShakeRotation(dur, new Vector3(0f, 0f, ang), vib, 90f, true));
             void finish()
             {
-                if (useTopLayerOverlay)
-                    RestoreMouthLungeOverlayIfNeeded();
+                applyBaseRot();
                 _onComplete?.Invoke();
             }
             seq.OnComplete(finish);
-            seq.OnKill(() =>
-            {
-                if (useTopLayerOverlay)
-                    RestoreMouthLungeOverlayIfNeeded();
-            });
+            seq.OnKill(applyBaseRot);
             _m_tweenContainer?.RegDoTween(seq);
-        }
-
-        private void RestoreMouthLungeOverlayIfNeeded()
-        {
-            if (_m_mouthLungeRestoreParent == null)
-                return;
-            var rt = GetGameObject().transform as RectTransform;
-            if (rt != null)
-            {
-                rt.SetParent(_m_mouthLungeRestoreParent, true);
-                int max = Mathf.Max(0, _m_mouthLungeRestoreParent.childCount - 1);
-                rt.SetSiblingIndex(Mathf.Clamp(_m_mouthLungeRestoreSiblingIndex, 0, max));
-            }
-            _m_mouthLungeRestoreParent = null;
         }
         private void refreshShow()
         {

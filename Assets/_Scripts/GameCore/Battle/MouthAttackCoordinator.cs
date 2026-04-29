@@ -13,7 +13,7 @@ namespace GameCore.Battle
     }
 
     /// <summary>
-    /// Mouth-type ATTACK / REAL_ATTACK: defer damage until UI lunge reaches the hit point, then return.
+    /// Mouth-type ATTACK / REAL_ATTACK: defer damage until the mouth attack shake plays on UI.
     /// </summary>
     public static class MouthAttackCoordinator
     {

@@ -83,9 +83,7 @@ namespace GameCore.UI
                 MouthAttackCoordinator.NotifyAnimationComplete();
                 return;
             }
-            UIPanelBattleFace opponentFace = caster.isEnemyPart ? _m_playerBattleFace : _m_enemyBattleFace;
-            Vector3 targetWorld = opponentFace.GetWorldCenterForGridPositions(caster.curEffectFacePosList);
-            panel.PlayMouthLungeTowardWorld(targetWorld,
+            panel.PlayMouthAttackShake(
                 () => MouthAttackCoordinator.ApplyPendingDamage(),
                 () => MouthAttackCoordinator.NotifyAnimationComplete());
         }

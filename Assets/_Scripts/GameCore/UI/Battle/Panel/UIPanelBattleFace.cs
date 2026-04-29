@@ -206,32 +206,6 @@ namespace GameCore.UI
             return _m_partPanelList.Find(x => x.partInfo == _info);
         }
 
-        /// <summary> World-space centroid of the given face grid positions (for mouth lunge target). </summary>
-        public Vector3 GetWorldCenterForGridPositions(List<Vector2Int> _facePositions)
-        {
-            if (mono.tranParentPart != null && (_facePositions == null || _facePositions.Count == 0))
-                return mono.tranParentPart.position;
-
-            if (_m_gridInfoList == null || _m_gridGOList == null || _facePositions == null || _facePositions.Count == 0)
-                return mono.tranParentPart != null ? mono.tranParentPart.position : Vector3.zero;
-
-            var acc = new List<Vector3>();
-            for (int i = 0; i < _facePositions.Count; i++)
-            {
-                var info = _m_gridInfoList.Find(x => x.pos == _facePositions[i]);
-                if (info == null) continue;
-                int idx = _m_gridInfoList.IndexOf(info);
-                if (idx >= 0 && idx < _m_gridGOList.Count)
-                    acc.Add(_m_gridGOList[idx].transform.position);
-            }
-            if (acc.Count == 0)
-                return mono.tranParentPart != null ? mono.tranParentPart.position : Vector3.zero;
-            Vector3 sum = Vector3.zero;
-            for (int i = 0; i < acc.Count; i++)
-                sum += acc[i];
-            return sum / acc.Count;
-        }
-
         /// <summary> Player/enemy face HP damage: shake face root, optional red flash, light extra shake on each part. </summary>
         public void PlayBodyDamageFeedback(TweenContainer _tc)
         {

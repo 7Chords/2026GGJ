@@ -36,13 +36,13 @@ namespace GameCore.UI
         public float activeScale;
         [Header("激活缩放时间")]
         public float scaleChgDuration;
-        [Header("嘴巴出去时间")]
-        public float mouthLungeOutDuration = 0.18f;
-        [Header("嘴巴返回时间")]
-        public float mouthReturnDuration = 0.18f;
-        [Header("嘴巴移动比例(0-1)")]
-        [Range(0f, 1f)]
-        public float mouthLungeT = 0.85f;
+        [Header("Mouth attack: rotation shake duration")]
+        public float mouthAttackShakeDuration = 0.22f;
+        [Header("Mouth attack: max rotation shake angle (deg Z)")]
+        public float mouthAttackShakeAngle = 14f;
+        [Header("Mouth attack: shake vibrato")]
+        [Range(1, 30)]
+        public int mouthAttackShakeVibrato = 14;
         [Header("受伤闪烁颜色")]
         public Color hurtFlashTint = new Color(1f, 0.4f, 0.4f, 1f);
         [Header("受伤闪烁淡入时间")]
