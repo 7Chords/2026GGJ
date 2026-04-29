@@ -570,6 +570,30 @@ namespace GameCore
             return EGridPosType.EFFECT;
         }
 
+        /// <summary>
+        /// 将父节点下已生成的 tooltip 预览格子整体平移，使合并包围盒中心与父 RectTransform 的矩形几何中心对齐。
+        /// </summary>
+        public static void CenterTooltipPreviewGridsUnderParent(RectTransform parentGrid)
+        {
+            if (parentGrid == null || parentGrid.childCount == 0)
+                return;
+
+            Bounds bounds = RectTransformUtility.CalculateRelativeRectTransformBounds(parentGrid, parentGrid.GetChild(0));
+            for (int i = 1; i < parentGrid.childCount; i++)
+            {
+                Bounds b = RectTransformUtility.CalculateRelativeRectTransformBounds(parentGrid, parentGrid.GetChild(i));
+                bounds.Encapsulate(b);
+            }
+
+            Vector2 offset = parentGrid.rect.center - (Vector2)bounds.center;
+            for (int i = 0; i < parentGrid.childCount; i++)
+            {
+                var rt = parentGrid.GetChild(i) as RectTransform;
+                if (rt != null)
+                    rt.anchoredPosition += offset;
+            }
+        }
+
         #endregion
     }
 }

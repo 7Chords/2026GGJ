@@ -85,16 +85,16 @@ namespace GameCore.UI
                 switch (_quality)
                 {
                     case EQualityType.NONE:
-                        mono.txtQuality.text = "ùù";
+                        mono.txtQuality.text = "ÔøΩÔøΩ";
                         break;
                     case EQualityType.NORMAL:
-                        mono.txtQuality.text = "∆’Õ®";
+                        mono.txtQuality.text = "ÔøΩÔøΩÕ®";
                         break;
                     case EQualityType.RARE:
-                        mono.txtQuality.text = "œ°”–";
+                        mono.txtQuality.text = "œ°ÔøΩÔøΩ";
                         break;
                     case EQualityType.PRECIOUS:
-                        mono.txtQuality.text = "’‰πÛ";
+                        mono.txtQuality.text = "ÔøΩÔøΩÔøΩ";
                         break;
                 }
             }
@@ -125,6 +125,8 @@ namespace GameCore.UI
                 EGridPosType t = GameCommon.GetOccupyEffectCellType(p, occSet, effSet);
                 createOneGrid(p, t);
             }
+            if (mono.tranParentGrid != null)
+                GameCommon.CenterTooltipPreviewGridsUnderParent(mono.tranParentGrid.GetComponent<RectTransform>());
         }
         private void createOneGrid(Vector2Int gridPos, EGridPosType posType)
         {

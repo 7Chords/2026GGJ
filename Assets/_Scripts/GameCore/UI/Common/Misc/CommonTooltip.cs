@@ -110,6 +110,8 @@ namespace GameCore.UI
                 EGridPosType t = GameCommon.GetOccupyEffectCellType(p, occSet, effSet);
                 createOneGrid(p, t);
             }
+            if (tranParentGrid != null)
+                GameCommon.CenterTooltipPreviewGridsUnderParent(tranParentGrid.GetComponent<RectTransform>());
         }
         private void setBuffTooltipRows(List<BuffInfo> buffInfoList)
         {
