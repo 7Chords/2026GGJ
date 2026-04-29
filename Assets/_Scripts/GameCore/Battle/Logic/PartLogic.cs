@@ -13,6 +13,7 @@ namespace GameCore.Battle
         private readonly List<PartEffectTrigger> _m_activeTriggers = new List<PartEffectTrigger>();
         private readonly List<PartEffectTrigger> _m_getHitTriggers = new List<PartEffectTrigger>();
         private readonly List<PartEffectTrigger> _m_dieTriggers = new List<PartEffectTrigger>();
+        private readonly List<PartEffectTrigger> _m_actionOverTriggers = new List<PartEffectTrigger>();
 
         public PartLogic(PartInfo _partInfo)
         {
@@ -33,6 +34,9 @@ namespace GameCore.Battle
                 case EAttributeTriggerPointType.DIE:
                     _m_dieTriggers.Add(_trigger);
                     break;
+                case EAttributeTriggerPointType.ACTION_OVER:
+                    _m_actionOverTriggers.Add(_trigger);
+                    break;
             }
         }
 
@@ -44,6 +48,8 @@ namespace GameCore.Battle
                 _m_getHitTriggers.Clear();
             if (_triggerPoint == null || _triggerPoint == EAttributeTriggerPointType.DIE)
                 _m_dieTriggers.Clear();
+            if (_triggerPoint == null || _triggerPoint == EAttributeTriggerPointType.ACTION_OVER)
+                _m_actionOverTriggers.Clear();
         }
 
         public void OnPartActive()
@@ -68,6 +74,12 @@ namespace GameCore.Battle
         public void OnPartDie()
         {
             foreach (var trigger in _m_dieTriggers)
+                trigger.Execute(_m_partInfo);
+        }
+
+        public void OnPartActionOver()
+        {
+            foreach (var trigger in _m_actionOverTriggers)
                 trigger.Execute(_m_partInfo);
         }
     }

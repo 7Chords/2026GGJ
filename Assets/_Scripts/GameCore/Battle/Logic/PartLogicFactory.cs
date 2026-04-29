@@ -55,6 +55,16 @@ namespace GameCore.Battle
                         _logic.RegisterTrigger(new PartEffectTrigger(entry, EAttributeTriggerPointType.DIE, () => PartEffectContext.Active));
                 }
             }
+
+            if (_triggerPoint == null || _triggerPoint == EAttributeTriggerPointType.ACTION_OVER)
+            {
+                _logic.ClearTriggers(EAttributeTriggerPointType.ACTION_OVER);
+                foreach (var entry in _partInfo.entryInfoList)
+                {
+                    if (entry?.triggerPointType == EAttributeTriggerPointType.ACTION_OVER)
+                        _logic.RegisterTrigger(new PartEffectTrigger(entry, EAttributeTriggerPointType.ACTION_OVER, () => PartEffectContext.Active));
+                }
+            }
         }
     }
 }

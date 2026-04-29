@@ -221,8 +221,12 @@ namespace GameCore
             SCTimeCaller.instance.CallDealy(GameConst.DELAY_END_TIME, () =>
             {
                 if (_cancelToken != null && _cancelToken.isCancelled) return;
-                if (_part != null && _part.currentHealth > 0 && _part.HasBuff(EAttributeTriggerPointType.ACTION_OVER))
-                    _part.TriggerBuff(EAttributeTriggerPointType.ACTION_OVER);
+                if (_part != null && _part.currentHealth > 0)
+                {
+                    _part.partLogic?.OnPartActionOver();
+                    if (_part.HasBuff(EAttributeTriggerPointType.ACTION_OVER))
+                        _part.TriggerBuff(EAttributeTriggerPointType.ACTION_OVER);
+                }
                 SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_END, _part);
                 ExecuteNext(_isPlayer);
             });

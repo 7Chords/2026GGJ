@@ -79,7 +79,8 @@ namespace GameCore.Battle
                     break;
                 case EBuffType.BREEDING_MASS:
                     {
-                        _buffInfo.onPartActionOver += () => GermMassBuffEffects.RunBreedingMassAfterPartAction(_buffInfo);
+                        // Matches buff ref TURN_OVER: end of owning side's turn (+10 or kill at 0).
+                        _buffInfo.onTurnOver += () => GermMassBuffEffects.RunBreedingMassOnTurnOver(_buffInfo);
                     }
                     break;
                 case EBuffType.HEAL_MASS:

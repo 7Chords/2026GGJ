@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using GameCore;
 using SCFrame;
 using UnityEngine;
 
@@ -30,6 +32,10 @@ namespace GameCore.Battle
             }
         }
 
+        /// <summary>
+        /// Same per-grid split as normal ATTACK: total damage = stack layers over curEffectFacePosList;
+        /// empty opposing cells damage body, occupied cells damage parts and apply mold to those parts.
+        /// </summary>
         public static void RunAttackMassEffect(BuffInfo buff)
         {
             if (buff?.owner == null) return;
@@ -37,24 +43,48 @@ namespace GameCore.Battle
             if (ctx == null) return;
             var owner = buff.owner;
             if (!owner.isOnFace || buff.buffLayer <= 0) return;
-            int dmg = buff.buffLayer;
+            float totalDamage = buff.buffLayer;
             int moldExtra = Mathf.RoundToInt(buff.buffValue);
             if (moldExtra <= 0) moldExtra = 2;
-            var enemyGrid = owner.isEnemyPart
+            if (owner.curEffectFacePosList == null || owner.curEffectFacePosList.Count == 0) return;
+
+            float perGridDamage = totalDamage / owner.curEffectFacePosList.Count;
+            int emptyGridNum = 0;
+            var partOccupyGridNumDic = new Dictionary<PartInfo, int>();
+
+            var gridInfoList = owner.isEnemyPart
                 ? GameModel.instance.playerFaceGridInfoList
                 : GameModel.instance.enemyFaceGridInfoList;
-            var targets = GameModel.CollectPartsInEffectArea(owner, enemyGrid);
-            for (int i = 0; i < targets.Count; i++)
+
+            foreach (var pos in owner.curEffectFacePosList)
             {
-                var p = targets[i];
-                if (p == null || p.currentHealth <= 0) continue;
-                if (p.isEnemyPart == owner.isEnemyPart) continue;
-                ctx.ApplyDamageToPart(p, owner, dmg);
-                ctx.ApplyBuffToPart(p, owner, GameConst.BUFF_ID_MOLD, moldExtra);
+                var gridInfo = gridInfoList?.Find(x => x.pos == pos);
+                if (gridInfo == null) continue;
+
+                if (gridInfo.ownerPart == null)
+                    emptyGridNum++;
+                else
+                {
+                    if (!partOccupyGridNumDic.ContainsKey(gridInfo.ownerPart))
+                        partOccupyGridNumDic[gridInfo.ownerPart] = 1;
+                    else
+                        partOccupyGridNumDic[gridInfo.ownerPart]++;
+                }
+            }
+
+            if (owner.isEnemyPart)
+                ctx.ApplyDamageToPlayer(Mathf.RoundToInt(perGridDamage * emptyGridNum));
+            else
+                ctx.ApplyDamageToEnemy(Mathf.RoundToInt(perGridDamage * emptyGridNum));
+
+            foreach (var pair in partOccupyGridNumDic)
+            {
+                ctx.ApplyDamageToPart(pair.Key, owner, Mathf.RoundToInt(pair.Value * perGridDamage));
+                ctx.ApplyBuffToPart(pair.Key, owner, GameConst.BUFF_ID_MOLD, moldExtra);
             }
         }
 
-        public static void RunBreedingMassAfterPartAction(BuffInfo buff)
+        public static void RunBreedingMassOnTurnOver(BuffInfo buff)
         {
             if (buff?.owner == null) return;
             var ctx = BattleContext.current;
@@ -114,7 +144,7 @@ namespace GameCore.Battle
         }
 
         /// <summary>
-        /// Among heal vs attack stacks, run GET_EFFECT-like logic for the side with higher layers (both if tied).
+        /// Non-breeding only: higher stack wins; tie runs both (matches buff copy: 最高 / 并列).
         /// </summary>
         public static void RunTriggerMaxMassNonBreeding(PartInfo owner)
         {
