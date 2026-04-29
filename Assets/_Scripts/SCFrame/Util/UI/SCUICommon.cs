@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameCore.Helpers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -53,6 +54,12 @@ namespace SCFrame
         {
             if (txt == null)
                 return;
+            if (PartHealthDisplay.UseInfiniteHpDisplay(maxHp))
+            {
+                txt.supportRichText = false;
+                txt.text = PartHealthDisplay.MaxHpDisplayText;
+                return;
+            }
 
             string maxPart = maxHp.ToString();
             string sep = "/";

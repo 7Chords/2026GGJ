@@ -1,5 +1,6 @@
 using DG.Tweening;
 using GameCore;
+using GameCore.Helpers;
 using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
@@ -62,7 +63,7 @@ namespace GameCore.UI
             if (_m_partInfo == null)
                 return;
             mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
-            mono.txtHealth.text = _m_partInfo.maxHealth.ToString();
+            mono.txtHealth.text = PartHealthDisplay.FormatMaxOnly(_m_partInfo.maxHealth);
             GoodsRefObj goodsRefObj = SCRefDataMgr.instance.goodsRefList.refDataList.Find(x => x.partId == _m_partInfo.levelRefObj.id);
             if(goodsRefObj!=null)
                 mono.txtValue.text = (goodsRefObj.goodsPrice / 2).ToString();
@@ -106,7 +107,7 @@ namespace GameCore.UI
             var bag = GameModel.instance.playerInfo.bagPartInfoList;
             if (bag == null || bag.Count <= 1)
             {
-                GameCommon.ShowPopTip("至少需要拥有一个部位", Vector2.zero);
+                GameCommon.ShowPopTip("?????????????????", Vector2.zero);
                 return;
             }
             AudioMgr.instance.PlaySfx("sfx_money");

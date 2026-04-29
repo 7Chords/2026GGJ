@@ -1,4 +1,5 @@
 using DG.Tweening;
+using GameCore.Helpers;
 using SCFrame;
 using SCFrame.UI;
 using System;
@@ -58,9 +59,9 @@ namespace GameCore.UI
                 return;
             mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
             if(!mono.isTxtHealthIsRunningInfo)
-                mono.txtHealth.text =_m_partInfo.maxHealth.ToString();
+                mono.txtHealth.text = PartHealthDisplay.FormatMaxOnly(_m_partInfo.maxHealth);
             else
-                mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.maxHealth;
+                mono.txtHealth.text = PartHealthDisplay.FormatSlashLine(_m_partInfo.currentHealth, _m_partInfo.maxHealth);
 
         }
 

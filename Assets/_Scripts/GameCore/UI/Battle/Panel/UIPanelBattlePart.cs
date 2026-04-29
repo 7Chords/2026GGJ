@@ -1,5 +1,6 @@
 using DG.Tweening;
 using GameCore;
+using GameCore.Helpers;
 using SCFrame;
 using SCFrame.UI;
 using System;
@@ -148,7 +149,7 @@ namespace GameCore.UI
             mono.imgGO.SetNativeSize();
             mono.imgPart.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partPlayerGameObjectName);
             mono.imgPart.SetNativeSize();
-            mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.maxHealth;
+            mono.txtHealth.text = PartHealthDisplay.FormatSlashLine(_m_partInfo.currentHealth, _m_partInfo.maxHealth);
 
             if(_m_partInfo.isEnemyPart)
                 mono.txtOrder.text = GameModel.instance.GetEnemyBattleOrderByPartInfo(_m_partInfo).ToString();
@@ -242,7 +243,8 @@ namespace GameCore.UI
                 _m_tweenContainer.RegDoTween(GetGameObject().transform.DOShakePosition(mono.hurtShakeDuration, mono.hurtShakeStrength));
                 playHurtRedFlash();
                 ParticleMgr.instance.PlayOneShot("vfx_blood", GetGameObject().GetRectTransform(), Vector2.zero, 1f, true);
-                mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.maxHealth;
+                if (!PartHealthDisplay.UseInfiniteHpDisplay(_m_partInfo.maxHealth))
+                    mono.txtHealth.text = PartHealthDisplay.FormatSlashLine(_m_partInfo.currentHealth, _m_partInfo.maxHealth);
                 GameCommon.ShowDamageFloatText(amount, GetGameObject().transform.position);
 
             }
@@ -288,7 +290,8 @@ namespace GameCore.UI
             int amount = (int)_objs[1];
             if (_m_partInfo == info)
             {
-                mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.maxHealth;
+                if (!PartHealthDisplay.UseInfiniteHpDisplay(_m_partInfo.maxHealth))
+                    mono.txtHealth.text = PartHealthDisplay.FormatSlashLine(_m_partInfo.currentHealth, _m_partInfo.maxHealth);
                 GameCommon.ShowHealFloatText(amount, GetGameObject().transform.position);
             }
         }

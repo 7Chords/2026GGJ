@@ -1,5 +1,6 @@
 using DG.Tweening;
 using GameCore.Battle;
+using GameCore.Helpers;
 using SCFrame;
 using SCFrame.UI;
 using System;
@@ -242,13 +243,19 @@ namespace GameCore.UI
         {
             if (_m_partInfo == null || mono.txtHealth == null)
                 return;
+            if (PartHealthDisplay.UseInfiniteHpDisplay(_m_partInfo.maxHealth))
+            {
+                mono.txtHealth.supportRichText = false;
+                mono.txtHealth.text = PartHealthDisplay.MaxHpDisplayText;
+                return;
+            }
             if (_m_healthPreviewActive && (_m_previewDamageAmt > 0 || _m_previewHealAmt > 0))
                 SCUICommon.ApplyHealthLinePreview(mono.txtHealth, mono.previewDamageColor, mono.previewHealColor,
                     _m_partInfo.currentHealth, _m_partInfo.maxHealth, _m_previewDamageAmt, _m_previewHealAmt);
             else
             {
                 mono.txtHealth.supportRichText = false;
-                mono.txtHealth.text = _m_partInfo.currentHealth + "/" + _m_partInfo.maxHealth;
+                mono.txtHealth.text = PartHealthDisplay.FormatSlashLine(_m_partInfo.currentHealth, _m_partInfo.maxHealth);
             }
         }
         private void setPreviewHighlight(bool _isHighlight)

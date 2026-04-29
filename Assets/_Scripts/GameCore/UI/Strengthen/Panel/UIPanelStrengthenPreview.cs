@@ -85,7 +85,7 @@ namespace GameCore.UI
                 switch (_quality)
                 {
                     case EQualityType.NONE:
-                        mono.txtQuality.text = "Œﬁ";
+                        mono.txtQuality.text = "ùù";
                         break;
                     case EQualityType.NORMAL:
                         mono.txtQuality.text = "∆’Õ®";
@@ -100,7 +100,7 @@ namespace GameCore.UI
             }
 
             if(mono.txtHealth!=null)
-                mono.txtHealth.text = _health.ToString();
+                mono.txtHealth.text = PartHealthDisplay.FormatMaxOnly(_health);
 
             if(mono.txtLevel!=null)
                 mono.txtLevel.text = "+" + (_level - 1).ToString();
