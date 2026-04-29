@@ -41,7 +41,7 @@ namespace GameCore
         public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_BATTLE = 0.2f;
 
         /// <summary> 伤害飘字（damagenum）与效果飘字（effect text）队列中，两条之间的间隔（秒）。 </summary>
-        public const float UIFLYOUT_STAGGER_INTERVAL = 0.12f;
+        public const float UIFLYOUT_STAGGER_INTERVAL = 0.5f;
 
         #endregion
 

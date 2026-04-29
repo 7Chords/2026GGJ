@@ -18,55 +18,65 @@ namespace GameCore
         private static GameObject _m_toolTipCache;
         private static GameObject _m_introTipCache;
         /// <summary>
-        /// 展示伤害飘字
+        /// 展示伤害飘字（与效果文本在同一 <paramref name="_partFlyoutQueueKey"/> 上错峰；null 表示非部位 UI，如整体血条）
         /// </summary>
-        public static void ShowDamageFloatText(int _damage, Vector3 _worldPos)
+        public static void ShowDamageFloatText(int _damage, Vector3 _worldPos, PartInfo _partFlyoutQueueKey = null)
         {
             Vector3 w = _worldPos;
             int d = _damage;
-            UIFlyoutStaggerQueue.Enqueue(() => UIFlyoutStaggerQueue.ShowDamageFloatTextImmediate(d, w));
+            PartInfo key = _partFlyoutQueueKey;
+            UIFlyoutStaggerQueue.Enqueue(key, () => UIFlyoutStaggerQueue.ShowDamageFloatTextImmediate(d, w));
         }
         /// <summary>
         /// 展示伤害飘字
         /// </summary>
-        public static void ShowDamageFloatText(int _damage, Vector2 _screenPos)
+        public static void ShowDamageFloatText(int _damage, Vector2 _screenPos, PartInfo _partFlyoutQueueKey = null)
         {
             Vector2 s = _screenPos;
             int d = _damage;
-            UIFlyoutStaggerQueue.Enqueue(() => UIFlyoutStaggerQueue.ShowDamageFloatTextImmediate(d, s));
+            PartInfo key = _partFlyoutQueueKey;
+            UIFlyoutStaggerQueue.Enqueue(key, () => UIFlyoutStaggerQueue.ShowDamageFloatTextImmediate(d, s));
         }
         /// <summary>
         /// 展示伤害飘字
         /// </summary>
-        public static void ShowDamageFloatText(int _damage, Transform _anchor)
+        public static void ShowDamageFloatText(int _damage, Transform _anchor, PartInfo _partFlyoutQueueKey = null)
         {
             Transform a = _anchor;
             int d = _damage;
-            UIFlyoutStaggerQueue.Enqueue(() => UIFlyoutStaggerQueue.ShowDamageFloatTextImmediate(d, a));
+            PartInfo key = _partFlyoutQueueKey;
+            UIFlyoutStaggerQueue.Enqueue(key, () => UIFlyoutStaggerQueue.ShowDamageFloatTextImmediate(d, a));
+        }
+        /// <summary>
+        /// 展示治疗量飘字（与同部位伤害/效果文本共用错峰队列）
+        /// </summary>
+        public static void ShowHealFloatText(int _healAmount, Vector3 _worldPos, PartInfo _partFlyoutQueueKey = null)
+        {
+            int h = _healAmount;
+            Vector3 w = _worldPos;
+            PartInfo key = _partFlyoutQueueKey;
+            UIFlyoutStaggerQueue.Enqueue(key, () => UIFlyoutStaggerQueue.ShowHealFloatTextImmediate(h, w));
         }
         /// <summary>
         /// 展示治疗量飘字
         /// </summary>
-        public static void ShowHealFloatText(int _healAmount, Vector3 _worldPos)
+        public static void ShowHealFloatText(int _healAmount, Vector2 _screenPos, PartInfo _partFlyoutQueueKey = null)
         {
-            UIFlyoutStaggerQueue.ShowHealFloatTextImmediate(_healAmount, _worldPos);
-        }
-        /// <summary>
-        /// 展示治疗量飘字
-        /// </summary>
-        public static void ShowHealFloatText(int _healAmount, Vector2 _screenPos)
-        {
-            UIFlyoutStaggerQueue.ShowHealFloatTextImmediate(_healAmount, _screenPos);
+            int h = _healAmount;
+            Vector2 s = _screenPos;
+            PartInfo key = _partFlyoutQueueKey;
+            UIFlyoutStaggerQueue.Enqueue(key, () => UIFlyoutStaggerQueue.ShowHealFloatTextImmediate(h, s));
         }
 
         /// <summary>
-        /// 展示效果文本（与伤害飘字共用间隔队列，见 <see cref="UIFlyoutStaggerQueue"/>）
+        /// 展示效果文本（与同部位的 <see cref="ShowDamageFloatText"/> 共用错峰队列，见 <see cref="UIFlyoutStaggerQueue"/>）
         /// </summary>
-        public static void ShowEffectText(string _content, Vector3 _worldPos)
+        public static void ShowEffectText(string _content, Vector3 _worldPos, PartInfo _partFlyoutQueueKey = null)
         {
             string c = _content;
             Vector3 w = _worldPos;
-            UIFlyoutStaggerQueue.Enqueue(() => UIFlyoutStaggerQueue.ShowEffectTextImmediate(c, w));
+            PartInfo key = _partFlyoutQueueKey;
+            UIFlyoutStaggerQueue.Enqueue(key, () => UIFlyoutStaggerQueue.ShowEffectTextImmediate(c, w));
         }
 
         public static void ShowTooltip(string _name, string _desc, Vector3 _worldPos, EQualityType _qualityType = EQualityType.NONE)

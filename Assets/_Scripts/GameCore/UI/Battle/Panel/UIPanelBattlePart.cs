@@ -245,7 +245,7 @@ namespace GameCore.UI
                 ParticleMgr.instance.PlayOneShot("vfx_blood", GetGameObject().GetRectTransform(), Vector2.zero, 1f, true);
                 if (!PartHealthDisplay.UseInfiniteHpDisplay(_m_partInfo.maxHealth))
                     mono.txtHealth.text = PartHealthDisplay.FormatSlashLine(_m_partInfo.currentHealth, _m_partInfo.maxHealth);
-                GameCommon.ShowDamageFloatText(amount, GetGameObject().transform.position);
+                GameCommon.ShowDamageFloatText(amount, GetGameObject().transform.position, _m_partInfo);
 
             }
         }
@@ -292,7 +292,7 @@ namespace GameCore.UI
             {
                 if (!PartHealthDisplay.UseInfiniteHpDisplay(_m_partInfo.maxHealth))
                     mono.txtHealth.text = PartHealthDisplay.FormatSlashLine(_m_partInfo.currentHealth, _m_partInfo.maxHealth);
-                GameCommon.ShowHealFloatText(amount, GetGameObject().transform.position);
+                GameCommon.ShowHealFloatText(amount, GetGameObject().transform.position, _m_partInfo);
             }
         }
         private void onPartActiveStart(object[] _objs)
@@ -302,7 +302,7 @@ namespace GameCore.UI
             PartInfo info = _objs[0] as PartInfo;
             if (_m_partInfo == info)
             {
-                GameCommon.ShowEffectText("行动", GetGameObject().transform.position);
+                GameCommon.ShowEffectText("行动", GetGameObject().transform.position, _m_partInfo);
                 Tween tween = GetGameObject().transform.DOScale(mono.activeScale, mono.scaleChgDuration);
                 _m_tweenContainer?.RegDoTween(tween);
             }
@@ -316,7 +316,7 @@ namespace GameCore.UI
             PartInfo info = _objs[0] as PartInfo;
             if (_m_partInfo == info)
             {
-                GameCommon.ShowEffectText(_m_partInfo.partRefObj.triggerSuccessTip, GetGameObject().transform.position);
+                GameCommon.ShowEffectText(_m_partInfo.partRefObj.triggerSuccessTip, GetGameObject().transform.position, _m_partInfo);
                 var refObj = _m_partInfo.partRefObj;
                 if (refObj != null)
                 {
@@ -358,7 +358,7 @@ namespace GameCore.UI
             PartInfo info = _objs[0] as PartInfo;
             if (_m_partInfo == info)
             {
-                GameCommon.ShowEffectText(_m_partInfo.partRefObj.triggerFailTip, GetGameObject().transform.position);
+                GameCommon.ShowEffectText(_m_partInfo.partRefObj.triggerFailTip, GetGameObject().transform.position, _m_partInfo);
             }
 
         }
@@ -372,7 +372,7 @@ namespace GameCore.UI
             if (_m_partInfo == info)
             {
 
-                GameCommon.ShowEffectText(casterInfo.partRefObj.triggerEffectTip, GetGameObject().transform.position);
+                GameCommon.ShowEffectText(casterInfo.partRefObj.triggerEffectTip, GetGameObject().transform.position, _m_partInfo);
             }
         }
         private void onPartActiveEnd(object[] _objs)

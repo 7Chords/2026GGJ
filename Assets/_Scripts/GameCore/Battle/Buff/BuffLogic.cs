@@ -196,7 +196,9 @@ namespace GameCore.Battle
         public void TriggerPartBuff(EAttributeTriggerPointType _triggerPointType)
         {
             List<BuffInfo> removeBuffList = new List<BuffInfo>();
-            foreach (var buffInfo in buffList)
+            // 回调里可能增删 buff，不能边遍历边改 buffList
+            List<BuffInfo> snapshot = new List<BuffInfo>(buffList);
+            foreach (var buffInfo in snapshot)
             {
                 if (buffInfo == null || buffInfo.buffRefObj == null)
                     continue;
