@@ -1,5 +1,6 @@
 using GameCore;
 using GameCore.RefData;
+using GameCore.UI;
 using SCFrame;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,7 @@ namespace GameCore.RuntimeDebug
         private Vector2 _scroll;
         private string _cheatAddPartIdText = "101001";
         private string _cheatAddPartLevelText = "1";
+        private string _cheatJumpFloorText = "1";
 
         public static void AttachIfNeeded(GameObject host)
         {
@@ -117,6 +119,18 @@ namespace GameCore.RuntimeDebug
             if (GUILayout.Button("添加部位到手牌"))
             {
                 CheatAddPartToPlayerHand(_cheatAddPartIdText, _cheatAddPartLevelText);
+                NotifyUiRefresh();
+            }
+
+            GUILayout.Space(6f);
+            GUILayout.Label("跳转地图层数（按 map 配表 floor 钳位）");
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("层", GUILayout.Width(22f));
+            _cheatJumpFloorText = GUILayout.TextField(_cheatJumpFloorText, GUILayout.MinWidth(60f));
+            GUILayout.EndHorizontal();
+            if (GUILayout.Button("跳转到该层并重置地图"))
+            {
+                CheatJumpToFloor(_cheatJumpFloorText);
                 NotifyUiRefresh();
             }
 
@@ -235,6 +249,68 @@ namespace GameCore.RuntimeDebug
             if (gm?.playerInfo == null || amount <= 0)
                 return;
             gm.playerInfo.playerMoney += amount;
+        }
+
+        private static void CheatJumpToFloor(string floorText)
+        {
+            var gm = GameModel.instance;
+            if (gm?.playerInfo == null)
+            {
+                Debug.LogWarning("[Cheat] No player.");
+                return;
+            }
+
+            if (!int.TryParse(floorText != null ? floorText.Trim() : string.Empty, out int target) || target < 1)
+            {
+                Debug.LogWarning("[Cheat] Invalid floor (need integer >= 1).");
+                return;
+            }
+
+            var mapRows = SCRefDataMgr.instance?.mapRefList?.refDataList;
+            if (mapRows != null && mapRows.Count > 0)
+            {
+                int minF = int.MaxValue;
+                int maxF = int.MinValue;
+                for (int i = 0; i < mapRows.Count; i++)
+                {
+                    var row = mapRows[i];
+                    if (row == null)
+                        continue;
+                    if (row.floor < minF) minF = row.floor;
+                    if (row.floor > maxF) maxF = row.floor;
+                }
+                if (maxF >= minF)
+                    target = Mathf.Clamp(target, minF, maxF);
+            }
+
+            int before = gm.playerInfo.playerFloor;
+            gm.playerInfo.playerFloor = target;
+            gm.playerInfo.playerMapPosition = new Vector2Int(-1, -1);
+            gm.playerInfo.ClearPendingMapMove();
+            gm.ClearPendingRunMapLayoutSeed();
+
+            if (MapManager.instance != null)
+            {
+                MapManager.instance.ClearCurrentMapNodes();
+                MapManager.instance.ClearPendingLayout();
+                MapManager.instance.SetLastMapLayoutSeed(-1);
+            }
+
+            var gen = MapGenerator.GetOrFind();
+            var mapMono = Object.FindObjectOfType<UIMonoMap>();
+            RectTransform mapContent = mapMono != null && mapMono.scrollView != null ? mapMono.scrollView.content : null;
+
+            if (gen != null && mapContent != null)
+            {
+                gen.GenerateMapDataOnly(null);
+                gen.SpawnMapVisuals(mapContent);
+            }
+            else
+            {
+                GameRunSave.SaveFromGameModel();
+            }
+
+            Debug.Log($"[Cheat] Jump floor {before} -> {target}.");
         }
 
         private static void CheatFullAllPlayerPartsHp()
