@@ -1,4 +1,5 @@
 using GameCore;
+using GameCore.Battle;
 using SCFrame;
 using SCFrame.UI;
 using System;
@@ -99,6 +100,8 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
+            onClearPreview();
+
             SCMsgCenter.UnregisterMsg(SCMsgConst.PLACE_PART_SUCCESS, onPlacePartSuccess);
             SCMsgCenter.UnregisterMsg(SCMsgConst.REPLACE_PART_POS_SUCCESS, onReplacePartPosSuccess);
             SCMsgCenter.UnregisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onReplacePartPosFail);
@@ -128,6 +131,8 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            onClearPreview();
+
             SCMsgCenter.RegisterMsg(SCMsgConst.PLACE_PART_SUCCESS, onPlacePartSuccess);
             SCMsgCenter.RegisterMsg(SCMsgConst.REPLACE_PART_POS_SUCCESS, onReplacePartPosSuccess);
             SCMsgCenter.RegisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onReplacePartPosFail);
@@ -157,10 +162,20 @@ namespace GameCore.UI
             }
         }
 
+        /// <summary> 放置成功后拖放预览格、目标高亮与数值预览需立刻清掉，否则会残留到进战再返回。 </summary>
+        private void clearPlacementPreviewUi()
+        {
+            onClearPreview();
+            SCMsgCenter.SendMsg(SCMsgConst.FACE_PART_TARTGET_PREVIEW_CANCEL);
+            PlacementPreviewHelper.BroadcastClear();
+        }
+
         private void onPlacePartSuccess(object[] _objs)
         {
             if (_objs == null || _objs.Length < 3)
                 return;
+            clearPlacementPreviewUi();
+
             PartInfo partInfo = _objs[0] as PartInfo;
             List<Vector2Int> occupyPosList = _objs[1] as List<Vector2Int>;
             List<Vector2Int> effectPosList = _objs[2] as List<Vector2Int>;
@@ -204,6 +219,8 @@ namespace GameCore.UI
         {
             if (_objs == null || _objs.Length < 3)
                 return;
+            clearPlacementPreviewUi();
+
             UIPanelPlayerFacePart panel = _objs[0] as UIPanelPlayerFacePart;
             List<Vector2Int> occupyPosList = _objs[1] as List<Vector2Int>;
             List<Vector2Int> effectPosList = _objs[2] as List<Vector2Int>;
@@ -285,8 +302,10 @@ namespace GameCore.UI
         }
         private void onClearPreview()
         {
+            if (_m_gridPanelList == null)
+                return;
             foreach (var gridPanel in _m_gridPanelList)
-                gridPanel.SetNoPreview();
+                gridPanel?.SetNoPreview();
         }
         private void onFacePartRangeHighlight(object[] _objs)
         {

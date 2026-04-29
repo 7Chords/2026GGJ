@@ -54,6 +54,8 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
+            onClearPreview();
+
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.NEW_GANE_START, onNewGameStart);
             SCMsgCenter.UnregisterMsg(SCMsgConst.ENEMY_FACE_PART_RANGE_HIGHLIGHT, onEnemyFacePartRangeHighlight);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.CLEAR_ENEMY_PREVIEW, onClearPreview);
@@ -82,6 +84,8 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            onClearPreview();
+
             SCMsgCenter.RegisterMsgAct(SCMsgConst.NEW_GANE_START, onNewGameStart);
             SCMsgCenter.RegisterMsg(SCMsgConst.ENEMY_FACE_PART_RANGE_HIGHLIGHT, onEnemyFacePartRangeHighlight);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.CLEAR_ENEMY_PREVIEW, onClearPreview);
@@ -275,8 +279,10 @@ namespace GameCore.UI
         }
         private void onClearPreview()
         {
+            if (_m_gridPanelList == null)
+                return;
             foreach (var gridPanel in _m_gridPanelList)
-                gridPanel.SetNoPreview();
+                gridPanel?.SetNoPreview();
         }
         private void onNewGameStart()
         {
