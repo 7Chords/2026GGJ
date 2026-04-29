@@ -8,7 +8,7 @@ using UnityEngine;
 namespace GameCore
 {
     /// <summary>
-    /// 飘字 / PopTip 入队，按 <see cref="GameConst.UIFLYOUT_STAGGER_INTERVAL"/> 间隔依次播放，避免同一帧内全部叠在一起。
+    /// 仅 <c>prefab_damage_num</c>（伤害飘字）与 <c>prefab_effect_text</c> 入队，按 <see cref="GameConst.UIFLYOUT_STAGGER_INTERVAL"/> 间隔依次出现；PopTip / 治疗飘字不经过此队列。
     /// </summary>
     public static class UIFlyoutStaggerQueue
     {
@@ -109,30 +109,15 @@ namespace GameCore
             damageGO.GetComponent<DamageFloatText>().Initialize(healAmount, false);
         }
 
-        public static void ShowPopTipImmediate(string content, Vector3 worldPos)
+        public static void ShowEffectTextImmediate(string content, Vector3 worldPos)
         {
-            GameObject popTipGo = ResourcesHelper.LoadGameObject(
-                GameConst.PREFAB_POP_TIP,
+            GameObject go = ResourcesHelper.LoadGameObject(
+                "prefab_effect_text",
                 SCGame.instance.topLayerRoot.transform);
-
-            Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(SCGame.instance.gameCamera, worldPos);
-            RectTransform rt = popTipGo.GetRectTransform();
-            Vector2 localPoint = SCUICommon.ScreenPointToUIPoint(rt, screenPos);
-            rt.localPosition = localPoint;
-            var popTipComp = popTipGo.GetComponent<CommonPopTip>();
-            popTipComp.Initialize(content);
-        }
-
-        public static void ShowPopTipImmediate(string content, Vector2 uiLocalPos)
-        {
-            GameObject popTipGo = ResourcesHelper.LoadGameObject(
-                GameConst.PREFAB_POP_TIP,
-                SCGame.instance.topLayerRoot.transform);
-
-            RectTransform rt = popTipGo.GetRectTransform();
-            rt.localPosition = uiLocalPos;
-            var popTipComp = popTipGo.GetComponent<CommonPopTip>();
-            popTipComp.Initialize(content);
+            go.GetRectTransform().localPosition = SCUICommon.UIWorldToUIPoint(
+                SCGame.instance.topLayerRoot.GetRectTransform(),
+                worldPos);
+            go.GetComponent<PartEffectText>().Initialize(content);
         }
 
         #endregion

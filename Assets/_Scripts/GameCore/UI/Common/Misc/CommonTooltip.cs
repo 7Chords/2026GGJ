@@ -126,13 +126,79 @@ namespace GameCore.UI
             }
         }
 
+        private static ScrollRect FindBuffSideScrollRect(GameObject sideRoot)
+        {
+            if (sideRoot == null) return null;
+            var s = sideRoot.GetComponent<ScrollRect>();
+            if (s != null) return s;
+            s = sideRoot.GetComponentInChildren<ScrollRect>(true);
+            if (s != null) return s;
+            return sideRoot.GetComponentInParent<ScrollRect>();
+        }
+
+        /// <summary> 侧栏挂在 ScrollRect 或 Content 上时，组件可能在自身/子级/父级。 </summary>
+        private BuffSideAutoScrollView FindBuffSideAutoScrollViewInHierarchy()
+        {
+            if (tranParentBuffSideInfo == null)
+                return null;
+            var v = tranParentBuffSideInfo.GetComponent<BuffSideAutoScrollView>();
+            if (v != null) return v;
+            v = tranParentBuffSideInfo.GetComponentInChildren<BuffSideAutoScrollView>(true);
+            if (v != null) return v;
+            return tranParentBuffSideInfo.GetComponentInParent<BuffSideAutoScrollView>();
+        }
+
+        private RectTransform GetBuffSideItemContentRoot()
+        {
+            if (tranParentBuffSideInfo == null)
+                return null;
+            var scroll = FindBuffSideScrollRect(tranParentBuffSideInfo);
+            if (scroll != null && scroll.content != null)
+                return scroll.content;
+            return tranParentBuffSideInfo.GetComponent<RectTransform>();
+        }
+
+        /// <summary> 有 ScrollRect 时自动挂上 <see cref="BuffSideAutoScrollView"/>，避免漏挂导致不自动滚动。 </summary>
+        private void EnsureBuffSideScrollController()
+        {
+            if (tranParentBuffSideInfo == null)
+                return;
+            if (FindBuffSideAutoScrollViewInHierarchy() != null)
+                return;
+            var scrollRect = FindBuffSideScrollRect(tranParentBuffSideInfo);
+            if (scrollRect == null)
+                return;
+            if (scrollRect.GetComponent<BuffSideAutoScrollView>() == null)
+                scrollRect.gameObject.AddComponent<BuffSideAutoScrollView>();
+        }
+
+        private void ClearBuffSideItemChildren()
+        {
+            if (tranParentBuffSideInfo == null)
+                return;
+            FindBuffSideAutoScrollViewInHierarchy()?.StopScrollTween();
+            RectTransform itemParent = GetBuffSideItemContentRoot();
+            if (itemParent == null)
+                return;
+            for (int i = itemParent.childCount - 1; i >= 0; i--)
+                SCCommon.DestoryGameObject(itemParent.GetChild(i).gameObject);
+        }
+
         private void setBuffSideItems(IList<EBuffType> buffTypes)
         {
             if (buffTypes == null || buffTypes.Count == 0 || tranParentBuffSideInfo == null)
                 return;
+            FindBuffSideAutoScrollViewInHierarchy()?.StopScrollTween();
+
+            RectTransform itemParent = GetBuffSideItemContentRoot();
+            if (itemParent == null)
+                return;
+            for (int i = itemParent.childCount - 1; i >= 0; i--)
+                SCCommon.DestoryGameObject(itemParent.GetChild(i).gameObject);
+
             for (int i = 0; i < buffTypes.Count; i++)
             {
-                GameObject sideGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_BUFF_SIDE_ITEM, tranParentBuffSideInfo.transform);
+                GameObject sideGO = ResourcesHelper.LoadGameObject(GameConst.PREFAB_BUFF_SIDE_ITEM, itemParent);
                 var sideItem = sideGO.GetComponent<CommonBuffSideItem>();
                 if (sideItem != null)
                     sideItem.Initialize(buffTypes[i]);
@@ -197,9 +263,18 @@ namespace GameCore.UI
             if (hasBuffRows)
                 setBuffTooltipRows(_partInfo.buffLogic.buffList);
             if (sideHintTypes.Count > 0)
+            {
+                EnsureBuffSideScrollController();
                 setBuffSideItems(sideHintTypes);
+            }
+            else
+                ClearBuffSideItemChildren();
+
             if (_m_tooltipRect != null && sideHintTypes.Count > 0)
+            {
                 LayoutRebuilder.ForceRebuildLayoutImmediate(_m_tooltipRect);
+                FindBuffSideAutoScrollViewInHierarchy()?.RefreshAfterItemsChanged(_m_tooltipRect);
+            }
             _m_tweenContainer.RegDoTween(canvasGroup.DOFade(1, fadeInDuratin));
         }
         #endregion

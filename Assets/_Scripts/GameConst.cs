@@ -40,7 +40,7 @@ namespace GameCore
         public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_BATTLE = 0.5f;
         public const float SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_BATTLE = 0.2f;
 
-        /// <summary> PopTip 与伤害/治疗飘字队列中，两条之间的播放间隔（秒）。 </summary>
+        /// <summary> 伤害飘字（damagenum）与效果飘字（effect text）队列中，两条之间的间隔（秒）。 </summary>
         public const float UIFLYOUT_STAGGER_INTERVAL = 0.12f;
 
         #endregion

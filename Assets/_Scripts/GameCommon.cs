@@ -49,32 +49,24 @@ namespace GameCore
         /// </summary>
         public static void ShowHealFloatText(int _healAmount, Vector3 _worldPos)
         {
-            Vector3 w = _worldPos;
-            int h = _healAmount;
-            UIFlyoutStaggerQueue.Enqueue(() => UIFlyoutStaggerQueue.ShowHealFloatTextImmediate(h, w));
+            UIFlyoutStaggerQueue.ShowHealFloatTextImmediate(_healAmount, _worldPos);
         }
         /// <summary>
         /// 展示治疗量飘字
         /// </summary>
         public static void ShowHealFloatText(int _healAmount, Vector2 _screenPos)
         {
-            Vector2 s = _screenPos;
-            int h = _healAmount;
-            UIFlyoutStaggerQueue.Enqueue(() => UIFlyoutStaggerQueue.ShowHealFloatTextImmediate(h, s));
+            UIFlyoutStaggerQueue.ShowHealFloatTextImmediate(_healAmount, _screenPos);
         }
 
         /// <summary>
-        /// 展示效果文本
+        /// 展示效果文本（与伤害飘字共用间隔队列，见 <see cref="UIFlyoutStaggerQueue"/>）
         /// </summary>
         public static void ShowEffectText(string _content, Vector3 _worldPos)
         {
-            GameObject damageGO = ResourcesHelper.LoadGameObject(
-                "prefab_effect_text",
-                SCGame.instance.topLayerRoot.transform);
-            damageGO.GetRectTransform().localPosition = SCUICommon.UIWorldToUIPoint(
-                SCGame.instance.topLayerRoot.GetRectTransform(),
-                _worldPos);
-            damageGO.GetComponent<PartEffectText>().Initialize(_content);
+            string c = _content;
+            Vector3 w = _worldPos;
+            UIFlyoutStaggerQueue.Enqueue(() => UIFlyoutStaggerQueue.ShowEffectTextImmediate(c, w));
         }
 
         public static void ShowTooltip(string _name, string _desc, Vector3 _worldPos, EQualityType _qualityType = EQualityType.NONE)
@@ -275,16 +267,28 @@ namespace GameCore
 
         public static void ShowPopTip(string _content, Vector3 _worldPos)
         {
-            string c = _content;
-            Vector3 w = _worldPos;
-            UIFlyoutStaggerQueue.Enqueue(() => UIFlyoutStaggerQueue.ShowPopTipImmediate(c, w));
+            GameObject popTipGo = ResourcesHelper.LoadGameObject(
+                GameConst.PREFAB_POP_TIP,
+                SCGame.instance.topLayerRoot.transform);
+
+            Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(SCGame.instance.gameCamera, _worldPos);
+            RectTransform rt = popTipGo.GetRectTransform();
+            Vector2 localPoint = SCUICommon.ScreenPointToUIPoint(rt, screenPos);
+            rt.localPosition = localPoint;
+            var popTipComp = popTipGo.GetComponent<CommonPopTip>();
+            popTipComp.Initialize(_content);
         }
 
         public static void ShowPopTip(string _content,Vector2 _uiLocalPos)
         {
-            string c = _content;
-            Vector2 p = _uiLocalPos;
-            UIFlyoutStaggerQueue.Enqueue(() => UIFlyoutStaggerQueue.ShowPopTipImmediate(c, p));
+            GameObject popTipGo = ResourcesHelper.LoadGameObject(
+                GameConst.PREFAB_POP_TIP,
+                SCGame.instance.topLayerRoot.transform);
+
+            RectTransform rt = popTipGo.GetRectTransform();
+            rt.localPosition = _uiLocalPos;
+            var popTipComp = popTipGo.GetComponent<CommonPopTip>();
+            popTipComp.Initialize(_content);
         }
 
         /// <summary>
