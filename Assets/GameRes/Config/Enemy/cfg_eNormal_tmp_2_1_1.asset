@@ -19,40 +19,46 @@ MonoBehaviour:
   - {x: 3, y: 6}
   turnLayouts:
   - slots:
-    - partLevelRefId: 10038
-      originFacePosition: {x: 0, y: 0}
-      rotationSteps: 0
-    - partLevelRefId: 10059
-      originFacePosition: {x: 2, y: 4}
-      rotationSteps: 2
-    - partLevelRefId: 10047
+    - partLevelRefId: 10056
       originFacePosition: {x: 0, y: 1}
       rotationSteps: 0
-    - partLevelRefId: 10068
-      originFacePosition: {x: 1, y: 2}
-      rotationSteps: 0
     - partLevelRefId: 10056
-      originFacePosition: {x: 0, y: 4}
-      rotationSteps: 0
-  - slots:
-    - partLevelRefId: 10056
-      originFacePosition: {x: 0, y: 0}
-      rotationSteps: 0
-    - partLevelRefId: 10056
-      originFacePosition: {x: 2, y: 0}
-      rotationSteps: 1
-    - partLevelRefId: 10068
-      originFacePosition: {x: 1, y: 1}
-      rotationSteps: 3
-    - partLevelRefId: 10059
       originFacePosition: {x: 2, y: 4}
       rotationSteps: 2
     - partLevelRefId: 10047
-      originFacePosition: {x: 0, y: 5}
-      rotationSteps: 0
-    - partLevelRefId: 10038
       originFacePosition: {x: 0, y: 2}
-      rotationSteps: 0
-    - partLevelRefId: 10041
-      originFacePosition: {x: 1, y: 4}
+      rotationSteps: 3
+    - partLevelRefId: 10047
+      originFacePosition: {x: 2, y: 1}
       rotationSteps: 1
+  - slots:
+    - partLevelRefId: 10071
+      originFacePosition: {x: 1, y: 2}
+      rotationSteps: 0
+    - partLevelRefId: 10068
+      originFacePosition: {x: 2, y: 1}
+      rotationSteps: 1
+    - partLevelRefId: 10068
+      originFacePosition: {x: 0, y: 2}
+      rotationSteps: 3
+    - partLevelRefId: 10071
+      originFacePosition: {x: 0, y: 0}
+      rotationSteps: 0
+    - partLevelRefId: 10071
+      originFacePosition: {x: 2, y: 4}
+      rotationSteps: 0
+    - partLevelRefId: 10059
+      originFacePosition: {x: 0, y: 5}
+      rotationSteps: 2
+    - partLevelRefId: 10059
+      originFacePosition: {x: 2, y: 0}
+      rotationSteps: 3
+    - partLevelRefId: 10059
+      originFacePosition: {x: 1, y: 5}
+      rotationSteps: 0
+    - partLevelRefId: 10059
+      originFacePosition: {x: 2, y: 6}
+      rotationSteps: 0
+    - partLevelRefId: 10062
+      originFacePosition: {x: 1, y: 6}
+      rotationSteps: 0
