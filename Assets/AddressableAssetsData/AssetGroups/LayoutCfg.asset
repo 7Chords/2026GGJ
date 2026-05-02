@@ -53,7 +53,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 264522d65dd8e1d4f80bd2b80f44fecb
-    m_Address: cfg_eNormal_tmp_1_8_1
+    m_Address: cfg_eNormal_tmp_1_7_2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -89,6 +89,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d0243991d413a4043916344754665b71
     m_Address: cfg_eNormal_tmp_2_6_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f3a797c2dc7ed3446addcee243012f05
+    m_Address: cfg_eNormal_tmp_2_7_1
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
