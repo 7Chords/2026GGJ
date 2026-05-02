@@ -24,12 +24,16 @@ namespace GameCore.UI
         public Text txtHealth;
         [Header("金钱文本")]
         public Text txtCoin;
-        [Header("战斗先后手文本")]
-        public Text txtBattleOrder;
+        [Header("是玩家先手显示的物体列表")]
+        public List<GameObject> goIsPlayerFirstShowList;
+        [Header("是敌人先手显示的物体列表")]
+        public List<GameObject> goIsEnemyFirstShowList;
         [Header("敌人生命值bar")]
         public Image imgEnemyHealthBar;
         [Header("敌人生命值文本")]
         public Text txtEnemyHealth;
+        [Header("敌人生命值图片")]
+        public Image imgEnemyHealth;
         [Header("设置按钮")]
         public Button btnSetting;
         [Header("教程按钮")]

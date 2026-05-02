@@ -4,6 +4,7 @@ using GameCore.Battle;
 using SCFrame;
 using SCFrame.UI;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -19,6 +20,9 @@ namespace GameCore.UI
         private bool _m_entityHealthPreviewActive;
         private int _m_previewDmgPlayerBody;
         private int _m_previewDmgEnemyBody;
+
+        static readonly int LiquidFillId = Shader.PropertyToID("_Fill");
+
         public UIPanelMaskCombine(UIMonoMaskCombine _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
@@ -123,19 +127,23 @@ namespace GameCore.UI
                 applyEntityHealthPreview();
             else
                 refreshShowPlain();
+            refreshBattleOrderObjects();
         }
 
         private void refreshShowPlain()
         {
             mono.imgHealthBar.fillAmount = (float)GameModel.instance.playerInfo.currentHealth / GameModel.instance.playerInfo.maxHealth;
             mono.txtHealth.text = GameModel.instance.playerInfo.currentHealth + "/" + GameModel.instance.playerInfo.maxHealth;
-            mono.txtBattleOrder.text = GameModel.instance.curTurnOwner == ETurnOwnerType.PLAYER ? "我方先手" : "敌方先手";
             mono.txtCoin.text = GameModel.instance.playerInfo.playerMoney.ToString();
             refreshBusyCountText();
             if (GameModel.instance.curEnemyInfo != null)
             {
-                mono.imgEnemyHealthBar.fillAmount = (float)GameModel.instance.curEnemyInfo.currentHealth / GameModel.instance.curEnemyInfo.maxHealth;
-                mono.txtEnemyHealth.text = GameModel.instance.curEnemyInfo.currentHealth + "/" + GameModel.instance.curEnemyInfo.maxHealth;
+                var e = GameModel.instance.curEnemyInfo;
+                float ratio = e.maxHealth > 0 ? (float)e.currentHealth / e.maxHealth : 0f;
+                if (mono.imgEnemyHealthBar != null)
+                    mono.imgEnemyHealthBar.fillAmount = ratio;
+                mono.txtEnemyHealth.text = e.currentHealth + "/" + e.maxHealth;
+                applyEnemyLiquidHealthFill(ratio);
             }
         }
 
@@ -169,14 +177,48 @@ namespace GameCore.UI
             if (mono.txtEnemyHealth != null)
                 SCUICommon.ApplyHealthLinePreview(mono.txtEnemyHealth, mono.previewDamageColor, mono.previewHealColor,
                     e.currentHealth, e.maxHealth, _m_previewDmgEnemyBody, 0);
-            if (mono.imgEnemyHealthBar != null && e.maxHealth > 0)
+            if (e.maxHealth > 0)
             {
                 int hpE = Mathf.Clamp(e.currentHealth - _m_previewDmgEnemyBody, 0, e.maxHealth);
-                mono.imgEnemyHealthBar.fillAmount = (float)hpE / e.maxHealth;
+                float ratio = (float)hpE / e.maxHealth;
+                if (mono.imgEnemyHealthBar != null)
+                    mono.imgEnemyHealthBar.fillAmount = ratio;
+                applyEnemyLiquidHealthFill(ratio);
             }
-            mono.txtBattleOrder.text = GameModel.instance.curTurnOwner == ETurnOwnerType.PLAYER ? "我方先手" : "敌方先手";
             mono.txtCoin.text = GameModel.instance.playerInfo.playerMoney.ToString();
             refreshBusyCountText();
+        }
+
+        /// <summary>Show player-first or enemy-first object groups by <see cref="GameModel.curTurnOwner"/>. </summary>
+        private void refreshBattleOrderObjects()
+        {
+            if (GameModel.instance == null)
+                return;
+            bool playerFirst = GameModel.instance.curTurnOwner == ETurnOwnerType.PLAYER;
+            setActiveAll(mono.goIsPlayerFirstShowList, playerFirst);
+            setActiveAll(mono.goIsEnemyFirstShowList, !playerFirst);
+        }
+
+        /// <summary> Sync <see cref="UIMonoMaskCombine.imgEnemyHealth"/> liquid shader <c>_Fill</c> with HP ratio (same as enemy bar fill). </summary>
+        private void applyEnemyLiquidHealthFill(float fill01)
+        {
+            if (mono.imgEnemyHealth == null)
+                return;
+            var mat = mono.imgEnemyHealth.material;
+            if (mat != null && mat.HasProperty(LiquidFillId))
+                mat.SetFloat(LiquidFillId, Mathf.Clamp01(fill01));
+        }
+
+        private static void setActiveAll(List<GameObject> list, bool active)
+        {
+            if (list == null)
+                return;
+            for (int i = 0; i < list.Count; i++)
+            {
+                var go = list[i];
+                if (go != null)
+                    go.SetActive(active);
+            }
         }
 
         private void onPlayerHandBusyChanged(object[] _objs)
@@ -218,7 +260,7 @@ namespace GameCore.UI
             _m_entityHealthPreviewActive = false;
             _m_previewDmgPlayerBody = 0;
             _m_previewDmgEnemyBody = 0;
-            refreshShowPlain();
+            refreshShow();
         }
 
         private void onNewBattleStart()
