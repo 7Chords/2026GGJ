@@ -68,5 +68,53 @@ namespace GameCore
             if (y < 0 || y >= currentMapNodes.GetLength(1)) return null;
             return currentMapNodes[x, y];
         }
+
+        /// <summary>
+        /// Same rules as the floating map marker: landed cell, else pending target, else first-column start fallback.
+        /// </summary>
+        public Vector2Int GetDisplayedPlayerMapGrid(out bool hasGrid)
+        {
+            hasGrid = false;
+            var p = GameModel.instance?.playerInfo;
+            if (p == null || currentMapNodes == null)
+                return new Vector2Int(-1, -1);
+
+            if (p.playerMapPosition.x >= 0)
+            {
+                hasGrid = true;
+                return p.playerMapPosition;
+            }
+
+            if (p.pendingMapTargetPosition.x >= 0)
+            {
+                hasGrid = true;
+                return p.pendingMapTargetPosition;
+            }
+
+            var grid = currentMapNodes;
+            int h = grid.GetLength(1);
+            if (h <= 0 || grid.GetLength(0) <= 0)
+                return new Vector2Int(-1, -1);
+
+            int cy = h / 2;
+            MapNode n = GetNode(0, cy);
+            if (n != null && n.isActive)
+            {
+                hasGrid = true;
+                return new Vector2Int(0, cy);
+            }
+
+            for (int j = 0; j < h; j++)
+            {
+                n = GetNode(0, j);
+                if (n != null && n.isActive)
+                {
+                    hasGrid = true;
+                    return new Vector2Int(0, j);
+                }
+            }
+
+            return new Vector2Int(-1, -1);
+        }
     }
 }

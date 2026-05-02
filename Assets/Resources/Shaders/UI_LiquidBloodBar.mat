@@ -38,8 +38,9 @@ Material:
     - _ColorMask: 15
     - _DepthAbsorb: 0.18
     - _EdgeSoftness: 0.001
-    - _Fill: 0.675
+    - _Fill: 1
     - _FillFromRight: 0
+    - _FillResponse: 0.82
     - _HighlightWidth: 0.0166
     - _LiquidOpacity: 0.58
     - _NoiseStrength: 0.0034
@@ -51,6 +52,7 @@ Material:
     - _StencilWriteMask: 255
     - _UseUIAlphaClip: 0
     - _WaveAmplitude: 0
+    - _WaveEndAttenuation: 1
     - _WaveFrequency: 2.3
     - _WaveSpeed: 0.0005
     m_Colors:

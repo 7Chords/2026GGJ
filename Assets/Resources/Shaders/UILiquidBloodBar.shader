@@ -22,6 +22,8 @@ Shader "UI/LiquidBloodBar"
 
         _NoiseStrength ("Surface Noise", Range(0,0.05)) = 0.012
 
+        _WaveEndAttenuation ("Wave Fade Near Empty Full", Range(0,1)) = 1
+
         _LiquidOpacity ("Body Opacity", Range(0.15,1)) = 0.58
         _DepthAbsorb ("Depth Darken (translucent body)", Range(0,0.45)) = 0.18
         _RimLight ("Back / edge light", Range(0,0.6)) = 0.12
@@ -120,6 +122,7 @@ Shader "UI/LiquidBloodBar"
             fixed4 _HighlightColor;
             float _HighlightWidth;
             float _NoiseStrength;
+            float _WaveEndAttenuation;
 
             float _LiquidOpacity;
             float _DepthAbsorb;
@@ -215,16 +218,20 @@ Shader "UI/LiquidBloodBar"
                 float t = _Time.y;
                 float wf = _WaveFrequency;
 
-                float n = noise1(ty * 14.0 + tx * 3.0, t * _WaveSpeed) * _NoiseStrength;
+                float fRaw = saturate(_Fill);
+                float fPlot = lerp(0.3, 0.7, fRaw);
 
-                float wobble = _WaveAmplitude * (
+                float endFade = lerp(1.0, sin(fRaw * 3.14159265), saturate(_WaveEndAttenuation));
+
+                float n = noise1(ty * 14.0 + tx * 3.0, t * _WaveSpeed) * _NoiseStrength * endFade;
+
+                float wobble = _WaveAmplitude * endFade * (
                     sin(ty * wf + t * _WaveSpeed)
                     + 0.48 * sin(ty * wf * 2.13 - t * _WaveSpeed * 0.92)
                     + 0.22 * sin(ty * wf * 4.9 + t * _WaveSpeed * 1.15)
                 ) + n;
 
-                float f = saturate(_Fill);
-                float surfaceX = saturate(f + wobble);
+                float surfaceX = saturate(fPlot + wobble);
 
                 float edge = max(_EdgeSoftness, 1e-4);
                 float liquidMask = 1.0 - smoothstep(surfaceX - edge, surfaceX + edge, tx);
@@ -245,9 +252,10 @@ Shader "UI/LiquidBloodBar"
                 blood += _BloodBright.rgb * _RimLight * rim;
 
                 float2 liqUv = float2(tx, ty);
-                float bub = bubbleLayer(liqUv, t, _BubbleDensity, _BubbleSize, _BubbleWobble);
+                float bubAtten = lerp(1.0, 0.35 + 0.65 * sin(fRaw * 3.14159265), saturate(_WaveEndAttenuation));
+                float bub = bubbleLayer(liqUv, t, _BubbleDensity, _BubbleSize, _BubbleWobble) * bubAtten;
                 bub *= liquidMask;
-                float bubSmall = bubbleLayer(liqUv * 1.73 + float2(0.13, 0.07), t * 1.13 + 2.1, _BubbleDensity * 1.45, _BubbleSize * 0.62, _BubbleWobble * 0.8);
+                float bubSmall = bubbleLayer(liqUv * 1.73 + float2(0.13, 0.07), t * 1.13 + 2.1, _BubbleDensity * 1.45, _BubbleSize * 0.62, _BubbleWobble * 0.8) * bubAtten;
                 bubSmall *= liquidMask;
                 float bubMix = saturate(bub + bubSmall * 0.65);
 

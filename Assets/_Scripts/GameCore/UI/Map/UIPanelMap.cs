@@ -15,7 +15,6 @@ namespace GameCore.UI
         {
         }
 
-        private GameObject _m_playerIconGO;
         private TweenContainer _m_tweenContainer;
 
         public override void AfterInitialize()
@@ -77,10 +76,27 @@ namespace GameCore.UI
 
         private void refreshShow()
         {
-            updatePlayerIcon();
             setPlayerInfo();
             refreshMapName();
+            RefreshAllMapNodeIcons();
             RefreshAllMapNodesCanWalk();
+        }
+
+        private void RefreshAllMapNodeIcons()
+        {
+            var grid = MapManager.instance?.currentMapNodes;
+            if (grid == null)
+                return;
+            for (int i = 0; i < grid.GetLength(0); i++)
+            {
+                for (int j = 0; j < grid.GetLength(1); j++)
+                {
+                    var node = grid[i, j];
+                    if (node == null)
+                        continue;
+                    node.RefreshMapIconDisplay();
+                }
+            }
         }
 
         /// <summary> ???????????????????????? Update?? </summary>
@@ -116,114 +132,7 @@ namespace GameCore.UI
                 ? mapRow.mapName
                 : string.Empty;
         }
-        /// <summary>
-        /// Resolve grid cell for the player marker: landed position, else pending target (not yet applied after room entry), else start column.
-        /// </summary>
-        private Vector2Int ResolvePlayerIconGrid(out bool hasAny)
-        {
-            hasAny = false;
-            var p = GameModel.instance?.playerInfo;
-            if (p == null || MapManager.instance?.currentMapNodes == null)
-                return new Vector2Int(-1, -1);
 
-            if (p.playerMapPosition.x >= 0)
-            {
-                hasAny = true;
-                return p.playerMapPosition;
-            }
-
-            if (p.pendingMapTargetPosition.x >= 0)
-            {
-                hasAny = true;
-                return p.pendingMapTargetPosition;
-            }
-
-            var grid = MapManager.instance.currentMapNodes;
-            int h = grid.GetLength(1);
-            if (h <= 0 || grid.GetLength(0) <= 0)
-                return new Vector2Int(-1, -1);
-
-            int cy = h / 2;
-            MapNode n = MapManager.instance.GetNode(0, cy);
-            if (n != null && n.isActive)
-            {
-                hasAny = true;
-                return new Vector2Int(0, cy);
-            }
-
-            for (int j = 0; j < h; j++)
-            {
-                n = MapManager.instance.GetNode(0, j);
-                if (n != null && n.isActive)
-                {
-                    hasAny = true;
-                    return new Vector2Int(0, j);
-                }
-            }
-
-            return new Vector2Int(-1, -1);
-        }
-
-        private void updatePlayerIcon()
-        {
-            if (MapManager.instance?.currentMapNodes == null)
-                return;
-
-            Vector2Int pos = ResolvePlayerIconGrid(out bool hasGrid);
-            if (!hasGrid)
-            {
-                if (_m_playerIconGO != null)
-                    _m_playerIconGO.SetActive(false);
-                return;
-            }
-
-            var targetNode = MapManager.instance.GetNode(pos.x, pos.y);
-            if (targetNode == null)
-            {
-                Debug.LogWarning(
-                    $"[UIPanelMap] ?????? ({pos.x},{pos.y}) ???????????????????????????? MapData ???????????????");
-                if (_m_playerIconGO != null)
-                    _m_playerIconGO.SetActive(false);
-                return;
-            }
-
-            if (_m_playerIconGO == null)
-            {
-                //todo:???? icon
-                _m_playerIconGO = new GameObject("PlayerIcon");
-                var img = _m_playerIconGO.AddComponent<UnityEngine.UI.Image>();
-                img.color = Color.green;
-            }
-
-            RectTransform mapContent = mono.scrollView != null ? mono.scrollView.content : null;
-            RectTransform targetRt = targetNode.GetComponent<RectTransform>();
-
-            // Inactive route cells still exist in the grid; parent under map content so the icon stays visible.
-            if (!targetNode.gameObject.activeInHierarchy && mapContent != null && targetRt != null)
-            {
-                var iconRt = _m_playerIconGO.GetComponent<RectTransform>();
-                if (iconRt == null)
-                    iconRt = _m_playerIconGO.AddComponent<RectTransform>();
-                _m_playerIconGO.transform.SetParent(mapContent, false);
-                iconRt.anchorMin = targetRt.anchorMin;
-                iconRt.anchorMax = targetRt.anchorMax;
-                iconRt.pivot = targetRt.pivot;
-                iconRt.sizeDelta = targetRt.sizeDelta;
-                iconRt.anchoredPosition = targetRt.anchoredPosition;
-                iconRt.localRotation = targetRt.localRotation;
-                _m_playerIconGO.transform.localScale = Vector3.one * 0.5f;
-            }
-            else
-            {
-                _m_playerIconGO.transform.SetParent(targetNode.transform, false);
-                _m_playerIconGO.transform.localPosition = Vector3.zero;
-                _m_playerIconGO.transform.localScale = Vector3.one * 0.5f;
-            }
-
-            _m_playerIconGO.SetActive(true);
-            _m_playerIconGO.transform.SetAsLastSibling();
-        }
-        
         private void setPlayerInfo()
         {
             mono.txtCoin.text = GameModel.instance.playerInfo.playerMoney.ToString();

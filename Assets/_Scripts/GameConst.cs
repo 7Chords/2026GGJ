@@ -28,6 +28,10 @@ namespace GameCore
         public const string MAT_UI_OUTLINE = "mat_ui_outline";
         #endregion
 
+        #region Map icons (Resources sprite names)
+        public const string SPR_ICON_NODE_PLAYER = "spr_icon_node_player";
+        #endregion
+
         #region TIP
 
         public const float TOOLTIP_SHOW_ON_LEFT_THRESHOLD = 0.5f;

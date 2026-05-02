@@ -61,6 +61,13 @@ namespace GameCore
             _uiPanel?.RefreshCanWalkState();
         }
 
+        /// <summary> Reapply room icon (including player marker sprite on current cell). </summary>
+        public void RefreshMapIconDisplay()
+        {
+            EnsurePanelCreated();
+            _uiPanel?.RefreshMapVisual();
+        }
+
         /// <summary> 根据预生成的纯数据设置变换与路线（打开地图 UI 时调用）。 </summary>
         public void ApplyFromLayout(MapCellLayoutData data)
         {

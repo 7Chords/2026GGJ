@@ -1,4 +1,5 @@
 using DG.Tweening;
+using GameCore;
 using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
@@ -79,6 +80,12 @@ namespace GameCore.UI
             SetCanWalkVisual(canMove);
         }
 
+        /// <summary> Re-run room icon + player-cell override (called when map opens or refreshes). </summary>
+        public void RefreshMapVisual()
+        {
+            RefreshShow();
+        }
+
         bool ComputeCanMoveToNode()
         {
             if (_m_mapNode == null || GameModel.instance?.playerInfo == null)
@@ -150,6 +157,16 @@ namespace GameCore.UI
                     break;
             }
 
+            if (MapManager.instance != null && mono.imgIcon != null && _m_mapNode != null)
+            {
+                Vector2Int pg = MapManager.instance.GetDisplayedPlayerMapGrid(out bool hasP);
+                if (hasP && _m_mapNode.GridPosition == pg)
+                {
+                    var spPlayer = ResourcesHelper.LoadAsset<Sprite>(GameConst.SPR_ICON_NODE_PLAYER);
+                    if (spPlayer != null)
+                        mono.imgIcon.sprite = spPlayer;
+                }
+            }
 
             RefreshCanWalkState();
         }
