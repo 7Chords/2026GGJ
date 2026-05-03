@@ -94,9 +94,9 @@ namespace GameCore.UI
         {
             if (_m_partInfo == null)
                 return;
-            mono.imgGO.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partPlayerGameObjectName);
+            mono.imgGO.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partEnemyGameObjectName);
             mono.imgGO.SetNativeSize();
-            mono.imgPart.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partPlayerGameObjectName);
+            mono.imgPart.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partEnemyGameObjectName);
             mono.imgPart.SetNativeSize();
             applyHealthLineDisplay();
             mono.txtOrder.text = GameModel.instance.GetEnemyBattleOrderByPartInfo(_m_partInfo).ToString();

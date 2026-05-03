@@ -145,9 +145,12 @@ namespace GameCore.UI
         {
             if (_m_partInfo == null)
                 return;
-            mono.imgGO.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partPlayerGameObjectName);
+            string partSpriteRes = _m_partInfo.isEnemyPart
+                ? _m_partInfo.partRefObj.partEnemyGameObjectName
+                : _m_partInfo.partRefObj.partPlayerGameObjectName;
+            mono.imgGO.sprite = ResourcesHelper.LoadAsset<Sprite>(partSpriteRes);
             mono.imgGO.SetNativeSize();
-            mono.imgPart.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partPlayerGameObjectName);
+            mono.imgPart.sprite = ResourcesHelper.LoadAsset<Sprite>(partSpriteRes);
             mono.imgPart.SetNativeSize();
             mono.txtHealth.text = PartHealthDisplay.FormatSlashLine(_m_partInfo.currentHealth, _m_partInfo.maxHealth);
 
