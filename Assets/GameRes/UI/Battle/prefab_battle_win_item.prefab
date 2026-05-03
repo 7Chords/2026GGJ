@@ -92,7 +92,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6259623164440864976
 RectTransform:
   m_ObjectHideFlags: 0
@@ -265,4 +265,4 @@ MonoBehaviour:
   txtHealth: {fileID: 6958061118933925905}
   scaleMouseEnter: 1.03
   scaleChgDuration: 0.1
-  isTxtHealthIsRunningInfo: 0
+  isTxtHealthIsRunningInfo: 1
