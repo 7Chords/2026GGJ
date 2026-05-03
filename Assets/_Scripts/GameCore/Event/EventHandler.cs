@@ -27,6 +27,18 @@ namespace GameCore
                 case EEventType.BLOOD_2_PART_LOW:
                     ExecuteBlood2Part(EEventType.BLOOD_2_PART_LOW);
                     break;
+                case EEventType.BLOOD_2_PART_EYE:
+                    ExecuteBlood2Part(EEventType.BLOOD_2_PART_EYE);
+                    break;
+                case EEventType.BLOOD_2_PART_NOSE:
+                    ExecuteBlood2Part(EEventType.BLOOD_2_PART_NOSE);
+                    break;
+                case EEventType.BLOOD_2_PART_MOUTH:
+                    ExecuteBlood2Part(EEventType.BLOOD_2_PART_MOUTH);
+                    break;
+                case EEventType.BLOOD_2_PART_SKIN:
+                    ExecuteBlood2Part(EEventType.BLOOD_2_PART_SKIN);
+                    break;
                 case EEventType.PART_2_PART_BLEED:
                 case EEventType.PART_2_PART_BURN:
                 case EEventType.PART_2_PART_NORMAL:
