@@ -58,5 +58,13 @@ namespace GameCore.UI
         [Range(0.15f, 0.55f)]
         public float triggerSuccessBounceUpPortion = 0.32f;
         public float triggerSuccessPunchScale = 0.1f;
+        [Header("是玩家部位时的颜色")]
+        public Color colorIsPlayerPart;
+        [Header("是敌人部位时的颜色")]
+        public Color colorIsEnemyPart;
+        [Header("生命值信息背景图片")]
+        public Image imgHealthBg;
+        [Header("顺序信息背景图片")]
+        public Image imgOrderBg;
     }
 }

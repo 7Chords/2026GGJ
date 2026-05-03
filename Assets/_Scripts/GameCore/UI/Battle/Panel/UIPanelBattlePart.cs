@@ -154,6 +154,12 @@ namespace GameCore.UI
             mono.imgPart.SetNativeSize();
             mono.txtHealth.text = PartHealthDisplay.FormatSlashLine(_m_partInfo.currentHealth, _m_partInfo.maxHealth);
 
+            Color infoBgColor = _m_partInfo.isEnemyPart ? mono.colorIsEnemyPart : mono.colorIsPlayerPart;
+            if (mono.imgHealthBg != null)
+                mono.imgHealthBg.color = infoBgColor;
+            if (mono.imgOrderBg != null)
+                mono.imgOrderBg.color = infoBgColor;
+
             if(_m_partInfo.isEnemyPart)
                 mono.txtOrder.text = GameModel.instance.GetEnemyBattleOrderByPartInfo(_m_partInfo).ToString();
             else
