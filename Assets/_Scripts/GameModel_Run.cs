@@ -55,6 +55,8 @@ namespace GameCore
         public bool RunTutorialBattleAutoShown { get; private set; }
         /// <summary> 本局是否已自动弹出过商店教程（每局一次，随存档）。 </summary>
         public bool RunTutorialStoreAutoShown { get; private set; }
+        /// <summary> First-time auto strengthen guide this run (persisted in run save). </summary>
+        public bool RunTutorialStrengthenAutoShown { get; private set; }
 
         public void MarkRunTutorialMapAutoShown()
         {
@@ -71,11 +73,17 @@ namespace GameCore
             RunTutorialStoreAutoShown = true;
         }
 
+        public void MarkRunTutorialStrengthenAutoShown()
+        {
+            RunTutorialStrengthenAutoShown = true;
+        }
+
         void ResetRunTutorialFlagsForNewRun()
         {
             RunTutorialMapAutoShown = false;
             RunTutorialBattleAutoShown = false;
             RunTutorialStoreAutoShown = false;
+            RunTutorialStrengthenAutoShown = false;
         }
 
         /// <summary> 读档后由 MapGenerator 在生成地图前读取；成功写入 pending 布局后清空。 </summary>
@@ -185,11 +193,13 @@ namespace GameCore
             RunTutorialMapAutoShown = data.tutorialMapAutoShown;
             RunTutorialBattleAutoShown = data.tutorialBattleAutoShown;
             RunTutorialStoreAutoShown = data.tutorialStoreAutoShown;
+            RunTutorialStrengthenAutoShown = data.tutorialStrengthenAutoShown;
             if (data.runSaveVersion < GameRunSave.CurrentRunSaveVersion)
             {
                 RunTutorialMapAutoShown = true;
                 RunTutorialBattleAutoShown = true;
                 RunTutorialStoreAutoShown = true;
+                RunTutorialStrengthenAutoShown = true;
             }
         }
 

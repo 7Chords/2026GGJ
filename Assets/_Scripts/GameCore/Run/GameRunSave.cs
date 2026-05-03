@@ -18,7 +18,7 @@ namespace GameCore
         private static bool _allowSaveAfterMapEntered;
         private static string _resolvedSavesDirectory;
 
-        public const int CurrentRunSaveVersion = 1;
+        public const int CurrentRunSaveVersion = 2;
 
         [Serializable]
         public class RunSaveData
@@ -41,6 +41,7 @@ namespace GameCore
             public bool tutorialMapAutoShown;
             public bool tutorialBattleAutoShown;
             public bool tutorialStoreAutoShown;
+            public bool tutorialStrengthenAutoShown;
         }
 
         [Serializable]
@@ -207,6 +208,7 @@ namespace GameCore
                 tutorialMapAutoShown = gm.RunTutorialMapAutoShown,
                 tutorialBattleAutoShown = gm.RunTutorialBattleAutoShown,
                 tutorialStoreAutoShown = gm.RunTutorialStoreAutoShown,
+                tutorialStrengthenAutoShown = gm.RunTutorialStrengthenAutoShown,
             };
 
             try

@@ -1,4 +1,5 @@
 using DG.Tweening;
+using GameCore;
 using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
@@ -86,6 +87,12 @@ namespace GameCore.UI
             _m_strengthenContainer?.SetListInfo(GameModel.instance.playerInfo.bagPartInfoList);
 
             refreshShow();
+            if (!GameModel.instance.RunTutorialStrengthenAutoShown)
+            {
+                GameModel.instance.MarkRunTutorialStrengthenAutoShown();
+                UICoreMgr.instance.AddNode(new UINodeGuideStrengthen(SCUIShowType.ADDITION));
+                GameRunSave.SaveFromGameModel();
+            }
         }
 
         private void onCheatDebugUiRefresh()
@@ -151,19 +158,19 @@ namespace GameCore.UI
             PartLevelRefObj levelRefObj = _m_curSelectPart.GetLevelRefObj();
             if (GameModel.instance.playerInfo.playerMoney < levelRefObj.levelUpCost)
             {
-                GameCommon.ShowPopTip("金币不足", Vector2.zero);
+                GameCommon.ShowPopTip("??????", Vector2.zero);
                 return;
             }
             if (!_m_curSelectPart.HasNextLevel())
             {
-                GameCommon.ShowPopTip("等级已达上限", Vector2.zero);
+                GameCommon.ShowPopTip("??????????", Vector2.zero);
                 return;
             }
             
             GameModel.instance.playerInfo.playerMoney = Mathf.Max(GameModel.instance.playerInfo.playerMoney - _m_curSelectPart.GetLevelRefObj().levelUpCost, 0);
             _m_curSelectPart.LevelUp();
             refreshShow();
-            GameCommon.ShowPopTip("强化成功", Vector2.zero);
+            GameCommon.ShowPopTip("??????", Vector2.zero);
         }
 
         private void onBtnConfirmMouseEnter(PointerEventData _arg1, object[] _arg2)
