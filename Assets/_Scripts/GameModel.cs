@@ -193,6 +193,10 @@ namespace GameCore
             {
                 playerInfo.deckPartInfoList[i].ResetToBag();
             }
+            for (int i = 0; i < playerInfo.busyPartInfoList.Count; i++)
+            {
+                playerInfo.busyPartInfoList[i].ResetToBag();
+            }
         }
 
         public void SetEnemyEmpty()
