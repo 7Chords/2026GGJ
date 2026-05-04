@@ -36,7 +36,7 @@ namespace GameCore.RuntimeDebug
 #if UNITY_EDITOR
             true;
 #else
-            Debug.isDebugBuild;
+            true;
 #endif
 
         private void Awake()
