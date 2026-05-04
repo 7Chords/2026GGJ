@@ -852,7 +852,7 @@ GameObject:
   - component: {fileID: 4896958350084611493}
   - component: {fileID: 3702420539617324458}
   m_Layer: 5
-  m_Name: Image
+  m_Name: img_money
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -872,11 +872,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7117087175001043415}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -495, y: -375}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 1}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 428.12097, y: -388.44678}
+  m_SizeDelta: {x: 68.8534, y: 95.0158}
+  m_Pivot: {x: 0, y: 1}
 --- !u!222 &4896958350084611493
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -905,7 +905,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1051706183, guid: bd3f289955ed25e4e86ed517b783de52, type: 3}
+  m_Sprite: {fileID: 86551606, guid: 420069e4e4607aa45a796dfac8b6a7a1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
