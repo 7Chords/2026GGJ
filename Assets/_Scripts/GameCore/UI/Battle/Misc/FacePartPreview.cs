@@ -1,4 +1,5 @@
 using GameCore.Battle;
+using GameCore.Helpers;
 using SCFrame;
 using System.Collections;
 using System.Collections.Generic;
@@ -160,6 +161,7 @@ namespace GameCore.UI
             imgGO.SetNativeSize();
             imgPart.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partPlayerGameObjectName);
             imgPart.SetNativeSize();
+            PartSpriteRaycastHelper.ApplyToPartImages(imgGO, imgPart);
 
             //?????????????
             imgGO.transform.rotation = Quaternion.Euler(0, 0, _m_partInfo.rotateStep * 90);

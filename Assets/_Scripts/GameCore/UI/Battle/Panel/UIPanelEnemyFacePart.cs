@@ -98,6 +98,7 @@ namespace GameCore.UI
             mono.imgGO.SetNativeSize();
             mono.imgPart.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partEnemyGameObjectName);
             mono.imgPart.SetNativeSize();
+            PartSpriteRaycastHelper.ApplyToPartImages(mono.imgGO, mono.imgPart);
             applyHealthLineDisplay();
             mono.txtOrder.text = GameModel.instance.GetEnemyBattleOrderByPartInfo(_m_partInfo).ToString();
 

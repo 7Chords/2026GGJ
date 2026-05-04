@@ -152,6 +152,7 @@ namespace GameCore.UI
             mono.imgGO.SetNativeSize();
             mono.imgPart.sprite = ResourcesHelper.LoadAsset<Sprite>(partSpriteRes);
             mono.imgPart.SetNativeSize();
+            PartSpriteRaycastHelper.ApplyToPartImages(mono.imgGO, mono.imgPart);
             mono.txtHealth.text = PartHealthDisplay.FormatSlashLine(_m_partInfo.currentHealth, _m_partInfo.maxHealth);
 
             Color infoBgColor = _m_partInfo.isEnemyPart ? mono.colorIsEnemyPart : mono.colorIsPlayerPart;
