@@ -6,7 +6,7 @@ Sprite:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: spr_icon_buff_MoldHeal
+  m_Name: spr_icon_buff_moldheal
   m_Rect:
     serializedVersion: 2
     x: 608.5334

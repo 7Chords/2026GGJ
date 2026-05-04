@@ -6,7 +6,7 @@ Sprite:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: spr_icon_buff_MoldPoison
+  m_Name: spr_icon_buff_moldpoison
   m_Rect:
     serializedVersion: 2
     x: 754.6667
