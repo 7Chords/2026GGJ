@@ -637,23 +637,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 18c0164f8b4efba45a0fd9c383dbebe2
-    m_Address: spr_icon_buff_MoldPoison
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7fffd1339a21d39438c2cf690034f4fc
-    m_Address: spr_icon_buff_MoldAttack
+  - m_GUID: 9f38f4bd0e7bf8f4abae763e891666a5
+    m_Address: spr_icon_buff_moldheal
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 514d048dda1420b48bc4f330b71b2940
-    m_Address: spr_icon_buff_MoldMult
+    m_Address: spr_icon_buff_moldmult
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9f38f4bd0e7bf8f4abae763e891666a5
-    m_Address: spr_icon_buff_MoldHeal
+  - m_GUID: 7fffd1339a21d39438c2cf690034f4fc
+    m_Address: spr_icon_buff_moldattack
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 18c0164f8b4efba45a0fd9c383dbebe2
+    m_Address: spr_icon_buff_moldpoison
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
