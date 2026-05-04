@@ -1,3 +1,5 @@
+using GameCore;
+using SCFrame;
 using SCFrame.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,14 +23,22 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
-            mono.btnExit.onClick.RemoveAllListeners();
+            mono.btnReturnMain.onClick.RemoveAllListeners();
         }
 
         public override void OnShowPanel()
         {
-            mono.btnExit.onClick.AddListener(() =>
+            mono.btnReturnMain.onClick.AddListener(() =>
             {
-                Application.Quit();
+                AudioMgr.instance.PlaySfx("sfx_click");
+                TVSwitchTransition.Run(() =>
+                {
+                    GameModel.instance.ResetRunForNewGame();
+                    GameRunSave.DeleteSave();
+                    MapGenerator.GetOrFind()?.GenerateMapDataOnly();
+                    UICoreMgr.instance.RemoveAllNodes(SCUINodeFuncType.BATTLE);
+                    UICoreMgr.instance.AddNode(new UINodeStart(SCUIShowType.FULL));
+                });
             });
         }
     }

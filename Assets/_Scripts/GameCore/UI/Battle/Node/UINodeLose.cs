@@ -32,7 +32,7 @@ namespace GameCore.UI
         private UIMonoLose _m_deckMono;
         public override string GetNodeName()
         {
-            return nameof(UINodeWin);
+            return nameof(UINodeLose);
         }
 
         public override string GetResName()

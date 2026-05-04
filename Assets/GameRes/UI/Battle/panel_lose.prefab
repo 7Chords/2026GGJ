@@ -503,7 +503,7 @@ MonoBehaviour:
   fadeInDuration: 0.25
   fadeOutDuration: 0.25
   btnRestart: {fileID: 6856439675525106173}
-  btnExit: {fileID: 3400506919676798737}
+  btnReturnMain: {fileID: 3400506919676798737}
 --- !u!223 &947482403089307706
 Canvas:
   m_ObjectHideFlags: 0

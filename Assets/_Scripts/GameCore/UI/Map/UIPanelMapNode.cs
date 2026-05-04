@@ -177,37 +177,37 @@ namespace GameCore.UI
             var playerPos = GameModel.instance.playerInfo.playerMapPosition;
             var targetPos = _m_mapNode.GridPosition;
 
-            //// Case A: First Move (Player not on map yet)
-            //if (playerPos.x == -1)
-            //{
-            //    if (targetPos.x != 0)
-            //    {
-            //        SCDebugHelper.Log("Must start at Layer 0!");
-            //        return;
-            //    }
-            //}
-            //// Case B: Normal Move
-            //else
-            //{
-            //    // Check Layer (Must be Next Layer)
-            //    if (targetPos.x != playerPos.x + 1)
-            //    {
-            //        SCDebugHelper.Log($"Can only move to Next Layer! Current: {playerPos.x}, Target: {targetPos.x}");
-            //        return;
-            //    }
+            // Case A: First Move (Player not on map yet)
+            if (playerPos.x == -1)
+            {
+                if (targetPos.x != 0)
+                {
+                    SCDebugHelper.Log("Must start at Layer 0!");
+                    return;
+                }
+            }
+            // Case B: Normal Move
+            else
+            {
+                // Check Layer (Must be Next Layer)
+                if (targetPos.x != playerPos.x + 1)
+                {
+                    SCDebugHelper.Log($"Can only move to Next Layer! Current: {playerPos.x}, Target: {targetPos.x}");
+                    return;
+                }
 
-            //    // Check Connection
-            //    // Find Logic: Get Previous Node and check if it connects to Target Index
-            //    var prevNode = MapManager.instance.GetNode(playerPos.x, playerPos.y);
-            //    if (prevNode != null)
-            //    {
-            //        if (!prevNode.nextLayerConnectedNodes.Contains(targetPos.y))
-            //        {
-            //            SCDebugHelper.Log("Not connected!");
-            //            return;
-            //        }
-            //    }
-            //}
+                // Check Connection
+                // Find Logic: Get Previous Node and check if it connects to Target Index
+                var prevNode = MapManager.instance.GetNode(playerPos.x, playerPos.y);
+                if (prevNode != null)
+                {
+                    if (!prevNode.nextLayerConnectedNodes.Contains(targetPos.y))
+                    {
+                        SCDebugHelper.Log("Not connected!");
+                        return;
+                    }
+                }
+            }
 
             // 2. ??????????????????????????????????????????? ApplyPendingMapMove??
             GameModel.instance.playerInfo.SetPendingMapTarget(targetPos);

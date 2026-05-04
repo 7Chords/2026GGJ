@@ -181,18 +181,20 @@ namespace GameCore.Helpers
                     }
                 case 101016:
                     {
+                        var atk = FindEntry(part, EAttributeTriggerPointType.ACTIVE, EAttributeType.ATTACK);
+                        int dmg = AttackBasePlusStrong(part, atk);
                         var e = FindEntry(part, EAttributeTriggerPointType.ACTIVE,
                             EAttributeType.CLEAR_ENEMY_BLEED_AND_HEAL_PART);
-                        int a0 = e?.attributeValueList != null && e.attributeValueList.Count > 0
+                        int maxStrip = e?.attributeValueList != null && e.attributeValueList.Count > 0
                             ? Mathf.RoundToInt(e.attributeValueList[0])
                             : 0;
-                        int a1 = e?.attributeValueList != null && e.attributeValueList.Count > 1
+                        int healUnit = e?.attributeValueList != null && e.attributeValueList.Count > 1
                             ? Mathf.RoundToInt(e.attributeValueList[1])
                             : 0;
-                        int a2 = e?.attributeValueList != null && e.attributeValueList.Count > 2
+                        int healAmt = e?.attributeValueList != null && e.attributeValueList.Count > 2
                             ? Mathf.RoundToInt(e.attributeValueList[2])
                             : 0;
-                        return new object[] { a0, a1, a2 };
+                        return new object[] { dmg, maxStrip, healUnit, healAmt };
                     }
                 case 101017:
                     {

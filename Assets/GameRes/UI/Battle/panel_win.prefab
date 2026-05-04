@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: 8568461380679321893}
   - component: {fileID: 3985249269143704480}
   m_Layer: 5
-  m_Name: btn_exit
+  m_Name: btn_returnMain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
