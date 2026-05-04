@@ -8,6 +8,6 @@ namespace GameCore.UI
 {
     public class UIMonoWin : _ASCUIMonoBase
     {
-        public Button btnExit;
+        public Button btnReturnMain;
     }
 }

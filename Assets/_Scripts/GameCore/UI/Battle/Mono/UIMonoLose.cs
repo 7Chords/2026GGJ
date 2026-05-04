@@ -9,7 +9,7 @@ namespace GameCore.UI
     public class UIMonoLose : _ASCUIMonoBase
     {
         public Button btnRestart;
-        public Button btnExit;
+        public Button btnReturnMain;
 
     }
 }
