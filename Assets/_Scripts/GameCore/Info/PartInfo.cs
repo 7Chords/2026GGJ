@@ -109,16 +109,22 @@ namespace GameCore
             localOccupyPosList = GameCommon.RotateShapeAndMove2Zero(localOccupyPosList, 1);
 
         }
+        /// <summary>
+        /// Battle order key: first occupied cell in face reading order (top-to-bottom, then left-to-right).
+        /// Not the AABB corner — independent min X / min Y can point at an empty cell inside the bbox.
+        /// </summary>
         public Vector2Int GetMinGridPos()
         {
-            int minX = int.MaxValue;
-            int minY = int.MaxValue;
-            for(int i=0;i<curOccupyFacePosList.Count;i++)
+            if (curOccupyFacePosList == null || curOccupyFacePosList.Count == 0)
+                return new Vector2Int(int.MaxValue, int.MaxValue);
+            Vector2Int best = curOccupyFacePosList[0];
+            for (int i = 1; i < curOccupyFacePosList.Count; i++)
             {
-                minX = Mathf.Min(curOccupyFacePosList[i].x, minX);
-                minY = Mathf.Min(curOccupyFacePosList[i].y, minY);
+                Vector2Int p = curOccupyFacePosList[i];
+                if (p.y < best.y || (p.y == best.y && p.x < best.x))
+                    best = p;
             }
-            return new Vector2Int(minX, minY);
+            return best;
         }
         public bool HasBuff()
         {
