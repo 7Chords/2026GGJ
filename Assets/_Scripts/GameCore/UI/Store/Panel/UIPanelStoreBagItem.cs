@@ -107,7 +107,7 @@ namespace GameCore.UI
             var bag = GameModel.instance.playerInfo.bagPartInfoList;
             if (bag == null || bag.Count <= 1)
             {
-                GameCommon.ShowPopTip("?????????????????", Vector2.zero);
+                GameCommon.ShowPopTip("你至少需要拥有一个部位", Vector2.zero);
                 return;
             }
             AudioMgr.instance.PlaySfx("sfx_money");

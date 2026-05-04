@@ -117,7 +117,6 @@ namespace GameCore.UI
                 if (mono.imgEnemyHealthBar != null && currentEnemyInfo.maxHealth > 0)
                     mono.imgEnemyHealthBar.fillAmount = (float)currentEnemyInfo.currentHealth / currentEnemyInfo.maxHealth;
             }
-            refreshIsBossShow();
         }
 
         private void onPlayerHurt(object[] _objs)
@@ -142,19 +141,6 @@ namespace GameCore.UI
             _m_tweenContainer?.RegDoTween(mono.goEnemyHealth.transform.DOShakePosition(mono.healthShakeDuration, mono.healthShakeStrength));
             _m_enemyBattleFace?.PlayBodyDamageFeedback(_m_tweenContainer);
             refreshShow();
-        }
-
-
-        private void refreshIsBossShow()
-        {
-            foreach (var cell in mono.bossShowCellList)
-            {
-                SCCommon.SetGameObjectEnable(cell.goBossShow, false);
-            }
-            if (GameModel.instance.curEnemyInfo.enemyRefObj.isBoss)
-            {
-                SCCommon.SetGameObjectEnable(mono.bossShowCellList.Find(x => x.bossType == GameModel.instance.curEnemyInfo.enemyRefObj.bossType).goBossShow, true);
-            }
         }
 
         /// <summary>
