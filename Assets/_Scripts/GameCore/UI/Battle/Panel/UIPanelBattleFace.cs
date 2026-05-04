@@ -206,6 +206,24 @@ namespace GameCore.UI
             return _m_partPanelList.Find(x => x.partInfo == _info);
         }
 
+        /// <summary> Calls <see cref="UIPanelBattlePart.HidePanel"/> on each face part that is still active (skips parts already hidden, e.g. dead). Panels are pushed to <paramref name="outPanels"/> for later <see cref="UIPanelBattlePart.ShowPanel"/>. </summary>
+        public void HideAllBattlePartItemsForDefeatFx(List<UIPanelBattlePart> outPanels)
+        {
+            if (_m_partPanelList == null || outPanels == null)
+                return;
+            for (int i = 0; i < _m_partPanelList.Count; i++)
+            {
+                UIPanelBattlePart p = _m_partPanelList[i];
+                if (p == null)
+                    continue;
+                GameObject go = p.GetGameObject();
+                if (go == null || !go.activeSelf)
+                    continue;
+                outPanels.Add(p);
+                p.HidePanel();
+            }
+        }
+
         /// <summary> Player/enemy face HP damage: shake face root, optional red flash, light extra shake on each part. </summary>
         public void PlayBodyDamageFeedback(TweenContainer _tc)
         {

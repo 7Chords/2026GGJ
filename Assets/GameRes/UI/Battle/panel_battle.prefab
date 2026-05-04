@@ -166,6 +166,9 @@ MonoBehaviour:
   girdLayoutGroup: {fileID: 7096030775589006647}
   tranParentPart: {fileID: 8947006611322938644}
   isEnemyFace: 1
+  imgFace: {fileID: 1525852729720497932}
+  defeatFaceEffectDuration: 1.15
+  defeatFaceHideImageWhenDone: 1
   faceBodyHurtShakeStrength: 20
   faceBodyHurtShakeDuration: 0.26
   faceBodyHurtFlashImage: {fileID: 0}
@@ -1622,7 +1625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 18c0906f6a0da83478be3eada60cedff, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -1727,6 +1730,9 @@ MonoBehaviour:
   girdLayoutGroup: {fileID: 629427676596701135}
   tranParentPart: {fileID: 3121195260461846949}
   isEnemyFace: 0
+  imgFace: {fileID: 6334467208276886851}
+  defeatFaceEffectDuration: 1.15
+  defeatFaceHideImageWhenDone: 1
   faceBodyHurtShakeStrength: 20
   faceBodyHurtShakeDuration: 0.26
   faceBodyHurtFlashImage: {fileID: 0}

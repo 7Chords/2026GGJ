@@ -8,21 +8,26 @@ namespace GameCore.UI
 {
     public class UIMonoBattleFace : _ASCUIMonoBase
     {
-        [Header("格子预制体名字")]
+        [Header("?????????????")]
         public string gridPrefabName;
-        [Header("列数")]
+        [Header("????")]
         public int columnCount;
-        [Header("行数")]
+        [Header("????")]
         public int rowCount;
-        [Header("禁用格子坐标列表")]
+        [Header("????????????б?")]
         public List<Vector2Int> disabledGrids;
-        [Header("格子layout")]
+        [Header("????layout")]
         public GridLayoutGroup girdLayoutGroup;
-        [Header("部位父物体")]
+        [Header("??λ??????")]
         public Transform tranParentPart;
-        [Header("是否是敌人的脸部")]
+        [Header("?????????????")]
         public bool isEnemyFace;
-
+        [Header("??????")]
+        public Image imgFace;
+        [Header("Defeat dissolve duration (seconds)")]
+        public float defeatFaceEffectDuration = 1.15f;
+        [Header("Defeat: deactivate imgFace when effect ends")]
+        public bool defeatFaceHideImageWhenDone = true;
         [Header("Body HP hurt: full face shake strength")]
         public float faceBodyHurtShakeStrength = 14f;
         [Header("Body HP hurt: full face shake duration")]

@@ -271,25 +271,36 @@ namespace GameCore
         {
             _cancelToken?.Cancel();
             BattleContext.current = null;
-            if (_isPlayerWin)
+
+            void FinishTerminateBattleUiAndState()
             {
-                GameModel.instance.CaptureEnemyWinSnapshot();
-                UICoreMgr.instance.AddNode(new UINodeBattleWin(SCUIShowType.ADDITION));
-                GameModel.instance.SetAllPlayerPart2Bag();
-                GameModel.instance.SetEnemyEmpty();
+                if (_isPlayerWin)
+                {
+                    GameModel.instance.CaptureEnemyWinSnapshot();
+                    UICoreMgr.instance.AddNode(new UINodeBattleWin(SCUIShowType.ADDITION));
+                    GameModel.instance.SetAllPlayerPart2Bag();
+                    GameModel.instance.SetEnemyEmpty();
+                }
+                else
+                {
+                    GameModel.instance.ClearEnemyWinSnapshot();
+                    GameModel.instance.playerInfo.ClearPendingMapMove();
+                    UICoreMgr.instance.AddNode(new UINodeLose(SCUIShowType.FULL));
+                    GameModel.instance.SetAllPlayerPart2Bag();
+                    GameModel.instance.SetEnemyEmpty();
+                }
+
+                _playerQueue.Start(null, null);
+                _enemyQueue.Start(null, null);
+                playerExcuteInfoList.Clear();
+                enemyExcuteInfoList.Clear();
             }
-            else
-            {
-                GameModel.instance.ClearEnemyWinSnapshot();
-                GameModel.instance.playerInfo.ClearPendingMapMove();
-                UICoreMgr.instance.AddNode(new UINodeLose(SCUIShowType.FULL));
-                GameModel.instance.SetAllPlayerPart2Bag();
-                GameModel.instance.SetEnemyEmpty();
-            }
-            _playerQueue.Start(null, null);
-            _enemyQueue.Start(null, null);
-            playerExcuteInfoList.Clear();
-            enemyExcuteInfoList.Clear();
+
+            if (UIPanelBattle.Current != null &&
+                UIPanelBattle.Current.TryRunDefeatFaceEffectThen(_isPlayerWin, FinishTerminateBattleUiAndState))
+                return;
+
+            FinishTerminateBattleUiAndState();
         }
     }
 }

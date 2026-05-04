@@ -1,7 +1,9 @@
 using SCFrame.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using GameCore.RefData;
 using GameCore;
 using GameCore.Battle;
@@ -12,16 +14,21 @@ namespace GameCore.UI
 {
     public class UIPanelBattle : _ASCUIAnimPanelBase<UIMonoBattle>
     {
+        public static UIPanelBattle Current { get; private set; }
+
         private UIPanelBattleFace _m_playerBattleFace;
         private UIPanelBattleFace _m_enemyBattleFace;
 
         private TweenContainer _m_tweenContainer;
+        Coroutine _defeatFaceEffectRoutine;
+        List<UIPanelBattlePart> _defeatHiddenPartPanels;
         public UIPanelBattle(UIMonoBattle _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
         }
 
         public override void AfterInitialize()
         {
+            Current = this;
             _m_playerBattleFace = new UIPanelBattleFace(mono.monoPlayerFace,SCUIShowType.INTERNAL);
             _m_enemyBattleFace = new UIPanelBattleFace(mono.monoEnemyFace, SCUIShowType.INTERNAL);
             _m_tweenContainer = new TweenContainer();
@@ -29,6 +36,15 @@ namespace GameCore.UI
 
         public override void BeforeDiscard()
         {
+            if (Current == this)
+                Current = null;
+            if (_defeatFaceEffectRoutine != null && mono != null)
+            {
+                mono.StopCoroutine(_defeatFaceEffectRoutine);
+                _defeatFaceEffectRoutine = null;
+            }
+
+            RestoreDefeatBattlePartItemsVisibility();
             _m_playerBattleFace?.Discard();
             _m_enemyBattleFace?.Discard();
             _m_tweenContainer?.KillAllDoTween();
@@ -139,6 +155,74 @@ namespace GameCore.UI
             {
                 SCCommon.SetGameObjectEnable(mono.bossShowCellList.Find(x => x.bossType == GameModel.instance.curEnemyInfo.enemyRefObj.bossType).goBossShow, true);
             }
+        }
+
+        /// <summary>
+        /// Plays defeat dissolve on the losing side face <see cref="UIMonoBattleFace.imgFace"/>, then invokes <paramref name="onComplete"/>.
+        /// Returns false if there is nothing to play (caller should run end flow immediately).
+        /// </summary>
+        public bool TryRunDefeatFaceEffectThen(bool playerWon, Action onComplete)
+        {
+            UIMonoBattleFace face = playerWon ? mono.monoEnemyFace : mono.monoPlayerFace;
+            if (face == null || face.imgFace == null || mono == null)
+                return false;
+
+            if (_defeatFaceEffectRoutine != null)
+            {
+                mono.StopCoroutine(_defeatFaceEffectRoutine);
+                _defeatFaceEffectRoutine = null;
+            }
+
+            RestoreDefeatBattlePartItemsVisibility();
+            UIPanelBattleFace facePanel = playerWon ? _m_enemyBattleFace : _m_playerBattleFace;
+            if (_defeatHiddenPartPanels == null)
+                _defeatHiddenPartPanels = new List<UIPanelBattlePart>();
+            else
+                _defeatHiddenPartPanels.Clear();
+
+            facePanel?.HideAllBattlePartItemsForDefeatFx(_defeatHiddenPartPanels);
+
+            float duration = Mathf.Max(0.05f, face.defeatFaceEffectDuration);
+            _defeatFaceEffectRoutine = mono.StartCoroutine(CoDefeatFaceEffect(face.imgFace, face.defeatFaceHideImageWhenDone, duration, () =>
+            {
+                _defeatFaceEffectRoutine = null;
+                RestoreDefeatBattlePartItemsVisibility();
+                onComplete?.Invoke();
+            }));
+            return true;
+        }
+
+        void RestoreDefeatBattlePartItemsVisibility()
+        {
+            if (_defeatHiddenPartPanels == null)
+                return;
+            for (int i = 0; i < _defeatHiddenPartPanels.Count; i++)
+                _defeatHiddenPartPanels[i]?.ShowPanel();
+            _defeatHiddenPartPanels.Clear();
+        }
+
+        IEnumerator CoDefeatFaceEffect(Image imgFace, bool hideWhenDone, float duration, Action onDone)
+        {
+            GameObject go = imgFace.gameObject;
+            bool wasActive = go.activeSelf;
+            go.SetActive(true);
+
+            UIDefeatFaceMaterialDriver driver = imgFace.GetComponent<UIDefeatFaceMaterialDriver>();
+            if (driver == null)
+                driver = go.AddComponent<UIDefeatFaceMaterialDriver>();
+
+            driver.Progress = 0f;
+            yield return driver.CoAnimateProgress(0f, 1f, duration, AnimationCurve.EaseInOut(0f, 0f, 1f, 1f));
+
+            driver.ResetToDefaultMaterial();
+            driver.Progress = 0f;
+
+            if (hideWhenDone)
+                go.SetActive(false);
+            else
+                go.SetActive(wasActive);
+
+            onDone?.Invoke();
         }
     }
 }
