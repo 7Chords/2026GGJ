@@ -7,12 +7,6 @@ using System;
 
 namespace GameCore.UI
 {
-    [Serializable]
-    public class BossShowCell
-    {
-        public EBossType bossType;
-        public GameObject goBossShow;
-    }
     public class UIMonoBattle : _ASCUIAnimMonoBase
     {
         [Header("玩家面具")]
@@ -39,7 +33,5 @@ namespace GameCore.UI
         public float healthShakeStrength;
         [Header("血条物体震动时间")]
         public float healthShakeDuration;
-        [Header("boss显示的物体列表")]
-        public List<BossShowCell> bossShowCellList;
     }
 }
