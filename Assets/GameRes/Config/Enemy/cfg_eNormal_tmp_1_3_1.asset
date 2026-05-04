@@ -61,5 +61,5 @@ MonoBehaviour:
       originFacePosition: {x: 0, y: 2}
       rotationSteps: 1
     - partLevelRefId: 10040
-      originFacePosition: {x: 1, y: 3}
+      originFacePosition: {x: 1, y: 1}
       rotationSteps: 0
