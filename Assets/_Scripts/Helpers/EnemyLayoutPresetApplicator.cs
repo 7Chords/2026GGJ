@@ -135,5 +135,43 @@ namespace GameCore.Helpers
             if (offset < 0) offset += cycleLen;
             return 1 + offset;
         }
+
+        /// <summary>
+        /// Picks the layout row for this layout-turn index and whether the enemy acts first this round
+        /// (curTurnOwner == ENEMY after RollBattleOrder). Second list may be shorter or empty: falls back to first list.
+        /// </summary>
+        public static EnemyTurnFaceLayout ResolveTurnFaceLayout(
+            EnemyLayoutPreset preset,
+            int layoutTurnIndex,
+            bool enemyActsFirstThisRound)
+        {
+            if (preset == null)
+                return null;
+
+            var first = preset.turnLayoutsEnemyActsFirst;
+            var second = preset.turnLayoutsEnemyActsSecond;
+            int countFirst = first != null ? first.Count : 0;
+            int countSecond = second != null ? second.Count : 0;
+            int layoutCountForIndex = countFirst > 0 ? countFirst : countSecond;
+            if (layoutCountForIndex <= 0)
+                return null;
+
+            int resolvedIdx = ResolveEnemyLayoutTurnIndex(layoutTurnIndex, layoutCountForIndex);
+            if (resolvedIdx < 0)
+                return null;
+
+            if (enemyActsFirstThisRound)
+            {
+                if (first != null && resolvedIdx < first.Count)
+                    return first[resolvedIdx];
+                return null;
+            }
+
+            if (second != null && resolvedIdx < second.Count)
+                return second[resolvedIdx];
+            if (first != null && resolvedIdx < first.Count)
+                return first[resolvedIdx];
+            return null;
+        }
     }
 }

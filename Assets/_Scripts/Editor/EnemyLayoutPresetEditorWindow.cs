@@ -19,6 +19,7 @@ namespace GameCore.Editor
         SerializedObject _serializedObject;
         Vector2 _scroll;
         int _turnIndex;
+        int _editVariant; // 0 = enemy acts first (先手), 1 = enemy acts second (后手)
         int _selectedSlotIndex = -1;
         long _newSlotPartLevelId;
         int _newSlotRotation;
@@ -76,32 +77,58 @@ namespace GameCore.Editor
             EditorGUILayout.PropertyField(_serializedObject.FindProperty("gridSize"), true);
             EditorGUILayout.PropertyField(_serializedObject.FindProperty("disabledGridPositions"), true);
 
-            SerializedProperty turnLayoutsProp = _serializedObject.FindProperty("turnLayouts");
+            SerializedProperty firstProp = _serializedObject.FindProperty("turnLayoutsEnemyActsFirst");
+            SerializedProperty secondProp = _serializedObject.FindProperty("turnLayoutsEnemyActsSecond");
             EditorGUILayout.Space(4);
-            EditorGUILayout.LabelField("回合布局", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("回合布局（先手 / 后手）", EditorStyles.boldLabel);
+            _editVariant = GUILayout.Toolbar(_editVariant, new[] { "敌人先手（敌方先动）", "敌人后手（玩家先动）" });
+            SerializedProperty turnLayoutsProp = _editVariant == 0 ? firstProp : secondProp;
+
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("＋ 回合", GUILayout.Width(72)))
             {
-                turnLayoutsProp.arraySize++;
-                _turnIndex = turnLayoutsProp.arraySize - 1;
+                firstProp.arraySize++;
+                secondProp.arraySize++;
+                _turnIndex = firstProp.arraySize - 1;
+                _selectedSlotIndex = -1;
             }
-            if (GUILayout.Button("－ 回合", GUILayout.Width(72)) && turnLayoutsProp.arraySize > 0)
+            if (GUILayout.Button("－ 回合", GUILayout.Width(72)) && firstProp.arraySize > 0)
             {
-                turnLayoutsProp.DeleteArrayElementAtIndex(_turnIndex);
-                _turnIndex = Mathf.Clamp(_turnIndex, 0, Mathf.Max(0, turnLayoutsProp.arraySize - 1));
+                int idx = Mathf.Clamp(_turnIndex, 0, firstProp.arraySize - 1);
+                firstProp.DeleteArrayElementAtIndex(idx);
+                if (secondProp.arraySize > idx)
+                    secondProp.DeleteArrayElementAtIndex(idx);
+                _turnIndex = Mathf.Clamp(_turnIndex, 0, Mathf.Max(0, firstProp.arraySize - 1));
+                _selectedSlotIndex = -1;
+            }
+            if (GUILayout.Button("后手 ← 全部复制先手", GUILayout.Width(160)))
+            {
+                DuplicateFirstLayoutsOntoSecond(firstProp, secondProp);
                 _selectedSlotIndex = -1;
             }
             EditorGUILayout.EndHorizontal();
 
-            if (turnLayoutsProp.arraySize == 0)
+            if (firstProp.arraySize == 0)
             {
-                EditorGUILayout.HelpBox("请先添加至少一个「回合」布局。", MessageType.Warning);
+                EditorGUILayout.HelpBox("请先添加至少一个「回合」布局（先手、后手列表会同步长度）。", MessageType.Warning);
                 _serializedObject.ApplyModifiedProperties();
                 return;
             }
 
-            _turnIndex = Mathf.Clamp(_turnIndex, 0, turnLayoutsProp.arraySize - 1);
-            _turnIndex = EditorGUILayout.IntSlider("当前编辑回合索引", _turnIndex, 0, turnLayoutsProp.arraySize - 1);
+            if (secondProp.arraySize != firstProp.arraySize)
+                EditorGUILayout.HelpBox(
+                    $"先手 {firstProp.arraySize} 回合，后手 {secondProp.arraySize} 回合：运行时缺索引会回退为先手；可用「后手 ← 全部复制先手」对齐。",
+                    MessageType.Info);
+
+            _turnIndex = Mathf.Clamp(_turnIndex, 0, firstProp.arraySize - 1);
+            _turnIndex = EditorGUILayout.IntSlider("当前编辑回合索引", _turnIndex, 0, firstProp.arraySize - 1);
+
+            if (_turnIndex >= turnLayoutsProp.arraySize)
+            {
+                EditorGUILayout.HelpBox("当前列表在此索引无条目，正在编辑先手条目的对应索引。", MessageType.Warning);
+                _serializedObject.ApplyModifiedProperties();
+                return;
+            }
 
             SerializedProperty turnProp = turnLayoutsProp.GetArrayElementAtIndex(_turnIndex);
             SerializedProperty slotsProp = turnProp.FindPropertyRelative("slots");
@@ -379,6 +406,34 @@ namespace GameCore.Editor
                 EditorGUILayout.HelpBox("校验通过：无越界、禁用格冲突与占用重叠。", MessageType.Info);
             else
                 EditorGUILayout.HelpBox("校验失败：" + err, MessageType.Error);
+        }
+
+        static void DuplicateFirstLayoutsOntoSecond(SerializedProperty firstList, SerializedProperty secondList)
+        {
+            if (firstList == null || secondList == null)
+                return;
+            secondList.arraySize = 0;
+            secondList.arraySize = firstList.arraySize;
+            for (int i = 0; i < firstList.arraySize; i++)
+                CopyTurnFaceLayoutSerialized(firstList.GetArrayElementAtIndex(i), secondList.GetArrayElementAtIndex(i));
+        }
+
+        static void CopyTurnFaceLayoutSerialized(SerializedProperty src, SerializedProperty dst)
+        {
+            SerializedProperty srcSlots = src.FindPropertyRelative("slots");
+            SerializedProperty dstSlots = dst.FindPropertyRelative("slots");
+            if (srcSlots == null || dstSlots == null)
+                return;
+            dstSlots.arraySize = 0;
+            dstSlots.arraySize = srcSlots.arraySize;
+            for (int i = 0; i < srcSlots.arraySize; i++)
+            {
+                SerializedProperty s = srcSlots.GetArrayElementAtIndex(i);
+                SerializedProperty d = dstSlots.GetArrayElementAtIndex(i);
+                d.FindPropertyRelative("partLevelRefId").longValue = s.FindPropertyRelative("partLevelRefId").longValue;
+                d.FindPropertyRelative("originFacePosition").vector2IntValue = s.FindPropertyRelative("originFacePosition").vector2IntValue;
+                d.FindPropertyRelative("rotationSteps").intValue = s.FindPropertyRelative("rotationSteps").intValue;
+            }
         }
     }
 }

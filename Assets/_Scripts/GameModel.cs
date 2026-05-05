@@ -350,6 +350,8 @@ namespace GameCore
                 foreach (var info in enemyFaceGridInfoList) info.SetEmpty();
             }
 
+            RollBattleOrder();
+
             var encounterPreset = curEnemyInfo != null && curEnemyInfo.enemyRefObj != null
                 ? ResourcesHelper.LoadAsset<EnemyLayoutPreset>(curEnemyInfo.enemyRefObj.layoutPresetName)
                 : null;
@@ -358,12 +360,9 @@ namespace GameCore
             if (usePreset)
             {
                 enemyFaceLayoutTurnIndex++;
-                EnemyTurnFaceLayout turnLayout = null;
-                if (encounterPreset.turnLayouts != null && encounterPreset.turnLayouts.Count > 0)
-                {
-                    int turnIdx = EnemyLayoutPresetApplicator.ResolveEnemyLayoutTurnIndex(enemyFaceLayoutTurnIndex, encounterPreset.turnLayouts.Count);
-                    turnLayout = encounterPreset.turnLayouts[turnIdx];
-                }
+                bool enemyActsFirst = curTurnOwner == ETurnOwnerType.ENEMY;
+                EnemyTurnFaceLayout turnLayout = EnemyLayoutPresetApplicator.ResolveTurnFaceLayout(
+                    encounterPreset, enemyFaceLayoutTurnIndex, enemyActsFirst);
                 EnemyLayoutPresetApplicator.PrepareBusyFromTurnLayoutBestEffort(curEnemyInfo, turnLayout, out var resolvedSlots);
                 EnemyLayoutPresetApplicator.ApplyTurnLayoutToFace(curEnemyInfo, enemyFaceGridInfoList, resolvedSlots);
             }
@@ -372,8 +371,6 @@ namespace GameCore
                 SCDebugHelper.LogError(
                     $"[Enemy] id={curEnemyInfo.enemyRefObj.id} 缺少有效 layoutPresetName，回合布局无法应用。战斗中敌人应始终使用预设。");
             }
-
-            RollBattleOrder();
         }
 
         public void PlayerDrawParts(int _count)
