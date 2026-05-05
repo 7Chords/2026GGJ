@@ -155,22 +155,24 @@ namespace GameCore.UI
         {
             if (_m_curSelectPart == null)
                 return;
+            AudioMgr.instance.PlaySfx("sfx_click");
+
             PartLevelRefObj levelRefObj = _m_curSelectPart.GetLevelRefObj();
             if (GameModel.instance.playerInfo.playerMoney < levelRefObj.levelUpCost)
             {
-                GameCommon.ShowPopTip("��Ǯ����", Vector2.zero);
+                GameCommon.ShowPopTip("金币不足", Vector2.zero);
                 return;
             }
             if (!_m_curSelectPart.HasNextLevel())
             {
-                GameCommon.ShowPopTip("�Ѵﵽ��ߵȼ�", Vector2.zero);
+                GameCommon.ShowPopTip("已达到最高等级", Vector2.zero);
                 return;
             }
             
             GameModel.instance.playerInfo.playerMoney = Mathf.Max(GameModel.instance.playerInfo.playerMoney - _m_curSelectPart.GetLevelRefObj().levelUpCost, 0);
             _m_curSelectPart.LevelUp();
             refreshShow();
-            GameCommon.ShowPopTip("ǿ���ɹ�", Vector2.zero);
+            GameCommon.ShowPopTip("强化成功", Vector2.zero);
         }
 
         private void onBtnConfirmMouseEnter(PointerEventData _arg1, object[] _arg2)

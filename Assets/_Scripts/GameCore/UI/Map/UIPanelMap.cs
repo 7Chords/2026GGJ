@@ -142,14 +142,17 @@ namespace GameCore.UI
 
         private void onBtnBagClickDown(PointerEventData _data, object[] _objs)
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.AddNode(new UINodeDeck(SCUIShowType.ADDITION, GameModel.instance.playerInfo.bagPartInfoList));
         }
         private void onBtnSettingClickDown(PointerEventData _data, object[] _objs)
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.AddNode(new UINodeSetting(SCUIShowType.ADDITION,true));
         }
         private void onBtnGuideClickDown(PointerEventData _data, object[] _objs)
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.AddNode(new UINodeGuideMap(SCUIShowType.ADDITION));
         }
 

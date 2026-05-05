@@ -88,7 +88,6 @@ namespace GameCore.UI
             List<PartInfo> randomSelectedList = RandomSelectBooty(sourceList, targetCount);
 
             _m_winContainer?.SetListInfo(randomSelectedList);
-
             mono.txtMoney.text = _m_enemyRefObj.winMoney.ToString();
 
             GameModel.instance.playerInfo.bagPartInfoList.AddRange(randomSelectedList);

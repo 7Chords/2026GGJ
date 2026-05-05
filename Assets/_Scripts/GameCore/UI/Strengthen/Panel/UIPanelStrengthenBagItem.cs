@@ -80,6 +80,7 @@ namespace GameCore.UI
 
         private void onBtnItemClickDown(PointerEventData arg1, object[] arg2)
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
             SCMsgCenter.SendMsg(SCMsgConst.SELECT_STRENGTHEN_PART, _m_partInfo);
         }
     }

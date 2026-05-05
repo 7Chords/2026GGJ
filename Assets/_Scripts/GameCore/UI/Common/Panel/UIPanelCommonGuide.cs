@@ -56,19 +56,20 @@ namespace GameCore.UI
         }
         private void onBtnNextClickDown(PointerEventData _data, object[] _objs)
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
             _m_curSelectIndex = Mathf.Min(_m_curSelectIndex + 1, mono.goGuideList.Count - 1);
             refreshShow();
         }
         private void onBtnLastClickDown(PointerEventData _data, object[] _objs)
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
             _m_curSelectIndex = Mathf.Max(_m_curSelectIndex -1 , 0);
             refreshShow();
         }
 
         private void onBtnCloseClickDonw(PointerEventData _data, object[] _objs)
         {
-            // CloseTopNode() uses list tail as "top"; after hiding tutorial with needMoveToBottomWhenHide,
-            // order can be [Guide, Map] so tail is Map and the map gets closed. ADDITION stack matches visuals.
+            AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.CloseTopAdditionNode();
         }
     }

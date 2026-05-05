@@ -60,11 +60,13 @@ namespace GameCore.UI
 
         private void onBtnSelectClickDown(PointerEventData _data, object[] _objs)
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
             SCMsgCenter.SendMsg(SCMsgConst.EVENT_SELECT_CONFIRM, _m_dialogueRefObj);
         }
 
         private void onBtnSelectMouseEnter(PointerEventData _data, object[] _objs)
         {
+            AudioMgr.instance.PlaySfx("sfx_mouse_enter");
             _m_tweenContainer?.RegDoTween(
                 GetGameObject().transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
         }
