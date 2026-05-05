@@ -1,3 +1,4 @@
+using DG.Tweening;
 using SCFrame;
 using SCFrame.UI;
 using System.Collections;
@@ -89,6 +90,60 @@ namespace GameCore.UI
                 item.HidePanel();
             }
 
+        }
+
+        public void SetListInfoAnimated(
+            List<PartInfo> _infoList,
+            float interval,
+            float popDuration,
+            float overshoot)
+        {
+            if (_infoList == null)
+                return;
+            if (_m_itemList == null)
+                return;
+
+            interval = Mathf.Max(0f, interval);
+            popDuration = Mathf.Max(0.01f, popDuration);
+            overshoot = Mathf.Clamp(overshoot, 0.1f, 3.5f);
+
+            int i = 0, count = 0;
+            UIPanelCommonPartItem item = null;
+            for (i = 0; i < _infoList.Count; i++)
+            {
+                if (i < _m_itemList.Count)
+                {
+                    item = _m_itemList[i];
+                }
+                else
+                {
+                    GameObject itemGO = creatItemGO();
+                    item = creatItemPanel(itemGO.GetComponent<UIMonoCommonPartItem>());
+                    _m_itemList.Add(item);
+                }
+                if (item == null)
+                    continue;
+
+                item.SetInfo(_infoList[i]);
+                item.ShowPanel();
+
+                var tr = item.GetGameObject().transform;
+                tr.DOKill(false);
+                tr.localScale = Vector3.zero;
+                tr.DOScale(Vector3.one, popDuration)
+                    .SetDelay(interval * count)
+                    .SetEase(Ease.OutBack, overshoot);
+
+                count++;
+            }
+            //Òþ²Ø¶àÓàµÄ
+            for (i = count; i < _m_itemList.Count; i++)
+            {
+                item = _m_itemList[i];
+                if (item == null)
+                    continue;
+                item.HidePanel();
+            }
         }
     }
 }

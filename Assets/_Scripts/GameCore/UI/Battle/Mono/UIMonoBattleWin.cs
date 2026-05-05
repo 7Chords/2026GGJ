@@ -14,6 +14,15 @@ namespace GameCore.UI
         public Text txtMoney;
         [Header("goto°´Å¥")]
         public Button btnGoto;
+
+        [Header("Battle win: money count-up duration (sec)")]
+        public float moneyCountUpDuration = 0.55f;
+        [Header("Battle win: booty pop interval (sec)")]
+        public float bootyPopInterval = 0.08f;
+        [Header("Battle win: booty pop duration (sec)")]
+        public float bootyPopDuration = 0.22f;
+        [Header("Battle win: booty pop ease overshoot (OutBack)")]
+        public float bootyPopOvershoot = 1.35f;
     }
 
 }

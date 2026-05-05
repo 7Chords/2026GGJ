@@ -4,6 +4,7 @@ using SCFrame;
 using SCFrame.UI;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 namespace GameCore.UI
 {
@@ -11,6 +12,7 @@ namespace GameCore.UI
     {
         private EnemyRefObj _m_enemyRefObj;
         private UIPanelCommonPartContainer _m_winContainer;
+        private Tween _m_moneyTween;
 
         public UIPanelBattleWin(UIMonoBattleWin _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
@@ -23,6 +25,8 @@ namespace GameCore.UI
 
         public override void BeforeDiscard()
         {
+            _m_moneyTween?.Kill(false);
+            _m_moneyTween = null;
             _m_winContainer?.Discard();
             _m_winContainer = null;
         }
@@ -31,6 +35,8 @@ namespace GameCore.UI
         {
             mono.btnGoto.onClick.RemoveAllListeners();
             _m_winContainer?.HidePanel();
+            _m_moneyTween?.Kill(false);
+            _m_moneyTween = null;
         }
 
         public override void OnShowPanel()
@@ -72,10 +78,10 @@ namespace GameCore.UI
                 ? SCRefDataMgr.instance.enemyRefList.refDataList.Find(x => x.id == winEnemyId)
                 : null;
             _m_winContainer?.ShowPanel();
-            refreshShow();
+            refreshShowAnimated();
         }
 
-        private void refreshShow()
+        private void refreshShowAnimated()
         {
             if (_m_enemyRefObj == null)
             {
@@ -87,8 +93,33 @@ namespace GameCore.UI
             int targetCount = _m_enemyRefObj.winCount;
             List<PartInfo> randomSelectedList = RandomSelectBooty(sourceList, targetCount);
 
-            _m_winContainer?.SetListInfo(randomSelectedList);
-            mono.txtMoney.text = _m_enemyRefObj.winMoney.ToString();
+            _m_winContainer?.SetListInfoAnimated(
+                randomSelectedList,
+                mono.bootyPopInterval,
+                mono.bootyPopDuration,
+                mono.bootyPopOvershoot);
+
+            int targetMoney = _m_enemyRefObj.winMoney;
+            _m_moneyTween?.Kill(false);
+            _m_moneyTween = null;
+            if (mono.txtMoney != null)
+            {
+                mono.txtMoney.text = "0";
+                float dur = Mathf.Max(0f, mono.moneyCountUpDuration);
+                if (dur <= 0.0001f)
+                {
+                    mono.txtMoney.text = targetMoney.ToString();
+                }
+                else
+                {
+                    int cur = 0;
+                    _m_moneyTween = DOTween.To(() => cur, v =>
+                    {
+                        cur = v;
+                        mono.txtMoney.text = cur.ToString();
+                    }, targetMoney, dur).SetEase(Ease.OutQuad);
+                }
+            }
 
             GameModel.instance.playerInfo.bagPartInfoList.AddRange(randomSelectedList);
             GameModel.instance.playerInfo.playerMoney += _m_enemyRefObj.winMoney;
