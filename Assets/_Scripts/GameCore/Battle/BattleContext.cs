@@ -46,7 +46,10 @@ namespace GameCore.Battle
             SCMsgCenter.SendMsg(SCMsgConst.ENEMY_HURT, _amount);
             EnemyPassiveController.OnEnemyBodyDamageApplied(_amount);
             if (enemy.currentHealth == 0)
+            {
+                AudioMgr.instance.PlaySfx("sfx_enemy_dead");
                 RequestTerminateBattle(true);
+            }
         }
 
         public void ApplyHealToEnemy(int _amount)

@@ -276,6 +276,7 @@ namespace GameCore.UI
 
             if (_m_partInfo == info)
             {
+                AudioMgr.instance.PlaySfx("sfx_hurt");
                 _m_tweenContainer.RegDoTween(GetGameObject().transform.DOShakePosition(mono.hurtShakeDuration, mono.hurtShakeStrength));
                 playHurtRedFlash();
                 ParticleMgr.instance.PlayOneShot("vfx_blood", GetGameObject().GetRectTransform(), Vector2.zero, 1f, true);
@@ -359,6 +360,22 @@ namespace GameCore.UI
                     EPartType t = refObj.partType;
                     if (t == EPartType.EYE || t == EPartType.NOSE)
                         playEyeNoseTriggerSuccessBounce();
+
+                    switch (t)
+                    {
+                        case EPartType.EYE:
+                            AudioMgr.instance.PlaySfx("sfx_eye_trigger");
+                            break;
+                        case EPartType.NOSE:
+                            AudioMgr.instance.PlaySfx("sfx_nose_trigger");
+                            break;
+                        case EPartType.MOUTH:
+                            AudioMgr.instance.PlaySfx("sfx_mouse_trigger");
+                            break;
+                        case EPartType.SKIN:
+                            AudioMgr.instance.PlaySfx("sfx_skin_trigger");
+                            break;
+                    }
                 }
             }
         }
