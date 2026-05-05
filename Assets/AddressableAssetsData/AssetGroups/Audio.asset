@@ -42,6 +42,36 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 803625a5c5a633745bfca0b54e85a952
+    m_Address: sfx_hurt
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b92c2ecc023c06c4a8b8d122358fc16f
+    m_Address: sfx_eye_trigger
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7630f786eeaaeed47a3132432e8e261c
+    m_Address: sfx_mouse_trigger
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 52ba167cc8a3c1b4aabb67d0a3f2f2ee
+    m_Address: sfx_enemy_dead
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ad6fd11e275b9d3479803c3c79cb5400
+    m_Address: sfx_skin_trigger
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02a52031c5876a74f87dc1a945b29ea8
+    m_Address: sfx_nose_trigger
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e6ff67292e86232428a7beb839c4d36b, type: 2}
   m_SchemaSet:
