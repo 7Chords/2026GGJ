@@ -43,14 +43,11 @@ namespace GameCore.UI
         {
             _m_deckContainer.SetListInfo(_partInfo);
         }
-        //private void refreshShow()
-        //{
-        //    _m_deckContainer.SetListInfo(GameModel.instance.playerInfo.deckPartInfoList);
-        //}
 
 
         private void onBtnCloseClickDown(PointerEventData _arg, object[] _objs)
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.CloseTopNode();
         }
     }
