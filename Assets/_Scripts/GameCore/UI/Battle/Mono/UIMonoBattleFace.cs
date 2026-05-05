@@ -1,4 +1,4 @@
-using SCFrame.UI;
+﻿using SCFrame.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,21 +8,21 @@ namespace GameCore.UI
 {
     public class UIMonoBattleFace : _ASCUIMonoBase
     {
-        [Header("?????????????")]
+        [Header("格子预制体名")]
         public string gridPrefabName;
-        [Header("????")]
+        [Header("列数")]
         public int columnCount;
-        [Header("????")]
+        [Header("行数")]
         public int rowCount;
-        [Header("????????????��?")]
+        [Header("失效格子")]
         public List<Vector2Int> disabledGrids;
-        [Header("????layout")]
+        [Header("layout")]
         public GridLayoutGroup girdLayoutGroup;
-        [Header("??��??????")]
+        [Header("格子父物体")]
         public Transform tranParentPart;
-        [Header("?????????????")]
+        [Header("是否是敌方脸部")]
         public bool isEnemyFace;
-        [Header("??????")]
+        [Header("脸部图片")]
         public Image imgFace;
         [Header("Defeat dissolve duration (seconds)")]
         public float defeatFaceEffectDuration = 1.15f;

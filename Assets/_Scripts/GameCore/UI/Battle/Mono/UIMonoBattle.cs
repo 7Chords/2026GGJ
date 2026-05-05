@@ -33,5 +33,7 @@ namespace GameCore.UI
         public float healthShakeStrength;
         [Header("血条物体震动时间")]
         public float healthShakeDuration;
+        [Header("血条缓动时间")]
+        public float healthBarFillTweenDuration = 0.35f;
     }
 }

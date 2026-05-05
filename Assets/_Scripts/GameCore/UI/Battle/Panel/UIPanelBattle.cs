@@ -109,14 +109,42 @@ namespace GameCore.UI
             PlayerInfo playerInfo = GameModel.instance.playerInfo;
             EnemyInfo currentEnemyInfo = GameModel.instance.curEnemyInfo;
             mono.txtPlayerHealth.text = playerInfo.currentHealth + "/" + playerInfo.maxHealth;
-            if (mono.imgPlayerHealthBar != null && playerInfo.maxHealth > 0)
-                mono.imgPlayerHealthBar.fillAmount = (float)playerInfo.currentHealth / playerInfo.maxHealth;
+            float barDur = Mathf.Max(0f, mono.healthBarFillTweenDuration);
+
+            if (mono.imgPlayerHealthBar != null)
+            {
+                if (playerInfo.maxHealth > 0)
+                    TweenHealthBarFill(mono.imgPlayerHealthBar, (float)playerInfo.currentHealth / playerInfo.maxHealth, barDur);
+                else
+                    TweenHealthBarFill(mono.imgPlayerHealthBar, 0f, barDur);
+            }
+
             if (currentEnemyInfo != null)
             {
                 mono.txtEnemyHealth.text = currentEnemyInfo.currentHealth + "/" + currentEnemyInfo.maxHealth;
-                if (mono.imgEnemyHealthBar != null && currentEnemyInfo.maxHealth > 0)
-                    mono.imgEnemyHealthBar.fillAmount = (float)currentEnemyInfo.currentHealth / currentEnemyInfo.maxHealth;
+                if (mono.imgEnemyHealthBar != null)
+                {
+                    if (currentEnemyInfo.maxHealth > 0)
+                        TweenHealthBarFill(mono.imgEnemyHealthBar, (float)currentEnemyInfo.currentHealth / currentEnemyInfo.maxHealth, barDur);
+                    else
+                        TweenHealthBarFill(mono.imgEnemyHealthBar, 0f, barDur);
+                }
             }
+        }
+
+        private void TweenHealthBarFill(Image img, float target01, float duration)
+        {
+            if (img == null)
+                return;
+            float t = Mathf.Clamp01(target01);
+            img.DOKill(false);
+            if (duration <= 0.0001f)
+            {
+                img.fillAmount = t;
+                return;
+            }
+            var tw = img.DOFillAmount(t, duration).SetEase(Ease.OutQuad);
+            _m_tweenContainer?.RegDoTween(tw);
         }
 
         private void onPlayerHurt(object[] _objs)

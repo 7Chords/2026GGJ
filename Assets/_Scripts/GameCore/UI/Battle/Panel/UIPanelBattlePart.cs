@@ -127,11 +127,37 @@ namespace GameCore.UI
             applyBaseRot();
 
             var seq = DOTween.Sequence();
-            seq.AppendCallback(() => _onHit?.Invoke());
+            float impactDur = Mathf.Max(0.02f, mono.mouthAttackImpactPunchDuration);
+            float impactAng = Mathf.Max(0f, mono.mouthAttackImpactPunchAngle);
+            float stutterA = Mathf.Max(0f, mono.mouthAttackImpactStutterPause);
+            float stutterMid = Mathf.Max(0f, mono.mouthAttackMidStutterPause);
             float dur = Mathf.Max(0.04f, mono.mouthAttackShakeDuration);
             float ang = mono.mouthAttackShakeAngle;
             int vib = Mathf.Clamp(mono.mouthAttackShakeVibrato, 1, 30);
-            seq.Append(t.DOShakeRotation(dur, new Vector3(0f, 0f, ang), vib, 90f, true));
+            float halfDur = dur * 0.5f;
+            float restDur = Mathf.Max(0.02f, dur - halfDur);
+
+            seq.AppendCallback(() => _onHit?.Invoke());
+            if (mono.imgGO != null && mono.mouthAttackPunchScale > 0.001f)
+            {
+                var punch = mono.imgGO.transform.DOPunchScale(
+                    Vector3.one * mono.mouthAttackPunchScale,
+                    impactDur * 1.15f, 5, 0.45f);
+                seq.Join(punch);
+            }
+            if (impactAng > 0.001f)
+            {
+                seq.Append(
+                    t.DOPunchRotation(new Vector3(0f, 0f, impactAng), impactDur, 6, 0.45f)
+                        .SetEase(Ease.OutQuad));
+            }
+            if (stutterA > 0.0001f)
+                seq.AppendInterval(stutterA);
+            Tween shakeA = t.DOShakeRotation(halfDur, new Vector3(0f, 0f, ang * 1.05f), vib, 90f, true);
+            seq.Append(shakeA);
+            if (stutterMid > 0.0001f)
+                seq.AppendInterval(stutterMid);
+            seq.Append(t.DOShakeRotation(restDur, new Vector3(0f, 0f, ang), vib, 90f, true));
             void finish()
             {
                 applyBaseRot();

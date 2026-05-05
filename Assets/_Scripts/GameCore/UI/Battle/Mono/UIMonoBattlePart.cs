@@ -39,10 +39,20 @@ namespace GameCore.UI
         [Header("Mouth attack: rotation shake duration")]
         public float mouthAttackShakeDuration = 0.22f;
         [Header("Mouth attack: max rotation shake angle (deg Z)")]
-        public float mouthAttackShakeAngle = 14f;
+        public float mouthAttackShakeAngle = 18f;
         [Header("Mouth attack: shake vibrato")]
         [Range(1, 30)]
-        public int mouthAttackShakeVibrato = 14;
+        public int mouthAttackShakeVibrato = 16;
+        [Header("Mouth attack: punch scale on hit (0 = off)")]
+        public float mouthAttackPunchScale = 0.14f;
+        [Header("Mouth attack: impact punch rotation (deg Z)")]
+        public float mouthAttackImpactPunchAngle = 9f;
+        [Header("Mouth attack: impact punch duration (sec)")]
+        public float mouthAttackImpactPunchDuration = 0.07f;
+        [Header("Mouth attack: stutter pause after impact (sec, frame-skip feel)")]
+        public float mouthAttackImpactStutterPause = 0.032f;
+        [Header("Mouth attack: mid-shake stutter pause (sec)")]
+        public float mouthAttackMidStutterPause = 0.028f;
         [Header("受伤闪烁颜色")]
         public Color hurtFlashTint = new Color(1f, 0.4f, 0.4f, 1f);
         [Header("受伤闪烁淡入时间")]
