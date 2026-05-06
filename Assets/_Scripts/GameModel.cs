@@ -272,6 +272,31 @@ namespace GameCore
             curTurnOwner = randomNum < 0.5f ? ETurnOwnerType.PLAYER : ETurnOwnerType.ENEMY;
         }
 
+        private MapRefObj GetCurrentMapRow()
+        {
+            int floor = playerInfo != null ? playerInfo.playerFloor : 1;
+            var list = SCRefDataMgr.instance?.mapRefList?.refDataList;
+            if (list == null || list.Count == 0)
+                return null;
+            var row = list.Find(m => m != null && m.floor == floor);
+            if (row != null)
+                return row;
+            // Fallback: keep game playable if map table is missing the exact floor row.
+            return list.FindLast(m => m != null) ?? list[0];
+        }
+
+        public int GetPlayerMaxHandCards()
+        {
+            int v = GetCurrentMapRow()?.playerMaxHandCards ?? 0;
+            return v > 0 ? v : GameConst.BUSY_CARD_MAX_COUNT;
+        }
+
+        public int GetPlayerMaxDrawCards()
+        {
+            int v = GetCurrentMapRow()?.playerMaxDrawCards ?? 0;
+            return v > 0 ? v : GameConst.DRAW_CARD_COUNT_PER_TURN;
+        }
+
         public void GenerateNewBattle(bool _isBoss = false,long _id = -1)
         {
             playerInfo.ClearListForNewBattle();
@@ -286,7 +311,7 @@ namespace GameCore
                     }
                 }
             }
-            PlayerDrawParts(GameConst.DRAW_CARD_COUNT_PER_TURN);
+            PlayerDrawParts(GetPlayerMaxDrawCards());
             if (_isBoss)
                 GenerateRandomEnemy(_id);
             else if (_id != -1)
@@ -337,7 +362,9 @@ namespace GameCore
         {
             PartDeckHelper.RecycleBusyToDeck(playerInfo.deckPartInfoList, playerInfo.busyPartInfoList);
             PartDeckHelper.RecycleBattleToBusy(playerInfo.battlePartInfoList, playerInfo.busyPartInfoList);
-            int playerDrawCnt = Mathf.Min(GameConst.DRAW_CARD_COUNT_PER_TURN, GameConst.BUSY_CARD_MAX_COUNT - playerInfo.busyPartInfoList.Count);
+            int maxHand = GetPlayerMaxHandCards();
+            int maxDraw = GetPlayerMaxDrawCards();
+            int playerDrawCnt = Mathf.Min(maxDraw, maxHand - playerInfo.busyPartInfoList.Count);
             PlayerDrawParts(playerDrawCnt);
             foreach (var info in playerFaceGridInfoList) info.SetEmpty();
 
@@ -376,7 +403,7 @@ namespace GameCore
         public void PlayerDrawParts(int _count)
         {
             if (playerInfo == null) return;
-            PartDeckHelper.DrawParts(playerInfo.deckPartInfoList, playerInfo.busyPartInfoList, _count, GameConst.BUSY_CARD_MAX_COUNT);
+            PartDeckHelper.DrawParts(playerInfo.deckPartInfoList, playerInfo.busyPartInfoList, _count, GetPlayerMaxHandCards());
         }
 
         public void EnemyDrawParts(int _count)

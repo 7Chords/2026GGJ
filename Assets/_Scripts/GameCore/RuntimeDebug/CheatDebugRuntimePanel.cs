@@ -203,9 +203,10 @@ namespace GameCore.RuntimeDebug
                 return;
             }
 
-            if (gm.playerInfo.busyPartInfoList.Count >= GameConst.BUSY_CARD_MAX_COUNT)
+            int maxHand = GameModel.instance != null ? GameModel.instance.GetPlayerMaxHandCards() : GameConst.BUSY_CARD_MAX_COUNT;
+            if (gm.playerInfo.busyPartInfoList.Count >= maxHand)
             {
-                Debug.LogWarning($"[Cheat] hand full (max {GameConst.BUSY_CARD_MAX_COUNT}).");
+                Debug.LogWarning($"[Cheat] hand full (max {maxHand}).");
                 return;
             }
 

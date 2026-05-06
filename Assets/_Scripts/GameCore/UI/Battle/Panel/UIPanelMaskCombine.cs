@@ -154,7 +154,7 @@ namespace GameCore.UI
                 return;
             var p = GameModel.instance?.playerInfo;
             int n = p?.busyPartInfoList != null ? p.busyPartInfoList.Count : 0;
-            mono.txtBusyCount.text = n + "/" + GameConst.BUSY_CARD_MAX_COUNT;
+            mono.txtBusyCount.text = n + "/" + GameModel.instance.GetPlayerMaxHandCards();
         }
 
         private void applyEntityHealthPreview()

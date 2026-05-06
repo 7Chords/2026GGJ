@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerCount: {x: 8, y: 4}
   repetitionCount: 6
-  firstNodeRoomType: 1
+  firstNodeRoomType: 2
   lastNodeRoomType: 4
+  usePenultimateNodeRoomType: 0
+  penultimateNodeRoomType: 1
   roomProbabilities:
   - type: 1
     weight: 20
