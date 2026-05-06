@@ -268,7 +268,7 @@ namespace GameCore
 
         public void RollBattleOrder()
         {
-            float randomNum = RandomUtility.GetRandomGenerator(EModuleType.COMBAT).Next(1, 100) / 100f;
+            float randomNum = UnityEngine.Random.value;
             curTurnOwner = randomNum < 0.5f ? ETurnOwnerType.PLAYER : ETurnOwnerType.ENEMY;
         }
 

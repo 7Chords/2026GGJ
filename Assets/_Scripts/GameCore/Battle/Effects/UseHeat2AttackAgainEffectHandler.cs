@@ -32,8 +32,7 @@ namespace GameCore.Battle.Effects
             battleCtx.ApplyReduceBuffLayerToPart(_caster, buffId, excess);
 
             float combinedChance = Mathf.Clamp(excess * xPercent, 0f, 100f);
-            var rng = RandomUtility.GetRandomGenerator(EModuleType.COMBAT);
-            int roll = rng.Next(0, 100);
+            float roll = UnityEngine.Random.Range(0f, 100f);
             if (roll >= combinedChance)
                 return;
 
