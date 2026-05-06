@@ -647,7 +647,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7fffd1339a21d39438c2cf690034f4fc
+  - m_GUID: 4893823e6db206d4881787e600ceaeac
     m_Address: spr_icon_buff_moldattack
     m_ReadOnly: 0
     m_SerializedLabels: []
