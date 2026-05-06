@@ -1,6 +1,7 @@
 using DG.Tweening;
 using GameCore;
 using GameCore.RefData;
+using GameCore.RuntimeDebug;
 using SCFrame;
 using SCFrame.UI;
 using System;
@@ -173,6 +174,35 @@ namespace GameCore.UI
 
         private void OnClickEnter()
         {
+            if (CheatDebugRuntimePanel.MapFreeEnterEnabled)
+            {
+                GameModel.instance.playerInfo.SetPendingMapTarget(_m_mapNode.GridPosition);
+                switch (_m_roomType)
+                {
+                    case ERoomType.ENEMY:
+                        EnterEnemyLevel();
+                        break;
+                    case ERoomType.BOSS:
+                        EnterBossLevel();
+                        break;
+                    case ERoomType.SHOP:
+                        EnterShop();
+                        break;
+                    case ERoomType.TRIAL:
+                        EnterTrial();
+                        break;
+                    case ERoomType.EVENT:
+                        EnterEvent();
+                        break;
+                    case ERoomType.STRENGTHEN:
+                        EnterStrengthen();
+                        break;
+                    default:
+                        break;
+                }
+                return;
+            }
+
             // 1. Validation Logic
             var playerPos = GameModel.instance.playerInfo.playerMapPosition;
             var targetPos = _m_mapNode.GridPosition;

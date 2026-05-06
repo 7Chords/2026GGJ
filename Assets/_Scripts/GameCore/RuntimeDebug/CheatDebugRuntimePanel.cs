@@ -13,6 +13,8 @@ namespace GameCore.RuntimeDebug
     /// </summary>
     public sealed class CheatDebugRuntimePanel : MonoBehaviour
     {
+        public static bool MapFreeEnterEnabled { get; private set; }
+
         private const int WindowId = 92001;
         private static readonly KeyCode ToggleKey = KeyCode.F9;
 
@@ -68,6 +70,9 @@ namespace GameCore.RuntimeDebug
         {
             _scroll = GUILayout.BeginScrollView(_scroll);
             GUILayout.Label($"Toggle: {ToggleKey}");
+
+            GUILayout.Space(6f);
+            MapFreeEnterEnabled = GUILayout.Toggle(MapFreeEnterEnabled, "地图：允许直接点击任意节点进入（跳过位置/连线检测）");
 
             if (GUILayout.Button("回满角色血量"))
             {
@@ -313,6 +318,7 @@ namespace GameCore.RuntimeDebug
 
             Debug.Log($"[Cheat] Jump floor {before} -> {target}.");
         }
+
 
         private static void CheatFullAllPlayerPartsHp()
         {
