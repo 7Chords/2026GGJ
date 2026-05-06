@@ -11,8 +11,10 @@ namespace GameCore.Battle.Effects
             var battleCtx = BattleContext.current;
             if (battleCtx == null) return;
 
-            int damage = Mathf.RoundToInt(_entry.attributeValueList[0]);
-            damage += BuffCombatModifiers.GetStrongAttackBonus(_caster);
+            float dmgF = _entry.attributeValueList[0];
+            dmgF += BuffCombatModifiers.GetStrongAttackBonus(_caster);
+            dmgF = EnemyPassiveController.ApplyOutgoingMouthAttackTotalFlatPenalty(_caster, dmgF);
+            int damage = Mathf.RoundToInt(dmgF);
             if (_caster.partRefObj.partType == EPartType.MOUTH)
             {
                 MouthAttackCoordinator.RegisterPendingAttack(_caster, new MouthAttackDamageData

@@ -49,13 +49,16 @@ namespace GameCore.Battle
                         {
                             float totalDamage = entry.attributeValueList[0];
                             totalDamage += BuffCombatModifiers.GetStrongAttackBonus(caster);
+                            totalDamage = EnemyPassiveController.ApplyOutgoingMouthAttackTotalFlatPenalty(caster, totalDamage);
                             AccumulateGridAttack(caster, totalDamage, p);
                             break;
                         }
                     case EAttributeType.REAL_ATTACK:
                         {
-                            int damage = Mathf.RoundToInt(entry.attributeValueList[0]);
-                            damage += BuffCombatModifiers.GetStrongAttackBonus(caster);
+                            float damageF = entry.attributeValueList[0];
+                            damageF += BuffCombatModifiers.GetStrongAttackBonus(caster);
+                            damageF = EnemyPassiveController.ApplyOutgoingMouthAttackTotalFlatPenalty(caster, damageF);
+                            int damage = Mathf.RoundToInt(damageF);
                             if (damage <= 0)
                                 break;
                             if (caster.isEnemyPart)
@@ -147,6 +150,7 @@ namespace GameCore.Battle
 
             float totalDamage = layer * attackUnit;
             totalDamage += BuffCombatModifiers.GetStrongAttackBonus(caster);
+            totalDamage = EnemyPassiveController.ApplyOutgoingMouthAttackTotalFlatPenalty(caster, totalDamage);
             AccumulateGridAttack(caster, totalDamage, p);
         }
 

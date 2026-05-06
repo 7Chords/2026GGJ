@@ -82,6 +82,8 @@ namespace GameCore.Helpers
             int baseDmg = Mathf.RoundToInt(e.attributeValueList[0]);
             if (part.partRefObj != null && part.partRefObj.partType == EPartType.MOUTH)
                 baseDmg += BuffCombatModifiers.GetStrongAttackBonus(part);
+            if (part.isEnemyPart && part.partRefObj != null && part.partRefObj.partType == EPartType.MOUTH)
+                baseDmg = Mathf.Max(0, Mathf.RoundToInt(EnemyPassiveController.ApplyOutgoingMouthAttackTotalFlatPenalty(part, baseDmg)));
             // Match combat: non-positive damage is not applied (BattleContext.ApplyDamageToPart).
             return Mathf.Max(0, baseDmg);
         }
@@ -93,6 +95,8 @@ namespace GameCore.Helpers
             int v = Mathf.RoundToInt(e.attributeValueList[0]);
             if (part.partRefObj != null && part.partRefObj.partType == EPartType.MOUTH)
                 v += BuffCombatModifiers.GetStrongAttackBonus(part);
+            if (part.isEnemyPart && part.partRefObj != null && part.partRefObj.partType == EPartType.MOUTH)
+                v = Mathf.Max(0, Mathf.RoundToInt(EnemyPassiveController.ApplyOutgoingMouthAttackTotalFlatPenalty(part, v)));
             return Mathf.Max(0, v);
         }
 

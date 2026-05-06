@@ -32,6 +32,7 @@ namespace GameCore.Battle.Effects
 
             float totalDamage = layer * attackUnit;
             totalDamage += BuffCombatModifiers.GetStrongAttackBonus(_caster);
+            totalDamage = EnemyPassiveController.ApplyOutgoingMouthAttackTotalFlatPenalty(_caster, totalDamage);
             if (_caster.curEffectFacePosList == null || _caster.curEffectFacePosList.Count == 0) return;
 
             float perGridDamage = totalDamage / _caster.curEffectFacePosList.Count;

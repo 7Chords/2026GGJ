@@ -114,6 +114,22 @@ namespace GameCore.Battle
             }
         }
 
+        /// <summary>
+        /// Revenge passive (no HATE): subtract flat penalty once from the mouth&apos;s total attack/REAL_ATTACK
+        /// before per-grid split. Tooltip and preview use the same helper.
+        /// </summary>
+        public static float ApplyOutgoingMouthAttackTotalFlatPenalty(PartInfo caster, float totalDamage)
+        {
+            if (caster == null || !caster.isEnemyPart || totalDamage <= 0f)
+                return totalDamage;
+            if (caster.partRefObj == null || caster.partRefObj.partType != EPartType.MOUTH)
+                return totalDamage;
+            var st = GameModel.instance.curEnemyInfo?.passiveBattleState;
+            if (st == null || st.outgoingPartDamageMod != EEnemyOutgoingPartDamageMod.ALL_PART_FLAT_PENALTY)
+                return totalDamage;
+            return Mathf.Max(0f, totalDamage - st.outgoingPartPenalty);
+        }
+
         public static int AdjustEnemyOutgoingDamageToPlayerPart(PartInfo target, PartInfo sender, int baseAmount)
         {
             if (baseAmount <= 0 || sender == null || !sender.isEnemyPart || target == null || target.isEnemyPart)
@@ -128,8 +144,6 @@ namespace GameCore.Battle
                     if (PartHasNonZeroBuff(target, EBuffType.PREY))
                         return baseAmount + st.outgoingPreyBonus;
                     return baseAmount;
-                case EEnemyOutgoingPartDamageMod.ALL_PART_FLAT_PENALTY:
-                    return Mathf.Max(0, baseAmount - st.outgoingPartPenalty);
                 default:
                     return baseAmount;
             }
