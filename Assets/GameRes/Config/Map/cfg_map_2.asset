@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de0fef0b35eb0b429275354d13682df, type: 3}
   m_Name: cfg_map_2
   m_EditorClassIdentifier: 
-  layerCount: {x: 8, y: 4}
+  layerCount: {x: 9, y: 4}
   repetitionCount: 6
   firstNodeRoomType: 2
   lastNodeRoomType: 4
-  usePenultimateNodeRoomType: 0
-  penultimateNodeRoomType: 1
+  usePenultimateNodeRoomType: 1
+  penultimateNodeRoomType: 2
   roomProbabilities:
   - type: 1
-    weight: 20
+    weight: 40
   - type: 2
     weight: 20
   - type: 6
