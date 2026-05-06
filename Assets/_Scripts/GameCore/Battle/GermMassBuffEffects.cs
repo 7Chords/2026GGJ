@@ -48,8 +48,6 @@ namespace GameCore.Battle
             var owner = buff.owner;
             if (!owner.isOnFace || buff.buffLayer <= 0) return;
             float totalDamage = buff.buffLayer;
-            int moldExtra = Mathf.RoundToInt(buff.buffValue);
-            if (moldExtra <= 0) moldExtra = 2;
             if (owner.curEffectFacePosList == null || owner.curEffectFacePosList.Count == 0) return;
 
             float perGridDamage = totalDamage / owner.curEffectFacePosList.Count;
@@ -84,7 +82,6 @@ namespace GameCore.Battle
             foreach (var pair in partOccupyGridNumDic)
             {
                 ctx.ApplyDamageToPart(pair.Key, owner, Mathf.RoundToInt(pair.Value * perGridDamage));
-                ctx.ApplyBuffToPart(pair.Key, owner, GameConst.BUFF_ID_MOLD, moldExtra);
             }
         }
 
@@ -100,7 +97,9 @@ namespace GameCore.Battle
                     ctx.ApplyDamageToPart(owner, owner, owner.maxHealth + owner.currentHealth);
                 return;
             }
-            buff.AddBuffLayer(10);
+            int add = Mathf.RoundToInt(buff.buffValue);
+            if (add == 0) add = 10;
+            buff.AddBuffLayer(add);
             SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, buff);
         }
 
