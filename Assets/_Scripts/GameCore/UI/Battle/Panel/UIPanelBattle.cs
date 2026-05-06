@@ -58,6 +58,7 @@ namespace GameCore.UI
             SCMsgCenter.UnregisterMsg(SCMsgConst.ENEMY_HURT, onEnemyHurt);
             SCMsgCenter.UnregisterMsgAct(SCMsgConst.ENEMY_HEAL, refreshShow);
             SCMsgCenter.UnregisterMsg(SCMsgConst.PART_MOUTH_ATTACK, onMouthAttack);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.ENEMY_PASSIVE_TRIGGER, onEnemyPassiveTrigger);
             _m_playerBattleFace?.HidePanel();
             _m_enemyBattleFace?.HidePanel();
         }
@@ -69,10 +70,23 @@ namespace GameCore.UI
             SCMsgCenter.RegisterMsg(SCMsgConst.ENEMY_HURT, onEnemyHurt);
             SCMsgCenter.RegisterMsgAct(SCMsgConst.ENEMY_HEAL, refreshShow);
             SCMsgCenter.RegisterMsg(SCMsgConst.PART_MOUTH_ATTACK, onMouthAttack);
+            SCMsgCenter.RegisterMsg(SCMsgConst.ENEMY_PASSIVE_TRIGGER, onEnemyPassiveTrigger);
 
             _m_playerBattleFace?.ShowPanel();
             _m_enemyBattleFace?.ShowPanel();
             refreshShow();
+        }
+
+        private void onEnemyPassiveTrigger(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            string passiveName = _objs[0] as string;
+            if (string.IsNullOrEmpty(passiveName))
+                return;
+            if (mono?.imgEnemyHealthBar == null)
+                return;
+            GameCommon.ShowEffectText(passiveName, mono.imgEnemyHealthBar.transform.position);
         }
 
         private void onMouthAttack(object[] _objs)

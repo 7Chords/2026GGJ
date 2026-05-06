@@ -57,6 +57,7 @@ namespace GameCore.UI
             SCMsgCenter.UnregisterMsg(SCMsgConst.PLACE_PART_SUCCESS, onPlayerHandBusyChanged);
             SCMsgCenter.UnregisterMsg(SCMsgConst.REPLACE_PART_POS_SUCCESS, onPlayerHandBusyChanged);
             SCMsgCenter.UnregisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onPlayerHandBusyChanged);
+            SCMsgCenter.UnregisterMsg(SCMsgConst.ENEMY_PASSIVE_TRIGGER, onEnemyPassiveTrigger);
 
             mono.btnConfirm.RemoveClickDown(OnBtnConfirmClick);
             mono.btnDeck.RemoveClickDown(onBtnDeckClickDown);
@@ -82,6 +83,7 @@ namespace GameCore.UI
             SCMsgCenter.RegisterMsg(SCMsgConst.PLACE_PART_SUCCESS, onPlayerHandBusyChanged);
             SCMsgCenter.RegisterMsg(SCMsgConst.REPLACE_PART_POS_SUCCESS, onPlayerHandBusyChanged);
             SCMsgCenter.RegisterMsg(SCMsgConst.REPLACE_PART_POS_FAIL, onPlayerHandBusyChanged);
+            SCMsgCenter.RegisterMsg(SCMsgConst.ENEMY_PASSIVE_TRIGGER, onEnemyPassiveTrigger);
 
             mono.btnConfirm.AddMouseLeftClickDown(OnBtnConfirmClick);
             mono.btnDeck.AddMouseLeftClickDown(onBtnDeckClickDown);
@@ -119,6 +121,18 @@ namespace GameCore.UI
         {
             refreshShow();
             _m_partContainer?.ReloadBusyParts();
+        }
+
+        private void onEnemyPassiveTrigger(object[] _objs)
+        {
+            if (_objs == null || _objs.Length == 0)
+                return;
+            string passiveName = _objs[0] as string;
+            if (string.IsNullOrEmpty(passiveName))
+                return;
+            if (mono?.imgEnemyHealthBar == null)
+                return;
+            GameCommon.ShowEffectText(passiveName, mono.imgEnemyHealthBar.transform.position);
         }
 
         private void refreshShow()

@@ -1,11 +1,23 @@
 using GameCore.RefData;
 using UnityEngine;
 using GameCore;
+using SCFrame;
 
 namespace GameCore.Battle
 {
     public static class EnemyPassiveController
     {
+        static void NotifyBossPassiveTriggered(EnemyInfo e, EnemyPassiveRefObj row)
+        {
+            if (row == null || e?.enemyRefObj == null)
+                return;
+            if (!e.enemyRefObj.isBoss)
+                return;
+            if (string.IsNullOrEmpty(row.passiveName))
+                return;
+            SCMsgCenter.SendMsg(SCMsgConst.ENEMY_PASSIVE_TRIGGER, row.passiveName);
+        }
+
         static float FloatParamAt(EnemyPassiveRefObj row, int index, float defaultValue)
         {
             if (row?.paramList == null || index < 0 || index >= row.paramList.Count)
@@ -33,6 +45,8 @@ namespace GameCore.Battle
             int interval = Mathf.Max(1, Mathf.RoundToInt(FloatParamAt(refPassive, 0, 2f)));
             if (st.enemyPhaseCounter % interval != 0)
                 return;
+
+            NotifyBossPassiveTriggered(e, refPassive);
 
             int preyBonusV = Mathf.RoundToInt(FloatParamAt(refPassive, 1, 2f));
             int preyBonus = preyBonusV > 0 ? preyBonusV : 2;
@@ -87,6 +101,7 @@ namespace GameCore.Battle
             while (st.bodyDamageAccumulator >= threshold)
             {
                 st.bodyDamageAccumulator -= threshold;
+                NotifyBossPassiveTriggered(e, refP);
                 if (healFrac > 0f)
                 {
                     int heal = Mathf.Max(1, Mathf.CeilToInt(e.currentHealth * healFrac));
@@ -175,6 +190,7 @@ namespace GameCore.Battle
             if (refG == null)
                 return;
             st.germsAtTheReadyApplied = true;
+            NotifyBossPassiveTriggered(e, refG);
             int layers = 20;
             if (refG.paramList != null && refG.paramList.Count > 0)
                 layers = Mathf.Max(1, Mathf.RoundToInt(refG.paramList[0]));

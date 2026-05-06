@@ -49,6 +49,8 @@ public class SCMsgConst
     public const int PART_POSITIVE_BUFF_GAIN = 2045;
     /// <summary> Negative outcome on a part: debuff stacks (per buff table), STRONG negative stacks, PART_LOSE_TURN. UI: vfx_debuff. </summary>
     public const int PART_DEBUFF_GAIN = 2046;
+    /// <summary> Enemy passive triggered (boss UI helper). Payload: string passiveName. </summary>
+    public const int ENEMY_PASSIVE_TRIGGER = 2047;
     #endregion
 
     #region system 99
