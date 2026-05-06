@@ -104,6 +104,14 @@ namespace GameCore
                 if (!part.HasBuff(EAttributeTriggerPointType.TURN_OVER)) continue;
                 part.TriggerBuff(EAttributeTriggerPointType.TURN_OVER);
             }
+
+            // FAT: on owning side turn over, if FAT >= threshold, convert ALL FAT into equal BURN layers.
+            for (int i = 0; i < list.Count; i++)
+            {
+                var part = list[i];
+                if (part == null) continue;
+                BuffLogic.TryConvertFatToBurnOnTurnOver(part);
+            }
         }
 
         private void OnBattleRoundFinish()

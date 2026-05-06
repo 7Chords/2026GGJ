@@ -1,5 +1,6 @@
 using GameCore.RefData;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameCore
@@ -10,7 +11,8 @@ namespace GameCore
         public PartInfo owner;
         public BuffRefObj buffRefObj;
         public EBuffType buffType;
-        public float buffValue;
+        public List<float> buffValueList;
+        public float buffValue => buffValueList != null && buffValueList.Count > 0 ? buffValueList[0] : 0f;
         public bool isPositive;
         public int buffLayer;
         public Action onPartActive;
@@ -25,7 +27,7 @@ namespace GameCore
         { 
             buffRefObj = _buffRefObj;
             buffType = _buffRefObj.buffType;
-            buffValue = _buffRefObj.buffValue;
+            buffValueList = _buffRefObj.buffValueList != null ? new List<float>(_buffRefObj.buffValueList) : new List<float>();
             isPositive = _buffRefObj.isPositive;
             buffLayer = Mathf.Clamp(_layer, -GameConst.BUFF_LAYER_MAX, GameConst.BUFF_LAYER_MAX);
             creator = _creator;

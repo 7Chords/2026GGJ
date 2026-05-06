@@ -76,23 +76,67 @@ namespace GameCore.Battle
             if (_addedBuff.buffType != EBuffType.FAT) return;
             if (_addedBuff.owner == null) return;
 
-            var burn = FindBuff(EBuffType.BURN);
-            if (burn == null || burn.buffLayer <= 0) return;
-
             var fat = FindBuff(EBuffType.FAT);
             if (fat == null || fat.buffLayer <= 0) return;
 
-            int convert = fat.buffLayer / 2;
-            if (convert <= 0) return;
+            // FAT rule (no table params):
+            // - If BURN exists, each newly gained 2 layers of FAT convert into 1 layer of BURN immediately.
+            const int Unit = 2;
 
-            fat.ReduceBuffLayer(convert * 2);
-            if (fat.buffLayer == 0)
+            var burn = FindBuff(EBuffType.BURN);
+            bool hasBurn = burn != null && burn.buffLayer > 0;
+            if (hasBurn)
+            {
+                int c = fat.buffLayer / Unit;
+                if (c > 0)
+                {
+                    fat.ReduceBuffLayer(c * Unit);
+                    burn.AddBuffLayer(c);
+                    SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, burn);
+                }
+            }
+
+            if (fat.buffLayer <= 0)
+            {
                 RemoveBuff(fat);
+                return;
+            }
+
+            SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, fat);
+        }
+
+        public static void TryConvertFatToBurnOnTurnOver(PartInfo owner)
+        {
+            if (owner?.buffLogic == null) return;
+            var fat = owner.GetBuff(EBuffType.FAT);
+            if (fat == null || fat.buffLayer <= 0)
+                return;
+
+            // FAT rule (no table params):
+            // - On owning side TURN_OVER, if FAT >= 10, convert ALL FAT into equal BURN layers.
+            const int Threshold = 10;
+
+            if (fat.buffLayer < Threshold)
+                return;
+
+            int toBurn = fat.buffLayer;
+
+            // Remove all FAT
+            owner.buffLogic.RemoveBuff(fat);
+
+            // Add equal layers of BURN (for next turn's tick; TURN_OVER tick already ran).
+            var burn = owner.GetBuff(EBuffType.BURN);
+            if (burn == null)
+            {
+                var bi = BuffFactory.CreateBuffInfoByType(EBuffType.BURN, toBurn, owner, owner);
+                if (bi != null)
+                    owner.AddBuff(bi);
+            }
             else
-                SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, fat);
-            
-            burn.AddBuffLayer(convert);
-            SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, burn);
+            {
+                burn.AddBuffLayer(toBurn);
+                SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, burn);
+            }
         }
 
         public void RemoveBuff(BuffInfo _buffInfo)
@@ -242,6 +286,7 @@ namespace GameCore.Battle
                             triggerLayer = buffInfo.buffLayer;
                         }
                         break;
+                    case EBuffType.FAT:
                     case EBuffType.MOLD:
                     case EBuffType.BREEDING_MASS:
                     case EBuffType.HEAL_MASS:

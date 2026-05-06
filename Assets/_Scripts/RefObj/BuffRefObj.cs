@@ -1,4 +1,5 @@
 using SCFrame;
+using System.Collections.Generic;
 
 namespace GameCore.RefData
 {
@@ -10,7 +11,8 @@ namespace GameCore.RefData
         public EBuffType buffType;
         public EAttributeTriggerPointType triggerPointType;
         public string buffIconResName;
-        public float buffValue;
+        public List<float> buffValueList;
+        public float buffValue => buffValueList != null && buffValueList.Count > 0 ? buffValueList[0] : 0f;
         public bool isPositive;
         protected override void _parseFromString()
         {
@@ -20,7 +22,7 @@ namespace GameCore.RefData
             buffType = (EBuffType)getEnum("buffType",typeof(EBuffType));
             triggerPointType = (EAttributeTriggerPointType)getEnum("triggerPointType", typeof(EAttributeTriggerPointType));
             buffIconResName = getString("buffIconResName");
-            buffValue = getFloat("buffValue");
+            buffValueList = getList<float>("buffValueList");
             isPositive = getBool("isPositive");
         }
         public static string assetPath => "RefData/ExportTxt";
