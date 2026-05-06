@@ -256,6 +256,8 @@ namespace GameCore.UI
             AudioMgr.instance.PlaySfx("sfx_click");
             TVSwitchTransition.Run(() =>
             {
+                AudioMgr.instance.PlayBgm("bgm_boss");
+
                 int floor = GameModel.instance.playerInfo.playerFloor;
                 EnemyRefObj bossRef = SCRefDataMgr.instance.enemyRefList.refDataList
                     .Find(e => e.isBoss && e.floor == floor);

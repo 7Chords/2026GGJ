@@ -33,6 +33,7 @@ namespace GameCore.UI
                 AudioMgr.instance.PlaySfx("sfx_click");
                 TVSwitchTransition.Run(() =>
                 {
+                    AudioMgr.instance.PlayBgm("bgm_main_music");
                     GameModel.instance.ResetRunForNewGame();
                     GameRunSave.DeleteSave();
                     MapGenerator.GetOrFind()?.GenerateMapDataOnly();

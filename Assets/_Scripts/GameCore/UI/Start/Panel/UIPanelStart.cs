@@ -74,6 +74,10 @@ namespace GameCore.UI
             }
 
             refreshContinueButtonVisibility();
+
+            if (AudioMgr.instance.bgmAudioInfo == null
+                || AudioMgr.instance.bgmAudioInfo.audioName != "bgm_main_music")
+                AudioMgr.instance.PlayBgm("bgm_main_music");
         }
 
         private void refreshContinueButtonVisibility()

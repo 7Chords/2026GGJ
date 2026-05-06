@@ -63,12 +63,14 @@ namespace GameCore.UI
                     }
                     else if (bossWin)
                     {
+                        AudioMgr.instance.PlayBgm("bgm_main_music");
                         GameModel.instance.AdvanceToNextRunFloorAndResetMap();
                         GameRunSave.SaveFromGameModel();
                         UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
                     }
                     else
                     {
+                        AudioMgr.instance.PlayBgm("bgm_main_music");
                         UICoreMgr.instance.AddNode(new UINodeMap(SCUIShowType.FULL));
                     }
                 });
