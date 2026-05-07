@@ -185,18 +185,27 @@ namespace GameCore
         }
         public void SetAllPlayerPart2Bag()
         {
-            for (int i = 0; i < playerInfo.battlePartInfoList.Count; i++)
+            if (playerInfo == null) return;
+            if (playerInfo.bagPartInfoList == null)
+                playerInfo.bagPartInfoList = new List<PartInfo>();
+
+            void MoveListToBag(List<PartInfo> src)
             {
-                playerInfo.battlePartInfoList[i].ResetToBag();
+                if (src == null || src.Count == 0) return;
+                for (int i = 0; i < src.Count; i++)
+                {
+                    var p = src[i];
+                    if (p == null) continue;
+                    p.ResetToBag();
+                    if (!playerInfo.bagPartInfoList.Contains(p))
+                        playerInfo.bagPartInfoList.Add(p);
+                }
+                src.Clear();
             }
-            for (int i = 0; i < playerInfo.deckPartInfoList.Count; i++)
-            {
-                playerInfo.deckPartInfoList[i].ResetToBag();
-            }
-            for (int i = 0; i < playerInfo.busyPartInfoList.Count; i++)
-            {
-                playerInfo.busyPartInfoList[i].ResetToBag();
-            }
+
+            MoveListToBag(playerInfo.battlePartInfoList);
+            MoveListToBag(playerInfo.deckPartInfoList);
+            MoveListToBag(playerInfo.busyPartInfoList);
         }
 
         public void SetEnemyEmpty()
@@ -301,14 +310,20 @@ namespace GameCore
         {
             playerInfo.ClearListForNewBattle();
 
-            if (playerInfo.bagPartInfoList != null)
+            // Move (not duplicate-reference) alive bag parts into deck for this battle.
+            if (playerInfo.bagPartInfoList != null && playerInfo.bagPartInfoList.Count > 0)
             {
+                var alive = new List<PartInfo>();
                 foreach (var part in playerInfo.bagPartInfoList)
                 {
-                    if (part.currentHealth > 0)
-                    {
-                        playerInfo.deckPartInfoList.Add(part);
-                    }
+                    if (part != null && part.currentHealth > 0)
+                        alive.Add(part);
+                }
+                for (int i = 0; i < alive.Count; i++)
+                {
+                    var p = alive[i];
+                    playerInfo.bagPartInfoList.Remove(p);
+                    playerInfo.deckPartInfoList.Add(p);
                 }
             }
             PlayerDrawParts(GetPlayerMaxDrawCards());
