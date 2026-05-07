@@ -65,8 +65,33 @@ namespace GameCore.Battle
         {
             _amount = EnemyPassiveController.AdjustEnemyOutgoingDamageToPlayerPart(_part, _sender, _amount);
             _amount += BuffCombatModifiers.GetPreyExtraDamage(_part);
+            bool isCultureMedium = _part?.partRefObj != null && _part.partRefObj.id == 101031;
             if (GermMassDamageAbsorption.PartHasSendMoldGetHitEntry(_part))
+            {
+                int before = _amount;
                 GermMassDamageAbsorption.AbsorbDamageThroughGerms(_part, ref _amount);
+
+                // 培养基规则：伤害先消耗菌团；若菌团不够吸收（即“溢出”），剩余伤害直接溢出到本体，
+                // 而不是扣培养基本身的血量（培养基血量用于展示/承载，不作为护盾生命值）。
+                if (isCultureMedium)
+                {
+                    int absorbed = Mathf.Max(0, before - _amount);
+                    int overflowToBody = Mathf.Max(0, _amount);
+                    if (absorbed > 0)
+                    {
+                        SCMsgCenter.SendMsg(SCMsgConst.PART_HURT, _part, absorbed);
+                        _part.TriggerGetHitLogic(_sender, absorbed);
+                    }
+                    if (overflowToBody > 0)
+                    {
+                        if (_part.isEnemyPart)
+                            ApplyDamageToEnemy(overflowToBody);
+                        else
+                            ApplyDamageToPlayer(overflowToBody);
+                    }
+                    return;
+                }
+            }
             if (_amount <= 0) return;
             int hpBefore = _part.currentHealth;
             int damageToPart = UnityEngine.Mathf.Min(_amount, hpBefore);
