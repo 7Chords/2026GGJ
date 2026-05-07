@@ -64,6 +64,9 @@ namespace GameCore.Battle
 
         public void ApplyDamageToPart(PartInfo _part, PartInfo _sender, int _amount)
         {
+            // Self-inflicted damage from own effects (bleed/burn/mold ticks etc.) should not trigger GET_HIT chains.
+            bool isSelfEffectDamage = ReferenceEquals(_part, _sender);
+
             _amount = EnemyPassiveController.AdjustEnemyOutgoingDamageToPlayerPart(_part, _sender, _amount);
             _amount += BuffCombatModifiers.GetPreyExtraDamage(_part);
             bool isCultureMedium = _part?.partRefObj != null && _part.partRefObj.id == 101031;
@@ -81,7 +84,8 @@ namespace GameCore.Battle
                     if (absorbed > 0)
                     {
                         SCMsgCenter.SendMsg(SCMsgConst.PART_HURT, _part, absorbed);
-                        _part.TriggerGetHitLogic(_sender, absorbed);
+                        if (!isSelfEffectDamage)
+                            _part.TriggerGetHitLogic(_sender, absorbed);
                     }
                     if (overflowToBodyFromGerms > 0)
                     {
@@ -99,7 +103,8 @@ namespace GameCore.Battle
             int overflowToBody = _amount - damageToPart;
             _part.currentHealth = UnityEngine.Mathf.Clamp(_part.currentHealth - _amount, 0, _part.maxHealth);
             SCMsgCenter.SendMsg(SCMsgConst.PART_HURT, _part, damageToPart);
-            _part.TriggerGetHitLogic(_sender, damageToPart);
+            if (!isSelfEffectDamage)
+                _part.TriggerGetHitLogic(_sender, damageToPart);
             if (_part.currentHealth == 0)
             {
                 SCMsgCenter.SendMsg(SCMsgConst.PART_DIE, _part);
