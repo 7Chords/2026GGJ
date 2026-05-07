@@ -74,12 +74,14 @@ namespace GameCore.UI
         private void onBtnReturnMainClickDonw(PointerEventData _data, object[] _objs)
         {
             AudioMgr.instance.PlaySfx("sfx_click");
-            GameRunSave.SaveFromGameModel();
             TVSwitchTransition.Run(() =>
             {
                 GameModel.instance.playerInfo.ClearPendingMapMove();
                 GameModel.instance.SetAllPlayerPart2Bag();
                 GameModel.instance.SetEnemyEmpty();
+                // Save after state is normalized (parts returned to bag, enemy cleared), otherwise continue-game
+                // can load with empty bag / parts stuck in battle lists.
+                GameRunSave.SaveFromGameModel();
                 UICoreMgr.instance.CloseTopNode();
                 UICoreMgr.instance.RemoveAllNodes(SCUINodeFuncType.BATTLE);
                 UICoreMgr.instance.AddNode(new UINodeStart(SCUIShowType.FULL));

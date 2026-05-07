@@ -127,6 +127,7 @@ namespace GameCore
                 usedSeed = ReseedMapRandomAndReturnSeed();
 
             MapManager.instance?.SetLastMapLayoutSeed(usedSeed);
+            GameModel.instance?.SetRunMapLayoutSeed(usedSeed);
 
             InitializeData();
             if (_mapData == null || _layoutData == null)

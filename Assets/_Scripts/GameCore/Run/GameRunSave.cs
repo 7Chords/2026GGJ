@@ -183,7 +183,10 @@ namespace GameCore
 
             var p = gm.playerInfo;
             var mm = MapManager.instance;
-            bool hasMapSeed = mm != null && mm.LastMapLayoutSeed >= 0;
+            int seedFromMapManager = mm != null ? mm.LastMapLayoutSeed : -1;
+            int seedFromGameModel = gm.RunMapLayoutSeed;
+            int seed = seedFromMapManager >= 0 ? seedFromMapManager : seedFromGameModel;
+            bool hasMapSeed = seed >= 0;
 
             var data = new RunSaveData
             {
@@ -204,7 +207,7 @@ namespace GameCore
                 busyParts = SerializeParts(p.busyPartInfoList),
                 battleParts = SerializeParts(p.battlePartInfoList),
                 mapLayoutFromSave = hasMapSeed,
-                mapLayoutSeed = hasMapSeed ? mm.LastMapLayoutSeed : 0,
+                mapLayoutSeed = hasMapSeed ? seed : 0,
                 tutorialMapAutoShown = gm.RunTutorialMapAutoShown,
                 tutorialBattleAutoShown = gm.RunTutorialBattleAutoShown,
                 tutorialStoreAutoShown = gm.RunTutorialStoreAutoShown,

@@ -6,6 +6,18 @@ namespace GameCore
 {
     public partial class GameModel
     {
+        /// <summary>
+        /// 本局地图布局种子（与 MapManager.LastMapLayoutSeed 同步）。
+        /// 用于在 MapManager 生命周期不稳定（切场景/销毁）时，仍能在存档里写入正确种子，确保继续游戏复现同一张图。
+        /// 未生成过为 -1。
+        /// </summary>
+        public int RunMapLayoutSeed { get; private set; } = -1;
+
+        public void SetRunMapLayoutSeed(int seed)
+        {
+            RunMapLayoutSeed = seed;
+        }
+
         /// <summary> Filled on player win before <see cref="SetEnemyEmpty"/> so battle-win UI can read loot / boss flags. </summary>
         public long LastWinEnemyRefId { get; private set; }
         public bool LastWinEnemyWasBoss { get; private set; }
@@ -46,6 +58,7 @@ namespace GameCore
                 MapManager.instance.ClearPendingLayout();
                 MapManager.instance.SetLastMapLayoutSeed(-1);
             }
+            RunMapLayoutSeed = -1;
             PendingRunMapLayoutSeed = null;
         }
 
@@ -133,6 +146,7 @@ namespace GameCore
             rollEventId = 0;
             enemyFaceLayoutTurnIndex = 0;
             PendingRunMapLayoutSeed = null;
+            RunMapLayoutSeed = -1;
             ClearEnemyWinSnapshot();
             ResetRunTutorialFlagsForNewRun();
 
@@ -178,6 +192,7 @@ namespace GameCore
             if (useSavedLayoutSeed)
             {
                 PendingRunMapLayoutSeed = data.mapLayoutSeed;
+                RunMapLayoutSeed = data.mapLayoutSeed;
                 // 与 MapManager 同步，避免读档后、生成地图前逻辑误判；继续游戏时用同一种子复现布局
                 if (MapManager.instance != null)
                     MapManager.instance.SetLastMapLayoutSeed(data.mapLayoutSeed);
@@ -185,6 +200,7 @@ namespace GameCore
             else
             {
                 PendingRunMapLayoutSeed = null;
+                RunMapLayoutSeed = -1;
                 // 旧存档无布局种子：清掉上一轮残留，避免与本次「将重随机地图」不一致
                 if (MapManager.instance != null)
                     MapManager.instance.SetLastMapLayoutSeed(-1);
