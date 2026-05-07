@@ -2,6 +2,7 @@ using SCFrame;
 using System.Collections.Generic;
 using GameCore.UI;
 using GameCore.RefData;
+using UnityEngine;
 
 namespace GameCore.Battle
 {
@@ -76,18 +77,18 @@ namespace GameCore.Battle
                 if (isCultureMedium)
                 {
                     int absorbed = Mathf.Max(0, before - _amount);
-                    int overflowToBody = Mathf.Max(0, _amount);
+                    int overflowToBodyFromGerms = Mathf.Max(0, _amount);
                     if (absorbed > 0)
                     {
                         SCMsgCenter.SendMsg(SCMsgConst.PART_HURT, _part, absorbed);
                         _part.TriggerGetHitLogic(_sender, absorbed);
                     }
-                    if (overflowToBody > 0)
+                    if (overflowToBodyFromGerms > 0)
                     {
                         if (_part.isEnemyPart)
-                            ApplyDamageToEnemy(overflowToBody);
+                            ApplyDamageToEnemy(overflowToBodyFromGerms);
                         else
-                            ApplyDamageToPlayer(overflowToBody);
+                            ApplyDamageToPlayer(overflowToBodyFromGerms);
                     }
                     return;
                 }
