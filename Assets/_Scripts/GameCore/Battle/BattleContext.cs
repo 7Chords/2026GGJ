@@ -99,6 +99,32 @@ namespace GameCore.Battle
             }
         }
 
+        public void ForceKillPart(PartInfo _part)
+        {
+            if (_part == null) return;
+            if (_part.currentHealth <= 0) return;
+
+            int hpBefore = _part.currentHealth;
+            _part.currentHealth = 0;
+
+            // Treat as “rule death”: show part hurt once, but do not overflow to body and do not run GET_HIT hooks.
+            SCMsgCenter.SendMsg(SCMsgConst.PART_HURT, _part, hpBefore);
+            SCMsgCenter.SendMsg(SCMsgConst.PART_DIE, _part);
+
+            if (_part.isEnemyPart)
+            {
+                GameModel.instance.curEnemyInfo?.battlePartInfoList.Remove(_part);
+                BattleManager.instance.RemovePartFromList(false, _part);
+                SCMsgCenter.SendMsg(SCMsgConst.BATTLE_ENEMY_PART_ORDER_CHG);
+            }
+            else
+            {
+                GameModel.instance.playerInfo?.battlePartInfoList.Remove(_part);
+                BattleManager.instance.RemovePartFromList(true, _part);
+                SCMsgCenter.SendMsg(SCMsgConst.BATTLE_PLAYER_PART_ORDER_CHG);
+            }
+        }
+
         public void ApplyHealToPart(PartInfo _part, int _amount)
         {
             if (_amount <= 0) return;

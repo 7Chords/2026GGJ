@@ -112,6 +112,23 @@ namespace GameCore
                 if (part == null) continue;
                 BuffLogic.TryConvertFatToBurnOnTurnOver(part);
             }
+
+            // Rule: parts on face die if they have no BREEDING_MASS.
+            // BREEDING_MASS can be removed when its layer reaches 0, so we must check absence here (not inside the buff callback).
+            var ctx = BattleContext.current;
+            if (ctx == null) return;
+            var snapshot = new List<PartInfo>(list);
+            for (int i = 0; i < snapshot.Count; i++)
+            {
+                var part = snapshot[i];
+                if (part == null) continue;
+                if (!part.isOnFace) continue;
+                if (part.currentHealth <= 0) continue;
+                // Only 培养基 (part.id = 101031) has the "no breeding mass -> die" rule.
+                if (part.partRefObj == null || part.partRefObj.id != 101031) continue;
+                if (part.GetBuff(EBuffType.BREEDING_MASS) != null) continue;
+                ctx.ForceKillPart(part);
+            }
         }
 
         private void OnBattleRoundFinish()

@@ -94,7 +94,7 @@ namespace GameCore.Battle
             {
                 owner.buffLogic?.RemoveBuff(buff);
                 if (ctx != null && owner.currentHealth > 0)
-                    ctx.ApplyDamageToPart(owner, owner, owner.maxHealth + owner.currentHealth);
+                    ctx.ForceKillPart(owner);
                 return;
             }
             int add = Mathf.RoundToInt(buff.buffValue);

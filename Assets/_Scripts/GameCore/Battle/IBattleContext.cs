@@ -34,6 +34,11 @@ namespace GameCore.Battle
         /// <summary> 对部位造成伤害；若部位死亡会从参战列表移除并通知 </summary>
         void ApplyDamageToPart(PartInfo _part, PartInfo _sender, int _amount);
 
+        /// <summary>
+        /// 强制杀死部位（用于规则性死亡：不应把“过量伤害”溢出到本体，也不应被菌团吸收等机制抵消）。
+        /// </summary>
+        void ForceKillPart(PartInfo _part);
+
         /// <summary> 对部位治疗 </summary>
         void ApplyHealToPart(PartInfo _part, int _amount);
 
