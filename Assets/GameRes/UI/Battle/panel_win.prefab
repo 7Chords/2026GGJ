@@ -108,7 +108,7 @@ MonoBehaviour:
   canvasGroup: {fileID: 3560470123633934606}
   fadeInDuration: 0.25
   fadeOutDuration: 0.25
-  btnExit: {fileID: 3985249269143704480}
+  btnReturnMain: {fileID: 3985249269143704480}
 --- !u!1 &2921264597339946044
 GameObject:
   m_ObjectHideFlags: 0
