@@ -134,6 +134,7 @@ namespace GameCore
         private void OnBattleRoundFinish()
         {
             TriggerTotalTurnOverForAllBattleParts();
+            ProcessMoldHalvingForNonFaceParts();
             GameModel.instance.ClearBuffsAfterFullBattleRound();
             SCTimeCaller.instance.CallDealy(1f, () =>
             {
@@ -143,6 +144,47 @@ namespace GameCore
                 UICoreMgr.instance.AddNode(new UINodeMaskCombine(SCUIShowType.FULL));
                 UICoreMgr.instance.AddNode(new UINodeBattleOrder(SCUIShowType.ADDITION));
             });
+        }
+
+        private static void ProcessMoldHalvingForNonFaceParts()
+        {
+            // Mold TOTAL_TURN_OVER is only triggered for in-battle parts (execute lists).
+            // For parts not deployed on face (busy/deck/bag), apply the "halve mold layers each full round" rule here.
+            var gm = GameModel.instance;
+            if (gm?.playerInfo == null) return;
+
+            static void HalveMoldOnList(List<PartInfo> parts)
+            {
+                if (parts == null || parts.Count == 0) return;
+                for (int i = 0; i < parts.Count; i++)
+                {
+                    var p = parts[i];
+                    if (p == null) continue;
+                    if (p.isOnFace) continue;
+                    var mold = p.GetBuff(EBuffType.MOLD);
+                    if (mold == null || mold.buffLayer <= 0) continue;
+
+                    int reduce = mold.buffLayer - mold.buffLayer / 2;
+                    if (reduce <= 0) continue;
+                    mold.ReduceBuffLayer(reduce);
+                    if (mold.buffLayer <= 0)
+                        p.buffLogic?.RemoveBuff(mold);
+                    else
+                        SCMsgCenter.SendMsg(SCMsgConst.PART_BUFF_UPDATE, mold);
+                }
+            }
+
+            // Player non-face containers
+            HalveMoldOnList(gm.playerInfo.bagPartInfoList);
+            HalveMoldOnList(gm.playerInfo.deckPartInfoList);
+            HalveMoldOnList(gm.playerInfo.busyPartInfoList);
+
+            // Enemy non-face containers (no bag list on enemy)
+            if (gm.curEnemyInfo != null)
+            {
+                HalveMoldOnList(gm.curEnemyInfo.deckPartInfoList);
+                HalveMoldOnList(gm.curEnemyInfo.busyPartInfoList);
+            }
         }
 
         #region 队列相关方法
