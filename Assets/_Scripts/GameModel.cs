@@ -258,7 +258,7 @@ namespace GameCore
                     candidates.Add(dialogueId);
                     continue;
                 }
-                if (!IsBloodForPartEventType(dialogue.eventType) || hp >= minHpForBlood2Part)
+                if (!IsBloodForPartEventType(dialogue.eventType) || hp > minHpForBlood2Part)
                     candidates.Add(dialogueId);
             }
 
