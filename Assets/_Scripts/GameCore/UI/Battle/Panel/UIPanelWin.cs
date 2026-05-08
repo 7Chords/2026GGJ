@@ -36,7 +36,7 @@ namespace GameCore.UI
                     GameModel.instance.ResetRunForNewGame();
                     GameRunSave.DeleteSave();
                     MapGenerator.GetOrFind()?.GenerateMapDataOnly();
-                    UICoreMgr.instance.RemoveAllNodes(SCUINodeFuncType.BATTLE);
+                    UICoreMgr.instance.RemoveAllNodes();
                     UICoreMgr.instance.AddNode(new UINodeStart(SCUIShowType.FULL));
                 });
             });

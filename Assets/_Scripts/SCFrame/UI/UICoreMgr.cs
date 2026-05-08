@@ -311,6 +311,22 @@ namespace SCFrame
                 }
             }
         }
+
+        /// <summary> Remove and discard every node (all func types). </summary>
+        public void RemoveAllNodes()
+        {
+            if (_m_nodeList == null || _m_nodeList.Count == 0)
+                return;
+            for (int i = _m_nodeList.Count - 1; i > -1; i--)
+            {
+                var node = _m_nodeList[i];
+                if (node == null)
+                    continue;
+                node.HideNode();
+                node.QuitNode();
+                _m_nodeList.RemoveAt(i);
+            }
+        }
         public _ASCUINodeBase GetNodeByName(string _nodeName)
         {
             foreach(var node in _m_nodeList)
