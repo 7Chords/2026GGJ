@@ -11,6 +11,11 @@ namespace GameCore
         public List<PartInfo> deckPartInfoList;
         public List<PartInfo> busyPartInfoList;
         public List<PartInfo> battlePartInfoList;
+        /// <summary>
+        /// Parts that died during the current battle. They are removed from battle execution/face,
+        /// but should return to bag after the battle (full reset).
+        /// </summary>
+        public List<PartInfo> deadPartInfoList;
 
         public int currentHealth;
         public int maxHealth;
@@ -30,6 +35,7 @@ namespace GameCore
             bagPartInfoList = new List<PartInfo>();
             deckPartInfoList = new List<PartInfo>();
             battlePartInfoList = new List<PartInfo>();
+            deadPartInfoList = new List<PartInfo>();
         }
 
         public void SetPendingMapTarget(Vector2Int target)
@@ -67,6 +73,9 @@ namespace GameCore
 
             if (battlePartInfoList == null) battlePartInfoList = new List<PartInfo>();
             else battlePartInfoList.Clear();
+
+            if (deadPartInfoList == null) deadPartInfoList = new List<PartInfo>();
+            else deadPartInfoList.Clear();
         }
     }
 }

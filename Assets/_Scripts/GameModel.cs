@@ -125,6 +125,8 @@ namespace GameCore
                 }
                 else
                 {
+                    if (playerInfo?.deadPartInfoList != null && !playerInfo.deadPartInfoList.Contains(_partInfo))
+                        playerInfo.deadPartInfoList.Add(_partInfo);
                     playerInfo.battlePartInfoList.Remove(_partInfo);
                     BattleManager.instance.RemovePartFromList(true, _partInfo);
                     SCMsgCenter.SendMsg(SCMsgConst.BATTLE_PLAYER_PART_ORDER_CHG);
@@ -206,6 +208,7 @@ namespace GameCore
             MoveListToBag(playerInfo.battlePartInfoList);
             MoveListToBag(playerInfo.deckPartInfoList);
             MoveListToBag(playerInfo.busyPartInfoList);
+            MoveListToBag(playerInfo.deadPartInfoList);
         }
 
         public void SetEnemyEmpty()

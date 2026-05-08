@@ -116,6 +116,9 @@ namespace GameCore.Battle
                 }
                 else
                 {
+                    var p = GameModel.instance.playerInfo;
+                    if (p?.deadPartInfoList != null && !p.deadPartInfoList.Contains(_part))
+                        p.deadPartInfoList.Add(_part);
                     GameModel.instance.playerInfo?.battlePartInfoList.Remove(_part);
                     BattleManager.instance.RemovePartFromList(true, _part);
                     SCMsgCenter.SendMsg(SCMsgConst.BATTLE_PLAYER_PART_ORDER_CHG);
@@ -150,6 +153,9 @@ namespace GameCore.Battle
             }
             else
             {
+                var p = GameModel.instance.playerInfo;
+                if (p?.deadPartInfoList != null && !p.deadPartInfoList.Contains(_part))
+                    p.deadPartInfoList.Add(_part);
                 GameModel.instance.playerInfo?.battlePartInfoList.Remove(_part);
                 BattleManager.instance.RemovePartFromList(true, _part);
                 SCMsgCenter.SendMsg(SCMsgConst.BATTLE_PLAYER_PART_ORDER_CHG);
