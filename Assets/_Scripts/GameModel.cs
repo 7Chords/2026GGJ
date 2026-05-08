@@ -78,8 +78,22 @@ namespace GameCore
                 return;
             playerInfo.currentHealth = Mathf.Clamp(playerInfo.currentHealth - _amount, 0, playerInfo.maxHealth);
             SCMsgCenter.SendMsg(SCMsgConst.PLAYER_HURT, _amount);
-            if(playerInfo.currentHealth == 0)
-                BattleManager.instance.TerminateBattle(false);
+            if (playerInfo.currentHealth == 0)
+            {
+                // Death can happen outside battle (e.g. event blood exchange). Do not run battle terminate flow there,
+                // otherwise it can fight with event/map UI transitions and cause panel flicker.
+                if (BattleContext.current != null)
+                {
+                    BattleManager.instance.TerminateBattle(false);
+                }
+                else
+                {
+                    // Clear all UI nodes and show lose panel.
+                    AudioMgr.instance.PlayBgm("bgm_main_music");
+                    UICoreMgr.instance.RemoveAllNodes();
+                    UICoreMgr.instance.AddNode(new UINodeLose(SCFrame.UI.SCUIShowType.FULL));
+                }
+            }
         }
 
         public void EnemyHeal(int _amount)

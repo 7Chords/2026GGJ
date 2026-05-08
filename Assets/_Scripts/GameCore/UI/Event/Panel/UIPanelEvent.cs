@@ -141,6 +141,10 @@ namespace GameCore.UI
             }
             EventHandler.DealEvent(_m_eventDialogueRefObj.eventType);
             refreshPlayerHud();
+            // If the event action killed the player (e.g. BLOOD_2_PART damage), the lose flow takes over.
+            // Do not advance dialogue or run END transitions, otherwise UI can flicker between panels.
+            if (GameModel.instance?.playerInfo != null && GameModel.instance.playerInfo.currentHealth <= 0)
+                return;
             // TRAP_BATTLE runs its own TVSwitch into mask-combine + battle; do not run END->map or it cancels that flow.
             if (_m_eventDialogueRefObj.flagType == EEventDialogueFlagType.END
                 && _m_eventDialogueRefObj.eventType != EEventType.TRAP_BATTLE)
@@ -211,6 +215,8 @@ namespace GameCore.UI
             if (selectDialogueRefObj.eventType != EEventType.NONE)
                 EventHandler.DealEvent(selectDialogueRefObj.eventType);
             refreshPlayerHud();
+            if (GameModel.instance?.playerInfo != null && GameModel.instance.playerInfo.currentHealth <= 0)
+                return;
             _m_eventDialogueId = selectDialogueRefObj.nextList[0];
             _m_eventDialogueRefObj = SCRefDataMgr.instance.eventDialogueRefList.refDataList.Find(x => x.id == _m_eventDialogueId);
             refreshShow();
