@@ -58,10 +58,25 @@ namespace GameCore.UI
             refreshShow();
         }
 
+        private void refreshPlayerHud()
+        {
+            var p = GameModel.instance?.playerInfo;
+            if (p == null)
+                return;
+
+            if (mono.txtHealth != null)
+                mono.txtHealth.text = $"{p.currentHealth}/{p.maxHealth}";
+            if (mono.imgHealthBar != null)
+                mono.imgHealthBar.fillAmount = p.maxHealth > 0 ? Mathf.Clamp01((float)p.currentHealth / p.maxHealth) : 0f;
+            if (mono.txtCoin != null)
+                mono.txtCoin.text = p.playerMoney.ToString();
+        }
+
         private void refreshShow()
         {
             if (_m_eventDialogueRefObj == null)
                 return;
+            refreshPlayerHud();
             stopDialogueTypewriter();
             if (_m_eventDialogueRefObj.dialogueType == EEventDialogueType.STANDARD)
             {
@@ -125,6 +140,7 @@ namespace GameCore.UI
                 return;
             }
             EventHandler.DealEvent(_m_eventDialogueRefObj.eventType);
+            refreshPlayerHud();
             // TRAP_BATTLE runs its own TVSwitch into mask-combine + battle; do not run END->map or it cancels that flow.
             if (_m_eventDialogueRefObj.flagType == EEventDialogueFlagType.END
                 && _m_eventDialogueRefObj.eventType != EEventType.TRAP_BATTLE)
@@ -169,6 +185,7 @@ namespace GameCore.UI
 
         private void onEventPartExchangeCompleted(object[] _objs)
         {
+            refreshPlayerHud();
             advanceToNextSingleDialogue();
         }
 
@@ -193,6 +210,7 @@ namespace GameCore.UI
             _m_isSelecting = false;
             if (selectDialogueRefObj.eventType != EEventType.NONE)
                 EventHandler.DealEvent(selectDialogueRefObj.eventType);
+            refreshPlayerHud();
             _m_eventDialogueId = selectDialogueRefObj.nextList[0];
             _m_eventDialogueRefObj = SCRefDataMgr.instance.eventDialogueRefList.refDataList.Find(x => x.id == _m_eventDialogueId);
             refreshShow();

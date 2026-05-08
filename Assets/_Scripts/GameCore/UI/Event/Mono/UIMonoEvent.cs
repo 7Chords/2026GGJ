@@ -18,6 +18,11 @@ namespace GameCore.UI
         public Image imgClickArea;
         [Header("对话内容逐字显示间隔（秒）")]
         public float dialogueTypewriterInterval = 0.04f;
-
+        [Header("血量条")]
+        public Image imgHealthBar;
+        [Header("血量文本")]
+        public Text txtHealth;
+        [Header("金币文本")]
+        public Text txtCoin;
     }
 }
