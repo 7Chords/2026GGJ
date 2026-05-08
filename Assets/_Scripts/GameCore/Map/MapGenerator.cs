@@ -107,6 +107,10 @@ namespace GameCore
                 int? fixedSeed = gm != null ? gm.PendingRunMapLayoutSeed : (int?)null;
                 if (!fixedSeed.HasValue && MapManager.instance.LastMapLayoutSeed >= 0)
                     fixedSeed = MapManager.instance.LastMapLayoutSeed;
+                // Continue safety: Pending seed can be cleared after data-gen; MapManager seed can be lost if lifecycle resets.
+                // Fall back to the run seed persisted on GameModel so layout remains stable after returning to main menu.
+                if (!fixedSeed.HasValue && gm != null && gm.RunMapLayoutSeed >= 0)
+                    fixedSeed = gm.RunMapLayoutSeed;
                 GenerateMapDataOnly(fixedSeed);
             }
 
@@ -569,6 +573,8 @@ namespace GameCore
             if (probs == null || probs.Count == 0)
                 return;
 
+            // Important: keep iteration deterministic across runs/platforms.
+            // Dictionary iteration order is not stable, which can change room type assignment even with same seed.
             var mergedWeight = new Dictionary<ERoomType, int>();
             for (int i = 0; i < probs.Count; i++)
             {
@@ -610,17 +616,26 @@ namespace GameCore
             var fracOrder = new List<(ERoomType type, float frac)>();
             int sumFloor = 0;
 
-            foreach (var kv in mergedWeight)
+            var mergedKeys = new List<ERoomType>(mergedWeight.Keys);
+            mergedKeys.Sort((a, b) => ((int)a).CompareTo((int)b));
+            for (int idx = 0; idx < mergedKeys.Count; idx++)
             {
-                float exact = (float)n * kv.Value / totalW;
+                var key = mergedKeys[idx];
+                int w = mergedWeight[key];
+                float exact = (float)n * w / totalW;
                 int fl = Mathf.FloorToInt(exact);
-                quota[kv.Key] = fl;
+                quota[key] = fl;
                 sumFloor += fl;
-                fracOrder.Add((kv.Key, exact - fl));
+                fracOrder.Add((key, exact - fl));
             }
 
             int deficit = n - sumFloor;
-            fracOrder.Sort((a, b) => b.frac.CompareTo(a.frac));
+            // Deterministic tie-break on type when fractional parts match.
+            fracOrder.Sort((a, b) =>
+            {
+                int c = b.frac.CompareTo(a.frac);
+                return c != 0 ? c : ((int)a.type).CompareTo((int)b.type);
+            });
             for (int k = 0; k < deficit; k++)
             {
                 var t = fracOrder[k % fracOrder.Count].type;
@@ -628,10 +643,14 @@ namespace GameCore
             }
 
             var pool = new List<ERoomType>(n);
-            foreach (var kv in quota)
+            var quotaKeys = new List<ERoomType>(quota.Keys);
+            quotaKeys.Sort((a, b) => ((int)a).CompareTo((int)b));
+            for (int q = 0; q < quotaKeys.Count; q++)
             {
-                for (int c = 0; c < kv.Value; c++)
-                    pool.Add(kv.Key);
+                var type = quotaKeys[q];
+                int count = quota[type];
+                for (int c = 0; c < count; c++)
+                    pool.Add(type);
             }
 
             while (pool.Count < n)

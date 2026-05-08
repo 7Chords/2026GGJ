@@ -121,8 +121,15 @@ namespace GameCore.UI
 
             var genPre = MapGenerator.GetOrFind();
             var gmPre = GameModel.instance;
-            if (genPre != null && gmPre != null && gmPre.PendingRunMapLayoutSeed.HasValue)
-                genPre.GenerateMapDataOnly(gmPre.PendingRunMapLayoutSeed);
+            if (genPre != null && gmPre != null)
+            {
+                // Prefer pending seed (from save) but fall back to run seed to keep layout stable.
+                int? fixedSeed = gmPre.PendingRunMapLayoutSeed;
+                if (!fixedSeed.HasValue && gmPre.RunMapLayoutSeed >= 0)
+                    fixedSeed = gmPre.RunMapLayoutSeed;
+                if (fixedSeed.HasValue)
+                    genPre.GenerateMapDataOnly(fixedSeed);
+            }
 
             TVSwitchTransition.Run(() =>
             {
