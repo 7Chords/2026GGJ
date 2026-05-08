@@ -1,3 +1,4 @@
+using GameCore;
 using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
@@ -145,7 +146,10 @@ namespace GameCore.UI
                 }
                 else
                 {
-                    bool waitForPartExchange = _m_eventDialogueRefObj.eventType == EEventType.PART_2_PART_NORMAL
+                    bool waitForPartExchange =
+                        (_m_eventDialogueRefObj.eventType == EEventType.PART_2_PART_NORMAL
+                        || _m_eventDialogueRefObj.eventType == EEventType.PART_2_PART_BLEED
+                        || _m_eventDialogueRefObj.eventType == EEventType.PART_2_PART_BURN)
                         && GameModel.instance.playerInfo.bagPartInfoList != null
                         && GameModel.instance.playerInfo.bagPartInfoList.Count > 0;
                     if (!waitForPartExchange)
@@ -175,11 +179,23 @@ namespace GameCore.UI
             EventDialogueRefObj selectDialogueRefObj = _objs[0] as EventDialogueRefObj;
             if (selectDialogueRefObj == null || selectDialogueRefObj.nextList.Count == 0)
                 return;
+
+            // Clear current option buttons before either opening the next tier or advancing dialogue.
+            SCMsgCenter.SendMsg(SCMsgConst.EVENT_END_SELECT);
+
+            if (selectDialogueRefObj.nextList.Count > 1)
+            {
+                _m_isSelecting = true;
+                SCMsgCenter.SendMsg(SCMsgConst.EVENT_START_SELECT, selectDialogueRefObj);
+                return;
+            }
+
             _m_isSelecting = false;
+            if (selectDialogueRefObj.eventType != EEventType.NONE)
+                EventHandler.DealEvent(selectDialogueRefObj.eventType);
             _m_eventDialogueId = selectDialogueRefObj.nextList[0];
             _m_eventDialogueRefObj = SCRefDataMgr.instance.eventDialogueRefList.refDataList.Find(x => x.id == _m_eventDialogueId);
             refreshShow();
-            SCMsgCenter.SendMsg(SCMsgConst.EVENT_END_SELECT);
         }
     }
 }

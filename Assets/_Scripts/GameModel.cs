@@ -272,7 +272,11 @@ namespace GameCore
         {
             return _type == EEventType.BLOOD_2_PART_HIGH
                 || _type == EEventType.BLOOD_2_PART_MIDDLE
-                || _type == EEventType.BLOOD_2_PART_LOW;
+                || _type == EEventType.BLOOD_2_PART_LOW
+                || _type == EEventType.BLOOD_2_PART_EYE
+                || _type == EEventType.BLOOD_2_PART_NOSE
+                || _type == EEventType.BLOOD_2_PART_MOUTH
+                || _type == EEventType.BLOOD_2_PART_SKIN;
         }
 
         public void RollBattleOrder()
