@@ -214,14 +214,20 @@ namespace GameCore.UI
 
         private void onBtnBookClickDown(PointerEventData arg1, object[] arg2)
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
+            UICoreMgr.instance.AddNode(new UINodeBook(SCUIShowType.ADDITION));
         }
 
         private void onBtnBookMouseEnter(PointerEventData arg1, object[] arg2)
         {
+            if (mono.btnBook == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnBook.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
         }
 
         private void onBtnBookMouseExit(PointerEventData arg1, object[] arg2)
         {
+            if (mono.btnBook == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnBook.transform.DOScale(Vector3.one, mono.scaleChgDuration));
         }
 
         private void onBtnHistoryClickDown(PointerEventData arg1, object[] arg2)
