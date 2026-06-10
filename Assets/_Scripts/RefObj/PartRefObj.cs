@@ -10,6 +10,7 @@ namespace GameCore.RefData
         public string partName;
         public EPartType partType;
         public EQualityType qualityType;
+        public bool isEnemyPart;
         public string partSpriteObjName;
         public string partPlayerGameObjectName;
         public string partEnemyGameObjectName;
@@ -32,6 +33,7 @@ namespace GameCore.RefData
             partName = getString("partName");
             partType = (EPartType)getEnum("partType",typeof(EPartType));
             qualityType = (EQualityType)getEnum("qualityType", typeof(EQualityType));
+            isEnemyPart = getBool("isEnemyPart");
             partSpriteObjName = getString("partSpriteObjName");
             partPlayerGameObjectName = getString("partPlayerGameObjectName");
             partEnemyGameObjectName = getString("partEnemyGameObjectName");

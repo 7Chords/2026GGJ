@@ -127,7 +127,7 @@ namespace GameCore.UI
             for (int i = 0; i < partRefs.Count; i++)
             {
                 PartRefObj partRef = partRefs[i];
-                if (partRef == null || partRef.partType != _filterType)
+                if (partRef == null || partRef.partType != _filterType || partRef.isEnemyPart)
                     continue;
 
                 PartLevelRefObj levelRow = findLowestLevelRowForPart(partRef.id);
