@@ -14,6 +14,10 @@ namespace GameCore.UI
         public Button btnSetting;
         [Header("继续按钮")]
         public Button btnContinue;
+        [Header("图鉴按钮")]
+        public Button btnBook;
+        [Header("历史按钮")]
+        public Button btnHistory;
         [Header("结束按钮")]
         public Button btnExit;
         [Header("鼠标移入按钮的缩放")]

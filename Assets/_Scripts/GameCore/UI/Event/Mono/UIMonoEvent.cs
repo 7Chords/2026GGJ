@@ -8,21 +8,21 @@ namespace GameCore.UI
 {
     public class UIMonoEvent : _ASCUIMonoBase
     {
-        [Header("ÐÕÃûÎÄ±¾")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½")]
         public Text txtName;
-        [Header("ÄÚÈÝÎÄ±¾")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½")]
         public Text txtContent;
-        [Header("Ñ¡ÔñÏîÈÝÆ÷")]
+        [Header("Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
         public UIMonoCommonContainer monoSelectContainer;
-        [Header("¶Ô»°µã»÷ÇøÓò")]
+        [Header("ï¿½Ô»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
         public Image imgClickArea;
-        [Header("¶Ô»°ÄÚÈÝÖð×ÖÏÔÊ¾¼ä¸ô£¨Ãë£©")]
+        [Header("ï¿½Ô»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë£©")]
         public float dialogueTypewriterInterval = 0.04f;
-        [Header("ÑªÁ¿Ìõ")]
+        [Header("Ñªï¿½ï¿½ï¿½ï¿½")]
         public Image imgHealthBar;
-        [Header("ÑªÁ¿ÎÄ±¾")]
+        [Header("Ñªï¿½ï¿½ï¿½Ä±ï¿½")]
         public Text txtHealth;
-        [Header("½ð±ÒÎÄ±¾")]
+        [Header("ï¿½ï¿½ï¿½ï¿½Ä±ï¿½")]
         public Text txtCoin;
     }
 }

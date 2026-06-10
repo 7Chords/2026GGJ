@@ -8,15 +8,15 @@ namespace GameCore.UI
 {
     public class UIMonoBattleFaceGrid : _ASCUIMonoBase
     {
-        [Header("Ä¬ÈÏµÄÑÕÉ«")]
+        [Header("Ä¬ï¿½Ïµï¿½ï¿½ï¿½É«")]
         public Color colorDefault;
-        [Header("¿ÉÒÔ·ÅÖÃµÄÑÕÉ«")]
+        [Header("ï¿½ï¿½ï¿½Ô·ï¿½ï¿½Ãµï¿½ï¿½ï¿½É«")]
         public Color colorCanPlace;
-        [Header("²»¿ÉÒÔ·ÅÖÃµÄÑÕÉ«")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½Ô·ï¿½ï¿½Ãµï¿½ï¿½ï¿½É«")]
         public Color colorCanNotPlace;
-        [Header("×÷ÓÃ·¶Î§µÄÑÕÉ«")]
+        [Header("ï¿½ï¿½ï¿½Ã·ï¿½Î§ï¿½ï¿½ï¿½ï¿½É«")]
         public Color colorIsEffective;
-        [Header("±³¾°Í¼Æ¬")]
+        [Header("ï¿½ï¿½ï¿½ï¿½Í¼Æ¬")]
         public Image imgGrid;
     }
 }

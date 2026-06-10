@@ -49,6 +49,18 @@ namespace GameCore.UI
                 mono.btnSetting.RemoveMouseEnter(onBtnSettingMouseEnter);
                 mono.btnSetting.RemoveMouseExit(onBtnSettingMouseExit);
             }
+            if (mono.btnBook != null)
+            {
+                mono.btnBook.RemoveClickDown(onBtnBookClickDown);
+                mono.btnBook.RemoveMouseEnter(onBtnBookMouseEnter);
+                mono.btnBook.RemoveMouseExit(onBtnBookMouseExit);
+            }
+            if (mono.btnHistory != null)
+            {
+                mono.btnHistory.RemoveClickDown(onBtnHistoryClickDown);
+                mono.btnHistory.RemoveMouseEnter(onBtnHistoryMouseEnter);
+                mono.btnHistory.RemoveMouseExit(onBtnHistoryMouseExit);
+            }
         }
 
         public override void OnShowPanel()
@@ -71,6 +83,18 @@ namespace GameCore.UI
                 mono.btnSetting.AddMouseLeftClickDown(onBtnSettingClickDown);
                 mono.btnSetting.AddMouseEnter(onBtnSettingMouseEnter);
                 mono.btnSetting.AddMouseExit(onBtnSettingMouseExit);
+            }
+            if (mono.btnBook != null)
+            {
+                mono.btnBook.AddMouseLeftClickDown(onBtnBookClickDown);
+                mono.btnBook.AddMouseEnter(onBtnBookMouseEnter);
+                mono.btnBook.AddMouseExit(onBtnBookMouseExit);
+            }
+            if (mono.btnHistory != null)
+            {
+                mono.btnHistory.AddMouseLeftClickDown(onBtnHistoryClickDown);
+                mono.btnHistory.AddMouseEnter(onBtnHistoryMouseEnter);
+                mono.btnHistory.AddMouseExit(onBtnHistoryMouseExit);
             }
 
             refreshContinueButtonVisibility();
@@ -186,6 +210,30 @@ namespace GameCore.UI
         {
             if (mono.btnSetting == null) return;
             _m_tweenContainer.RegDoTween(mono.btnSetting.transform.DOScale(Vector3.one, mono.scaleChgDuration));
+        }
+
+        private void onBtnBookClickDown(PointerEventData arg1, object[] arg2)
+        {
+        }
+
+        private void onBtnBookMouseEnter(PointerEventData arg1, object[] arg2)
+        {
+        }
+
+        private void onBtnBookMouseExit(PointerEventData arg1, object[] arg2)
+        {
+        }
+
+        private void onBtnHistoryClickDown(PointerEventData arg1, object[] arg2)
+        {
+        }
+
+        private void onBtnHistoryMouseEnter(PointerEventData arg1, object[] arg2)
+        {
+        }
+
+        private void onBtnHistoryMouseExit(PointerEventData arg1, object[] arg2)
+        {
         }
     }
 }

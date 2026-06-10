@@ -9,15 +9,15 @@ namespace GameCore
     [CreateAssetMenu(fileName = "NewMapData", menuName = "Map/MapData")]
     public class MapData : ScriptableObject
     {
-        [Header("µØÍ¼ÐÐÁÐ")]
+        [Header("ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½")]
         public Vector2Int layerCount = new Vector2Int(12, 5);
-        [Header("µØÍ¼½»²æµã")]
+        [Header("ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½")]
         public int repetitionCount = 5;
 
-        [Header("½ÚµãÅäÖÃ")]
-        [Tooltip("µÚÒ»¸ö½Úµã")]
+        [Header("ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½")]
+        [Tooltip("ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Úµï¿½")]
         public ERoomType firstNodeRoomType = ERoomType.ENEMY;
-        [Tooltip("×îºóÒ»¸ö½Úµã")]
+        [Tooltip("ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Úµï¿½")]
         public ERoomType lastNodeRoomType = ERoomType.BOSS;
 
         [Tooltip("When true, the column before the last uses penultimateNodeRoomType instead of interior random/quota.")]
@@ -25,7 +25,7 @@ namespace GameCore
         [Tooltip("Room type for the second-to-last column (used when usePenultimateNodeRoomType and map has at least 3 columns).")]
         public ERoomType penultimateNodeRoomType = ERoomType.ENEMY;
 
-        [Header("½Úµã¸ÅÂÊ")]
+        [Header("ï¿½Úµï¿½ï¿½ï¿½ï¿½")]
         public List<RoomProbability> roomProbabilities;
 
         [Tooltip("If true, use legacy per-step weighted random for interior rooms. If false (default), after routes are built interior visible nodes get types by count quota so ratios match Room Probabilities.")]

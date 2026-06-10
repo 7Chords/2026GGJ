@@ -107,7 +107,7 @@ namespace GameCore.UI
             var bag = GameModel.instance.playerInfo.bagPartInfoList;
             if (bag == null || bag.Count <= 1)
             {
-                GameCommon.ShowPopTip("ÄãÖÁÉÙÐèÒªÓµÓÐÒ»¸ö²¿Î»", Vector2.zero);
+                GameCommon.ShowPopTip("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÓµï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Î»", Vector2.zero);
                 return;
             }
             AudioMgr.instance.PlaySfx("sfx_money");

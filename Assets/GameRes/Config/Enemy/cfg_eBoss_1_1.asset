@@ -17,7 +17,7 @@ MonoBehaviour:
   - {x: 3, y: 0}
   - {x: 0, y: 6}
   - {x: 3, y: 6}
-  turnLayouts:
+  turnLayoutsEnemyActsFirst:
   - slots:
     - partLevelRefId: 10073
       originFacePosition: {x: 0, y: 0}
@@ -111,3 +111,4 @@ MonoBehaviour:
     - partLevelRefId: 10078
       originFacePosition: {x: 1, y: 6}
       rotationSteps: 0
+  turnLayoutsEnemyActsSecond: []

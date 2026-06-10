@@ -10,7 +10,7 @@ namespace GameCore.UI
 {
     public class UIPanelCommonPartContainer : UIPanelContainerBase<UIMonoCommonContainer, UIPanelCommonPartItem, UIMonoCommonPartItem>
     {
-        private List<UIPanelCommonPartItem> _m_itemList;//itemÁÐ±í
+        private List<UIPanelCommonPartItem> _m_itemList;//itemï¿½Ð±ï¿½
 
         public UIPanelCommonPartContainer(UIMonoCommonContainer _mono, SCUIShowType _showType = SCUIShowType.INTERNAL) : base(_mono, _showType)
         {
@@ -81,7 +81,7 @@ namespace GameCore.UI
                 item.ShowPanel();
                 count++;
             }
-            //Òþ²Ø¶àÓàµÄ
+            //ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ï¿½ï¿½
             for (i = count; i < _m_itemList.Count; i++)
             {
                 item = _m_itemList[i];
@@ -136,7 +136,7 @@ namespace GameCore.UI
 
                 count++;
             }
-            //Òþ²Ø¶àÓàµÄ
+            //ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ï¿½ï¿½
             for (i = count; i < _m_itemList.Count; i++)
             {
                 item = _m_itemList[i];

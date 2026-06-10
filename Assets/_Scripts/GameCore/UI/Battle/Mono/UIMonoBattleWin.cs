@@ -8,11 +8,11 @@ namespace GameCore.UI
 {
     public class UIMonoBattleWin : _ASCUIMonoBase
     {
-        [Header("Õ½ÀûÆ·container")]
+        [Header("Õ½ï¿½ï¿½Æ·container")]
         public UIMonoCommonContainer monoContainer;
-        [Header("½ðÇ®ÎÄ±¾")]
+        [Header("ï¿½ï¿½Ç®ï¿½Ä±ï¿½")]
         public Text txtMoney;
-        [Header("goto°´Å¥")]
+        [Header("gotoï¿½ï¿½Å¥")]
         public Button btnGoto;
 
         [Header("Battle win: money count-up duration (sec)")]

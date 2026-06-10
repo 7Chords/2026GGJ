@@ -5,7 +5,7 @@ using UnityEngine;
 namespace SCFrame.UI
 {
     /// <summary>
-    /// UIÃæ°å³éÏó»ùÀà
+    /// UIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class _ASCUIPanelBase<T> : _ASCUILifeObjBase, ISCUIPanelBase where T:_ASCUIMonoBase
@@ -28,7 +28,7 @@ namespace SCFrame.UI
             mono = _mono;
             showType = _showType;
 
-            //Ãæ°åÄÚ²¿µÄ×ÓÃæ°å ²»Í¨¹ýnode³õÊ¼»¯ ËùÒÔÔÚ¹¹Ôìº¯ÊýÀïÃæ³õÊ¼»¯
+            //ï¿½ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Í¨ï¿½ï¿½nodeï¿½ï¿½Ê¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ú¹ï¿½ï¿½ìº¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
             if (showType == SCUIShowType.INTERNAL)
                 Initialize();
         }

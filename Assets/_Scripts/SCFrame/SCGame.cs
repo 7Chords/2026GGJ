@@ -7,7 +7,7 @@ namespace SCFrame
 {
 
     /// <summary>
-    /// 功能相当于全局Mono
+    /// 锟斤拷锟斤拷锟洁当锟斤拷全锟斤拷Mono
     /// </summary>
     public class SCGame : SingletonPersistent<SCGame>
     {

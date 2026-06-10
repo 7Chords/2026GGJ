@@ -8,21 +8,21 @@ namespace GameCore.UI
 {
     public class UIMonoStoreBagItem : _ASCUIMonoBase
     {
-        [Header("²¿Î»icon")]
+        [Header("ï¿½ï¿½Î»icon")]
         public Image imgIcon;
-        [Header("ÉúÃüÖµÎÄ±¾")]
+        [Header("ï¿½ï¿½ï¿½ï¿½Öµï¿½Ä±ï¿½")]
         public Text txtHealth;
-        [Header("¼ÛÖµÎÄ±¾")]
+        [Header("ï¿½ï¿½Öµï¿½Ä±ï¿½")]
         public Text txtValue;
-        [Header("Êó±êÒÆÈëµÄËõ·Å")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
         public float scaleMouseEnter;
-        [Header("Êó±êÒÆÈëµÄËõ·ÅÊ±¼ä")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½")]
         public float scaleChgDuration;
         [Header("Sell button hover scale")]
         public float scaleMouseEnterSell;
-        [Header("³öÊÛ°´Å¥")]
+        [Header("ï¿½ï¿½ï¿½Û°ï¿½Å¥")]
         public Button btnSell;
-        [Header("ÄÚÈİÎïÌå")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
         public GameObject goContent;
 
     }

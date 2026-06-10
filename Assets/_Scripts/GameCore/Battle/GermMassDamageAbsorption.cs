@@ -4,7 +4,7 @@ using UnityEngine;
 namespace GameCore.Battle
 {
     /// <summary>
-    /// спSEND_MOLD_2_BY_GET_HIT╣дфВ╧ы йэиксеох©шЁЩ╬Зме╢╕юМфВ
+    /// О©╫О©╫SEND_MOLD_2_BY_GET_HITО©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫х©шЁО©╫О©╫О©╫О©╫е╢О©╫О©╫О©╫О©╫О©╫
     /// </summary>
     public static class GermMassDamageAbsorption
     {

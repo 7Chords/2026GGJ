@@ -7,11 +7,11 @@ namespace GameCore.UI
 {
     public class CommonBuffSideItem : MonoBehaviour
     {
-        [Header("buffÍ¼±ê")]
+        [Header("buffÍ¼ï¿½ï¿½")]
         public Image imgBuffIcon;
-        [Header("buffÃûÎÄ±¾")]
+        [Header("buffï¿½ï¿½ï¿½Ä±ï¿½")]
         public Text txtBuffName;
-        [Header("ÃèÊöÎÄ±¾")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½")]
         public Text txtBuffDesc;
 
         public void Initialize(EBuffType _buffType)

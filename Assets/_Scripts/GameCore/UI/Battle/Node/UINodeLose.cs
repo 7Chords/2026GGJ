@@ -45,13 +45,13 @@ namespace GameCore.UI
             _m_panelGO = ResourcesHelper.LoadGameObject(GetResName(), GetRootTransform(), true);
             if (_m_panelGO == null)
             {
-                Debug.LogError("未找到资源名为" + GetResName() + "的资源!!!");
+                Debug.LogError("未锟揭碉拷锟斤拷源锟斤拷为" + GetResName() + "锟斤拷锟斤拷源!!!");
                 return;
             }
             _m_deckMono = _m_panelGO.GetComponent<UIMonoLose>();
             if (_m_deckMono == null)
             {
-                Debug.LogError("资源名为" + GetResName() + "的资源上不存在对应的Mono!!!");
+                Debug.LogError("锟斤拷源锟斤拷为" + GetResName() + "锟斤拷锟斤拷源锟较诧拷锟斤拷锟节讹拷应锟斤拷Mono!!!");
                 return;
             }
 

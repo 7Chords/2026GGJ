@@ -8,29 +8,29 @@ namespace GameCore.UI
 {
     public class UIMonoStrengthen : _ASCUIMonoBase
     {
-        [Header("Ç¿»¯Ç°Ô¤ÀÀmono")]
+        [Header("Ç¿ï¿½ï¿½Ç°Ô¤ï¿½ï¿½mono")]
         public UIMonoStrengthenPreview monoPreviewBefore;
-        [Header("Ç¿»¯ºóÔ¤ÀÀmono")]
+        [Header("Ç¿ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½mono")]
         public UIMonoStrengthenPreview monoPreviewAfter;
-        [Header("±³°ümono")]
+        [Header("ï¿½ï¿½ï¿½ï¿½mono")]
         public UIMonoCommonContainer monoBagContainer;
-        [Header("È·ÈÏÇ¿»¯°´Å¥")]
+        [Header("È·ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ï¿½Å¥")]
         public Button btnConfirm;
-        [Header("Ç¿»¯ÏûºÄ½ðÇ®ÎÄ±¾")]
+        [Header("Ç¿ï¿½ï¿½ï¿½ï¿½ï¿½Ä½ï¿½Ç®ï¿½Ä±ï¿½")]
         public Text txtStrengthenCoin;
-        [Header("Íæ¼Ò½ðÇ®ÎÄ±¾")]
+        [Header("ï¿½ï¿½Ò½ï¿½Ç®ï¿½Ä±ï¿½")]
         public Text txtPlayerCoin;
-        [Header("Àë¿ª°´Å¥")]
+        [Header("ï¿½ë¿ªï¿½ï¿½Å¥")]
         public Button btnExit;
-        [Header("ÉèÖÃ°´Å¥")]
+        [Header("ï¿½ï¿½ï¿½Ã°ï¿½Å¥")]
         public Button btnSetting;
-        [Header("½Ì³Ì°´Å¥")]
+        [Header("ï¿½Ì³Ì°ï¿½Å¥")]
         public Button btnGuide;
-        [Header("Ñ¡ÔñÁËÇ¿»¯Æ÷¹ÙÒªÏÔÊ¾µÄÎïÌå")]
+        [Header("Ñ¡ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
         public List<GameObject> goHasSelectPart;
-        [Header("Êó±êÒÆÈë°´Å¥µÄËõ·Å")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë°´Å¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
         public float scaleMouseEnter = 1.08f;
-        [Header("Êó±êÒÆÈëµÄËõ·ÅÊ±¼ä")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½")]
         public float scaleChgDuration = 0.15f;
     }
 }

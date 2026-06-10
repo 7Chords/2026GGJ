@@ -8,16 +8,16 @@ namespace GameCore.UI
 {
     public class UIMonoEventSelectItem : _ASCUIMonoBase
     {
-        [Header("Ñ¡Ôñ°´Å¥")]
+        [Header("Ñ¡ï¿½ï¿½Å¥")]
         public Button btnSelect;
 
-        [Header("ÄÚÈÝÎÄ±¾")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½")]
         public Text txtContent;
 
-        [Header("Êó±êÐü¸¡Ëõ·Å")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
         public float scaleMouseEnter = 1.05f;
 
-        [Header("Ëõ·Å¶¯»­Ê±³¤")]
+        [Header("ï¿½ï¿½ï¿½Å¶ï¿½ï¿½ï¿½Ê±ï¿½ï¿½")]
         public float scaleChgDuration = 0.12f;
     }
 

@@ -6,35 +6,35 @@ namespace GameCore.UI
 {
     public class UIMonoEnemyFacePart : _ASCUIMonoBase
     {
-        [Header("²¿Î»ÎïÌå")]
+        [Header("ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½")]
         public Image imgGO;
-        [Header("²¿Î»Í¼Æ¬")]
+        [Header("ï¿½ï¿½Î»Í¼Æ¬")]
         public Image imgPart;
-        [Header("ÉúÃüÎÄ±¾")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½")]
         public Text txtHealth;
-        [Header("Ë³ĞòÎÄ±¾")]
+        [Header("Ë³ï¿½ï¿½ï¿½Ä±ï¿½")]
         public Text txtOrder;
-        [Header("ÉúÃüĞÅÏ¢ÎïÌå")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½")]
         public GameObject goHealthInfo;
-        [Header("Ë³ĞòĞÅÏ¢ÎïÌå")]
+        [Header("Ë³ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½")]
         public GameObject goOrder;
-        [Header("BuffĞÅÏ¢ÎïÌå")]
+        [Header("Buffï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½")]
         public GameObject goBuff;
         [Header("Preview Damage Color")]
         public Color previewDamageColor = new Color(0.92f, 0.32f, 0.32f, 1f);
         [Header("Preview Heal Color")]
         public Color previewHealColor = new Color(0.32f, 0.82f, 0.45f, 1f);
-        [Header("ÉúÃüĞÅÏ¢ÎïÌåÃªµã")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½Ãªï¿½ï¿½")]
         public Vector2 goHealthPosPivot;
-        [Header("Ë³ĞòĞÅÏ¢ÎïÌåÃªµã")]
+        [Header("Ë³ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½Ãªï¿½ï¿½")]
         public Vector2 goOrderPosPivot;
-        [Header("buffĞÅÏ¢ÎïÌåÃªµã")]
+        [Header("buffï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½Ãªï¿½ï¿½")]
         public Vector2 goBuffPosPivot;
-        [Header("Êó±êÒÆÈëËõ·Å")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
         public float scaleMouseEnter;
-        [Header("Êó±êÒÆÈëËõ·ÅÊ±¼ä")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½")]
         public float scaleChgDuration;
-        [Header("ÎïÌåÕûÌåËõ·Å")]
+        [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
         public float scaleGO;
     }
 
