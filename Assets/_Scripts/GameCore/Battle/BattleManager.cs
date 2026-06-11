@@ -351,6 +351,11 @@ namespace GameCore
                 }
                 else
                 {
+                    var enemyRef = GameModel.instance.curEnemyInfo?.enemyRefObj;
+                    ERunEndReason loseReason = enemyRef != null && enemyRef.isBoss
+                        ? ERunEndReason.BossBattle
+                        : ERunEndReason.Battle;
+                    GameModel.instance.PrepareRunEndSnapshot(false, loseReason);
                     GameModel.instance.ClearEnemyWinSnapshot();
                     GameModel.instance.playerInfo.ClearPendingMapMove();
                     UICoreMgr.instance.AddNode(new UINodeLose(SCUIShowType.FULL));

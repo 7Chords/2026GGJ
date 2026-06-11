@@ -232,14 +232,20 @@ namespace GameCore.UI
 
         private void onBtnHistoryClickDown(PointerEventData arg1, object[] arg2)
         {
+            AudioMgr.instance.PlaySfx("sfx_click");
+            UICoreMgr.instance.AddNode(new UINodeHistory(SCUIShowType.ADDITION));
         }
 
         private void onBtnHistoryMouseEnter(PointerEventData arg1, object[] arg2)
         {
+            if (mono.btnHistory == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnHistory.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
         }
 
         private void onBtnHistoryMouseExit(PointerEventData arg1, object[] arg2)
         {
+            if (mono.btnHistory == null) return;
+            _m_tweenContainer.RegDoTween(mono.btnHistory.transform.DOScale(Vector3.one, mono.scaleChgDuration));
         }
     }
 }

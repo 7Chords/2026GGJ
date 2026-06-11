@@ -44,6 +44,49 @@ namespace GameCore
             LastWinPlayerFloor = 1;
         }
 
+        public ERoomType RunEncounterRoomType { get; private set; } = ERoomType.NONE;
+
+        public bool HasPendingRunEndSnapshot { get; private set; }
+        public bool PendingRunEndIsWin { get; private set; }
+        public ERunEndReason PendingRunEndReason { get; private set; } = ERunEndReason.Unknown;
+        public int PendingRunEndFloor { get; private set; } = 1;
+        public string PendingRunEndEnemyName { get; private set; }
+        public long PendingRunEndEnemyRefId { get; private set; }
+
+        public void SetRunEncounterRoomType(ERoomType roomType)
+        {
+            RunEncounterRoomType = roomType;
+        }
+
+        public void PrepareRunEndSnapshot(bool isWin, ERunEndReason reason)
+        {
+            HasPendingRunEndSnapshot = true;
+            PendingRunEndIsWin = isWin;
+            PendingRunEndReason = reason;
+            PendingRunEndFloor = playerInfo != null ? playerInfo.playerFloor : 1;
+
+            if (curEnemyInfo?.enemyRefObj != null)
+            {
+                PendingRunEndEnemyRefId = curEnemyInfo.enemyRefObj.id;
+                PendingRunEndEnemyName = curEnemyInfo.enemyRefObj.enemyName;
+            }
+            else
+            {
+                PendingRunEndEnemyRefId = 0;
+                PendingRunEndEnemyName = string.Empty;
+            }
+        }
+
+        public void ClearRunEndSnapshot()
+        {
+            HasPendingRunEndSnapshot = false;
+            PendingRunEndIsWin = false;
+            PendingRunEndReason = ERunEndReason.Unknown;
+            PendingRunEndFloor = 1;
+            PendingRunEndEnemyRefId = 0;
+            PendingRunEndEnemyName = string.Empty;
+        }
+
         /// <summary> After floor-1 boss (etc.): next map cfg and encounters use higher floor; map is regenerated. </summary>
         public void AdvanceToNextRunFloorAndResetMap()
         {
@@ -148,6 +191,8 @@ namespace GameCore
             PendingRunMapLayoutSeed = null;
             RunMapLayoutSeed = -1;
             ClearEnemyWinSnapshot();
+            ClearRunEndSnapshot();
+            RunEncounterRoomType = ERoomType.NONE;
             ResetRunTutorialFlagsForNewRun();
 
             if (MapManager.instance != null)

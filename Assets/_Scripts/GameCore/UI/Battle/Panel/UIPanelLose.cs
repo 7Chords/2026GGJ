@@ -28,6 +28,9 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            GameBattleHistory.TryRecordPendingRunEndFromGameModel();
+            GameModel.instance.ClearRunEndSnapshot();
+
             mono.btnReturnMain.onClick.AddListener(() =>
             {
                 AudioMgr.instance.PlaySfx("sfx_click");

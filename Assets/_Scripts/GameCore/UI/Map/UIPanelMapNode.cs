@@ -177,6 +177,7 @@ namespace GameCore.UI
             if (CheatDebugRuntimePanel.MapFreeEnterEnabled)
             {
                 GameModel.instance.playerInfo.SetPendingMapTarget(_m_mapNode.GridPosition);
+                GameModel.instance.SetRunEncounterRoomType(_m_roomType);
                 switch (_m_roomType)
                 {
                     case ERoomType.ENEMY:
@@ -241,6 +242,7 @@ namespace GameCore.UI
 
             // 2. ??????????????????????????????????????????? ApplyPendingMapMove??
             GameModel.instance.playerInfo.SetPendingMapTarget(targetPos);
+            GameModel.instance.SetRunEncounterRoomType(_m_roomType);
 
             switch (_m_roomType)
             {

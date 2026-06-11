@@ -88,7 +88,16 @@ namespace GameCore
                 }
                 else
                 {
-                    // Clear all UI nodes and show lose panel.
+                    ERunEndReason reason = GameModel.instance.RunEncounterRoomType switch
+                    {
+                        ERoomType.EVENT => ERunEndReason.Event,
+                        ERoomType.TRIAL => ERunEndReason.Trial,
+                        ERoomType.BOSS => ERunEndReason.BossBattle,
+                        ERoomType.ENEMY => ERunEndReason.Battle,
+                        _ => ERunEndReason.Unknown,
+                    };
+                    GameModel.instance.PrepareRunEndSnapshot(false, reason);
+                    GameModel.instance.SetAllPlayerPart2Bag();
                     AudioMgr.instance.PlayBgm("bgm_main_music");
                     UICoreMgr.instance.RemoveAllNodes();
                     UICoreMgr.instance.AddNode(new UINodeLose(SCFrame.UI.SCUIShowType.FULL));
