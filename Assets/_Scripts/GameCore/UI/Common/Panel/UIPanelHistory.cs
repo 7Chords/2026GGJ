@@ -1,15 +1,18 @@
 using GameCore;
 using SCFrame;
 using SCFrame.UI;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace GameCore.UI
 {
     public class UIPanelHistory : _ASCUIPanelBase<UIMonoHistory>
     {
         private readonly List<UIPanelHistoryItem> _m_itemList = new List<UIPanelHistoryItem>();
+        private Coroutine _m_listLayoutRebuildRoutine;
 
         public UIPanelHistory(UIMonoHistory _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
@@ -21,6 +24,7 @@ namespace GameCore.UI
 
         public override void BeforeDiscard()
         {
+            cancelDeferredListLayoutRebuild();
             for (int i = 0; i < _m_itemList.Count; i++)
                 _m_itemList[i]?.Discard();
             _m_itemList.Clear();
@@ -28,10 +32,14 @@ namespace GameCore.UI
 
         public override void OnHidePanel()
         {
+            cancelDeferredListLayoutRebuild();
             if (mono.btnClose != null)
                 mono.btnClose.RemoveClickDown(onBtnCloseClickDown);
             for (int i = 0; i < _m_itemList.Count; i++)
+            {
+                _m_itemList[i]?.ResetToCollapsed();
                 _m_itemList[i]?.HidePanel();
+            }
         }
 
         public override void OnShowPanel()
@@ -62,7 +70,61 @@ namespace GameCore.UI
             }
 
             for (int i = showCount; i < _m_itemList.Count; i++)
+            {
+                _m_itemList[i]?.ResetToCollapsed();
                 _m_itemList[i]?.HidePanel();
+            }
+
+            rebuildHistoryListLayout();
+            scheduleDeferredListLayoutRebuild();
+        }
+
+        private void rebuildHistoryListLayout()
+        {
+            if (mono.monoListContainer == null || mono.monoListContainer.layoutGroup == null)
+                return;
+
+            for (int i = 0; i < _m_itemList.Count; i++)
+            {
+                UIPanelHistoryItem itemPanel = _m_itemList[i];
+                if (itemPanel == null || !itemPanel.hasShowed)
+                    continue;
+                itemPanel.RebuildItemLayout();
+            }
+
+            RectTransform listRect = mono.monoListContainer.layoutGroup.transform as RectTransform;
+            if (listRect == null)
+                return;
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(listRect);
+            Canvas.ForceUpdateCanvases();
+        }
+
+        private void scheduleDeferredListLayoutRebuild()
+        {
+            cancelDeferredListLayoutRebuild();
+            if (mono == null)
+                return;
+
+            _m_listLayoutRebuildRoutine = this.StartCoroutine(coDeferredListLayoutRebuild());
+        }
+
+        private IEnumerator coDeferredListLayoutRebuild()
+        {
+            yield return null;
+            yield return new WaitForEndOfFrame();
+
+            _m_listLayoutRebuildRoutine = null;
+            rebuildHistoryListLayout();
+        }
+
+        private void cancelDeferredListLayoutRebuild()
+        {
+            if (_m_listLayoutRebuildRoutine == null)
+                return;
+
+            this.StopCoroutine(_m_listLayoutRebuildRoutine);
+            _m_listLayoutRebuildRoutine = null;
         }
 
         private UIPanelHistoryItem getOrCreateItem(int index)
