@@ -12,6 +12,7 @@ namespace GameCore.UI
     public class UIPanelPartSelect : _ASCUIPanelBase<UIMonoPartSelect>
     {
         public static UIPanelBattleWin pendingBattleWinHost;
+        public static int pendingOptionIndex = -1;
 
         private readonly List<UIPanelPartSelectItem> _m_itemList = new List<UIPanelPartSelectItem>();
         private List<PartInfo> _m_offerList;
@@ -58,7 +59,7 @@ namespace GameCore.UI
             hideAllItems();
 
             if (pendingBattleWinHost != null)
-                _m_offerList = pendingBattleWinHost.GetOrRollBootyOffers();
+                _m_offerList = pendingBattleWinHost.GetOrRollBootyOffers(pendingOptionIndex);
             else
             {
                 EnemyRefObj enemyRef = resolveWinEnemyRef();
@@ -179,8 +180,10 @@ namespace GameCore.UI
             GameModel.instance.playerInfo.bagPartInfoList.Add(selectedPart);
 
             var battleWinHost = pendingBattleWinHost;
+            int optionIndex = pendingOptionIndex;
             pendingBattleWinHost = null;
-            battleWinHost?.OnBootySelected(selectedPart);
+            pendingOptionIndex = -1;
+            battleWinHost?.OnBootySelected(optionIndex, selectedPart);
             UICoreMgr.instance.CloseTopNode();
         }
     }

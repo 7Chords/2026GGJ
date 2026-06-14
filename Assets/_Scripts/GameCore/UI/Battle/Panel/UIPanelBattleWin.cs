@@ -12,10 +12,10 @@ namespace GameCore.UI
     public class UIPanelBattleWin : _ASCUIPanelBase<UIMonoBattleWin>
     {
         private EnemyRefObj _m_enemyRefObj;
-        private UIPanelBattleWinOptionItem _m_optionItem;
-        private List<PartInfo> _m_bootyOffers;
+        private readonly List<UIPanelBattleWinOptionItem> _m_optionItemList = new List<UIPanelBattleWinOptionItem>();
+        private readonly List<bool> _m_optionSelectedFlags = new List<bool>();
+        private List<List<PartInfo>> _m_bootyOfferGroups;
         private Tween _m_moneyTween;
-        private bool _m_bootySelected;
         private bool _m_partSelectOpen;
 
         public UIPanelBattleWin(UIMonoBattleWin _mono, SCUIShowType _showType) : base(_mono, _showType)
@@ -30,26 +30,32 @@ namespace GameCore.UI
         {
             _m_moneyTween?.Kill(false);
             _m_moneyTween = null;
-            _m_optionItem?.Discard();
-            _m_optionItem = null;
-            _m_bootyOffers = null;
+            for (int i = 0; i < _m_optionItemList.Count; i++)
+                _m_optionItemList[i]?.Discard();
+            _m_optionItemList.Clear();
+            _m_optionSelectedFlags.Clear();
+            _m_bootyOfferGroups = null;
             if (UIPanelPartSelect.pendingBattleWinHost == this)
+            {
                 UIPanelPartSelect.pendingBattleWinHost = null;
+                UIPanelPartSelect.pendingOptionIndex = -1;
+            }
         }
 
         public override void OnHidePanel()
         {
             mono.btnGoto.onClick.RemoveAllListeners();
-            _m_optionItem?.HidePanel();
+            for (int i = 0; i < _m_optionItemList.Count; i++)
+                _m_optionItemList[i]?.HidePanel();
             _m_moneyTween?.Kill(false);
             _m_moneyTween = null;
         }
 
         public override void OnShowPanel()
         {
-            _m_bootySelected = false;
             _m_partSelectOpen = false;
-            _m_bootyOffers = null;
+            _m_bootyOfferGroups = null;
+            _m_optionSelectedFlags.Clear();
 
             mono.btnGoto.onClick.AddListener(() =>
             {
@@ -92,30 +98,29 @@ namespace GameCore.UI
                 : null;
 
             refreshMoneyReward();
-            refreshBootyOption();
+            refreshBootyOptions();
         }
 
-        public List<PartInfo> GetOrRollBootyOffers()
+        public List<PartInfo> GetOrRollBootyOffers(int optionIndex)
         {
-            if (_m_bootyOffers != null)
-                return _m_bootyOffers;
+            ensureBootyOfferGroups();
+            if (optionIndex < 0 || optionIndex >= _m_bootyOfferGroups.Count)
+                return new List<PartInfo>();
 
-            if (_m_enemyRefObj == null)
-                _m_bootyOffers = new List<PartInfo>();
-            else
-                _m_bootyOffers = BattleBootyHelper.RollBootyOffers(_m_enemyRefObj, BattleBootyHelper.DefaultOfferCount);
-
-            return _m_bootyOffers;
+            return _m_bootyOfferGroups[optionIndex];
         }
 
-        public void OnBootySelected(PartInfo selectedPart)
+        public void OnBootySelected(int optionIndex, PartInfo selectedPart)
         {
             _m_partSelectOpen = false;
             if (selectedPart == null)
                 return;
 
-            _m_bootySelected = true;
-            _m_optionItem?.HidePanel();
+            if (optionIndex >= 0 && optionIndex < _m_optionSelectedFlags.Count)
+                _m_optionSelectedFlags[optionIndex] = true;
+
+            if (optionIndex >= 0 && optionIndex < _m_optionItemList.Count)
+                _m_optionItemList[optionIndex]?.HidePanel();
         }
 
         public void OnPartSelectClosed()
@@ -123,54 +128,117 @@ namespace GameCore.UI
             _m_partSelectOpen = false;
         }
 
-        private void refreshBootyOption()
+        private void ensureBootyOfferGroups()
         {
-            if (_m_bootySelected || !hasBootyOffer())
+            if (_m_bootyOfferGroups != null)
+                return;
+
+            int optionCount = getOptionCount();
+            if (_m_enemyRefObj == null || optionCount <= 0)
             {
-                _m_optionItem?.HidePanel();
+                _m_bootyOfferGroups = new List<List<PartInfo>>();
                 return;
             }
 
-            ensureOptionItem();
-            if (_m_optionItem == null)
+            _m_bootyOfferGroups = BattleBootyHelper.RollDistinctBootyOfferGroups(
+                _m_enemyRefObj,
+                optionCount,
+                BattleBootyHelper.DefaultOfferCount);
+        }
+
+        private void refreshBootyOptions()
+        {
+            hideExtraOptionItems();
+
+            int optionCount = getOptionCount();
+            if (optionCount <= 0)
                 return;
 
-            _m_optionItem.onClicked = onOptionItemClicked;
-            _m_optionItem.ShowPanel();
+            ensureBootyOfferGroups();
+            ensureOptionSelectedFlags(optionCount);
 
-            var tr = _m_optionItem.GetGameObject().transform;
+            int shownCount = 0;
+            for (int i = 0; i < optionCount; i++)
+            {
+                if (_m_optionSelectedFlags[i])
+                {
+                    if (i < _m_optionItemList.Count)
+                        _m_optionItemList[i].HidePanel();
+                    continue;
+                }
+
+                UIPanelBattleWinOptionItem itemPanel = getOrCreateOptionItem(i);
+                if (itemPanel == null)
+                    continue;
+
+                int capturedIndex = i;
+                itemPanel.onClicked = () => onOptionItemClicked(capturedIndex);
+                itemPanel.ShowPanel();
+                playOptionPopAnim(itemPanel, shownCount);
+                shownCount++;
+            }
+
+            for (int i = optionCount; i < _m_optionItemList.Count; i++)
+                _m_optionItemList[i].HidePanel();
+        }
+
+        private void ensureOptionSelectedFlags(int optionCount)
+        {
+            while (_m_optionSelectedFlags.Count < optionCount)
+                _m_optionSelectedFlags.Add(false);
+        }
+
+        private void playOptionPopAnim(UIPanelBattleWinOptionItem itemPanel, int popIndex)
+        {
+            var tr = itemPanel.GetGameObject().transform;
             tr.DOKill(false);
             tr.localScale = Vector3.zero;
             float popDuration = Mathf.Max(0.01f, mono.bootyPopDuration);
             float overshoot = Mathf.Clamp(mono.bootyPopOvershoot, 0.1f, 3.5f);
             tr.DOScale(Vector3.one, popDuration)
-                .SetDelay(Mathf.Max(0f, mono.bootyPopInterval))
+                .SetDelay(Mathf.Max(0f, mono.bootyPopInterval) * popIndex)
                 .SetEase(Ease.OutBack, overshoot);
         }
 
-        private void ensureOptionItem()
+        private UIPanelBattleWinOptionItem getOrCreateOptionItem(int index)
         {
-            if (_m_optionItem != null)
-                return;
+            if (index < _m_optionItemList.Count)
+                return _m_optionItemList[index];
 
             if (mono.monoContainer == null || mono.monoContainer.layoutGroup == null)
-                return;
+                return null;
 
             GameObject itemGO = ResourcesHelper.LoadGameObject(
                 mono.monoContainer.prefabItemObjName,
                 mono.monoContainer.layoutGroup.transform);
             if (itemGO == null)
-                return;
+                return null;
 
             UIMonoBattleWinOptionItem itemMono = itemGO.GetComponent<UIMonoBattleWinOptionItem>();
             if (itemMono == null)
             {
                 Debug.LogError("prefab missing UIMonoBattleWinOptionItem: " + mono.monoContainer.prefabItemObjName);
-                return;
+                return null;
             }
 
-            _m_optionItem = new UIPanelBattleWinOptionItem(itemMono, SCUIShowType.INTERNAL);
-            _m_optionItem.Initialize();
+            var itemPanel = new UIPanelBattleWinOptionItem(itemMono, SCUIShowType.INTERNAL);
+            itemPanel.Initialize();
+            _m_optionItemList.Add(itemPanel);
+            return itemPanel;
+        }
+
+        private void hideExtraOptionItems()
+        {
+            for (int i = 0; i < _m_optionItemList.Count; i++)
+                _m_optionItemList[i]?.HidePanel();
+        }
+
+        private int getOptionCount()
+        {
+            if (!hasBootyOffer())
+                return 0;
+
+            return _m_enemyRefObj.winCount;
         }
 
         private bool hasBootyOffer()
@@ -183,14 +251,19 @@ namespace GameCore.UI
             return BattleBootyHelper.HasBootyOffers(_m_enemyRefObj);
         }
 
-        private void onOptionItemClicked()
+        private void onOptionItemClicked(int optionIndex)
         {
-            if (_m_bootySelected || _m_partSelectOpen)
+            if (_m_partSelectOpen)
+                return;
+            if (optionIndex < 0 || optionIndex >= _m_optionSelectedFlags.Count)
+                return;
+            if (_m_optionSelectedFlags[optionIndex])
                 return;
 
             _m_partSelectOpen = true;
             AudioMgr.instance.PlaySfx("sfx_click");
             UIPanelPartSelect.pendingBattleWinHost = this;
+            UIPanelPartSelect.pendingOptionIndex = optionIndex;
             UICoreMgr.instance.AddNode(new UINodePartSelect(SCUIShowType.ADDITION));
         }
 
