@@ -11,6 +11,8 @@ namespace GameCore.UI
 {
     public class UIPanelPartSelect : _ASCUIPanelBase<UIMonoPartSelect>
     {
+        public static UIPanelBattleWin pendingBattleWinHost;
+
         private readonly List<UIPanelPartSelectItem> _m_itemList = new List<UIPanelPartSelectItem>();
         private List<PartInfo> _m_offerList;
         private bool _m_finished;
@@ -55,15 +57,20 @@ namespace GameCore.UI
         {
             hideAllItems();
 
-            EnemyRefObj enemyRef = resolveWinEnemyRef();
-            int offerCount = mono != null && mono.offerCount > 0
-                ? mono.offerCount
-                : BattleBootyHelper.DefaultOfferCount;
-            _m_offerList = BattleBootyHelper.RollBootyOffers(enemyRef, offerCount);
+            if (pendingBattleWinHost != null)
+                _m_offerList = pendingBattleWinHost.GetOrRollBootyOffers();
+            else
+            {
+                EnemyRefObj enemyRef = resolveWinEnemyRef();
+                int offerCount = mono != null && mono.offerCount > 0
+                    ? mono.offerCount
+                    : BattleBootyHelper.DefaultOfferCount;
+                _m_offerList = BattleBootyHelper.RollBootyOffers(enemyRef, offerCount);
+            }
 
             if (_m_offerList == null || _m_offerList.Count == 0)
             {
-                finishSelection(null);
+                closeWithoutSelection();
                 return;
             }
 
@@ -149,12 +156,18 @@ namespace GameCore.UI
                 return;
 
             AudioMgr.instance.PlaySfx("sfx_click");
-            finishSelection(null);
+            closeWithoutSelection();
+        }
+
+        private void closeWithoutSelection()
+        {
+            pendingBattleWinHost?.OnPartSelectClosed();
+            UICoreMgr.instance.CloseTopNode();
         }
 
         private void finishSelection(PartInfo selectedPart)
         {
-            if (_m_finished)
+            if (_m_finished || selectedPart == null)
                 return;
 
             _m_finished = true;
@@ -163,16 +176,12 @@ namespace GameCore.UI
             if (mono.btnSkip != null)
                 mono.btnSkip.interactable = false;
 
-            if (selectedPart != null)
-                GameModel.instance.playerInfo.bagPartInfoList.Add(selectedPart);
+            GameModel.instance.playerInfo.bagPartInfoList.Add(selectedPart);
 
-            openBattleWinPanel();
-        }
-
-        private static void openBattleWinPanel()
-        {
+            var battleWinHost = pendingBattleWinHost;
+            pendingBattleWinHost = null;
+            battleWinHost?.OnBootySelected(selectedPart);
             UICoreMgr.instance.CloseTopNode();
-            UICoreMgr.instance.AddNode(new UINodeBattleWin(SCUIShowType.ADDITION));
         }
     }
 }

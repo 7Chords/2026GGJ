@@ -63,7 +63,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 95aae52dd5aa81e43960fb5ce40b8d23
-    m_Address: prefab_battle_win_item
+    m_Address: prefab_battle_win_option_item
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

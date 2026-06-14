@@ -345,7 +345,7 @@ namespace GameCore
                 {
                     GameModel.instance.CaptureEnemyWinSnapshot();
                     AudioMgr.instance.PlaySfx("sfx_money");
-                    UICoreMgr.instance.AddNode(new UINodePartSelect(SCUIShowType.ADDITION));
+                    UICoreMgr.instance.AddNode(new UINodeBattleWin(SCUIShowType.ADDITION));
                     GameModel.instance.SetAllPlayerPart2Bag();
                     GameModel.instance.SetEnemyEmpty();
                 }

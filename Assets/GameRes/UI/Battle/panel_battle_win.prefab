@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 993060783892889871}
   - component: {fileID: 7706653439289844752}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: txt_drop_coin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -306,7 +306,7 @@ MonoBehaviour:
   canvasGroup: {fileID: 2931751810240012559}
   fadeInDuration: 0.1
   fadeOutDuration: 0.1
-  prefabItemObjName: prefab_battle_win_item
+  prefabItemObjName: prefab_battle_win_option_item
   layoutGroup: {fileID: 9215278916724833326}
 --- !u!114 &9215278916724833326
 MonoBehaviour:
@@ -502,7 +502,7 @@ GameObject:
   - component: {fileID: 2173567036617413242}
   - component: {fileID: 7372907505348420769}
   m_Layer: 5
-  m_Name: Text (Legacy) (1)
+  m_Name: txt_drop_part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

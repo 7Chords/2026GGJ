@@ -17,6 +17,31 @@ namespace GameCore.Helpers
             return RandomSelectBooty(enemyRef.bootyList, offerCount);
         }
 
+        public static bool HasBootyOffers(EnemyRefObj enemyRef)
+        {
+            if (enemyRef?.bootyList == null || enemyRef.bootyList.Count == 0)
+                return false;
+
+            for (int i = 0; i < enemyRef.bootyList.Count; i++)
+            {
+                BootyEffectObj booty = enemyRef.bootyList[i];
+                if (booty == null)
+                    continue;
+
+                PartLevelRefObj partLevelRefObj = SCRefDataMgr.instance.partLevelRefList.refDataList
+                    .Find(x => x.id == booty.partLevelId);
+                if (partLevelRefObj == null)
+                    continue;
+
+                PartRefObj partRefObj = SCRefDataMgr.instance.partRefList.refDataList
+                    .Find(x => x.id == partLevelRefObj.partId);
+                if (partRefObj != null)
+                    return true;
+            }
+
+            return false;
+        }
+
         public static List<PartInfo> RandomSelectBooty(List<BootyEffectObj> sourceList, int count)
         {
             var resultList = new List<PartInfo>();
