@@ -11,6 +11,8 @@ namespace GameCore.UI
         public Button btnSelect;
         [Header("Part icon")]
         public Image imgIcon;
+        [Header("Part name text")]
+        public Text txtName;
         [Header("Part health text")]
         public Text txtHealth;
         [Header("Mouse hover scale")]

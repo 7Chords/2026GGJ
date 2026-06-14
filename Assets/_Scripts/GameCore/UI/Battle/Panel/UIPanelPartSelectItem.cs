@@ -87,6 +87,11 @@ namespace GameCore.UI
             if (mono.imgIcon != null)
                 mono.imgIcon.sprite = ResourcesHelper.LoadAsset<Sprite>(_m_partInfo.partRefObj.partSpriteObjName);
 
+            if (mono.txtName != null)
+                mono.txtName.text = string.IsNullOrEmpty(_m_partInfo.partRefObj.partName)
+                    ? ""
+                    : _m_partInfo.partRefObj.partName;
+
             if (mono.txtHealth != null)
                 mono.txtHealth.text = PartHealthDisplay.FormatSlashLine(_m_partInfo.currentHealth, _m_partInfo.maxHealth);
 
