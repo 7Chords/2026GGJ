@@ -9,10 +9,18 @@ using UnityEngine.UI;
 
 namespace GameCore.UI
 {
+    public enum EHistoryListMode
+    {
+        All = 0,
+        Favorite = 1,
+    }
+
     public class UIPanelHistory : _ASCUIPanelBase<UIMonoHistory>
     {
         private readonly List<UIPanelHistoryItem> _m_itemList = new List<UIPanelHistoryItem>();
         private Coroutine _m_listLayoutRebuildRoutine;
+        private EHistoryListMode _m_listMode = EHistoryListMode.All;
+        private bool _m_isRefreshingList;
 
         public UIPanelHistory(UIMonoHistory _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
@@ -35,6 +43,8 @@ namespace GameCore.UI
             cancelDeferredListLayoutRebuild();
             if (mono.btnClose != null)
                 mono.btnClose.RemoveClickDown(onBtnCloseClickDown);
+            unbindTabButton(mono.btnAll, onBtnAllClickDown);
+            unbindTabButton(mono.btnFavorite, onBtnFavoriteTabClickDown);
             for (int i = 0; i < _m_itemList.Count; i++)
             {
                 _m_itemList[i]?.ResetToCollapsed();
@@ -44,39 +54,109 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
+            _m_listMode = EHistoryListMode.All;
+
             if (mono.btnClose != null)
                 mono.btnClose.AddMouseLeftClickDown(onBtnCloseClickDown);
+            bindTabButton(mono.btnAll, onBtnAllClickDown);
+            bindTabButton(mono.btnFavorite, onBtnFavoriteTabClickDown);
+
+            refreshTabButtonState();
             refreshHistoryList();
+        }
+
+        private void bindTabButton(Button btn, System.Action<PointerEventData, object[]> click)
+        {
+            if (btn == null)
+                return;
+            btn.AddMouseLeftClickDown(click);
+        }
+
+        private void unbindTabButton(Button btn, System.Action<PointerEventData, object[]> click)
+        {
+            if (btn == null)
+                return;
+            btn.RemoveClickDown(click);
+        }
+
+        private void selectListMode(EHistoryListMode mode)
+        {
+            if (_m_listMode == mode)
+                return;
+
+            AudioMgr.instance.PlaySfx("sfx_click");
+            _m_listMode = mode;
+            refreshTabButtonState();
+            refreshHistoryList();
+        }
+
+        private void refreshTabButtonState()
+        {
+            setTabButtonSelected(mono.btnAll, _m_listMode == EHistoryListMode.All);
+            setTabButtonSelected(mono.btnFavorite, _m_listMode == EHistoryListMode.Favorite);
+        }
+
+        private static void setTabButtonSelected(Button btn, bool selected)
+        {
+            if (btn == null)
+                return;
+            btn.interactable = !selected;
         }
 
         private void refreshHistoryList()
         {
-            var entries = GameBattleHistory.GetEntries();
-            bool hasEntries = entries != null && entries.Count > 0;
-            if (mono.goEmptyHint != null)
-                mono.goEmptyHint.SetActive(!hasEntries);
-
-            if (mono.monoListContainer == null || mono.monoListContainer.layoutGroup == null)
+            if (_m_isRefreshingList)
                 return;
 
-            int showCount = hasEntries ? entries.Count : 0;
-            for (int i = 0; i < showCount; i++)
+            _m_isRefreshingList = true;
+            try
             {
-                UIPanelHistoryItem itemPanel = getOrCreateItem(i);
-                if (itemPanel == null)
-                    continue;
-                itemPanel.SetInfo(entries[i]);
-                itemPanel.ShowPanel();
-            }
+                IReadOnlyList<GameBattleHistory.BattleHistoryEntry> entries =
+                    _m_listMode == EHistoryListMode.Favorite
+                        ? GameBattleHistory.GetFavoriteEntries()
+                        : GameBattleHistory.GetEntries();
 
-            for (int i = showCount; i < _m_itemList.Count; i++)
+                bool hasEntries = entries != null && entries.Count > 0;
+                if (mono.goEmptyHint != null)
+                    mono.goEmptyHint.SetActive(!hasEntries);
+
+                if (mono.monoListContainer == null || mono.monoListContainer.layoutGroup == null)
+                    return;
+
+                int showCount = hasEntries ? entries.Count : 0;
+                for (int i = 0; i < showCount; i++)
+                {
+                    UIPanelHistoryItem itemPanel = getOrCreateItem(i);
+                    if (itemPanel == null)
+                        continue;
+
+                    itemPanel.onFavoriteStateChanged = onItemFavoriteStateChanged;
+                    itemPanel.SetInfo(entries[i]);
+                    if (!itemPanel.hasShowed)
+                        itemPanel.ShowPanel();
+                }
+
+                for (int i = showCount; i < _m_itemList.Count; i++)
+                {
+                    _m_itemList[i]?.ResetToCollapsed();
+                    _m_itemList[i]?.HidePanel();
+                }
+
+                rebuildHistoryListLayout();
+                scheduleDeferredListLayoutRebuild();
+            }
+            finally
             {
-                _m_itemList[i]?.ResetToCollapsed();
-                _m_itemList[i]?.HidePanel();
+                _m_isRefreshingList = false;
             }
+        }
 
-            rebuildHistoryListLayout();
-            scheduleDeferredListLayoutRebuild();
+        private void onItemFavoriteStateChanged()
+        {
+            if (_m_listMode != EHistoryListMode.Favorite)
+                return;
+
+            refreshHistoryList();
         }
 
         private void rebuildHistoryListLayout()
@@ -151,10 +231,14 @@ namespace GameCore.UI
             return itemPanel;
         }
 
-        private void onBtnCloseClickDown(PointerEventData _data, object[] _objs)
+        private void onBtnCloseClickDown(PointerEventData data, object[] objs)
         {
             AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.CloseTopNode();
         }
+
+        private void onBtnAllClickDown(PointerEventData data, object[] objs) => selectListMode(EHistoryListMode.All);
+
+        private void onBtnFavoriteTabClickDown(PointerEventData data, object[] objs) => selectListMode(EHistoryListMode.Favorite);
     }
 }

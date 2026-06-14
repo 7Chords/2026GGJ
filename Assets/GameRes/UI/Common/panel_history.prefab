@@ -1030,6 +1030,9 @@ MonoBehaviour:
   canvasGroup: {fileID: 623203083366758797}
   fadeInDuration: 0.25
   fadeOutDuration: 0.25
+  goIndexes: {fileID: 9029986654557395756}
+  btnAll: {fileID: 819124843513400185}
+  btnFavorite: {fileID: 7673588875457416898}
   monoListContainer: {fileID: 388745115378559145}
   btnClose: {fileID: 8021702824194440657}
   goEmptyHint: {fileID: 0}
@@ -1125,7 +1128,7 @@ GameObject:
   - component: {fileID: 372652561550514306}
   - component: {fileID: 7673588875457416898}
   m_Layer: 5
-  m_Name: btn_enemy
+  m_Name: btn_favorite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1372,7 +1375,7 @@ GameObject:
   - component: {fileID: 5149593146032631398}
   - component: {fileID: 819124843513400185}
   m_Layer: 5
-  m_Name: btn_part
+  m_Name: btn_all
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

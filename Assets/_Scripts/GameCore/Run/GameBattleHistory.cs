@@ -22,12 +22,14 @@ namespace GameCore
     public static class GameBattleHistory
     {
         public const string HistoryFileName = "battle_history.json";
-        public const int MaxHistoryCount = 50;
+        public const int MaxHistoryCount = 20;
+        public const int MaxFavoriteCount = 10;
 
         [Serializable]
         public class BattleHistoryStore
         {
             public List<BattleHistoryEntry> entries = new List<BattleHistoryEntry>();
+            public List<long> favoriteRecordedAtTicks = new List<long>();
         }
 
         [Serializable]
@@ -45,6 +47,63 @@ namespace GameCore
         public static IReadOnlyList<BattleHistoryEntry> GetEntries()
         {
             return LoadStore().entries;
+        }
+
+        public static IReadOnlyList<BattleHistoryEntry> GetFavoriteEntries()
+        {
+            var store = LoadStore();
+            var result = new List<BattleHistoryEntry>();
+            if (store.favoriteRecordedAtTicks == null || store.entries == null)
+                return result;
+
+            for (int i = 0; i < store.favoriteRecordedAtTicks.Count; i++)
+            {
+                long ticks = store.favoriteRecordedAtTicks[i];
+                BattleHistoryEntry entry = findEntryByRecordedAtTicks(store.entries, ticks);
+                if (entry != null)
+                    result.Add(entry);
+            }
+            return result;
+        }
+
+        public static bool IsFavorite(BattleHistoryEntry entry)
+        {
+            if (entry == null || entry.recordedAtTicks <= 0)
+                return false;
+
+            var ticksList = LoadStore().favoriteRecordedAtTicks;
+            return ticksList != null && ticksList.Contains(entry.recordedAtTicks);
+        }
+
+        /// <summary>
+        /// Toggle favorite by recordedAtTicks. Returns true if now favorited.
+        /// </summary>
+        public static bool ToggleFavorite(long recordedAtTicks)
+        {
+            if (recordedAtTicks <= 0)
+                return false;
+
+            var store = LoadStore();
+            if (findEntryByRecordedAtTicks(store.entries, recordedAtTicks) == null)
+                return false;
+
+            if (store.favoriteRecordedAtTicks == null)
+                store.favoriteRecordedAtTicks = new List<long>();
+
+            int index = store.favoriteRecordedAtTicks.IndexOf(recordedAtTicks);
+            if (index >= 0)
+            {
+                store.favoriteRecordedAtTicks.RemoveAt(index);
+                SaveStore(store);
+                return false;
+            }
+
+            store.favoriteRecordedAtTicks.Insert(0, recordedAtTicks);
+            while (store.favoriteRecordedAtTicks.Count > MaxFavoriteCount)
+                store.favoriteRecordedAtTicks.RemoveAt(store.favoriteRecordedAtTicks.Count - 1);
+
+            SaveStore(store);
+            return true;
         }
 
         public static void TryRecordPendingRunEndFromGameModel()
@@ -68,6 +127,7 @@ namespace GameCore
             store.entries.Insert(0, entry);
             if (store.entries.Count > MaxHistoryCount)
                 store.entries.RemoveRange(MaxHistoryCount, store.entries.Count - MaxHistoryCount);
+            pruneFavorites(store);
             SaveStore(store);
         }
 
@@ -200,13 +260,52 @@ namespace GameCore
                 if (string.IsNullOrEmpty(json))
                     return new BattleHistoryStore();
                 var store = JsonUtility.FromJson<BattleHistoryStore>(json);
-                return store?.entries != null ? store : new BattleHistoryStore();
+                if (store == null)
+                    return new BattleHistoryStore();
+                if (store.entries == null)
+                    store.entries = new List<BattleHistoryEntry>();
+                if (store.favoriteRecordedAtTicks == null)
+                    store.favoriteRecordedAtTicks = new List<long>();
+                if (store.entries.Count > MaxHistoryCount)
+                    store.entries.RemoveRange(MaxHistoryCount, store.entries.Count - MaxHistoryCount);
+                pruneFavorites(store);
+                return store;
             }
             catch (Exception e)
             {
                 Debug.LogWarning($"[GameBattleHistory] load failed: {e.Message}");
                 return new BattleHistoryStore();
             }
+        }
+
+        static BattleHistoryEntry findEntryByRecordedAtTicks(List<BattleHistoryEntry> entries, long recordedAtTicks)
+        {
+            if (entries == null)
+                return null;
+
+            for (int i = 0; i < entries.Count; i++)
+            {
+                BattleHistoryEntry entry = entries[i];
+                if (entry != null && entry.recordedAtTicks == recordedAtTicks)
+                    return entry;
+            }
+            return null;
+        }
+
+        static void pruneFavorites(BattleHistoryStore store)
+        {
+            if (store?.favoriteRecordedAtTicks == null || store.entries == null)
+                return;
+
+            for (int i = store.favoriteRecordedAtTicks.Count - 1; i >= 0; i--)
+            {
+                long ticks = store.favoriteRecordedAtTicks[i];
+                if (findEntryByRecordedAtTicks(store.entries, ticks) == null)
+                    store.favoriteRecordedAtTicks.RemoveAt(i);
+            }
+
+            while (store.favoriteRecordedAtTicks.Count > MaxFavoriteCount)
+                store.favoriteRecordedAtTicks.RemoveAt(store.favoriteRecordedAtTicks.Count - 1);
         }
 
         static void SaveStore(BattleHistoryStore store)

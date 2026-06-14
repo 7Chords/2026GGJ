@@ -67,6 +67,7 @@ MonoBehaviour:
   fadeInDuration: 0.1
   fadeOutDuration: 0.1
   btnToggle: {fileID: 100016}
+  btnFavorite: {fileID: 2893639859311677291}
   txtResult: {fileID: 100015}
   txtTime: {fileID: 100019}
   txtLoseLocation: {fileID: 100021}
@@ -647,7 +648,7 @@ GameObject:
   - component: {fileID: 4492746088030776499}
   - component: {fileID: 2893639859311677291}
   m_Layer: 5
-  m_Name: Button (Legacy)
+  m_Name: btn_favorite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

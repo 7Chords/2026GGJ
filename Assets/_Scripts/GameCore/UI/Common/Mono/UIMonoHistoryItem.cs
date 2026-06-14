@@ -8,6 +8,8 @@ namespace GameCore.UI
     {
         [Header("Expand toggle")]
         public Button btnToggle;
+        [Header("Favorite button")]
+        public Button btnFavorite;
         [Header("Win/Lose text")]
         public Text txtResult;
         [Header("Recorded time")]

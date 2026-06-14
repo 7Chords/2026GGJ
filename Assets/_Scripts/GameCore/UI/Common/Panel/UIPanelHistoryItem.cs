@@ -15,6 +15,9 @@ namespace GameCore.UI
         private GameBattleHistory.BattleHistoryEntry _m_entry;
         private bool _m_expanded;
         private Coroutine _m_layoutRebuildRoutine;
+        private static readonly Color FavoriteActiveColor = new Color(1f, 0.85f, 0.2f, 1f);
+
+        public System.Action onFavoriteStateChanged;
 
         public UIPanelHistoryItem(UIMonoHistoryItem _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
@@ -39,15 +42,31 @@ namespace GameCore.UI
             ResetToCollapsed();
             if (mono.btnToggle != null)
                 mono.btnToggle.RemoveClickDown(onBtnToggleClickDown);
+            if (mono.btnFavorite != null)
+                mono.btnFavorite.RemoveClickDown(onBtnFavoriteClickDown);
             _m_partContainer?.HidePanel();
         }
 
         public override void OnShowPanel()
         {
-            if (mono.btnToggle != null)
-                mono.btnToggle.AddMouseLeftClickDown(onBtnToggleClickDown);
+            bindItemButtons();
             refreshExpandedView(false);
             _m_partContainer?.ShowPanel();
+        }
+
+        private void bindItemButtons()
+        {
+            if (mono.btnToggle != null)
+            {
+                mono.btnToggle.RemoveClickDown(onBtnToggleClickDown);
+                mono.btnToggle.AddMouseLeftClickDown(onBtnToggleClickDown);
+            }
+
+            if (mono.btnFavorite != null)
+            {
+                mono.btnFavorite.RemoveClickDown(onBtnFavoriteClickDown);
+                mono.btnFavorite.AddMouseLeftClickDown(onBtnFavoriteClickDown);
+            }
         }
 
         public void SetInfo(GameBattleHistory.BattleHistoryEntry entry)
@@ -55,6 +74,7 @@ namespace GameCore.UI
             _m_entry = entry;
             ResetToCollapsed();
             refreshHeader();
+            refreshFavoriteButtonState();
             refreshExpandedView(false);
         }
 
@@ -103,6 +123,17 @@ namespace GameCore.UI
                 mono.txtLoseLocation.text = loseText;
                 mono.txtLoseLocation.gameObject.SetActive(!_m_entry.isWin && !string.IsNullOrEmpty(loseText));
             }
+        }
+
+        private void refreshFavoriteButtonState()
+        {
+            if (mono.btnFavorite == null)
+                return;
+
+            bool favorited = GameBattleHistory.IsFavorite(_m_entry);
+            Graphic targetGraphic = mono.btnFavorite.targetGraphic;
+            if (targetGraphic != null)
+                targetGraphic.color = favorited ? FavoriteActiveColor : Color.white;
         }
 
         private void refreshExpandedView(bool rebuildParentList)
@@ -183,9 +214,33 @@ namespace GameCore.UI
 
         private void onBtnToggleClickDown(PointerEventData _data, object[] _objs)
         {
+            if (isPointerOverFavoriteButton(_data))
+                return;
+
             AudioMgr.instance.PlaySfx("sfx_click");
             _m_expanded = !_m_expanded;
             refreshExpandedView(true);
+        }
+
+        private bool isPointerOverFavoriteButton(PointerEventData data)
+        {
+            if (mono.btnFavorite == null || data == null || data.pointerPress == null)
+                return false;
+
+            Transform favoriteTransform = mono.btnFavorite.transform;
+            Transform pressTransform = data.pointerPress.transform;
+            return pressTransform == favoriteTransform || pressTransform.IsChildOf(favoriteTransform);
+        }
+
+        private void onBtnFavoriteClickDown(PointerEventData _data, object[] _objs)
+        {
+            if (_m_entry == null || _m_entry.recordedAtTicks <= 0)
+                return;
+
+            AudioMgr.instance.PlaySfx("sfx_click");
+            GameBattleHistory.ToggleFavorite(_m_entry.recordedAtTicks);
+            refreshFavoriteButtonState();
+            onFavoriteStateChanged?.Invoke();
         }
     }
 }
