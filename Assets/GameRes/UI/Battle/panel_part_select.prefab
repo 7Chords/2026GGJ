@@ -91,6 +91,8 @@ GameObject:
   - component: {fileID: 7266851508278085366}
   - component: {fileID: 4318137597624964395}
   - component: {fileID: 1266574679978637511}
+  - component: {fileID: 5357528212414907434}
+  - component: {fileID: 1354618326980926500}
   m_Layer: 5
   m_Name: btn_skip
   m_TagString: Untagged
@@ -200,6 +202,36 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!225 &5357528212414907434
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3872100335648700941}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &1354618326980926500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3872100335648700941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ab44f543e725d142affac630bb91f30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiMask: {fileID: 0}
+  canvasGroup: {fileID: 5357528212414907434}
+  fadeInDuration: 0.1
+  fadeOutDuration: 0.1
+  prefabItemObjName: 
+  layoutGroup: {fileID: 0}
 --- !u!1 &4533107205027384290
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,6 +243,8 @@ GameObject:
   - component: {fileID: 4633951124401579453}
   - component: {fileID: 922394572941422170}
   - component: {fileID: 2797725549712329338}
+  - component: {fileID: 8011111111111111111}
+  - component: {fileID: 7384068673250085523}
   m_Layer: 5
   m_Name: panel_part_select
   m_TagString: Untagged
@@ -278,6 +312,37 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &8011111111111111111
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4533107205027384290}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &7384068673250085523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4533107205027384290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0407f0eebb81e004cb14ea4abdeda4a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiMask: {fileID: 7281546973534354337}
+  canvasGroup: {fileID: 8011111111111111111}
+  fadeInDuration: 0.25
+  fadeOutDuration: 0.25
+  monoContainer: {fileID: 8033333333333333333}
+  btnSkip: {fileID: 1266574679978637511}
+  offerCount: 3
 --- !u!1 &6567006453017932652
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,6 +353,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1840984447018232285}
   - component: {fileID: 1110971109439126340}
+  - component: {fileID: 8044444444444444444}
+  - component: {fileID: 8033333333333333333}
   m_Layer: 5
   m_Name: content_part
   m_TagString: Untagged
@@ -332,7 +399,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 0
+  m_Spacing: 40
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -340,6 +407,36 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!225 &8044444444444444444
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6567006453017932652}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &8033333333333333333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6567006453017932652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ab44f543e725d142affac630bb91f30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiMask: {fileID: 0}
+  canvasGroup: {fileID: 8044444444444444444}
+  fadeInDuration: 0.1
+  fadeOutDuration: 0.1
+  prefabItemObjName: prefab_part_select_item
+  layoutGroup: {fileID: 1110971109439126340}
 --- !u!1 &7281546973534354337
 GameObject:
   m_ObjectHideFlags: 0
