@@ -10,10 +10,18 @@ using UnityEngine.UI;
 
 namespace GameCore.UI
 {
+    public enum EBookCategory
+    {
+        None = 0,
+        Part = 1,
+        Enemy = 2,
+    }
+
     public class UIPanelBook : _ASCUIPanelBase<UIMonoBook>
     {
         private UIPanelCommonPartContainer _m_partContainer;
         private TweenContainer _m_tweenContainer;
+        private EBookCategory _m_curCategory = EBookCategory.Part;
         private EPartType _m_curFilterType = EPartType.EYE;
 
         public UIPanelBook(UIMonoBook _mono, SCUIShowType _showType) : base(_mono, _showType)
@@ -38,61 +46,157 @@ namespace GameCore.UI
         {
             if (mono.btnClose != null)
                 mono.btnClose.RemoveClickDown(onBtnCloseClickDown);
+            unbindCategoryButton(mono.btnPart, onBtnPartClickDown, onBtnPartMouseEnter, onBtnPartMouseExit);
+            unbindCategoryButton(mono.btnEnemy, onBtnEnemyClickDown, onBtnEnemyMouseEnter, onBtnEnemyMouseExit);
             unbindFilterButton(mono.btnEye, onBtnEyeClickDown, onBtnEyeMouseEnter, onBtnEyeMouseExit);
             unbindFilterButton(mono.btnNose, onBtnNoseClickDown, onBtnNoseMouseEnter, onBtnNoseMouseExit);
             unbindFilterButton(mono.btnMouth, onBtnMouthClickDown, onBtnMouthMouseEnter, onBtnMouthMouseExit);
             unbindFilterButton(mono.btnSkin, onBtnSkinClickDown, onBtnSkinMouseEnter, onBtnSkinMouseExit);
             _m_partContainer?.HidePanel();
+            resetOnHide();
         }
 
         public override void OnShowPanel()
         {
-            _m_curFilterType = EPartType.EYE;
-
             if (mono.btnClose != null)
                 mono.btnClose.AddMouseLeftClickDown(onBtnCloseClickDown);
+            bindCategoryButton(mono.btnPart, onBtnPartClickDown, onBtnPartMouseEnter, onBtnPartMouseExit);
+            bindCategoryButton(mono.btnEnemy, onBtnEnemyClickDown, onBtnEnemyMouseEnter, onBtnEnemyMouseExit);
             bindFilterButton(mono.btnEye, onBtnEyeClickDown, onBtnEyeMouseEnter, onBtnEyeMouseExit);
             bindFilterButton(mono.btnNose, onBtnNoseClickDown, onBtnNoseMouseEnter, onBtnNoseMouseExit);
             bindFilterButton(mono.btnMouth, onBtnMouthClickDown, onBtnMouthMouseEnter, onBtnMouthMouseExit);
             bindFilterButton(mono.btnSkin, onBtnSkinClickDown, onBtnSkinMouseEnter, onBtnSkinMouseExit);
 
-            _m_partContainer?.ShowPanel();
-            refreshFilterButtonState();
-            refreshPartList();
+            showDefaultOpenState();
+        }
+
+        private void showDefaultOpenState()
+        {
+            _m_curCategory = EBookCategory.Part;
+            _m_curFilterType = EPartType.EYE;
+
+            if (mono.goIndexes != null)
+                mono.goIndexes.SetActive(true);
+            if (mono.goPageEnemy != null)
+                mono.goPageEnemy.SetActive(false);
+
+            refreshCategoryView();
+        }
+
+        private void resetOnHide()
+        {
+            _m_curCategory = EBookCategory.None;
+
+            if (mono.goPagePart != null)
+                mono.goPagePart.SetActive(false);
+            if (mono.goPageEnemy != null)
+                mono.goPageEnemy.SetActive(false);
+        }
+
+        private void selectCategory(EBookCategory category)
+        {
+            if (_m_curCategory == category)
+                return;
+
+            AudioMgr.instance.PlaySfx("sfx_click");
+            _m_curCategory = category;
+            refreshCategoryView();
+        }
+
+        private void refreshCategoryView()
+        {
+            refreshCategoryButtonState();
+
+            bool showPartPage = _m_curCategory == EBookCategory.Part;
+            bool showEnemyPage = _m_curCategory == EBookCategory.Enemy && mono.goPageEnemy != null;
+
+            if (mono.goPagePart != null)
+                mono.goPagePart.SetActive(showPartPage);
+            if (mono.goPageEnemy != null)
+                mono.goPageEnemy.SetActive(showEnemyPage);
+
+            if (showPartPage)
+            {
+                _m_curFilterType = EPartType.EYE;
+                refreshFilterButtonState();
+                _m_partContainer?.ShowPanel();
+                refreshPartList();
+                return;
+            }
+
+            _m_partContainer?.HidePanel();
+        }
+
+        private void refreshCategoryButtonState()
+        {
+            setCategoryButtonSelected(mono.btnPart, _m_curCategory == EBookCategory.Part);
+
+            bool enemyReady = mono.goPageEnemy != null;
+            if (mono.btnEnemy == null)
+                return;
+            mono.btnEnemy.interactable = enemyReady && _m_curCategory != EBookCategory.Enemy;
+        }
+
+        private static void setCategoryButtonSelected(Button btn, bool selected)
+        {
+            if (btn == null)
+                return;
+            btn.interactable = !selected;
+        }
+
+        private void bindCategoryButton(
+            Button btn,
+            System.Action<PointerEventData, object[]> click,
+            System.Action<PointerEventData, object[]> enter,
+            System.Action<PointerEventData, object[]> exit)
+        {
+            bindFilterButton(btn, click, enter, exit);
+        }
+
+        private void unbindCategoryButton(
+            Button btn,
+            System.Action<PointerEventData, object[]> click,
+            System.Action<PointerEventData, object[]> enter,
+            System.Action<PointerEventData, object[]> exit)
+        {
+            unbindFilterButton(btn, click, enter, exit);
         }
 
         private void bindFilterButton(
-            Button _btn,
-            System.Action<PointerEventData, object[]> _click,
-            System.Action<PointerEventData, object[]> _enter,
-            System.Action<PointerEventData, object[]> _exit)
+            Button btn,
+            System.Action<PointerEventData, object[]> click,
+            System.Action<PointerEventData, object[]> enter,
+            System.Action<PointerEventData, object[]> exit)
         {
-            if (_btn == null)
+            if (btn == null)
                 return;
-            _btn.AddMouseLeftClickDown(_click);
-            _btn.AddMouseEnter(_enter);
-            _btn.AddMouseExit(_exit);
+            btn.AddMouseLeftClickDown(click);
+            btn.AddMouseEnter(enter);
+            btn.AddMouseExit(exit);
         }
 
         private void unbindFilterButton(
-            Button _btn,
-            System.Action<PointerEventData, object[]> _click,
-            System.Action<PointerEventData, object[]> _enter,
-            System.Action<PointerEventData, object[]> _exit)
+            Button btn,
+            System.Action<PointerEventData, object[]> click,
+            System.Action<PointerEventData, object[]> enter,
+            System.Action<PointerEventData, object[]> exit)
         {
-            if (_btn == null)
+            if (btn == null)
                 return;
-            _btn.RemoveClickDown(_click);
-            _btn.RemoveMouseEnter(_enter);
-            _btn.RemoveMouseExit(_exit);
+            btn.RemoveClickDown(click);
+            btn.RemoveMouseEnter(enter);
+            btn.RemoveMouseExit(exit);
         }
 
-        private void onFilterButtonClick(EPartType _type)
+        private void onFilterButtonClick(EPartType type)
         {
-            if (_m_curFilterType == _type)
+            if (_m_curCategory != EBookCategory.Part)
                 return;
+            if (_m_curFilterType == type)
+                return;
+
             AudioMgr.instance.PlaySfx("sfx_click");
-            _m_curFilterType = _type;
+            _m_curFilterType = type;
             refreshFilterButtonState();
             refreshPartList();
         }
@@ -105,19 +209,22 @@ namespace GameCore.UI
             setFilterButtonSelected(mono.btnSkin, _m_curFilterType == EPartType.SKIN);
         }
 
-        private static void setFilterButtonSelected(Button _btn, bool _selected)
+        private static void setFilterButtonSelected(Button btn, bool selected)
         {
-            if (_btn == null)
+            if (btn == null)
                 return;
-            _btn.interactable = !_selected;
+            btn.interactable = !selected;
         }
 
         private void refreshPartList()
         {
+            if (_m_curCategory != EBookCategory.Part)
+                return;
+
             _m_partContainer?.SetListInfo(buildBookPartList(_m_curFilterType));
         }
 
-        private static List<PartInfo> buildBookPartList(EPartType _filterType)
+        private static List<PartInfo> buildBookPartList(EPartType filterType)
         {
             var result = new List<PartInfo>();
             var partRefs = SCRefDataMgr.instance?.partRefList?.refDataList;
@@ -127,7 +234,7 @@ namespace GameCore.UI
             for (int i = 0; i < partRefs.Count; i++)
             {
                 PartRefObj partRef = partRefs[i];
-                if (partRef == null || partRef.partType != _filterType || partRef.isEnemyPart)
+                if (partRef == null || partRef.partType != filterType || partRef.isEnemyPart)
                     continue;
 
                 PartLevelRefObj levelRow = findLowestLevelRowForPart(partRef.id);
@@ -142,7 +249,7 @@ namespace GameCore.UI
             return result;
         }
 
-        private static PartLevelRefObj findLowestLevelRowForPart(long _partId)
+        private static PartLevelRefObj findLowestLevelRowForPart(long partId)
         {
             var rows = SCRefDataMgr.instance?.partLevelRefList?.refDataList;
             if (rows == null)
@@ -152,7 +259,7 @@ namespace GameCore.UI
             for (int i = 0; i < rows.Count; i++)
             {
                 PartLevelRefObj row = rows[i];
-                if (row == null || row.partId != _partId)
+                if (row == null || row.partId != partId)
                     continue;
                 if (best == null || row.partLevel < best.partLevel)
                     best = row;
@@ -160,38 +267,56 @@ namespace GameCore.UI
             return best;
         }
 
-        private void onBtnCloseClickDown(PointerEventData _data, object[] _objs)
+        private void onBtnCloseClickDown(PointerEventData data, object[] objs)
         {
             AudioMgr.instance.PlaySfx("sfx_click");
             UICoreMgr.instance.CloseTopNode();
         }
 
-        private void onBtnEyeClickDown(PointerEventData _data, object[] _objs) => onFilterButtonClick(EPartType.EYE);
-        private void onBtnNoseClickDown(PointerEventData _data, object[] _objs) => onFilterButtonClick(EPartType.NOSE);
-        private void onBtnMouthClickDown(PointerEventData _data, object[] _objs) => onFilterButtonClick(EPartType.MOUTH);
-        private void onBtnSkinClickDown(PointerEventData _data, object[] _objs) => onFilterButtonClick(EPartType.SKIN);
+        private void onBtnPartClickDown(PointerEventData data, object[] objs) => selectCategory(EBookCategory.Part);
 
-        private void onBtnEyeMouseEnter(PointerEventData _data, object[] _objs) => onFilterButtonMouseEnter(mono.btnEye);
-        private void onBtnEyeMouseExit(PointerEventData _data, object[] _objs) => onFilterButtonMouseExit(mono.btnEye);
-        private void onBtnNoseMouseEnter(PointerEventData _data, object[] _objs) => onFilterButtonMouseEnter(mono.btnNose);
-        private void onBtnNoseMouseExit(PointerEventData _data, object[] _objs) => onFilterButtonMouseExit(mono.btnNose);
-        private void onBtnMouthMouseEnter(PointerEventData _data, object[] _objs) => onFilterButtonMouseEnter(mono.btnMouth);
-        private void onBtnMouthMouseExit(PointerEventData _data, object[] _objs) => onFilterButtonMouseExit(mono.btnMouth);
-        private void onBtnSkinMouseEnter(PointerEventData _data, object[] _objs) => onFilterButtonMouseEnter(mono.btnSkin);
-        private void onBtnSkinMouseExit(PointerEventData _data, object[] _objs) => onFilterButtonMouseExit(mono.btnSkin);
-
-        private void onFilterButtonMouseEnter(Button _btn)
+        private void onBtnEnemyClickDown(PointerEventData data, object[] objs)
         {
-            if (_btn == null || !_btn.interactable)
+            if (mono.goPageEnemy == null)
                 return;
-            _m_tweenContainer?.RegDoTween(_btn.transform.DOScale(mono.btnEnterScale, mono.btnScaleChgTime));
+            selectCategory(EBookCategory.Enemy);
         }
 
-        private void onFilterButtonMouseExit(Button _btn)
+        private void onBtnEyeClickDown(PointerEventData data, object[] objs) => onFilterButtonClick(EPartType.EYE);
+        private void onBtnNoseClickDown(PointerEventData data, object[] objs) => onFilterButtonClick(EPartType.NOSE);
+        private void onBtnMouthClickDown(PointerEventData data, object[] objs) => onFilterButtonClick(EPartType.MOUTH);
+        private void onBtnSkinClickDown(PointerEventData data, object[] objs) => onFilterButtonClick(EPartType.SKIN);
+
+        private void onBtnPartMouseEnter(PointerEventData data, object[] objs) => onCategoryButtonMouseEnter(mono.btnPart);
+        private void onBtnPartMouseExit(PointerEventData data, object[] objs) => onCategoryButtonMouseExit(mono.btnPart);
+        private void onBtnEnemyMouseEnter(PointerEventData data, object[] objs) => onCategoryButtonMouseEnter(mono.btnEnemy);
+        private void onBtnEnemyMouseExit(PointerEventData data, object[] objs) => onCategoryButtonMouseExit(mono.btnEnemy);
+
+        private void onBtnEyeMouseEnter(PointerEventData data, object[] objs) => onFilterButtonMouseEnter(mono.btnEye);
+        private void onBtnEyeMouseExit(PointerEventData data, object[] objs) => onFilterButtonMouseExit(mono.btnEye);
+        private void onBtnNoseMouseEnter(PointerEventData data, object[] objs) => onFilterButtonMouseEnter(mono.btnNose);
+        private void onBtnNoseMouseExit(PointerEventData data, object[] objs) => onFilterButtonMouseExit(mono.btnNose);
+        private void onBtnMouthMouseEnter(PointerEventData data, object[] objs) => onFilterButtonMouseEnter(mono.btnMouth);
+        private void onBtnMouthMouseExit(PointerEventData data, object[] objs) => onFilterButtonMouseExit(mono.btnMouth);
+        private void onBtnSkinMouseEnter(PointerEventData data, object[] objs) => onFilterButtonMouseEnter(mono.btnSkin);
+        private void onBtnSkinMouseExit(PointerEventData data, object[] objs) => onFilterButtonMouseExit(mono.btnSkin);
+
+        private void onCategoryButtonMouseEnter(Button btn) => onFilterButtonMouseEnter(btn);
+
+        private void onCategoryButtonMouseExit(Button btn) => onFilterButtonMouseExit(btn);
+
+        private void onFilterButtonMouseEnter(Button btn)
         {
-            if (_btn == null)
+            if (btn == null || !btn.interactable)
                 return;
-            _m_tweenContainer?.RegDoTween(_btn.transform.DOScale(Vector3.one, mono.btnScaleChgTime));
+            _m_tweenContainer?.RegDoTween(btn.transform.DOScale(mono.btnEnterScale, mono.btnScaleChgTime));
+        }
+
+        private void onFilterButtonMouseExit(Button btn)
+        {
+            if (btn == null)
+                return;
+            _m_tweenContainer?.RegDoTween(btn.transform.DOScale(Vector3.one, mono.btnScaleChgTime));
         }
     }
 }

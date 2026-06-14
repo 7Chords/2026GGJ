@@ -6,6 +6,17 @@ namespace GameCore.UI
 {
     public class UIMonoBook : _ASCUIMonoBase
     {
+        [Header("Category index root")]
+        public GameObject goIndexes;
+        [Header("Category: part")]
+        public Button btnPart;
+        [Header("Category: enemy")]
+        public Button btnEnemy;
+        [Header("Part book page")]
+        public GameObject goPagePart;
+        [Header("Enemy book page (optional)")]
+        public GameObject goPageEnemy;
+
         [Header("Part list container")]
         public UIMonoCommonContainer monoContainer;
         [Header("Close button")]
