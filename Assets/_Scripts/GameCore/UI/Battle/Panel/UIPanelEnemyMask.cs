@@ -160,9 +160,13 @@ namespace GameCore.UI
             clearPassiveItems();
 
             _m_curEnemyInfo = GameModel.instance.curEnemyInfo;
+            refreshEnemyName();
 
             if (_m_curEnemyInfo == null)
+            {
+                refreshPassiveItems();
                 return;
+            }
 
             PartInfo partInfo = null;
 
@@ -215,13 +219,38 @@ namespace GameCore.UI
             _m_passiveItemPanelList.Clear();
         }
 
+        private void refreshEnemyName()
+        {
+            if (mono.txtName == null)
+                return;
+            string name = _m_curEnemyInfo?.enemyRefObj?.enemyName;
+            mono.txtName.text = string.IsNullOrEmpty(name) ? "" : name;
+        }
+
+        private bool hasValidPassive()
+        {
+            if (_m_curEnemyInfo?.enemyRefObj?.passiveIdList == null || _m_curEnemyInfo.enemyRefObj.passiveIdList.Count == 0)
+                return false;
+            var passiveTable = SCRefDataMgr.instance.enemyPassiveRefList.refDataList;
+            if (passiveTable == null)
+                return false;
+            for (int i = 0; i < _m_curEnemyInfo.enemyRefObj.passiveIdList.Count; i++)
+            {
+                long pid = _m_curEnemyInfo.enemyRefObj.passiveIdList[i];
+                if (passiveTable.Find(x => x.id == pid) != null)
+                    return true;
+            }
+            return false;
+        }
+
         private void refreshPassiveItems()
         {
             clearPassiveItems();
-            if (mono.tranPassiveContainer == null || string.IsNullOrEmpty(mono.passiveItemPrefabName))
-                return;
             _m_curEnemyInfo = GameModel.instance.curEnemyInfo;
-            if (_m_curEnemyInfo?.enemyRefObj?.passiveIdList == null || _m_curEnemyInfo.enemyRefObj.passiveIdList.Count == 0)
+            bool hasPassive = hasValidPassive();
+            if (mono.tranPassiveContainer != null)
+                SCCommon.SetGameObjectEnable(mono.tranPassiveContainer.gameObject, hasPassive);
+            if (!hasPassive || mono.tranPassiveContainer == null || string.IsNullOrEmpty(mono.passiveItemPrefabName))
                 return;
             var passiveTable = SCRefDataMgr.instance.enemyPassiveRefList.refDataList;
             if (passiveTable == null)

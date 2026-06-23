@@ -29073,6 +29073,7 @@ MonoBehaviour:
   - {x: 3, y: 0}
   - {x: 3, y: 6}
   tranParentPart: {fileID: 2612377385258473042}
+  txtName: {fileID: 0}
   tranPassiveContainer: {fileID: 0}
   passiveItemPrefabName: prefab_passive_item
 --- !u!1 &7083166230935183416
