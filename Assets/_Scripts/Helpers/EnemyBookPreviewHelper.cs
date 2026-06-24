@@ -166,7 +166,7 @@ namespace GameCore.Helpers
             return ResourcesHelper.LoadAsset<EnemyLayoutPreset>(enemyRef.layoutPresetName);
         }
 
-        public static List<EnemyRefObj> BuildSortedEnemyBookList()
+        public static List<EnemyRefObj> BuildSortedEnemyBookList(int floor = 0)
         {
             var result = new List<EnemyRefObj>();
             var enemyRefs = SCRefDataMgr.instance?.enemyRefList?.refDataList;
@@ -180,6 +180,8 @@ namespace GameCore.Helpers
                 if (enemyRef == null || seenIds.Contains(enemyRef.id))
                     continue;
                 if (enemyRef.battleType == EBattleType.EVENT)
+                    continue;
+                if (floor > 0 && enemyRef.floor != floor)
                     continue;
 
                 seenIds.Add(enemyRef.id);

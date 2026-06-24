@@ -2338,6 +2338,8 @@ MonoBehaviour:
   btnNose: {fileID: 6886730399589409748}
   btnMouth: {fileID: 8298668191705616538}
   btnSkin: {fileID: 4623072977985822975}
+  btnEnemyFloor1: {fileID: 4746026176028864979}
+  btnEnemyFloor2: {fileID: 3275527916985521768}
   btnEnterScale: 1.1
   btnScaleChgTime: 0.1
 --- !u!1 &5749907505714433889

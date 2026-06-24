@@ -31,6 +31,10 @@ namespace GameCore.UI
         public Button btnMouth;
         [Header("Filter: skin")]
         public Button btnSkin;
+        [Header("Enemy filter: floor 1")]
+        public Button btnEnemyFloor1;
+        [Header("Enemy filter: floor 2")]
+        public Button btnEnemyFloor2;
         [Header("Button hover scale")]
         public float btnEnterScale = 1.1f;
         [Header("Button scale duration")]
