@@ -118,7 +118,6 @@ namespace GameCore.UI
             if (showPartPage)
             {
                 _m_curFilterType = EPartType.EYE;
-                refreshFilterButtonState();
                 _m_partContainer?.ShowPanel();
                 refreshPartList();
                 return;
@@ -129,19 +128,20 @@ namespace GameCore.UI
 
         private void refreshCategoryButtonState()
         {
-            setCategoryButtonSelected(mono.btnPart, _m_curCategory == EBookCategory.Part);
+            if (mono.btnPart != null)
+                mono.btnPart.interactable = true;
 
-            bool enemyReady = mono.goPageEnemy != null;
-            if (mono.btnEnemy == null)
-                return;
-            mono.btnEnemy.interactable = enemyReady && _m_curCategory != EBookCategory.Enemy;
-        }
+            if (mono.btnEnemy != null)
+                mono.btnEnemy.interactable = mono.goPageEnemy != null;
 
-        private static void setCategoryButtonSelected(Button btn, bool selected)
-        {
-            if (btn == null)
-                return;
-            btn.interactable = !selected;
+            if (mono.btnEye != null)
+                mono.btnEye.interactable = true;
+            if (mono.btnNose != null)
+                mono.btnNose.interactable = true;
+            if (mono.btnMouth != null)
+                mono.btnMouth.interactable = true;
+            if (mono.btnSkin != null)
+                mono.btnSkin.interactable = true;
         }
 
         private void bindCategoryButton(
@@ -197,23 +197,7 @@ namespace GameCore.UI
 
             AudioMgr.instance.PlaySfx("sfx_click");
             _m_curFilterType = type;
-            refreshFilterButtonState();
             refreshPartList();
-        }
-
-        private void refreshFilterButtonState()
-        {
-            setFilterButtonSelected(mono.btnEye, _m_curFilterType == EPartType.EYE);
-            setFilterButtonSelected(mono.btnNose, _m_curFilterType == EPartType.NOSE);
-            setFilterButtonSelected(mono.btnMouth, _m_curFilterType == EPartType.MOUTH);
-            setFilterButtonSelected(mono.btnSkin, _m_curFilterType == EPartType.SKIN);
-        }
-
-        private static void setFilterButtonSelected(Button btn, bool selected)
-        {
-            if (btn == null)
-                return;
-            btn.interactable = !selected;
         }
 
         private void refreshPartList()
