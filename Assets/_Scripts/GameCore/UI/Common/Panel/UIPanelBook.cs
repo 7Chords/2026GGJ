@@ -1,5 +1,6 @@
 using DG.Tweening;
 using GameCore;
+using GameCore.Helpers;
 using GameCore.RefData;
 using SCFrame;
 using SCFrame.UI;
@@ -20,6 +21,7 @@ namespace GameCore.UI
     public class UIPanelBook : _ASCUIPanelBase<UIMonoBook>
     {
         private UIPanelCommonPartContainer _m_partContainer;
+        private readonly List<UIPanelBookEnemyItem> _m_enemyItemList = new List<UIPanelBookEnemyItem>();
         private TweenContainer _m_tweenContainer;
         private EBookCategory _m_curCategory = EBookCategory.Part;
         private EPartType _m_curFilterType = EPartType.EYE;
@@ -31,7 +33,7 @@ namespace GameCore.UI
         public override void AfterInitialize()
         {
             _m_tweenContainer = new TweenContainer();
-            _m_partContainer = new UIPanelCommonPartContainer(mono.monoContainer, SCUIShowType.INTERNAL);
+            _m_partContainer = new UIPanelCommonPartContainer(mono.monoPartContainer, SCUIShowType.INTERNAL);
         }
 
         public override void BeforeDiscard()
@@ -40,6 +42,9 @@ namespace GameCore.UI
             _m_tweenContainer = null;
             _m_partContainer?.Discard();
             _m_partContainer = null;
+            for (int i = 0; i < _m_enemyItemList.Count; i++)
+                _m_enemyItemList[i]?.Discard();
+            _m_enemyItemList.Clear();
         }
 
         public override void OnHidePanel()
@@ -53,6 +58,7 @@ namespace GameCore.UI
             unbindFilterButton(mono.btnMouth, onBtnMouthClickDown, onBtnMouthMouseEnter, onBtnMouthMouseExit);
             unbindFilterButton(mono.btnSkin, onBtnSkinClickDown, onBtnSkinMouseEnter, onBtnSkinMouseExit);
             _m_partContainer?.HidePanel();
+            hideEnemyItems();
             resetOnHide();
         }
 
@@ -108,22 +114,46 @@ namespace GameCore.UI
             refreshCategoryButtonState();
 
             bool showPartPage = _m_curCategory == EBookCategory.Part;
-            bool showEnemyPage = _m_curCategory == EBookCategory.Enemy && mono.goPageEnemy != null;
+            bool showEnemyPage = _m_curCategory == EBookCategory.Enemy && hasEnemyBookPage();
 
             if (mono.goPagePart != null)
                 mono.goPagePart.SetActive(showPartPage);
             if (mono.goPageEnemy != null)
                 mono.goPageEnemy.SetActive(showEnemyPage);
 
+            setPartFiltersVisible(showPartPage);
+
             if (showPartPage)
             {
                 _m_curFilterType = EPartType.EYE;
                 _m_partContainer?.ShowPanel();
+                hideEnemyItems();
                 refreshPartList();
                 return;
             }
 
             _m_partContainer?.HidePanel();
+            if (showEnemyPage)
+                refreshEnemyList();
+            else
+                hideEnemyItems();
+        }
+
+        private bool hasEnemyBookPage()
+        {
+            return mono.monoEnemyContainer != null;
+        }
+
+        private void setPartFiltersVisible(bool visible)
+        {
+            if (mono.btnEye != null)
+                mono.btnEye.gameObject.SetActive(visible);
+            if (mono.btnNose != null)
+                mono.btnNose.gameObject.SetActive(visible);
+            if (mono.btnMouth != null)
+                mono.btnMouth.gameObject.SetActive(visible);
+            if (mono.btnSkin != null)
+                mono.btnSkin.gameObject.SetActive(visible);
         }
 
         private void refreshCategoryButtonState()
@@ -132,7 +162,7 @@ namespace GameCore.UI
                 mono.btnPart.interactable = true;
 
             if (mono.btnEnemy != null)
-                mono.btnEnemy.interactable = mono.goPageEnemy != null;
+                mono.btnEnemy.interactable = hasEnemyBookPage();
 
             if (mono.btnEye != null)
                 mono.btnEye.interactable = true;
@@ -251,6 +281,72 @@ namespace GameCore.UI
             return best;
         }
 
+        private void refreshEnemyList()
+        {
+            hideEnemyItems();
+
+            if (mono.monoEnemyContainer == null || mono.monoEnemyContainer.layoutGroup == null)
+                return;
+
+            List<EnemyRefObj> enemyList = EnemyBookPreviewHelper.BuildSortedEnemyBookList();
+            for (int i = 0; i < enemyList.Count; i++)
+            {
+                UIPanelBookEnemyItem itemPanel = getOrCreateEnemyItem(i);
+                if (itemPanel == null)
+                    continue;
+
+                itemPanel.onSelected = onEnemyItemSelected;
+                itemPanel.SetInfo(enemyList[i]);
+                if (!itemPanel.hasShowed)
+                    itemPanel.ShowPanel();
+            }
+
+            for (int i = enemyList.Count; i < _m_enemyItemList.Count; i++)
+                _m_enemyItemList[i]?.HidePanel();
+        }
+
+        private UIPanelBookEnemyItem getOrCreateEnemyItem(int index)
+        {
+            if (index < _m_enemyItemList.Count)
+                return _m_enemyItemList[index];
+
+            if (mono.monoEnemyContainer == null)
+                return null;
+
+            GameObject itemGO = ResourcesHelper.LoadGameObject(
+                mono.monoEnemyContainer.prefabItemObjName,
+                mono.monoEnemyContainer.layoutGroup.transform);
+            if (itemGO == null)
+                return null;
+
+            UIMonoBookEnemyItem itemMono = itemGO.GetComponent<UIMonoBookEnemyItem>();
+            if (itemMono == null)
+            {
+                Debug.LogError("prefab missing UIMonoBookEnemyItem: " + mono.monoEnemyContainer.prefabItemObjName);
+                return null;
+            }
+
+            var itemPanel = new UIPanelBookEnemyItem(itemMono, SCUIShowType.INTERNAL);
+            itemPanel.Initialize();
+            _m_enemyItemList.Add(itemPanel);
+            return itemPanel;
+        }
+
+        private void hideEnemyItems()
+        {
+            for (int i = 0; i < _m_enemyItemList.Count; i++)
+                _m_enemyItemList[i]?.HidePanel();
+        }
+
+        private void onEnemyItemSelected(EnemyRefObj enemyRef)
+        {
+            if (enemyRef == null)
+                return;
+
+            AudioMgr.instance.PlaySfx("sfx_click");
+            UICoreMgr.instance.AddNode(new UINodeBookEnemyDetail(SCUIShowType.ADDITION, enemyRef));
+        }
+
         private void onBtnCloseClickDown(PointerEventData data, object[] objs)
         {
             AudioMgr.instance.PlaySfx("sfx_click");
@@ -261,7 +357,7 @@ namespace GameCore.UI
 
         private void onBtnEnemyClickDown(PointerEventData data, object[] objs)
         {
-            if (mono.goPageEnemy == null)
+            if (!hasEnemyBookPage())
                 return;
             selectCategory(EBookCategory.Enemy);
         }

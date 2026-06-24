@@ -16,9 +16,11 @@ namespace GameCore.UI
         public GameObject goPagePart;
         [Header("Enemy book page (optional)")]
         public GameObject goPageEnemy;
+        [Header("Enemy list container")]
+        public UIMonoCommonContainer monoEnemyContainer;
 
         [Header("Part list container")]
-        public UIMonoCommonContainer monoContainer;
+        public UIMonoCommonContainer monoPartContainer;
         [Header("Close button")]
         public Button btnClose;
         [Header("Filter: eye")]

@@ -13,6 +13,7 @@ namespace GameCore.UI
     public class UIPanelEnemyFacePart : _ASCUIPanelBase<UIMonoEnemyFacePart>
     {
         private PartInfo _m_partInfo;
+        private List<PartInfo> _m_battleOrderList;
         public PartInfo partInfo => _m_partInfo;
 
         private TweenContainer _m_tweenContainer;
@@ -38,6 +39,7 @@ namespace GameCore.UI
             GameCommon.DiscardToolTip();
             _m_tweenContainer?.KillAllDoTween();
             _m_tweenContainer = null;
+            _m_battleOrderList = null;
 
             if(_m_partBuffItemList != null)
             {
@@ -81,9 +83,10 @@ namespace GameCore.UI
             }
         }
 
-        public void SetInfo(PartInfo _info)
+        public void SetInfo(PartInfo _info, List<PartInfo> battleOrderList = null)
         {
             _m_partInfo = _info;
+            _m_battleOrderList = battleOrderList;
             refreshShow();
         }
         public void SetLocalPos(Vector2 _pos)
@@ -100,7 +103,7 @@ namespace GameCore.UI
             mono.imgPart.SetNativeSize();
             PartSpriteRaycastHelper.ApplyToPartImages(mono.imgGO, mono.imgPart);
             applyHealthLineDisplay();
-            mono.txtOrder.text = GameModel.instance.GetEnemyBattleOrderByPartInfo(_m_partInfo).ToString();
+            mono.txtOrder.text = getBattleOrderDisplay().ToString();
 
             GameObject buffInfoGO = null;
             UIMonoPartBuff monoPartBuff = null;
@@ -124,6 +127,14 @@ namespace GameCore.UI
             autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goBuff, mono.goBuffPosPivot);
 
             mono.imgGO.transform.localScale = mono.scaleGO * Vector3.one;
+        }
+
+        private int getBattleOrderDisplay()
+        {
+            if (_m_battleOrderList != null)
+                return BattleOrderHelper.GetBattleOrderByPartInfo(_m_battleOrderList, _m_partInfo);
+
+            return GameModel.instance.GetEnemyBattleOrderByPartInfo(_m_partInfo);
         }
 
         private void onMouseExit(PointerEventData _data, object[] _objs)

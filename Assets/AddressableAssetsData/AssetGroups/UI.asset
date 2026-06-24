@@ -262,6 +262,26 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cf20fd74718aa474896b136e24d9d9c5
+    m_Address: panel_book_enemy_detail
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: acb1c7cd57a26d34aaa93fed2fd65513
+    m_Address: prefab_book_enemy_item
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3cec36bf585caab4e9f2ebbace03ae3c
+    m_Address: prefab_book_enemy_part_reserve_item
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dba264ca9b6ee004684b9368e98a41d5
+    m_Address: prefab_book_enemy_turn_layout_item
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e6ff67292e86232428a7beb839c4d36b, type: 2}
   m_SchemaSet:
