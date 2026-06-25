@@ -116,6 +116,8 @@ namespace GameCore.UI
             if (entries == null || entries.Count == 0)
                 return;
 
+            removeOrphanTurnLayoutChildren();
+
             for (int i = 0; i < entries.Count; i++)
             {
                 UIPanelBookEnemyTurnLayoutItem itemPanel = getOrCreateTurnItem(i);
@@ -123,12 +125,30 @@ namespace GameCore.UI
                     continue;
 
                 itemPanel.SetInfo(_m_enemyRef, entries[i], _m_deckParts, _m_layoutPreset);
-                if (!itemPanel.hasShowed)
-                    itemPanel.ShowPanel();
+                itemPanel.ShowPanel();
             }
 
             for (int i = entries.Count; i < _m_turnItemList.Count; i++)
                 _m_turnItemList[i]?.HidePanel();
+        }
+
+        private void removeOrphanTurnLayoutChildren()
+        {
+            Transform parent = mono.monoTurnLayoutContainer.layoutGroup.transform;
+            var managedRoots = new HashSet<GameObject>();
+            for (int i = 0; i < _m_turnItemList.Count; i++)
+            {
+                GameObject go = _m_turnItemList[i]?.GetGameObject();
+                if (go != null)
+                    managedRoots.Add(go);
+            }
+
+            for (int i = parent.childCount - 1; i >= 0; i--)
+            {
+                GameObject child = parent.GetChild(i).gameObject;
+                if (!managedRoots.Contains(child))
+                    Object.Destroy(child);
+            }
         }
 
         private UIPanelBookEnemyPartReserveItem getOrCreateReserveItem(int index)

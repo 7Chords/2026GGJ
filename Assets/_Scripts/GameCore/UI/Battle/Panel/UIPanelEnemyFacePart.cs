@@ -23,6 +23,9 @@ namespace GameCore.UI
         private int _m_previewDamageAmt;
         private int _m_previewHealAmt;
         private bool _m_healthPreviewActive;
+        private Vector2 _m_tooltipScreenRatio = new Vector2(
+            GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_COMBINE,
+            GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_COMBINE);
 
         public UIPanelEnemyFacePart(UIMonoEnemyFacePart _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
@@ -93,6 +96,12 @@ namespace GameCore.UI
         {
             GetGameObject().transform.localPosition = _pos;
         }
+
+        public void SetTooltipScreenRatio(Vector2 screenRatio)
+        {
+            _m_tooltipScreenRatio = screenRatio;
+        }
+
         private void refreshShow()
         {
             if (_m_partInfo == null)
@@ -152,9 +161,7 @@ namespace GameCore.UI
             //????????? ??????????
             GetGameObject().transform.SetAsLastSibling();
             _m_tweenContainer.RegDoTween(mono.imgGO.transform.DOScale(mono.scaleMouseEnter, mono.scaleChgDuration));
-            GameCommon.ShowTooltip(_m_partInfo,
-                new Vector2(GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_X_IN_COMBINE, GameConst.SHOW_FACE_PART_TIP_SCREEN_RATIO_Y_IN_COMBINE),
-                false);
+            GameCommon.ShowTooltip(_m_partInfo, _m_tooltipScreenRatio, false);
             SCMsgCenter.SendMsg(SCMsgConst.ENEMY_FACE_PART_RANGE_HIGHLIGHT, _m_partInfo);
             SCMsgCenter.SendMsg(SCMsgConst.ENEMY_FACE_PART_TARGET_PREVIEW_HIGHLIGHT, GameModel.instance.GetPartPreviewTargetPartList(_m_partInfo));
             PlacementPreviewHelper.BroadcastValues(_m_partInfo);

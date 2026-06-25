@@ -364,14 +364,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 5845072696330071869}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fb98cb2fba548c4c8ae7958909af6f3, type: 3}
+  m_Script: {fileID: 11500000, guid: c7d8e9f0a1b243658970abcdef120001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   uiMask: {fileID: 0}
   canvasGroup: {fileID: 2500446948005700118}
   fadeInDuration: 0
   fadeOutDuration: 0
-  gridPrefabName: prefab_enemy_mask_grid
+  gridPrefabName: prefab_book_enemy_mask_grid
+  facePartPrefabName: prefab_book_enemy_face_part
   layoutGrid: {fileID: 2797763155867889214}
   column: 4
   row: 7
@@ -381,8 +382,7 @@ MonoBehaviour:
   - {x: 3, y: 6}
   tranParentPart: {fileID: 1510221414624823526}
   txtName: {fileID: 0}
-  tranPassiveContainer: {fileID: 0}
-  passiveItemPrefabName: prefab_passive_item
+  facePartTooltipScreenRatio: {x: 0.5, y: 0.8}
 --- !u!1 &6454879694336786844
 GameObject:
   m_ObjectHideFlags: 0

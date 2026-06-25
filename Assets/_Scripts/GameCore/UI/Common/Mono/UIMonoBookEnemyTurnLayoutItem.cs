@@ -9,6 +9,6 @@ namespace GameCore.UI
         [Header("Turn label")]
         public Text txtTurnLabel;
         [Header("Enemy mask preview")]
-        public UIMonoEnemyMask monoEnemyMask;
+        public UIMonoBookEnemyMask monoEnemyMask;
     }
 }
