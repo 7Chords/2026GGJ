@@ -38,9 +38,10 @@ namespace GameCore.Battle
             SCMsgCenter.SendMsg(SCMsgConst.PLAYER_HEAL);
         }
 
-        public void ApplyDamageToEnemy(int _amount)
+        public void ApplyDamageToEnemy(int _amount, PartInfo _attacker = null)
         {
             if (_amount <= 0) return;
+            TryTrackPlayerDamageDealt(_attacker, _amount);
             var enemy = GameModel.instance.curEnemyInfo;
             if (enemy == null) return;
             enemy.currentHealth = UnityEngine.Mathf.Clamp(enemy.currentHealth - _amount, 0, enemy.maxHealth);
@@ -81,6 +82,8 @@ namespace GameCore.Battle
                 {
                     int absorbed = Mathf.Max(0, before - _amount);
                     int overflowToBodyFromGerms = Mathf.Max(0, _amount);
+                    if (_part.isEnemyPart)
+                        TryTrackPlayerDamageDealt(_sender, before, isSelfEffectDamage);
                     if (absorbed > 0)
                     {
                         SCMsgCenter.SendMsg(SCMsgConst.PART_HURT, _part, absorbed);
@@ -98,6 +101,8 @@ namespace GameCore.Battle
                 }
             }
             if (_amount <= 0) return;
+            if (_part.isEnemyPart)
+                TryTrackPlayerDamageDealt(_sender, _amount, isSelfEffectDamage);
             int hpBefore = _part.currentHealth;
             int damageToPart = UnityEngine.Mathf.Min(_amount, hpBefore);
             int overflowToBody = _amount - damageToPart;
@@ -226,6 +231,15 @@ namespace GameCore.Battle
         public void ApplyReduceAllBuffLayerToPart(PartInfo _part, int _reduceLayer)
         {
             _part.ReduceAllBuffLayer(_reduceLayer);
+        }
+
+        private static void TryTrackPlayerDamageDealt(PartInfo sender, int amount, bool isSelfEffectDamage = false)
+        {
+            if (amount <= 0 || isSelfEffectDamage)
+                return;
+            if (sender == null || sender.isEnemyPart)
+                return;
+            GameModel.instance.AddRunDamageDealt(amount);
         }
     }
 }

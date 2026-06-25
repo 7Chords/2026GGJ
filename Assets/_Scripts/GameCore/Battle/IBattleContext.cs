@@ -26,7 +26,7 @@ namespace GameCore.Battle
         void ApplyHealToPlayer(int _amount);
 
         /// <summary> 对当前敌人造成伤害；若敌人死亡会请求结束战斗 </summary>
-        void ApplyDamageToEnemy(int _amount);
+        void ApplyDamageToEnemy(int _amount, PartInfo _attacker = null);
 
         /// <summary> 对当前敌人治疗 </summary>
         void ApplyHealToEnemy(int _amount);

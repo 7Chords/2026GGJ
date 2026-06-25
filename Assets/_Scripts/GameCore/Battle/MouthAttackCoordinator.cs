@@ -61,7 +61,7 @@ namespace GameCore.Battle
                 if (caster.isEnemyPart)
                     battleCtx.ApplyDamageToPlayer(d.realAttackBodyDamage);
                 else
-                    battleCtx.ApplyDamageToEnemy(d.realAttackBodyDamage);
+                    battleCtx.ApplyDamageToEnemy(d.realAttackBodyDamage, caster);
                 return;
             }
 
@@ -72,7 +72,7 @@ namespace GameCore.Battle
             if (caster.isEnemyPart)
                 battleCtx.ApplyDamageToPlayer(Mathf.RoundToInt(perGridDamage * emptyGridNum));
             else
-                battleCtx.ApplyDamageToEnemy(Mathf.RoundToInt(perGridDamage * emptyGridNum));
+                battleCtx.ApplyDamageToEnemy(Mathf.RoundToInt(perGridDamage * emptyGridNum), caster);
 
             if (partOccupyGridNumDic != null)
             {

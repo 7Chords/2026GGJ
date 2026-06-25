@@ -77,7 +77,7 @@ namespace GameCore.Battle
             if (owner.isEnemyPart)
                 ctx.ApplyDamageToPlayer(Mathf.RoundToInt(perGridDamage * emptyGridNum));
             else
-                ctx.ApplyDamageToEnemy(Mathf.RoundToInt(perGridDamage * emptyGridNum));
+                ctx.ApplyDamageToEnemy(Mathf.RoundToInt(perGridDamage * emptyGridNum), owner);
 
             foreach (var pair in partOccupyGridNumDic)
             {

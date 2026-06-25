@@ -62,7 +62,7 @@ namespace GameCore.Battle.Effects
             if (_caster.isEnemyPart)
                 battleCtx.ApplyDamageToPlayer(Mathf.RoundToInt(perGridDamage * emptyGridNum));
             else
-                battleCtx.ApplyDamageToEnemy(Mathf.RoundToInt(perGridDamage * emptyGridNum));
+                battleCtx.ApplyDamageToEnemy(Mathf.RoundToInt(perGridDamage * emptyGridNum), _caster);
 
             foreach (var pair in partOccupyGridNumDic)
                 battleCtx.ApplyDamageToPart(pair.Key, _caster, Mathf.RoundToInt(pair.Value * perGridDamage));

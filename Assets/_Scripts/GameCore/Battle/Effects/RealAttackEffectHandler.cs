@@ -29,7 +29,7 @@ namespace GameCore.Battle.Effects
             if (_caster.isEnemyPart)
                 battleCtx.ApplyDamageToPlayer(damage);
             else
-                battleCtx.ApplyDamageToEnemy(damage);
+                battleCtx.ApplyDamageToEnemy(damage, _caster);
         }
     }
 }
