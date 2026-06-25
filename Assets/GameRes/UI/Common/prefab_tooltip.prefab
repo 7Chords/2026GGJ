@@ -682,7 +682,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: wdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadada
+  m_Text: wdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawdadadawd
 --- !u!1 &2385288524055739928
 GameObject:
   m_ObjectHideFlags: 0
@@ -1862,7 +1862,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 218.55185, y: -418.67682}
+  m_AnchoredPosition: {x: 218.55185, y: -355.67682}
   m_SizeDelta: {x: 437.1037, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7603656062021809402
@@ -2014,7 +2014,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 218.55185, y: -175.1268}
+  m_AnchoredPosition: {x: 218.55185, y: -143.6268}
   m_SizeDelta: {x: 437.1037, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3377494056976667983

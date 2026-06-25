@@ -131,6 +131,7 @@ namespace GameCore.UI
                         continue;
 
                     itemPanel.onFavoriteStateChanged = onItemFavoriteStateChanged;
+                    itemPanel.onExpandStateChanged = onItemExpandStateChanged;
                     itemPanel.SetInfo(entries[i]);
                     if (!itemPanel.hasShowed)
                         itemPanel.ShowPanel();
@@ -159,6 +160,12 @@ namespace GameCore.UI
             refreshHistoryList();
         }
 
+        private void onItemExpandStateChanged()
+        {
+            rebuildHistoryListLayout();
+            scheduleDeferredListLayoutRebuild();
+        }
+
         private void rebuildHistoryListLayout()
         {
             if (mono.monoListContainer == null || mono.monoListContainer.layoutGroup == null)
@@ -176,8 +183,19 @@ namespace GameCore.UI
             if (listRect == null)
                 return;
 
-            LayoutRebuilder.ForceRebuildLayoutImmediate(listRect);
+            rebuildLayoutRect(listRect);
+
+            ScrollRect scroll = listRect.GetComponentInParent<ScrollRect>();
+            if (scroll?.content != null && scroll.content != listRect)
+                rebuildLayoutRect(scroll.content);
+
             Canvas.ForceUpdateCanvases();
+        }
+
+        private static void rebuildLayoutRect(RectTransform rect)
+        {
+            if (rect != null)
+                LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
         }
 
         private void scheduleDeferredListLayoutRebuild()

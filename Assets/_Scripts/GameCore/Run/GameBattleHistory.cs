@@ -42,6 +42,12 @@ namespace GameCore
             public string enemyName;
             public long recordedAtTicks;
             public GameRunSave.PartSaveEntry[] endParts;
+            public int battlesCleared;
+            public int eventsCleared;
+            public int shopsCleared;
+            public int strengthenCleared;
+            public int totalGoldEarned;
+            public int totalDamageDealt;
         }
 
         public static IReadOnlyList<BattleHistoryEntry> GetEntries()
@@ -121,6 +127,12 @@ namespace GameCore
                 enemyName = gm.PendingRunEndEnemyName ?? string.Empty,
                 recordedAtTicks = DateTime.UtcNow.Ticks,
                 endParts = SerializeAllPlayerParts(gm.playerInfo),
+                battlesCleared = gm.RunBattlesCleared,
+                eventsCleared = gm.RunEventsCleared,
+                shopsCleared = gm.RunShopsCleared,
+                strengthenCleared = gm.RunStrengthenCleared,
+                totalGoldEarned = gm.RunTotalGoldEarned,
+                totalDamageDealt = gm.RunTotalDamageDealt,
             };
 
             var store = LoadStore();
@@ -195,6 +207,42 @@ namespace GameCore
             {
                 return string.Empty;
             }
+        }
+
+        public static string FormatBattlesClearedText(BattleHistoryEntry entry)
+        {
+            return FormatStatCount(entry, entry?.battlesCleared ?? 0, "\u6218\u6597");
+        }
+
+        public static string FormatEventsClearedText(BattleHistoryEntry entry)
+        {
+            return FormatStatCount(entry, entry?.eventsCleared ?? 0, "\u4e8b\u4ef6");
+        }
+
+        public static string FormatShopsClearedText(BattleHistoryEntry entry)
+        {
+            return FormatStatCount(entry, entry?.shopsCleared ?? 0, "\u5546\u5e97");
+        }
+
+        public static string FormatStrengthenClearedText(BattleHistoryEntry entry)
+        {
+            return FormatStatCount(entry, entry?.strengthenCleared ?? 0, "\u5f3a\u5316");
+        }
+
+        public static string FormatTotalGoldText(BattleHistoryEntry entry)
+        {
+            return FormatStatCount(entry, entry?.totalGoldEarned ?? 0, "\u91d1\u5e01");
+        }
+
+        public static string FormatTotalDamageText(BattleHistoryEntry entry)
+        {
+            return FormatStatCount(entry, entry?.totalDamageDealt ?? 0, "\u4f24\u5bb3");
+        }
+
+        private static string FormatStatCount(BattleHistoryEntry entry, int value, string label)
+        {
+            int safeValue = Mathf.Max(0, value);
+            return string.IsNullOrEmpty(label) ? safeValue.ToString() : label + "\uff1a" + safeValue;
         }
 
         static GameRunSave.PartSaveEntry[] SerializeAllPlayerParts(PlayerInfo playerInfo)

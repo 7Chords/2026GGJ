@@ -59,6 +59,7 @@ namespace GameCore
                             Find(x => x.floor == GameModel.instance.playerInfo.playerFloor);
                         if (getMoneyRefObj == null)
                             return;
+                        GameModel.instance.AddRunGoldEarned(getMoneyRefObj.money);
                         GameModel.instance.playerInfo.playerMoney += getMoneyRefObj.money;
                         GameCommon.ShowPopTip("获得金币×" + getMoneyRefObj.money, Vector2.zero);
                     }

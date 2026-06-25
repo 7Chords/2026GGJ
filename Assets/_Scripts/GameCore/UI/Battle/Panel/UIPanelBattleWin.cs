@@ -278,6 +278,7 @@ namespace GameCore.UI
             }
 
             int targetMoney = _m_enemyRefObj.winMoney;
+            GameModel.instance.AddRunGoldEarned(targetMoney);
             GameModel.instance.playerInfo.playerMoney += targetMoney;
 
             _m_moneyTween?.Kill(false);

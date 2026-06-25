@@ -47,6 +47,8 @@ namespace GameCore
         {
             if (pendingMapTargetPosition.x < 0 || pendingMapTargetPosition.y < 0)
                 return;
+
+            GameModel.instance?.OnEncounterCleared();
             playerMapPosition = pendingMapTargetPosition;
             pendingMapTargetPosition = new Vector2Int(-1, -1);
         }

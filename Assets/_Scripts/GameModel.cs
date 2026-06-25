@@ -130,6 +130,9 @@ namespace GameCore
             _amount += BuffCombatModifiers.GetPreyExtraDamage(_partInfo);
             if (_amount <= 0)
                 return;
+            if (_partInfo.isEnemyPart && _senderInfo != null && !_senderInfo.isEnemyPart)
+                AddRunDamageDealt(_amount);
+
             int hpBefore = _partInfo.currentHealth;
             int damageToPart = Mathf.Min(_amount, hpBefore);
             int overflowToBody = _amount - damageToPart;

@@ -18,6 +18,7 @@ namespace GameCore.UI
         private static readonly Color FavoriteActiveColor = new Color(1f, 0.85f, 0.2f, 1f);
 
         public System.Action onFavoriteStateChanged;
+        public System.Action onExpandStateChanged;
 
         public UIPanelHistoryItem(UIMonoHistoryItem _mono, SCUIShowType _showType) : base(_mono, _showType)
         {
@@ -86,6 +87,20 @@ namespace GameCore.UI
                 mono.goPartRoot.SetActive(false);
             if (mono.txtExpandHint != null)
                 mono.txtExpandHint.text = "展开器官库";
+
+            resetExpandContentLayoutSize();
+        }
+
+        private void resetExpandContentLayoutSize()
+        {
+            if (mono.monoPartContainer?.layoutGroup?.transform is RectTransform partContentRect)
+                partContentRect.sizeDelta = new Vector2(partContentRect.sizeDelta.x, 0);
+
+            if (mono.goPartRoot != null && mono.goPartRoot.transform.childCount > 0)
+            {
+                if (mono.goPartRoot.transform.GetChild(0) is RectTransform dataRect)
+                    dataRect.sizeDelta = new Vector2(dataRect.sizeDelta.x, 0);
+            }
         }
 
         public void RebuildItemLayout()
@@ -95,15 +110,18 @@ namespace GameCore.UI
 
         public void RebuildParentListLayout()
         {
-            RectTransform itemRect = GetGameObject().GetComponent<RectTransform>();
+            RectTransform itemRect = GetGameObject()?.GetComponent<RectTransform>();
             if (itemRect == null)
                 return;
 
             RectTransform listRect = itemRect.parent as RectTransform;
-            if (listRect == null)
-                return;
+            if (listRect != null)
+                rebuildLayoutRect(listRect);
 
-            LayoutRebuilder.ForceRebuildLayoutImmediate(listRect);
+            ScrollRect scroll = listRect != null ? listRect.GetComponentInParent<ScrollRect>() : null;
+            if (scroll?.content != null && scroll.content != listRect)
+                rebuildLayoutRect(scroll.content);
+
             Canvas.ForceUpdateCanvases();
         }
 
@@ -123,6 +141,19 @@ namespace GameCore.UI
                 mono.txtLoseLocation.text = loseText;
                 mono.txtLoseLocation.gameObject.SetActive(!_m_entry.isWin && !string.IsNullOrEmpty(loseText));
             }
+
+            if (mono.txtBattleCount != null)
+                mono.txtBattleCount.text = GameBattleHistory.FormatBattlesClearedText(_m_entry);
+            if (mono.txtEventCount != null)
+                mono.txtEventCount.text = GameBattleHistory.FormatEventsClearedText(_m_entry);
+            if (mono.txtShopCount != null)
+                mono.txtShopCount.text = GameBattleHistory.FormatShopsClearedText(_m_entry);
+            if (mono.txtStrengthenCount != null)
+                mono.txtStrengthenCount.text = GameBattleHistory.FormatStrengthenClearedText(_m_entry);
+            if (mono.txtTotalGold != null)
+                mono.txtTotalGold.text = GameBattleHistory.FormatTotalGoldText(_m_entry);
+            if (mono.txtTotalDamage != null)
+                mono.txtTotalDamage.text = GameBattleHistory.FormatTotalDamageText(_m_entry);
         }
 
         private void refreshFavoriteButtonState()
@@ -146,39 +177,54 @@ namespace GameCore.UI
                 mono.txtExpandHint.text = _m_expanded ? "收起器官库" : "展开器官库";
 
             if (_m_expanded)
+            {
+                resetExpandContentLayoutSize();
                 _m_partContainer?.SetListInfo(GameBattleHistory.DeserializeEndParts(_m_entry));
+            }
 
             rebuildItemLayoutImmediate();
 
             if (rebuildParentList)
             {
                 RebuildParentListLayout();
-                if (_m_expanded)
-                    scheduleDeferredItemLayoutRebuild(true);
+                scheduleDeferredItemLayoutRebuild(true);
+                onExpandStateChanged?.Invoke();
             }
+        }
+
+        private static void rebuildLayoutRect(RectTransform rect)
+        {
+            if (rect != null)
+                LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
         }
 
         private void rebuildItemLayoutImmediate()
         {
-            if (_m_expanded && mono.monoPartContainer != null && mono.monoPartContainer.layoutGroup != null)
+            if (_m_expanded && mono.monoPartContainer?.layoutGroup != null)
             {
                 RectTransform partLayoutRect = mono.monoPartContainer.layoutGroup.transform as RectTransform;
-                if (partLayoutRect != null)
-                    LayoutRebuilder.ForceRebuildLayoutImmediate(partLayoutRect);
+                rebuildLayoutRect(partLayoutRect);
+
+                if (partLayoutRect?.parent is RectTransform partContentRect)
+                    rebuildLayoutRect(partContentRect);
             }
 
             if (_m_expanded && mono.goPartRoot != null)
             {
-                RectTransform partRootRect = mono.goPartRoot.GetComponent<RectTransform>();
-                if (partRootRect != null)
-                    LayoutRebuilder.ForceRebuildLayoutImmediate(partRootRect);
+                RectTransform expandRect = mono.goPartRoot.GetComponent<RectTransform>();
+                if (expandRect != null)
+                {
+                    for (int i = 0; i < expandRect.childCount; i++)
+                    {
+                        if (expandRect.GetChild(i) is RectTransform childRect)
+                            rebuildLayoutRect(childRect);
+                    }
+
+                    rebuildLayoutRect(expandRect);
+                }
             }
 
-            RectTransform itemRect = GetGameObject().GetComponent<RectTransform>();
-            if (itemRect == null)
-                return;
-
-            LayoutRebuilder.ForceRebuildLayoutImmediate(itemRect);
+            rebuildLayoutRect(GetGameObject()?.GetComponent<RectTransform>());
         }
 
         private void scheduleDeferredItemLayoutRebuild(bool rebuildParentList)
@@ -195,9 +241,6 @@ namespace GameCore.UI
             yield return new WaitForEndOfFrame();
 
             _m_layoutRebuildRoutine = null;
-            if (!_m_expanded)
-                yield break;
-
             rebuildItemLayoutImmediate();
             if (rebuildParentList)
                 RebuildParentListLayout();

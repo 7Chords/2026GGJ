@@ -193,6 +193,7 @@ namespace GameCore
             ClearEnemyWinSnapshot();
             ClearRunEndSnapshot();
             RunEncounterRoomType = ERoomType.NONE;
+            ResetRunStatistics();
             ResetRunTutorialFlagsForNewRun();
 
             if (MapManager.instance != null)
