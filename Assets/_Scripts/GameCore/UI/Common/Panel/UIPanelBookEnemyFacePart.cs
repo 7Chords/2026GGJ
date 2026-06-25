@@ -92,11 +92,61 @@ namespace GameCore.UI
             mono.imgGO.SetNativeSize();
             PartSpriteRaycastHelper.ApplyToPartImages(mono.imgGO, null);
 
+            applyHealthLineDisplay();
+
             if (mono.txtOrder != null)
                 mono.txtOrder.text = getBattleOrderDisplay().ToString();
 
             mono.imgGO.transform.rotation = Quaternion.Euler(0f, 0f, _m_partInfo.rotateStep * 90f);
+
+            autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goHealthInfo, mono.goHealthPosPivot);
+            autoAdjustPosAndRotate(mono.imgGO.gameObject, mono.goOrder, mono.goOrderPosPivot);
+
             mono.imgGO.transform.localScale = mono.scaleGO * Vector3.one;
+        }
+
+        private void applyHealthLineDisplay()
+        {
+            if (_m_partInfo == null || mono.txtHealth == null)
+                return;
+
+            if (PartHealthDisplay.UseInfiniteHpDisplay(_m_partInfo.maxHealth))
+            {
+                mono.txtHealth.supportRichText = false;
+                mono.txtHealth.text = PartHealthDisplay.MaxHpDisplayText;
+                return;
+            }
+
+            mono.txtHealth.supportRichText = false;
+            mono.txtHealth.text = PartHealthDisplay.FormatSlashLine(_m_partInfo.currentHealth, _m_partInfo.maxHealth);
+        }
+
+        private void autoAdjustPosAndRotate(GameObject parent, GameObject child, Vector2 pivotPos)
+        {
+            if (parent == null || child == null)
+                return;
+
+            RectTransform parentRT = parent.GetComponent<RectTransform>();
+            RectTransform childRT = child.GetComponent<RectTransform>();
+            if (parentRT == null || childRT == null)
+                return;
+
+            float scale = parentRT.lossyScale.y;
+
+            int rotateMod = _m_partInfo.rotateStep % 2;
+            bool isRotated90 = rotateMod != 0;
+
+            float parentVisualW = isRotated90 ? parentRT.rect.height : parentRT.rect.width;
+            float parentVisualH = isRotated90 ? parentRT.rect.width : parentRT.rect.height;
+
+            float parentHalfW = parentVisualW * scale * 0.5f;
+            float parentHalfH = parentVisualH * scale * 0.5f;
+
+            float x = parentRT.position.x + pivotPos.x * parentHalfW;
+            float y = parentRT.position.y + pivotPos.y * parentHalfH;
+
+            child.transform.position = new Vector3(x, y, parentRT.position.z);
+            child.transform.rotation = Quaternion.identity;
         }
 
         private int getBattleOrderDisplay()

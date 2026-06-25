@@ -8,8 +8,18 @@ namespace GameCore.UI
     {
         [Header("Part image (hover target)")]
         public Image imgGO;
+        [Header("Health text")]
+        public Text txtHealth;
         [Header("Battle order text")]
         public Text txtOrder;
+        [Header("Health info root")]
+        public GameObject goHealthInfo;
+        [Header("Order info root")]
+        public GameObject goOrder;
+        [Header("Health info anchor pivot")]
+        public Vector2 goHealthPosPivot;
+        [Header("Order info anchor pivot")]
+        public Vector2 goOrderPosPivot;
         [Header("Hover scale")]
         public float scaleMouseEnter = 0.44f;
         [Header("Scale tween duration")]
