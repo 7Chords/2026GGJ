@@ -14,6 +14,10 @@ namespace GameCore.UI
         public UIMonoCommonContainer monoPartReserveContainer;
         [Header("Turn layout container")]
         public UIMonoCommonContainer monoTurnLayoutContainer;
+        [Header("Passive item container")]
+        public Transform tranPassiveContainer;
+        [Header("Passive item prefab resource name")]
+        public string passiveItemPrefabName;
         [Header("Close button")]
         public Button btnClose;
     }

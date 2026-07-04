@@ -16,6 +16,7 @@ namespace GameCore.UI
     {
         private readonly List<UIPanelBookEnemyPartReserveItem> _m_reserveItemList = new List<UIPanelBookEnemyPartReserveItem>();
         private readonly List<UIPanelBookEnemyTurnLayoutItem> _m_turnItemList = new List<UIPanelBookEnemyTurnLayoutItem>();
+        private readonly List<UIPanelPassiveItem> _m_passiveItemPanelList = new List<UIPanelPassiveItem>();
 
         private EnemyRefObj _m_enemyRef;
         private List<PartInfo> _m_deckParts;
@@ -34,6 +35,7 @@ namespace GameCore.UI
         public override void BeforeDiscard()
         {
             cancelDeferredDetailLayoutRebuild();
+            clearPassiveItems();
             discardReserveItems();
             discardTurnItems();
         }
@@ -43,6 +45,7 @@ namespace GameCore.UI
             cancelDeferredDetailLayoutRebuild();
             if (mono.btnClose != null)
                 mono.btnClose.RemoveClickDown(onBtnCloseClickDown);
+            hidePassiveItems();
             hideReserveItems();
             hideTurnItems();
         }
@@ -73,6 +76,7 @@ namespace GameCore.UI
             if (mono.txtEnemyHealth != null)
                 mono.txtEnemyHealth.text = PartHealthDisplay.FormatMaxOnly(_m_enemyRef.enemyHealth);
 
+            refreshPassiveItems();
             refreshReserveItems();
             refreshTurnLayoutItems();
             scheduleDeferredDetailLayoutRebuild();
@@ -209,6 +213,78 @@ namespace GameCore.UI
         {
             for (int i = 0; i < _m_turnItemList.Count; i++)
                 _m_turnItemList[i]?.HidePanel();
+        }
+
+        private void hidePassiveItems()
+        {
+            for (int i = 0; i < _m_passiveItemPanelList.Count; i++)
+                _m_passiveItemPanelList[i]?.HidePanel();
+        }
+
+        private void clearPassiveItems()
+        {
+            for (int i = 0; i < _m_passiveItemPanelList.Count; i++)
+            {
+                _m_passiveItemPanelList[i]?.HidePanel();
+                _m_passiveItemPanelList[i]?.Discard();
+            }
+            _m_passiveItemPanelList.Clear();
+        }
+
+        private bool hasValidPassive()
+        {
+            if (_m_enemyRef?.passiveIdList == null || _m_enemyRef.passiveIdList.Count == 0)
+                return false;
+
+            var passiveTable = SCRefDataMgr.instance?.enemyPassiveRefList?.refDataList;
+            if (passiveTable == null)
+                return false;
+
+            for (int i = 0; i < _m_enemyRef.passiveIdList.Count; i++)
+            {
+                long pid = _m_enemyRef.passiveIdList[i];
+                if (passiveTable.Find(x => x.id == pid) != null)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private void refreshPassiveItems()
+        {
+            clearPassiveItems();
+
+            bool hasPassive = hasValidPassive();
+            if (mono.tranPassiveContainer != null)
+                SCCommon.SetGameObjectEnable(mono.tranPassiveContainer.gameObject, hasPassive);
+
+            if (!hasPassive || mono.tranPassiveContainer == null || string.IsNullOrEmpty(mono.passiveItemPrefabName))
+                return;
+
+            var passiveTable = SCRefDataMgr.instance.enemyPassiveRefList.refDataList;
+            if (passiveTable == null)
+                return;
+
+            for (int i = 0; i < _m_enemyRef.passiveIdList.Count; i++)
+            {
+                long pid = _m_enemyRef.passiveIdList[i];
+                EnemyPassiveRefObj row = passiveTable.Find(x => x.id == pid);
+                if (row == null)
+                    continue;
+
+                GameObject go = ResourcesHelper.LoadGameObject(mono.passiveItemPrefabName, mono.tranPassiveContainer);
+                if (go == null)
+                    continue;
+
+                UIMonoPassiveItem itemMono = go.GetComponent<UIMonoPassiveItem>();
+                if (itemMono == null)
+                    continue;
+
+                var itemPanel = new UIPanelPassiveItem(itemMono, SCUIShowType.INTERNAL);
+                itemPanel.SetInfo(row);
+                itemPanel.ShowPanel();
+                _m_passiveItemPanelList.Add(itemPanel);
+            }
         }
 
         private void discardReserveItems()
