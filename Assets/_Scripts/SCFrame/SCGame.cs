@@ -7,7 +7,7 @@ namespace SCFrame
 {
 
     /// <summary>
-    /// �����൱��ȫ��Mono
+    /// 全局Mono
     /// </summary>
     public class SCGame : SingletonPersistent<SCGame>
     {
@@ -28,6 +28,10 @@ namespace SCFrame
 
         [Header("Camera")]
         public Camera gameCamera;
+
+        [Header("Audio")]
+        public GameObject bgmRoot;
+        public GameObject sfxRoot;
 
         [Header("Volumn")]
         public Volume globalVolumn;

@@ -40,10 +40,8 @@ namespace GameCore
         public override void OnInitialize()
         {
             // 创建BGM和SFX的AudioSource根节点
-            _bgmSourcesRootGO = new GameObject("BGM_ROOT");
-            _sfxSourcesRootGO = new GameObject("SFX_ROOT");
-            _bgmSourcesRootGO.transform.SetParent(GameInit.instance.transform);
-            _sfxSourcesRootGO.transform.SetParent(GameInit.instance.transform);
+            _bgmSourcesRootGO = SCGame.instance.bgmRoot;
+            _sfxSourcesRootGO = SCGame.instance.sfxRoot;
 
             // 初始化列表
             sfxAudioInfoList = new List<AudioInfo>();
