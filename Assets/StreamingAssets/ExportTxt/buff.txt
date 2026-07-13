@@ -1,2 +1,0 @@
-﻿id	buffName	buffDesc	buffType	triggerPointType	buffIconResName	buffValue	isPositive
-100001	流血	部位行动时扣除2点血量	BLEED	ACTIVE	spr_icon_buff_bleed	2	FALSE

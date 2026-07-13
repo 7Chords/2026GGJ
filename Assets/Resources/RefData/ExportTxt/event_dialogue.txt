@@ -1,7 +1,0 @@
-﻿id	name	content	dialogueType	flagType	nextList	eventType
-100001	画外音	前面有好像个土堆。	STANDARD	BEGIN	100002	NONE
-100002	黑影	有一把铲子，要不要挖一下？	STANDARD	NONE	100003;100004	NONE
-100003	黑影	挖一下	SELECT	NONE	100005	NONE
-100004	黑影	不挖，走了	SELECT	NONE	100006	NONE
-100005	你	挖到了一个没关紧的箱子，里面金灿灿的。	STANDARD	END	0	TREASURE_COIN
-100006	你	保守的你什么也没有得到。	STANDARD	END	0	NONE

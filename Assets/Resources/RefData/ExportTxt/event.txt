@@ -1,2 +1,0 @@
-﻿id	floor	eventList
-100001	1	100001

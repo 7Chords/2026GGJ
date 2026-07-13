@@ -1,4 +1,0 @@
-﻿key	value
-playerHealth	80
-initPartList	10058:1;10061:1;10064:1;10068:1;10072:1;10039:1
-playerMoney	66

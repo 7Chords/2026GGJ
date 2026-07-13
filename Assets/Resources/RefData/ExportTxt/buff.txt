@@ -1,4 +1,0 @@
-﻿id	buffName	buffDesc	buffType	triggerPointType	buffIconResName	buffValue	isPositive
-100001	流血	部位行动时扣除2点生命值	BLEED	ACTIVE	spr_icon_buff_bleed	2	FALSE
-100002	油脂	无效果，可以被转化为油脂	FAT	NONE	spr_icon_buff_fat	2	FALSE
-100003	燃烧	回合结束时，消耗所有层数，每消耗一层扣除部位5点生命值	BURN	TURN_OVER	spr_icon_buff_burn	5	FALSE

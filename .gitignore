@@ -74,5 +74,6 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
-# Auto-exported reference txt under Resources
+# Auto-exported reference txt (Excel export output)
 /[Aa]ssets/[Rr]esources/**/[Ee]xport[Tt]xt/
+/[Aa]ssets/[Ss]treamingAssets/[Ee]xport[Tt]xt/
