@@ -1,4 +1,5 @@
 using SCFrame.UI;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,14 @@ namespace GameCore.UI
         public Button btnToggle;
         [Header("Favorite button")]
         public Button btnFavorite;
+        [Header("Favorited show objects")]
+        public List<GameObject> goFavoriteShowList;
+        [Header("Not favorited show objects")]
+        public List<GameObject> goNotFavoriteShowList;
+        [Header("Expanded show objects")]
+        public List<GameObject> goExpandedShowList;
+        [Header("Collapsed show objects")]
+        public List<GameObject> goCollapsedShowList;
         [Header("Win/Lose text")]
         public Text txtResult;
         [Header("Recorded time")]
