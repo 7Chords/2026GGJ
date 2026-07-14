@@ -215,10 +215,10 @@ namespace GameCore.Helpers
                 if (layout == null)
                     continue;
 
-                string orderLabel = enemyActsFirst ? "Enemy First" : "Player First";
+                string orderLabel = enemyActsFirst ? "敌人先手" : "玩家先手";
                 entries.Add(new TurnLayoutPreviewEntry
                 {
-                    label = $"Round {i + 1} ({orderLabel})",
+                    label = $"回合{i + 1}（{orderLabel}）",
                     layout = layout,
                     enemyActsFirst = enemyActsFirst
                 });
