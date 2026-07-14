@@ -1,4 +1,5 @@
 using GameCore;
+using GameCore.Battle;
 using GameCore.RefData;
 using GameCore.UI;
 using SCFrame;
@@ -111,6 +112,11 @@ namespace GameCore.RuntimeDebug
                     CheatEnemyBodyHpToOne();
                     NotifyUiRefresh();
                 }
+
+                if (GUILayout.Button("立即获得本次战斗胜利"))
+                {
+                    CheatWinCurrentBattle();
+                }
             }
 
             GUILayout.Space(6f);
@@ -175,6 +181,23 @@ namespace GameCore.RuntimeDebug
                 return;
             gm.curEnemyInfo.currentHealth = 1;
             SCMsgCenter.SendMsg(SCMsgConst.ENEMY_HEAL);
+        }
+
+        private static void CheatWinCurrentBattle()
+        {
+            if (GameModel.instance?.curEnemyInfo == null)
+            {
+                Debug.LogWarning("[Cheat] No active enemy battle.");
+                return;
+            }
+
+            if (BattleManager.instance == null)
+            {
+                Debug.LogWarning("[Cheat] BattleManager missing.");
+                return;
+            }
+
+            BattleManager.instance.TerminateBattle(true);
         }
 
         private static void CheatAddPartToPlayerHand(string partIdText, string levelText)

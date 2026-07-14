@@ -74,6 +74,7 @@ namespace GameCore.UI
 
             _m_playerBattleFace?.ShowPanel();
             _m_enemyBattleFace?.ShowPanel();
+            resetHurtFlash();
             refreshShow();
         }
 
@@ -170,7 +171,40 @@ namespace GameCore.UI
                 GameCommon.ShowDamageFloatText(amount, mono.imgPlayerHealthBar.transform.position);
             _m_tweenContainer?.RegDoTween(mono.goPlayerHealth.transform.DOShakePosition(mono.healthShakeDuration, mono.healthShakeStrength));
             _m_playerBattleFace?.PlayBodyDamageFeedback(_m_tweenContainer);
+            playHurtFlash();
             refreshShow();
+        }
+
+        private void resetHurtFlash()
+        {
+            if (mono.imgHurtFlash == null)
+                return;
+
+            mono.imgHurtFlash.DOKill(false);
+            Color c = mono.imgHurtFlash.color;
+            c.a = 0f;
+            mono.imgHurtFlash.color = c;
+        }
+
+        private void playHurtFlash()
+        {
+            if (mono.imgHurtFlash == null)
+                return;
+
+            Image img = mono.imgHurtFlash;
+            img.DOKill(false);
+
+            Color c = img.color;
+            c.a = 0f;
+            img.color = c;
+
+            float inDur = Mathf.Max(0.01f, mono.hurtFlashInDuration);
+            float outDur = Mathf.Max(0.01f, mono.hurtFlashOutDuration);
+
+            Sequence seq = DOTween.Sequence();
+            seq.Append(img.DOFade(1f, inDur).SetEase(Ease.OutQuad));
+            seq.Append(img.DOFade(0f, outDur).SetEase(Ease.InQuad));
+            _m_tweenContainer?.RegDoTween(seq);
         }
 
         private void onEnemyHurt(object[] _objs)

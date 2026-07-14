@@ -35,5 +35,11 @@ namespace GameCore.UI
         public float healthShakeDuration;
         [Header("血条缓动时间")]
         public float healthBarFillTweenDuration = 0.35f;
+        [Header("受伤红闪 Image")]
+        public Image imgHurtFlash;
+        [Header("受伤红闪淡入时间")]
+        public float hurtFlashInDuration = 0.05f;
+        [Header("受伤红闪淡出时间")]
+        public float hurtFlashOutDuration = 0.15f;
     }
 }
