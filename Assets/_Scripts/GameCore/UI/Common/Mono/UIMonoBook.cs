@@ -23,18 +23,20 @@ namespace GameCore.UI
         public UIMonoCommonContainer monoPartContainer;
         [Header("Close button")]
         public Button btnClose;
-        [Header("Filter: eye")]
-        public Button btnEye;
-        [Header("Filter: nose")]
-        public Button btnNose;
-        [Header("Filter: mouth")]
-        public Button btnMouth;
-        [Header("Filter: skin")]
-        public Button btnSkin;
-        [Header("Enemy filter: floor 1")]
-        public Button btnEnemyFloor1;
-        [Header("Enemy filter: floor 2")]
-        public Button btnEnemyFloor2;
+        [Header("Filter toggle: eye")]
+        public Toggle toggleEye;
+        [Header("Filter toggle: nose")]
+        public Toggle toggleNose;
+        [Header("Filter toggle: mouth")]
+        public Toggle toggleMouth;
+        [Header("Filter toggle: skin")]
+        public Toggle toggleSkin;
+        [Header("Filter toggle: enemy-only parts")]
+        public Toggle toggleEnemyPart;
+        [Header("Enemy filter toggle: floor 1")]
+        public Toggle toggleEnemyFloor1;
+        [Header("Enemy filter toggle: floor 2")]
+        public Toggle toggleEnemyFloor2;
         [Header("Button hover scale")]
         public float btnEnterScale = 1.1f;
         [Header("Button scale duration")]
