@@ -6,5 +6,6 @@ namespace SCFrame
     public class SCSettingData
     {
         public ELanguageType languageType = ELanguageType.zh_CN;
+        public bool battleSpeed2x;
     }
 }

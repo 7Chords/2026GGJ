@@ -124,7 +124,7 @@ namespace GameCore.UI
             PlayerInfo playerInfo = GameModel.instance.playerInfo;
             EnemyInfo currentEnemyInfo = GameModel.instance.curEnemyInfo;
             mono.txtPlayerHealth.text = playerInfo.currentHealth + "/" + playerInfo.maxHealth;
-            float barDur = Mathf.Max(0f, mono.healthBarFillTweenDuration);
+            float barDur = SCSettingMgr.instance.ScaleBattleDuration(Mathf.Max(0f, mono.healthBarFillTweenDuration));
 
             if (mono.imgPlayerHealthBar != null)
             {
@@ -169,7 +169,8 @@ namespace GameCore.UI
             int amount = (int)_objs[0];
             if (amount > 0 && mono.goPlayerHealth != null)
                 GameCommon.ShowDamageFloatText(amount, mono.imgPlayerHealthBar.transform.position);
-            _m_tweenContainer?.RegDoTween(mono.goPlayerHealth.transform.DOShakePosition(mono.healthShakeDuration, mono.healthShakeStrength));
+            _m_tweenContainer?.RegDoTween(mono.goPlayerHealth.transform.DOShakePosition(
+                SCSettingMgr.instance.ScaleBattleDuration(mono.healthShakeDuration), mono.healthShakeStrength));
             _m_playerBattleFace?.PlayBodyDamageFeedback(_m_tweenContainer);
             playHurtFlash();
             refreshShow();
@@ -198,8 +199,8 @@ namespace GameCore.UI
             c.a = 0f;
             img.color = c;
 
-            float inDur = Mathf.Max(0.01f, mono.hurtFlashInDuration);
-            float outDur = Mathf.Max(0.01f, mono.hurtFlashOutDuration);
+            float inDur = SCSettingMgr.instance.ScaleBattleDuration(Mathf.Max(0.01f, mono.hurtFlashInDuration));
+            float outDur = SCSettingMgr.instance.ScaleBattleDuration(Mathf.Max(0.01f, mono.hurtFlashOutDuration));
 
             Sequence seq = DOTween.Sequence();
             seq.Append(img.DOFade(1f, inDur).SetEase(Ease.OutQuad));
@@ -214,7 +215,8 @@ namespace GameCore.UI
             int amount = (int)_objs[0];
             if (amount > 0 && mono.goEnemyHealth != null)
                 GameCommon.ShowDamageFloatText(amount, mono.imgEnemyHealthBar.transform.position);
-            _m_tweenContainer?.RegDoTween(mono.goEnemyHealth.transform.DOShakePosition(mono.healthShakeDuration, mono.healthShakeStrength));
+            _m_tweenContainer?.RegDoTween(mono.goEnemyHealth.transform.DOShakePosition(
+                SCSettingMgr.instance.ScaleBattleDuration(mono.healthShakeDuration), mono.healthShakeStrength));
             _m_enemyBattleFace?.PlayBodyDamageFeedback(_m_tweenContainer);
             refreshShow();
         }

@@ -33,11 +33,18 @@ namespace GameCore.UI
             mono.btnReturnMain.RemoveMouseEnter(onBtnReturnMainMouseEnter);
             mono.btnReturnMain.RemoveMouseExit(onBtnReturnMainMouseExit);
             mono.togCRT.onValueChanged.RemoveAllListeners();
+            if (mono.togBattleSpeed != null)
+                mono.togBattleSpeed.onValueChanged.RemoveAllListeners();
         }
 
         private void onTogCRTClickDown(bool _isOn)
         {
             SCGame.instance.rendererData.rendererFeatures.Find(x => x.name == "TintRenderFeature").SetActive(_isOn);
+        }
+
+        private void onTogBattleSpeedChanged(bool _isOn)
+        {
+            SCSettingMgr.instance.battleSpeed2x = _isOn;
         }
 
         public override void OnShowPanel()
@@ -58,6 +65,12 @@ namespace GameCore.UI
 
             mono.sldMusic.value = AudioMgr.instance.bgmVolumeFactor;
             mono.sldSound.value = AudioMgr.instance.sfxVolumeFactor;
+
+            if (mono.togBattleSpeed != null)
+            {
+                mono.togBattleSpeed.SetIsOnWithoutNotify(SCSettingMgr.instance.battleSpeed2x);
+                mono.togBattleSpeed.onValueChanged.AddListener(onTogBattleSpeedChanged);
+            }
         }
 
         private void onBtnReturnMainMouseExit(PointerEventData _data, object[] _objs)

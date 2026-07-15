@@ -32,6 +32,11 @@ namespace GameCore
             _m_runner?.Kill();
         }
 
+        static float BattleDur(float duration)
+        {
+            return SCSettingMgr.instance.ScaleBattleDuration(duration);
+        }
+
         public void StartBattle()
         {
             playerExcuteInfoList = new List<PartInfo>(GameModel.instance.playerInfo.battlePartInfoList);
@@ -39,7 +44,7 @@ namespace GameCore
             if (_cancelToken == null) _cancelToken = new BattleCancelToken();
             _cancelToken.Reset();
 
-            SCTimeCaller.instance.CallDealy(0.5f, () =>
+            SCTimeCaller.instance.CallDealy(BattleDur(0.5f), () =>
             {
                 if (_cancelToken.isCancelled) return;
                 BattleContext.current = new BattleContext();
@@ -136,7 +141,7 @@ namespace GameCore
             TriggerTotalTurnOverForAllBattleParts();
             ProcessMoldHalvingForNonFaceParts();
             GameModel.instance.ClearBuffsAfterFullBattleRound();
-            SCTimeCaller.instance.CallDealy(1f, () =>
+            SCTimeCaller.instance.CallDealy(BattleDur(1f), () =>
             {
                 if (_cancelToken != null && _cancelToken.isCancelled) return;
                 BattleContext.current = null;
@@ -256,20 +261,20 @@ namespace GameCore
  
             _m_runner?.Kill();
             _m_runner = new SequenceRunner();
-            _m_runner.AddTask(GameConst.DELAY_START_TIME, () =>
+            _m_runner.AddTask(BattleDur(GameConst.DELAY_START_TIME), () =>
             {
                 if (_cancelToken != null && _cancelToken.isCancelled) return;
                 SCMsgCenter.SendMsg(SCMsgConst.PART_ACTIVE_START, _part);
             });
             if (_part.HasBuff(EAttributeTriggerPointType.ACTIVE))
             {
-                _m_runner.AddTask(GameConst.DELAY_ACTIVE_BUFF_TIME, () =>
+                _m_runner.AddTask(BattleDur(GameConst.DELAY_ACTIVE_BUFF_TIME), () =>
                 {
                     if (_cancelToken != null && _cancelToken.isCancelled) return;
                     _part.TriggerBuff(EAttributeTriggerPointType.ACTIVE);
                 });
             }
-            _m_runner.AddTask(GameConst.DELAY_EFFECT_TIME, () =>
+            _m_runner.AddTask(BattleDur(GameConst.DELAY_EFFECT_TIME), () =>
             {
                 if (_cancelToken != null && _cancelToken.isCancelled) return;
                 MouthAttackCoordinator.ResetPendingForNewActivation();
@@ -285,7 +290,7 @@ namespace GameCore
 
         private void SchedulePartActivationEnd(bool _isPlayer, PartInfo _part)
         {
-            SCTimeCaller.instance.CallDealy(GameConst.DELAY_END_TIME, () =>
+            SCTimeCaller.instance.CallDealy(BattleDur(GameConst.DELAY_END_TIME), () =>
             {
                 if (_cancelToken != null && _cancelToken.isCancelled) return;
                 if (_part != null && _part.currentHealth > 0)

@@ -64,18 +64,25 @@ namespace GameCore.UI
             gameObject.GetRectTransform().localScale = Vector3.zero;
             canvasGroup.alpha = 1f;
 
+            float bigger = SCSettingMgr.instance.ScaleBattleDuration(biggerDuration);
+            float shake = SCSettingMgr.instance.ScaleBattleDuration(shakeDuration);
+            float stop = SCSettingMgr.instance.ScaleBattleDuration(stopDuration);
+            float floatT = SCSettingMgr.instance.ScaleBattleDuration(floatDuration);
+            float fade = SCSettingMgr.instance.ScaleBattleDuration(fadeOutDuration);
+
+
             //创建放大动画
-            Tween biggerTween = gameObject.GetRectTransform().DOScale(Vector3.one, biggerDuration);
+            Tween biggerTween = gameObject.GetRectTransform().DOScale(Vector3.one, bigger);
 
             //创建抖动动画
-            Tween shakeTween = gameObject.GetRectTransform().DOShakePosition(shakeDuration, shakeStrength);
+            Tween shakeTween = gameObject.GetRectTransform().DOShakePosition(shake, shakeStrength);
 
             //创建上浮动画
             Tween floatTween = gameObject.GetRectTransform().DOLocalMoveY(
-                _originalPosition.y + floatHeight, floatDuration);
+                _originalPosition.y + floatHeight, floatT);
 
             //创建淡出动画
-            Tween fadeOutTween = canvasGroup.DOFade(0, fadeOutDuration).OnComplete(() =>
+            Tween fadeOutTween = canvasGroup.DOFade(0, fade).OnComplete(() =>
             {
                 SCCommon.DestoryGameObject(gameObject);
             });
@@ -88,7 +95,7 @@ namespace GameCore.UI
             mainSequence.Join(shakeTween); // 与放大动画同时执行
 
             //第二阶段：静止一段时间
-            mainSequence.AppendInterval(stopDuration);
+            mainSequence.AppendInterval(stop);
 
             //第三阶段：同时执行上浮和淡出
             mainSequence.Append(floatTween);

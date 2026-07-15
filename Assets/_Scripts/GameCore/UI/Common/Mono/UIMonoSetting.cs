@@ -8,19 +8,21 @@ namespace GameCore.UI
 {
     public class UIMonoSetting : _ASCUIMonoBase
     {
-        [Header("音量滑动条")]
+        [Header("??????????")]
         public Slider sldMusic;
-        [Header("音效滑动条")]
+        [Header("??Ч??????")]
         public Slider sldSound;
-        [Header("关闭按钮")]
+        [Header("?????")]
         public Button btnClose;
-        [Header("返回主页面按钮")]
+        [Header("????????水?")]
         public Button btnReturnMain;
-        [Header("CRT开关")]
+        [Header("CRT????")]
         public Toggle togCRT;
-        [Header("按钮缩放大小")]
+        [Header("Battle speed 1.5x")]
+        public Toggle togBattleSpeed;
+        [Header("????????С")]
         public float btnEnterScale;
-        [Header("按钮缩放时间")]
+        [Header("??????????")]
         public float btnScaleChgTime;
     }
 }

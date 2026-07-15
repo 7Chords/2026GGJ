@@ -28,7 +28,7 @@ namespace GameCore.UI
 
         public override void OnShowPanel()
         {
-            _m_tweenContainer?.RegDoTween(DOVirtual.DelayedCall(mono.showDuration, () =>
+            _m_tweenContainer?.RegDoTween(DOVirtual.DelayedCall(SCSettingMgr.instance.ScaleBattleDuration(mono.showDuration), () =>
             {
                 UICoreMgr.instance.CloseTopNode();
             }));

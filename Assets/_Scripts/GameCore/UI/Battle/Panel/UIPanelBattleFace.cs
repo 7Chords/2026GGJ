@@ -88,7 +88,7 @@ namespace GameCore.UI
                 _m_partPanelList.Clear();
             }
 
-            SCTimeCaller.instance.CallDealy(0.5f, () =>
+            SCTimeCaller.instance.CallDealy(SCSettingMgr.instance.ScaleBattleDuration(0.5f), () =>
             {
                 refreshShow();
             });
@@ -231,7 +231,8 @@ namespace GameCore.UI
                 return;
             var root = mono.transform;
             root.DOKill(false);
-            _tc.RegDoTween(root.DOShakePosition(mono.faceBodyHurtShakeDuration, mono.faceBodyHurtShakeStrength));
+            _tc.RegDoTween(root.DOShakePosition(
+                SCSettingMgr.instance.ScaleBattleDuration(mono.faceBodyHurtShakeDuration), mono.faceBodyHurtShakeStrength));
             playFaceBodyHurtFlash(_tc);
             if (_m_partPanelList == null)
                 return;
@@ -247,8 +248,10 @@ namespace GameCore.UI
             Color baseCol = img.color;
             img.DOKill(false);
             var seq = DOTween.Sequence();
-            seq.Append(img.DOColor(mono.faceBodyHurtFlashTint, mono.faceBodyHurtFlashInDuration).SetEase(Ease.OutQuad));
-            seq.Append(img.DOColor(baseCol, mono.faceBodyHurtFlashOutDuration).SetEase(Ease.InQuad));
+            seq.Append(img.DOColor(mono.faceBodyHurtFlashTint,
+                SCSettingMgr.instance.ScaleBattleDuration(mono.faceBodyHurtFlashInDuration)).SetEase(Ease.OutQuad));
+            seq.Append(img.DOColor(baseCol,
+                SCSettingMgr.instance.ScaleBattleDuration(mono.faceBodyHurtFlashOutDuration)).SetEase(Ease.InQuad));
             _tc.RegDoTween(seq);
         }
     }

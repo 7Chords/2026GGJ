@@ -112,7 +112,7 @@ namespace GameCore.UI
                 return;
             var t = GetGameObject().transform;
             t.DOKill(false);
-            float dur = mono.hurtShakeDuration * 0.82f;
+            float dur = SCSettingMgr.instance.ScaleBattleDuration(mono.hurtShakeDuration * 0.82f);
             float str = mono.hurtShakeStrength * mono.bodyHurtPartFollowShakeStrengthMul;
             _tc.RegDoTween(t.DOShakePosition(dur, str));
         }
@@ -127,11 +127,11 @@ namespace GameCore.UI
             applyBaseRot();
 
             var seq = DOTween.Sequence();
-            float impactDur = Mathf.Max(0.02f, mono.mouthAttackImpactPunchDuration);
+            float impactDur = SCSettingMgr.instance.ScaleBattleDuration(Mathf.Max(0.02f, mono.mouthAttackImpactPunchDuration));
             float impactAng = Mathf.Max(0f, mono.mouthAttackImpactPunchAngle);
-            float stutterA = Mathf.Max(0f, mono.mouthAttackImpactStutterPause);
-            float stutterMid = Mathf.Max(0f, mono.mouthAttackMidStutterPause);
-            float dur = Mathf.Max(0.04f, mono.mouthAttackShakeDuration);
+            float stutterA = SCSettingMgr.instance.ScaleBattleDuration(Mathf.Max(0f, mono.mouthAttackImpactStutterPause));
+            float stutterMid = SCSettingMgr.instance.ScaleBattleDuration(Mathf.Max(0f, mono.mouthAttackMidStutterPause));
+            float dur = SCSettingMgr.instance.ScaleBattleDuration(Mathf.Max(0.04f, mono.mouthAttackShakeDuration));
             float ang = mono.mouthAttackShakeAngle;
             int vib = Mathf.Clamp(mono.mouthAttackShakeVibrato, 1, 30);
             float halfDur = dur * 0.5f;
@@ -277,7 +277,8 @@ namespace GameCore.UI
             if (_m_partInfo == info)
             {
                 AudioMgr.instance.PlaySfx("sfx_hurt");
-                _m_tweenContainer.RegDoTween(GetGameObject().transform.DOShakePosition(mono.hurtShakeDuration, mono.hurtShakeStrength));
+                _m_tweenContainer.RegDoTween(GetGameObject().transform.DOShakePosition(
+                    SCSettingMgr.instance.ScaleBattleDuration(mono.hurtShakeDuration), mono.hurtShakeStrength));
                 playHurtRedFlash();
                 ParticleMgr.instance.PlayOneShot("vfx_blood", GetGameObject().GetRectTransform(), Vector2.zero, 1f, true);
                 if (!PartHealthDisplay.UseInfiniteHpDisplay(_m_partInfo.maxHealth))
@@ -310,12 +311,14 @@ namespace GameCore.UI
             if (mono.imgPart != null)
                 mono.imgPart.DOKill(false);
             var seq = DOTween.Sequence();
-            seq.Append(mono.imgGO.DOColor(flashTint, mono.hurtFlashInDuration).SetEase(Ease.OutQuad));
+            float inDur = SCSettingMgr.instance.ScaleBattleDuration(mono.hurtFlashInDuration);
+            float outDur = SCSettingMgr.instance.ScaleBattleDuration(mono.hurtFlashOutDuration);
+            seq.Append(mono.imgGO.DOColor(flashTint, inDur).SetEase(Ease.OutQuad));
             if (mono.imgPart != null)
-                seq.Join(mono.imgPart.DOColor(flashTint, mono.hurtFlashInDuration).SetEase(Ease.OutQuad));
-            seq.Append(mono.imgGO.DOColor(baseTint, mono.hurtFlashOutDuration).SetEase(Ease.InQuad));
+                seq.Join(mono.imgPart.DOColor(flashTint, inDur).SetEase(Ease.OutQuad));
+            seq.Append(mono.imgGO.DOColor(baseTint, outDur).SetEase(Ease.InQuad));
             if (mono.imgPart != null)
-                seq.Join(mono.imgPart.DOColor(baseTint, mono.hurtFlashOutDuration).SetEase(Ease.InQuad));
+                seq.Join(mono.imgPart.DOColor(baseTint, outDur).SetEase(Ease.InQuad));
             _m_tweenContainer?.RegDoTween(seq);
         }
 
@@ -340,7 +343,8 @@ namespace GameCore.UI
             if (_m_partInfo == info)
             {
                 GameCommon.ShowEffectText("行动", GetGameObject().transform.position, _m_partInfo);
-                Tween tween = GetGameObject().transform.DOScale(mono.activeScale, mono.scaleChgDuration);
+                Tween tween = GetGameObject().transform.DOScale(
+                    mono.activeScale, SCSettingMgr.instance.ScaleBattleDuration(mono.scaleChgDuration));
                 _m_tweenContainer?.RegDoTween(tween);
             }
 
@@ -388,7 +392,7 @@ namespace GameCore.UI
                 return;
             Vector2 baseAp = rt.anchoredPosition;
             float h = mono.triggerSuccessBounceHeight;
-            float total = Mathf.Max(0.05f, mono.triggerSuccessBounceDuration);
+            float total = SCSettingMgr.instance.ScaleBattleDuration(Mathf.Max(0.05f, mono.triggerSuccessBounceDuration));
             float upPortion = Mathf.Clamp(mono.triggerSuccessBounceUpPortion, 0.15f, 0.55f);
             float upT = total * upPortion;
             float downT = total - upT;
@@ -435,7 +439,8 @@ namespace GameCore.UI
             PartInfo info = _objs[0] as PartInfo;
             if (_m_partInfo == info)
             {
-                Tween tween = GetGameObject().transform.DOScale(Vector3.one, mono.scaleChgDuration);
+                Tween tween = GetGameObject().transform.DOScale(
+                    Vector3.one, SCSettingMgr.instance.ScaleBattleDuration(mono.scaleChgDuration));
                 _m_tweenContainer?.RegDoTween(tween);
 
             }
