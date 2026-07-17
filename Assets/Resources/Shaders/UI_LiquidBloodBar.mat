@@ -38,7 +38,7 @@ Material:
     - _ColorMask: 15
     - _DepthAbsorb: 0.18
     - _EdgeSoftness: 0.001
-    - _Fill: 1
+    - _Fill: 0.1
     - _FillFromRight: 0
     - _FillResponse: 0.82
     - _HighlightWidth: 0.0166

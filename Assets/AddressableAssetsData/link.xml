@@ -1,0 +1,145 @@
+<linker>
+  <assembly fullname="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="GameCore.Data.EnemyLayoutPreset" preserve="all" />
+    <type fullname="GameCore.MapData" preserve="all" />
+    <type fullname="GameCore.UI.BuffSideAutoScrollView" preserve="all" />
+    <type fullname="GameCore.UI.CommonBuffSideItem" preserve="all" />
+    <type fullname="GameCore.UI.CommonIntroTip" preserve="all" />
+    <type fullname="GameCore.UI.CommonPopTip" preserve="all" />
+    <type fullname="GameCore.UI.CommonTooltip" preserve="all" />
+    <type fullname="GameCore.UI.DamageFloatText" preserve="all" />
+    <type fullname="GameCore.UI.FacePartPreview" preserve="all" />
+    <type fullname="GameCore.UI.PartEffectText" preserve="all" />
+    <type fullname="GameCore.UI.SliderFilledImageSync" preserve="all" />
+    <type fullname="GameCore.UI.TooltipBuffItem" preserve="all" />
+    <type fullname="GameCore.UI.TooltipGrid" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoBattle" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoBattleFace" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoBattleFaceGrid" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoBattleOrder" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoBattlePart" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoBattleWin" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoBattleWinOptionItem" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoBook" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoBookEnemyDetail" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoBookEnemyFacePart" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoBookEnemyItem" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoBookEnemyMask" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoBookEnemyMaskGrid" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoBookEnemyPartReserveItem" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoBookEnemyTurnLayoutItem" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoCommonContainer" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoCommonGuide" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoCommonIndexItem" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoCommonPartItem" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoDeck" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoEnemyFacePart" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoEnemyMask" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoEnemyMaskGrid" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoEvent" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoEventPartExchange" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoEventSelectItem" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoHistory" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoHistoryItem" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoLose" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoMap" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoMaskCombine" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoMaskCombineFace" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoMaskCombineFaceGrid" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoMaskCombinePartContainerItem" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoPartBuff" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoPartSelect" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoPartSelectItem" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoPassiveItem" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoPlayerFacePart" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoSetting" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoStart" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoStore" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoStoreBag" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoStoreBagItem" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoStoreItem" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoStrengthen" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoStrengthenBagItem" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoStrengthenPreview" preserve="all" />
+    <type fullname="GameCore.UI.UIMonoWin" preserve="all" />
+    <type fullname="SCFrame.AnimationEventTrigger" preserve="all" />
+    <type fullname="SCFrame.SCEventListener" preserve="all" />
+    <type fullname="GameCore.Data.EnemyLayoutSlot" preserve="nothing" serialized="true" />
+    <type fullname="GameCore.Data.EnemyTurnFaceLayout" preserve="nothing" serialized="true" />
+    <type fullname="GameCore.RoomProbability" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="Coffee.UIParticle, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="Coffee.UIExtensions.UIParticle" preserve="all" />
+  </assembly>
+  <assembly fullname="Unity.Addressables, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
+    <type fullname="UnityEngine.AddressableAssets.Addressables" preserve="all" />
+  </assembly>
+  <assembly fullname="Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.AssetBundleProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.BundledAssetProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.InstanceProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.LegacyResourcesProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.SceneProvider" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.AnimationClip" preserve="all" />
+    <type fullname="UnityEngine.Animator" preserve="all" />
+    <type fullname="UnityEngine.RuntimeAnimatorController" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.AudioClip" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.GameObject" preserve="all" />
+    <type fullname="UnityEngine.Material" preserve="all" />
+    <type fullname="UnityEngine.Object" preserve="all" />
+    <type fullname="UnityEngine.RectTransform" preserve="all" />
+    <type fullname="UnityEngine.Shader" preserve="all" />
+    <type fullname="UnityEngine.Sprite" preserve="all" />
+    <type fullname="UnityEngine.Texture2D" preserve="all" />
+    <type fullname="UnityEngine.Transform" preserve="all" />
+    <type fullname="UnityEngine.Events.PersistentCallGroup" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.RectOffset" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="UnityEngine.ParticleSystemModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.ParticleSystem" preserve="all" />
+    <type fullname="UnityEngine.ParticleSystemRenderer" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.Font" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.UI.Button" preserve="all" />
+    <type fullname="UnityEngine.UI.ContentSizeFitter" preserve="all" />
+    <type fullname="UnityEngine.UI.GraphicRaycaster" preserve="all" />
+    <type fullname="UnityEngine.UI.GridLayoutGroup" preserve="all" />
+    <type fullname="UnityEngine.UI.HorizontalLayoutGroup" preserve="all" />
+    <type fullname="UnityEngine.UI.Image" preserve="all" />
+    <type fullname="UnityEngine.UI.Mask" preserve="all" />
+    <type fullname="UnityEngine.UI.Outline" preserve="all" />
+    <type fullname="UnityEngine.UI.RawImage" preserve="all" />
+    <type fullname="UnityEngine.UI.RectMask2D" preserve="all" />
+    <type fullname="UnityEngine.UI.Scrollbar" preserve="all" />
+    <type fullname="UnityEngine.UI.ScrollRect" preserve="all" />
+    <type fullname="UnityEngine.UI.Slider" preserve="all" />
+    <type fullname="UnityEngine.UI.Text" preserve="all" />
+    <type fullname="UnityEngine.UI.Toggle" preserve="all" />
+    <type fullname="UnityEngine.UI.VerticalLayoutGroup" preserve="all" />
+    <type fullname="UnityEngine.UI.AnimationTriggers" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UI.Button/ButtonClickedEvent" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UI.ColorBlock" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UI.FontData" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UI.MaskableGraphic/CullStateChangedEvent" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UI.Navigation" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UI.ScrollRect/ScrollRectEvent" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UI.Scrollbar/ScrollEvent" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UI.Slider/SliderEvent" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UI.SpriteState" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UI.Toggle/ToggleEvent" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.Canvas" preserve="all" />
+    <type fullname="UnityEngine.CanvasGroup" preserve="all" />
+    <type fullname="UnityEngine.CanvasRenderer" preserve="all" />
+  </assembly>
+</linker>

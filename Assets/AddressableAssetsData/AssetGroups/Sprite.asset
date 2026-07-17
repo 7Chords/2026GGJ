@@ -657,6 +657,41 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9d52fb303594de04d8c7af8b36f681fb
+    m_Address: spr_icon_101031
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa8033276220a7c43aa2f8bf0fc49b3c
+    m_Address: spr_icon_101026
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 45eda01c99e71e9429d7290fe733b912
+    m_Address: spr_icon_101030
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bdda06fe36bb967409eafd2d715429eb
+    m_Address: spr_icon_101027
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6829fe4d866db59479cf5aad9d9893fa
+    m_Address: spr_icon_101028
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 55e0207f823c6b242ace911962d3f8d4
+    m_Address: spr_icon_101025
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0097978e22a48b4ba16ebaf8c67e85b
+    m_Address: spr_icon_101029
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e6ff67292e86232428a7beb839c4d36b, type: 2}
   m_SchemaSet:
