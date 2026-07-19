@@ -120,6 +120,7 @@ namespace GameCore.UI
             {
                 sb.Append(c);
                 mono.txtContent.text = sb.ToString();
+                AudioMgr.instance.PlaySfx("sfx_dialogue_jump");
                 yield return new WaitForSeconds(interval);
             }
             _m_dialogueLineRevealComplete = true;
