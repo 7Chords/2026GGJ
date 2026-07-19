@@ -239,6 +239,37 @@ namespace GameCore
             return FormatStatCount(entry, entry?.totalDamageDealt ?? 0, "\u4f24\u5bb3");
         }
 
+        public static int GetMaxWinStreak()
+        {
+            var entries = LoadStore().entries;
+            if (entries == null || entries.Count == 0)
+                return 0;
+
+            int maxStreak = 0;
+            int currentStreak = 0;
+            // entries are newest-first; walk oldest -> newest for chronological streaks
+            for (int i = entries.Count - 1; i >= 0; i--)
+            {
+                BattleHistoryEntry entry = entries[i];
+                if (entry != null && entry.isWin)
+                {
+                    currentStreak++;
+                    if (currentStreak > maxStreak)
+                        maxStreak = currentStreak;
+                }
+                else
+                {
+                    currentStreak = 0;
+                }
+            }
+            return maxStreak;
+        }
+
+        public static string FormatMaxWinStreakText()
+        {
+            return "\u6700\u9AD8\u8FDE\u80DC\uFF1A" + GetMaxWinStreak();
+        }
+
         private static string FormatStatCount(BattleHistoryEntry entry, int value, string label)
         {
             int safeValue = Mathf.Max(0, value);

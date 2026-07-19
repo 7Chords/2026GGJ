@@ -62,7 +62,15 @@ namespace GameCore.UI
             bindTabButton(mono.btnFavorite, onBtnFavoriteTabClickDown);
 
             refreshTabButtonState();
+            refreshMaxWinStreak();
             refreshHistoryList();
+        }
+
+        private void refreshMaxWinStreak()
+        {
+            if (mono.txtMaxWinStreak == null)
+                return;
+            mono.txtMaxWinStreak.text = GameBattleHistory.FormatMaxWinStreakText();
         }
 
         private void bindTabButton(Button btn, System.Action<PointerEventData, object[]> click)

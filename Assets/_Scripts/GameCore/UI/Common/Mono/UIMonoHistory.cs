@@ -18,5 +18,7 @@ namespace GameCore.UI
         public Button btnClose;
         [Header("Empty list hint")]
         public GameObject goEmptyHint;
+        [Header("Max win streak text")]
+        public Text txtMaxWinStreak;
     }
 }

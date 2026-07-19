@@ -1116,6 +1116,7 @@ MonoBehaviour:
   monoListContainer: {fileID: 388745115378559145}
   btnClose: {fileID: 8021702824194440657}
   goEmptyHint: {fileID: 0}
+  txtMaxWinStreak: {fileID: 2869827391524584852}
 --- !u!1 &6348629411836346585
 GameObject:
   m_ObjectHideFlags: 0
