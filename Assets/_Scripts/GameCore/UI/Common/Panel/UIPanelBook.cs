@@ -34,6 +34,7 @@ namespace GameCore.UI
         {
             _m_tweenContainer = new TweenContainer();
             _m_partContainer = new UIPanelCommonPartContainer(mono.monoPartContainer, SCUIShowType.INTERNAL);
+            _m_partContainer.SetEnableLevelPreviewCycle(true);
         }
 
         public override void BeforeDiscard()

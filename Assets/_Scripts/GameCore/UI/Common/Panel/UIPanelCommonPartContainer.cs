@@ -1,7 +1,7 @@
 using DG.Tweening;
+using GameCore;
 using SCFrame;
 using SCFrame.UI;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,16 +10,25 @@ namespace GameCore.UI
 {
     public class UIPanelCommonPartContainer : UIPanelContainerBase<UIMonoCommonContainer, UIPanelCommonPartItem, UIMonoCommonPartItem>
     {
-        private List<UIPanelCommonPartItem> _m_itemList;//item�б�
+        private List<UIPanelCommonPartItem> _m_itemList;
+        private bool _m_enableLevelPreviewCycle;
 
         public UIPanelCommonPartContainer(UIMonoCommonContainer _mono, SCUIShowType _showType = SCUIShowType.INTERNAL) : base(_mono, _showType)
         {
         }
 
+        public void SetEnableLevelPreviewCycle(bool enabled)
+        {
+            _m_enableLevelPreviewCycle = enabled;
+            if (_m_itemList == null)
+                return;
+            for (int i = 0; i < _m_itemList.Count; i++)
+                _m_itemList[i]?.SetEnableLevelPreviewCycle(enabled);
+        }
+
         public override void AfterInitialize()
         {
             _m_itemList = new List<UIPanelCommonPartItem>();
-
         }
 
         public override void BeforeDiscard()
@@ -44,13 +53,12 @@ namespace GameCore.UI
 
         protected override GameObject creatItemGO()
         {
-            return ResourcesHelper.LoadGameObject(mono.prefabItemObjName,mono.layoutGroup.transform);
-
+            return ResourcesHelper.LoadGameObject(mono.prefabItemObjName, mono.layoutGroup.transform);
         }
 
         protected override UIPanelCommonPartItem creatItemPanel(UIMonoCommonPartItem _mono)
         {
-            return new UIPanelCommonPartItem(_mono,SCUIShowType.INTERNAL);
+            return new UIPanelCommonPartItem(_mono, SCUIShowType.INTERNAL);
         }
 
         public void SetListInfo(List<PartInfo> _infoList)
@@ -77,11 +85,11 @@ namespace GameCore.UI
                 }
                 if (item == null)
                     continue;
+                item.SetEnableLevelPreviewCycle(_m_enableLevelPreviewCycle);
                 item.SetInfo(_infoList[i]);
                 item.ShowPanel();
                 count++;
             }
-            //���ض����
             for (i = count; i < _m_itemList.Count; i++)
             {
                 item = _m_itemList[i];
@@ -89,7 +97,6 @@ namespace GameCore.UI
                     continue;
                 item.HidePanel();
             }
-
         }
 
         public void SetListInfoAnimated(
@@ -124,6 +131,7 @@ namespace GameCore.UI
                 if (item == null)
                     continue;
 
+                item.SetEnableLevelPreviewCycle(_m_enableLevelPreviewCycle);
                 item.SetInfo(_infoList[i]);
                 item.ShowPanel();
 
@@ -136,7 +144,6 @@ namespace GameCore.UI
 
                 count++;
             }
-            //���ض����
             for (i = count; i < _m_itemList.Count; i++)
             {
                 item = _m_itemList[i];
