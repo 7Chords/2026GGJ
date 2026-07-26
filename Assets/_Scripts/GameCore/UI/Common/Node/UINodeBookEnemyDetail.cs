@@ -20,7 +20,7 @@ namespace GameCore.UI
 
         public override bool canQuitByEsc => true;
 
-        public override bool canQuitByMouseRight => true;
+        public override bool canQuitByMouseRight => false;
 
         public override bool ignoreOnUIList => false;
 
