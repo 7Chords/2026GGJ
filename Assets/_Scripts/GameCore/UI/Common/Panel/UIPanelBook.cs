@@ -294,7 +294,21 @@ namespace GameCore.UI
             return toggle != null && toggle.isOn;
         }
 
-        private void onPartFilterChanged(bool isOn)
+        private void onPartTypeFilterChanged(Toggle source, bool isOn)
+        {
+            if (_m_suppressToggleCallback)
+                return;
+            if (_m_curCategory != EBookCategory.Part)
+                return;
+
+            if (isOn)
+                exclusiveSelectPartTypeToggle(source);
+
+            AudioMgr.instance.PlaySfx("sfx_click");
+            refreshPartList();
+        }
+
+        private void onEnemyPartFilterChanged(bool isOn)
         {
             if (_m_suppressToggleCallback)
                 return;
@@ -305,15 +319,55 @@ namespace GameCore.UI
             refreshPartList();
         }
 
-        private void onEnemyFloorChanged(bool isOn)
+        private void onEnemyFloorChanged(Toggle source, bool isOn)
         {
             if (_m_suppressToggleCallback)
                 return;
             if (_m_curCategory != EBookCategory.Enemy)
                 return;
 
+            if (isOn)
+                exclusiveSelectEnemyFloorToggle(source);
+
             AudioMgr.instance.PlaySfx("sfx_click");
             refreshEnemyList();
+        }
+
+        private void exclusiveSelectPartTypeToggle(Toggle selected)
+        {
+            _m_suppressToggleCallback = true;
+            if (selected != mono.toggleEye)
+                setToggleIsOn(mono.toggleEye, false);
+            if (selected != mono.toggleNose)
+                setToggleIsOn(mono.toggleNose, false);
+            if (selected != mono.toggleMouth)
+                setToggleIsOn(mono.toggleMouth, false);
+            if (selected != mono.toggleSkin)
+                setToggleIsOn(mono.toggleSkin, false);
+            _m_suppressToggleCallback = false;
+        }
+
+        private void exclusiveSelectEnemyFloorToggle(Toggle selected)
+        {
+            _m_suppressToggleCallback = true;
+            if (selected != mono.toggleEnemyFloor1)
+                setToggleIsOn(mono.toggleEnemyFloor1, false);
+            if (selected != mono.toggleEnemyFloor2)
+                setToggleIsOn(mono.toggleEnemyFloor2, false);
+            _m_suppressToggleCallback = false;
+        }
+
+        private EPartType? getSelectedPartType()
+        {
+            if (isToggleOn(mono.toggleEye))
+                return EPartType.EYE;
+            if (isToggleOn(mono.toggleNose))
+                return EPartType.NOSE;
+            if (isToggleOn(mono.toggleMouth))
+                return EPartType.MOUTH;
+            if (isToggleOn(mono.toggleSkin))
+                return EPartType.SKIN;
+            return null;
         }
 
         private void refreshPartList()
@@ -321,33 +375,16 @@ namespace GameCore.UI
             if (_m_curCategory != EBookCategory.Part)
                 return;
 
-            bool includeEye = isToggleOn(mono.toggleEye);
-            bool includeNose = isToggleOn(mono.toggleNose);
-            bool includeMouth = isToggleOn(mono.toggleMouth);
-            bool includeSkin = isToggleOn(mono.toggleSkin);
-            bool includeEnemyPart = isToggleOn(mono.toggleEnemyPart);
-            bool anySelected = includeEye || includeNose || includeMouth || includeSkin || includeEnemyPart;
-
             _m_partContainer?.SetListInfo(buildBookPartList(
-                includeEye,
-                includeNose,
-                includeMouth,
-                includeSkin,
-                includeEnemyPart,
-                anySelected));
+                getSelectedPartType(),
+                isToggleOn(mono.toggleEnemyPart)));
         }
 
-        private static List<PartInfo> buildBookPartList(
-            bool includeEye,
-            bool includeNose,
-            bool includeMouth,
-            bool includeSkin,
-            bool includeEnemyPart,
-            bool anySelected)
+        private static List<PartInfo> buildBookPartList(EPartType? selectedType, bool enemyPartsOnly)
         {
             var result = new List<PartInfo>();
             var partRefs = SCRefDataMgr.instance?.partRefList?.refDataList;
-            if (partRefs == null)
+            if (partRefs == null || selectedType == null)
                 return result;
 
             for (int i = 0; i < partRefs.Count; i++)
@@ -356,14 +393,14 @@ namespace GameCore.UI
                 if (partRef == null)
                     continue;
 
-                if (!matchPartFilter(partRef, includeEye, includeNose, includeMouth, includeSkin, includeEnemyPart, anySelected))
+                if (!matchPartFilter(partRef, selectedType.Value, enemyPartsOnly))
                     continue;
 
                 PartLevelRefObj levelRow = findLowestLevelRowForPart(partRef.id);
                 if (levelRow == null)
                     continue;
 
-                var info = new PartInfo(partRef, false, levelRow.partLevel);
+                var info = new PartInfo(partRef, partRef.isEnemyPart, levelRow.partLevel);
                 if (info.levelRefObj == null)
                     continue;
                 result.Add(info);
@@ -371,34 +408,12 @@ namespace GameCore.UI
             return result;
         }
 
-        private static bool matchPartFilter(
-            PartRefObj partRef,
-            bool includeEye,
-            bool includeNose,
-            bool includeMouth,
-            bool includeSkin,
-            bool includeEnemyPart,
-            bool anySelected)
+        private static bool matchPartFilter(PartRefObj partRef, EPartType selectedType, bool enemyPartsOnly)
         {
-            if (partRef.isEnemyPart)
-                return anySelected ? includeEnemyPart : false;
-
-            if (!anySelected)
+            if (partRef.partType != selectedType)
                 return false;
-
-            switch (partRef.partType)
-            {
-                case EPartType.EYE:
-                    return includeEye;
-                case EPartType.NOSE:
-                    return includeNose;
-                case EPartType.MOUTH:
-                    return includeMouth;
-                case EPartType.SKIN:
-                    return includeSkin;
-                default:
-                    return false;
-            }
+            // Enemy-only toggle on: only enemy parts; off: player + enemy of that type.
+            return !enemyPartsOnly || partRef.isEnemyPart;
         }
 
         private static PartLevelRefObj findLowestLevelRowForPart(long partId)
@@ -445,44 +460,14 @@ namespace GameCore.UI
 
         private List<EnemyRefObj> buildEnemyBookList()
         {
-            bool includeFloor1 = isToggleOn(mono.toggleEnemyFloor1);
-            bool includeFloor2 = isToggleOn(mono.toggleEnemyFloor2);
-            bool anyFloorSelected = includeFloor1 || includeFloor2;
-
-            // No floor toggle selected -> empty list; otherwise union of selected floors.
-            if (!anyFloorSelected && hasEnemyFloorFilters())
-                return new List<EnemyRefObj>();
-
-            if (includeFloor1 && includeFloor2)
-            {
-                var merged = EnemyBookPreviewHelper.BuildSortedEnemyBookList(1);
-                List<EnemyRefObj> floor2 = EnemyBookPreviewHelper.BuildSortedEnemyBookList(2);
-                for (int i = 0; i < floor2.Count; i++)
-                {
-                    EnemyRefObj enemy = floor2[i];
-                    if (enemy == null)
-                        continue;
-                    bool exists = false;
-                    for (int j = 0; j < merged.Count; j++)
-                    {
-                        if (merged[j] != null && merged[j].id == enemy.id)
-                        {
-                            exists = true;
-                            break;
-                        }
-                    }
-                    if (!exists)
-                        merged.Add(enemy);
-                }
-                return merged;
-            }
-
-            if (includeFloor1)
+            if (isToggleOn(mono.toggleEnemyFloor1))
                 return EnemyBookPreviewHelper.BuildSortedEnemyBookList(1);
-            if (includeFloor2)
+            if (isToggleOn(mono.toggleEnemyFloor2))
                 return EnemyBookPreviewHelper.BuildSortedEnemyBookList(2);
 
-            // No floor filters exist on UI: show all.
+            // No floor selected / no floor filters: empty when filters exist, otherwise show all.
+            if (hasEnemyFloorFilters())
+                return new List<EnemyRefObj>();
             return EnemyBookPreviewHelper.BuildSortedEnemyBookList(0);
         }
 
@@ -543,13 +528,13 @@ namespace GameCore.UI
             selectCategory(EBookCategory.Enemy);
         }
 
-        private void onToggleEyeChanged(bool isOn) => onPartFilterChanged(isOn);
-        private void onToggleNoseChanged(bool isOn) => onPartFilterChanged(isOn);
-        private void onToggleMouthChanged(bool isOn) => onPartFilterChanged(isOn);
-        private void onToggleSkinChanged(bool isOn) => onPartFilterChanged(isOn);
-        private void onToggleEnemyPartChanged(bool isOn) => onPartFilterChanged(isOn);
-        private void onToggleEnemyFloor1Changed(bool isOn) => onEnemyFloorChanged(isOn);
-        private void onToggleEnemyFloor2Changed(bool isOn) => onEnemyFloorChanged(isOn);
+        private void onToggleEyeChanged(bool isOn) => onPartTypeFilterChanged(mono.toggleEye, isOn);
+        private void onToggleNoseChanged(bool isOn) => onPartTypeFilterChanged(mono.toggleNose, isOn);
+        private void onToggleMouthChanged(bool isOn) => onPartTypeFilterChanged(mono.toggleMouth, isOn);
+        private void onToggleSkinChanged(bool isOn) => onPartTypeFilterChanged(mono.toggleSkin, isOn);
+        private void onToggleEnemyPartChanged(bool isOn) => onEnemyPartFilterChanged(isOn);
+        private void onToggleEnemyFloor1Changed(bool isOn) => onEnemyFloorChanged(mono.toggleEnemyFloor1, isOn);
+        private void onToggleEnemyFloor2Changed(bool isOn) => onEnemyFloorChanged(mono.toggleEnemyFloor2, isOn);
 
         private void onBtnPartMouseEnter(PointerEventData data, object[] objs) => onHoverEnter(mono.btnPart);
         private void onBtnPartMouseExit(PointerEventData data, object[] objs) => onHoverExit(mono.btnPart);
